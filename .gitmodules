@@ -1,0 +1,3 @@
+[submodule "katipo"]
+	path = katipo
+	url = https://github.com/mjdave/katipo

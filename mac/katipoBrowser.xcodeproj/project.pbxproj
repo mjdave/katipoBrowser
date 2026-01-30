@@ -1,0 +1,543 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 77;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		5B11E6FB2CED1A370049F911 /* host.c in Sources */ = {isa = PBXBuildFile; fileRef = 5B11E6F52CED1A370049F911 /* host.c */; };
+		5B11E6FC2CED1A370049F911 /* callbacks.c in Sources */ = {isa = PBXBuildFile; fileRef = 5B11E6F32CED1A370049F911 /* callbacks.c */; };
+		5B11E6FD2CED1A370049F911 /* peer.c in Sources */ = {isa = PBXBuildFile; fileRef = 5B11E6F82CED1A370049F911 /* peer.c */; };
+		5B11E6FE2CED1A370049F911 /* unix.c in Sources */ = {isa = PBXBuildFile; fileRef = 5B11E6FA2CED1A370049F911 /* unix.c */; };
+		5B11E6FF2CED1A370049F911 /* list.c in Sources */ = {isa = PBXBuildFile; fileRef = 5B11E6F62CED1A370049F911 /* list.c */; };
+		5B11E7002CED1A370049F911 /* protocol.c in Sources */ = {isa = PBXBuildFile; fileRef = 5B11E6F92CED1A370049F911 /* protocol.c */; };
+		5B11E7012CED1A370049F911 /* packet.c in Sources */ = {isa = PBXBuildFile; fileRef = 5B11E6F72CED1A370049F911 /* packet.c */; };
+		5B11E7022CED1A370049F911 /* compress.c in Sources */ = {isa = PBXBuildFile; fileRef = 5B11E6F42CED1A370049F911 /* compress.c */; };
+		5B1384B12E3A08F900AEF9AD /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5B1384B02E3A08F900AEF9AD /* AVFoundation.framework */; };
+		5B1AD7912E6069B6005D15BD /* CoreMedia.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5B1AD7902E6069B6005D15BD /* CoreMedia.framework */; };
+		5B2916322CC9C00100C035A1 /* mdb.c in Sources */ = {isa = PBXBuildFile; fileRef = 5B2916302CC9C00100C035A1 /* mdb.c */; };
+		5B2916332CC9C00100C035A1 /* midl.c in Sources */ = {isa = PBXBuildFile; fileRef = 5B2916312CC9C00100C035A1 /* midl.c */; };
+		5B49FD272F2C2019007C1980 /* KatipoBrowser.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5B49FD262F2C2019007C1980 /* KatipoBrowser.cpp */; };
+		5B49FD2A2F2C21BB007C1980 /* SDL3.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5B49FD282F2C21BB007C1980 /* SDL3.framework */; };
+		5B49FD2B2F2C21BB007C1980 /* SDL3_mixer.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5B49FD292F2C21BB007C1980 /* SDL3_mixer.framework */; };
+		5B49FD2D2F2C21CA007C1980 /* MoltenVK.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5B49FD2C2F2C21CA007C1980 /* MoltenVK.xcframework */; };
+		5B735EBB2EF9041000630636 /* katipoBrowser.icon in Resources */ = {isa = PBXBuildFile; fileRef = 5B735EBA2EF9041000630636 /* katipoBrowser.icon */; };
+		5BED52FC2E6014340028ED11 /* MediaPlayer.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5BED52FB2E6014340028ED11 /* MediaPlayer.framework */; };
+		5BFDBDA92CC82F1600247D8D /* MurmurHash3.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5BFDBDA72CC82F1600247D8D /* MurmurHash3.cpp */; };
+		5BFDBDAA2CC82F1600247D8D /* MurmurHash2.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5BFDBDA52CC82F1600247D8D /* MurmurHash2.cpp */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		5B29163B2CC9C07600C035A1 /* Embed Libraries */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+			);
+			name = "Embed Libraries";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		5B2916512CCED4CE00C035A1 /* CopyFiles */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 7;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
+/* Begin PBXFileReference section */
+		5B11E6F32CED1A370049F911 /* callbacks.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; name = callbacks.c; path = "/Users/davidframpton/Documents/ambience/thirdParty/enet-1.3.18/callbacks.c"; sourceTree = "<absolute>"; };
+		5B11E6F42CED1A370049F911 /* compress.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; name = compress.c; path = "/Users/davidframpton/Documents/ambience/thirdParty/enet-1.3.18/compress.c"; sourceTree = "<absolute>"; };
+		5B11E6F52CED1A370049F911 /* host.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; name = host.c; path = "/Users/davidframpton/Documents/ambience/thirdParty/enet-1.3.18/host.c"; sourceTree = "<absolute>"; };
+		5B11E6F62CED1A370049F911 /* list.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; name = list.c; path = "/Users/davidframpton/Documents/ambience/thirdParty/enet-1.3.18/list.c"; sourceTree = "<absolute>"; };
+		5B11E6F72CED1A370049F911 /* packet.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; name = packet.c; path = "/Users/davidframpton/Documents/ambience/thirdParty/enet-1.3.18/packet.c"; sourceTree = "<absolute>"; };
+		5B11E6F82CED1A370049F911 /* peer.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; name = peer.c; path = "/Users/davidframpton/Documents/ambience/thirdParty/enet-1.3.18/peer.c"; sourceTree = "<absolute>"; };
+		5B11E6F92CED1A370049F911 /* protocol.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; name = protocol.c; path = "/Users/davidframpton/Documents/ambience/thirdParty/enet-1.3.18/protocol.c"; sourceTree = "<absolute>"; };
+		5B11E6FA2CED1A370049F911 /* unix.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; name = unix.c; path = "/Users/davidframpton/Documents/ambience/thirdParty/enet-1.3.18/unix.c"; sourceTree = "<absolute>"; };
+		5B1384AD2E3A08B600AEF9AD /* AudioToolbox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioToolbox.framework; path = System/Library/Frameworks/AudioToolbox.framework; sourceTree = SDKROOT; };
+		5B1384B02E3A08F900AEF9AD /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = System/Library/Frameworks/AVFoundation.framework; sourceTree = SDKROOT; };
+		5B1AD7902E6069B6005D15BD /* CoreMedia.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreMedia.framework; path = System/Library/Frameworks/CoreMedia.framework; sourceTree = SDKROOT; };
+		5B2916302CC9C00100C035A1 /* mdb.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; name = mdb.c; path = /Users/davidframpton/Documents/ambience/thirdParty/liblmdb/mdb.c; sourceTree = "<absolute>"; };
+		5B2916312CC9C00100C035A1 /* midl.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; name = midl.c; path = /Users/davidframpton/Documents/ambience/thirdParty/liblmdb/midl.c; sourceTree = "<absolute>"; };
+		5B49FD252F2C2019007C1980 /* KatipoBrowser.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = KatipoBrowser.h; path = ../browser/KatipoBrowser.h; sourceTree = SOURCE_ROOT; };
+		5B49FD262F2C2019007C1980 /* KatipoBrowser.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = KatipoBrowser.cpp; path = ../browser/KatipoBrowser.cpp; sourceTree = SOURCE_ROOT; };
+		5B49FD282F2C21BB007C1980 /* SDL3.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SDL3.framework; path = thirdPartyMac/SDL3.framework; sourceTree = "<group>"; };
+		5B49FD292F2C21BB007C1980 /* SDL3_mixer.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SDL3_mixer.framework; path = thirdPartyMac/SDL3_mixer.framework; sourceTree = "<group>"; };
+		5B49FD2C2F2C21CA007C1980 /* MoltenVK.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; name = MoltenVK.xcframework; path = thirdPartyMac/MoltenVK/static/MoltenVK.xcframework; sourceTree = "<group>"; };
+		5B735EBA2EF9041000630636 /* katipoBrowser.icon */ = {isa = PBXFileReference; lastKnownFileType = folder.iconcomposer.icon; name = katipoBrowser.icon; path = ../working/images/katipoBrowser.icon; sourceTree = SOURCE_ROOT; };
+		5BED52FB2E6014340028ED11 /* MediaPlayer.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MediaPlayer.framework; path = System/Library/Frameworks/MediaPlayer.framework; sourceTree = SDKROOT; };
+		5BFDBD012CC78B1E00247D8D /* katipoBrowser.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = katipoBrowser.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		5BFDBDA52CC82F1600247D8D /* MurmurHash2.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = MurmurHash2.cpp; path = /Users/davidframpton/Documents/ambience/thirdParty/MurmurHash2.cpp; sourceTree = "<absolute>"; };
+		5BFDBDA62CC82F1600247D8D /* MurmurHash3.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = MurmurHash3.h; path = /Users/davidframpton/Documents/ambience/thirdParty/MurmurHash3.h; sourceTree = "<absolute>"; };
+		5BFDBDA72CC82F1600247D8D /* MurmurHash3.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = MurmurHash3.cpp; path = /Users/davidframpton/Documents/ambience/thirdParty/MurmurHash3.cpp; sourceTree = "<absolute>"; };
+		5BFDBDA82CC82F1600247D8D /* stb_image.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = stb_image.h; path = /Users/davidframpton/Documents/ambience/thirdParty/stb_image.h; sourceTree = "<absolute>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFileSystemSynchronizedRootGroup section */
+		5B2E9B162DE302DF00B8DF1E /* katipoBrowser */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = katipoBrowser;
+			sourceTree = "<group>";
+		};
+		5B49FD402F2C23A8007C1980 /* source */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			name = source;
+			path = ../katipo/thirdParty/tui/source;
+			sourceTree = SOURCE_ROOT;
+		};
+		5B49FDA92F2C3690007C1980 /* browser */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			name = browser;
+			path = ../browser;
+			sourceTree = SOURCE_ROOT;
+		};
+		5B49FDED2F2C36FC007C1980 /* core */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			name = core;
+			path = ../katipo/core;
+			sourceTree = SOURCE_ROOT;
+		};
+/* End PBXFileSystemSynchronizedRootGroup section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		5BFDBCFE2CC78B1E00247D8D /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				5B1AD7912E6069B6005D15BD /* CoreMedia.framework in Frameworks */,
+				5BED52FC2E6014340028ED11 /* MediaPlayer.framework in Frameworks */,
+				5B49FD2A2F2C21BB007C1980 /* SDL3.framework in Frameworks */,
+				5B49FD2D2F2C21CA007C1980 /* MoltenVK.xcframework in Frameworks */,
+				5B49FD2B2F2C21BB007C1980 /* SDL3_mixer.framework in Frameworks */,
+				5B1384B12E3A08F900AEF9AD /* AVFoundation.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		5B8CB8652D9105DE008DDB36 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				5B1AD7902E6069B6005D15BD /* CoreMedia.framework */,
+				5BED52FB2E6014340028ED11 /* MediaPlayer.framework */,
+				5B1384B02E3A08F900AEF9AD /* AVFoundation.framework */,
+				5B1384AD2E3A08B600AEF9AD /* AudioToolbox.framework */,
+				5B49FD2C2F2C21CA007C1980 /* MoltenVK.xcframework */,
+				5B49FD282F2C21BB007C1980 /* SDL3.framework */,
+				5B49FD292F2C21BB007C1980 /* SDL3_mixer.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		5BFDBCF82CC78B1E00247D8D = {
+			isa = PBXGroup;
+			children = (
+				5B2E9B162DE302DF00B8DF1E /* katipoBrowser */,
+				5BFDBD022CC78B1E00247D8D /* Products */,
+				5B49FD252F2C2019007C1980 /* KatipoBrowser.h */,
+				5B49FD402F2C23A8007C1980 /* source */,
+				5B49FDA92F2C3690007C1980 /* browser */,
+				5B49FDED2F2C36FC007C1980 /* core */,
+				5B49FD262F2C2019007C1980 /* KatipoBrowser.cpp */,
+				5BFDBDA52CC82F1600247D8D /* MurmurHash2.cpp */,
+				5BFDBDA62CC82F1600247D8D /* MurmurHash3.h */,
+				5BFDBDA72CC82F1600247D8D /* MurmurHash3.cpp */,
+				5BFDBDA82CC82F1600247D8D /* stb_image.h */,
+				5B2916302CC9C00100C035A1 /* mdb.c */,
+				5B2916312CC9C00100C035A1 /* midl.c */,
+				5B11E6F32CED1A370049F911 /* callbacks.c */,
+				5B11E6F42CED1A370049F911 /* compress.c */,
+				5B11E6F52CED1A370049F911 /* host.c */,
+				5B11E6F62CED1A370049F911 /* list.c */,
+				5B11E6F72CED1A370049F911 /* packet.c */,
+				5B11E6F82CED1A370049F911 /* peer.c */,
+				5B11E6F92CED1A370049F911 /* protocol.c */,
+				5B11E6FA2CED1A370049F911 /* unix.c */,
+				5B8CB8652D9105DE008DDB36 /* Frameworks */,
+				5B735EBA2EF9041000630636 /* katipoBrowser.icon */,
+			);
+			sourceTree = "<group>";
+		};
+		5BFDBD022CC78B1E00247D8D /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				5BFDBD012CC78B1E00247D8D /* katipoBrowser.app */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		5BFDBD002CC78B1E00247D8D /* katipoBrowser */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 5BFDBD1A2CC78B1F00247D8D /* Build configuration list for PBXNativeTarget "katipoBrowser" */;
+			buildPhases = (
+				5BFDBCFD2CC78B1E00247D8D /* Sources */,
+				5BFDBCFE2CC78B1E00247D8D /* Frameworks */,
+				5B2916512CCED4CE00C035A1 /* CopyFiles */,
+				5BFDBCFF2CC78B1E00247D8D /* Resources */,
+				5B29163B2CC9C07600C035A1 /* Embed Libraries */,
+				5B2916502CCED37600C035A1 /* ShellScript */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			fileSystemSynchronizedGroups = (
+				5B2E9B162DE302DF00B8DF1E /* katipoBrowser */,
+				5B49FD402F2C23A8007C1980 /* source */,
+				5B49FDA92F2C3690007C1980 /* browser */,
+				5B49FDED2F2C36FC007C1980 /* core */,
+			);
+			name = katipoBrowser;
+			packageProductDependencies = (
+			);
+			productName = katipoBrowser;
+			productReference = 5BFDBD012CC78B1E00247D8D /* katipoBrowser.app */;
+			productType = "com.apple.product-type.application";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		5BFDBCF92CC78B1E00247D8D /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = 1;
+				LastUpgradeCheck = 1600;
+				TargetAttributes = {
+					5BFDBD002CC78B1E00247D8D = {
+						CreatedOnToolsVersion = 16.0;
+					};
+				};
+			};
+			buildConfigurationList = 5BFDBCFC2CC78B1E00247D8D /* Build configuration list for PBXProject "katipoBrowser" */;
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = 5BFDBCF82CC78B1E00247D8D;
+			minimizedProjectReferenceProxies = 1;
+			preferredProjectObjectVersion = 77;
+			productRefGroup = 5BFDBD022CC78B1E00247D8D /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				5BFDBD002CC78B1E00247D8D /* katipoBrowser */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		5BFDBCFF2CC78B1E00247D8D /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				5B735EBB2EF9041000630636 /* katipoBrowser.icon in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		5B2916502CCED37600C035A1 /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			alwaysOutOfDate = 1;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+			);
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "# Type a script or drag a script file from your workspace to insert its path.\n#(cd ${BUILT_PRODUCTS_DIR}/${CONTENTS_FOLDER_PATH}/MacOS && ln -s ../Resources/steam_appid.txt steam_appid.txt) || true\n#echo  ${BUILT_PRODUCTS_DIR}/${CONTENTS_FOLDER_PATH}/Resources\necho ${SRCROOT}/../resources\nif [ \"${ACTION}\" = \"build\" ]; then\n(cd ${BUILT_PRODUCTS_DIR}/${CONTENTS_FOLDER_PATH}/Resources && rm -rf common) || true\n(cd ${BUILT_PRODUCTS_DIR}/${CONTENTS_FOLDER_PATH}/Resources && ln -s ${SRCROOT}/../common common) || true\n(cd ${BUILT_PRODUCTS_DIR}/${CONTENTS_FOLDER_PATH}/Resources && rm -rf scripts) || true\n(cd ${BUILT_PRODUCTS_DIR}/${CONTENTS_FOLDER_PATH}/Resources && ln -s ${SRCROOT}/../apps/katipoBrowser/scripts scripts) || true\nfi\n\n";
+		};
+/* End PBXShellScriptBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		5BFDBCFD2CC78B1E00247D8D /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				5B2916322CC9C00100C035A1 /* mdb.c in Sources */,
+				5B11E6FB2CED1A370049F911 /* host.c in Sources */,
+				5B11E6FC2CED1A370049F911 /* callbacks.c in Sources */,
+				5B11E6FD2CED1A370049F911 /* peer.c in Sources */,
+				5B11E6FE2CED1A370049F911 /* unix.c in Sources */,
+				5B11E6FF2CED1A370049F911 /* list.c in Sources */,
+				5B11E7002CED1A370049F911 /* protocol.c in Sources */,
+				5B11E7012CED1A370049F911 /* packet.c in Sources */,
+				5B49FD272F2C2019007C1980 /* KatipoBrowser.cpp in Sources */,
+				5B11E7022CED1A370049F911 /* compress.c in Sources */,
+				5B2916332CC9C00100C035A1 /* midl.c in Sources */,
+				5BFDBDA92CC82F1600247D8D /* MurmurHash3.cpp in Sources */,
+				5BFDBDAA2CC82F1600247D8D /* MurmurHash2.cpp in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin XCBuildConfiguration section */
+		5BFDBD182CC78B1F00247D8D /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MACOSX_DEPLOYMENT_TARGET = 15.0;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = macosx;
+			};
+			name = Debug;
+		};
+		5BFDBD192CC78B1F00247D8D /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MACOSX_DEPLOYMENT_TARGET = 15.0;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				SDKROOT = macosx;
+			};
+			name = Release;
+		};
+		5BFDBD1B2CC78B1F00247D8D /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = katipoBrowser;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CLANG_ENABLE_OBJC_ARC = NO;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = NO;
+				CODE_SIGN_ENTITLEMENTS = katipoBrowser/katipoBrowser.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				COMBINE_HIDPI_IMAGES = YES;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 9Q78V5BF2N;
+				ENABLE_HARDENED_RUNTIME = NO;
+				ENABLE_USER_SCRIPT_SANDBOXING = NO;
+				FRAMEWORK_SEARCH_PATHS = (
+					"\"$(SRCROOT)/../ThirdParty\"",
+					"\"$(SRCROOT)/thirdPartyMac\"",
+					"$(PROJECT_DIR)/thirdPartyMac",
+					"$(PROJECT_DIR)/thirdPartyMac/MoltenVK/dynamic/MoltenVK.xcframework/macos-arm64_x86_64",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = NO;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = katipoBrowser/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = Ambience;
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.developer-tools";
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				INFOPLIST_KEY_NSMainStoryboardFile = Main;
+				INFOPLIST_KEY_NSPrincipalClass = NSApplication;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+					"@executable_path/../Frameworks/MoltenVK.framework",
+				);
+				LIBRARY_SEARCH_PATHS = (
+					"\"$(SRCROOT)/../ThirdParty\"",
+					"\"$(SRCROOT)/../../../VulkanSDK/1.3.261.1/MoltenVK/MoltenVK.xcframework/macos-arm64_x86_64\"",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.majicjungle.katipoBrowser;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				USER_HEADER_SEARCH_PATHS = (
+					"\"$(SRCROOT)/thirdPartyMac/SDL3.framework/Headers\"",
+					"\"$(SRCROOT)/thirdPartyMac/SDL3_mixer.framework/Headers\"",
+					"\"$(SRCROOT)/../katipo/thirdParty/enet-1.3.18/include\"",
+					"\"$(SRCROOT)/thirdPartyMac/MoltenVK/include\"",
+					"\"$(SRCROOT)/../katipo/thirdParty/tui/source\"",
+					"\"$(SRCROOT)/../katipo/thirdParty/tui/thirdParty/glm/glm\"",
+					"\"$(SRCROOT)/../thirdParty/VulkanMemoryAllocator-3.2.1/include\"",
+				);
+				WARNING_CFLAGS = "-Wno-nullability-completeness";
+			};
+			name = Debug;
+		};
+		5BFDBD1C2CC78B1F00247D8D /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = katipoBrowser;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CLANG_ENABLE_OBJC_ARC = NO;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = NO;
+				CODE_SIGN_ENTITLEMENTS = katipoBrowser/katipoBrowser.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				COMBINE_HIDPI_IMAGES = YES;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 9Q78V5BF2N;
+				ENABLE_HARDENED_RUNTIME = NO;
+				ENABLE_USER_SCRIPT_SANDBOXING = NO;
+				FRAMEWORK_SEARCH_PATHS = (
+					"\"$(SRCROOT)/../ThirdParty\"",
+					"\"$(SRCROOT)/thirdPartyMac\"",
+					"$(PROJECT_DIR)/thirdPartyMac",
+					"$(PROJECT_DIR)/thirdPartyMac/MoltenVK/dynamic/MoltenVK.xcframework/macos-arm64_x86_64",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = NO;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = katipoBrowser/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = Ambience;
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.developer-tools";
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				INFOPLIST_KEY_NSMainStoryboardFile = Main;
+				INFOPLIST_KEY_NSPrincipalClass = NSApplication;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+					"@executable_path/../Frameworks/MoltenVK.framework",
+				);
+				LIBRARY_SEARCH_PATHS = (
+					"\"$(SRCROOT)/../ThirdParty\"",
+					"\"$(SRCROOT)/../../../VulkanSDK/1.3.261.1/MoltenVK/MoltenVK.xcframework/macos-arm64_x86_64\"",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.majicjungle.katipoBrowser;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				USER_HEADER_SEARCH_PATHS = (
+					"\"$(SRCROOT)/thirdPartyMac/SDL3.framework/Headers\"",
+					"\"$(SRCROOT)/thirdPartyMac/SDL3_mixer.framework/Headers\"",
+					"\"$(SRCROOT)/../katipo/thirdParty/enet-1.3.18/include\"",
+					"\"$(SRCROOT)/thirdPartyMac/MoltenVK/include\"",
+					"\"$(SRCROOT)/../katipo/thirdParty/tui/source\"",
+					"\"$(SRCROOT)/../katipo/thirdParty/tui/thirdParty/glm/glm\"",
+					"\"$(SRCROOT)/../thirdParty/VulkanMemoryAllocator-3.2.1/include\"",
+				);
+				WARNING_CFLAGS = "-Wno-nullability-completeness";
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		5BFDBCFC2CC78B1E00247D8D /* Build configuration list for PBXProject "katipoBrowser" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				5BFDBD182CC78B1F00247D8D /* Debug */,
+				5BFDBD192CC78B1F00247D8D /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		5BFDBD1A2CC78B1F00247D8D /* Build configuration list for PBXNativeTarget "katipoBrowser" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				5BFDBD1B2CC78B1F00247D8D /* Debug */,
+				5BFDBD1C2CC78B1F00247D8D /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 5BFDBCF92CC78B1E00247D8D /* Project object */;
+}
