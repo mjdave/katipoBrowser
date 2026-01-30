@@ -110,7 +110,7 @@ void KatipoBrowser::init()
         }
     });*/
     
-    TuiTable* sceneTable = (TuiTable*)TuiRef::load(Katipo::getResourcePath("scripts/scene.tui"), rootTable);
+    TuiTable* sceneTable = (TuiTable*)TuiRef::load(Katipo::getResourcePath("app/katipoBrowser/scripts/scene.tui"), rootTable);
     rootTable->setTable("scene", sceneTable);
     sceneTable->release();
     

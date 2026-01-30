@@ -10,7 +10,6 @@
 #include "TuiScript.h"
 #include "MJRawImageTexture.h"
 #include "Camera.h"
-//#include "MJAtmosphere.h"
 #include "GCommandBuffer.h"
 #include "KatipoUtilities.h"
 #include "ObjectVert.h"
@@ -27,7 +26,6 @@ MJCache::MJCache(Vulkan* vulkan_,
     materialManager = materialManager_;
 	camera = camera_;
 	noiseTexture = noiseTexture_;
-    uiLightingManager = new UILightingManager(vulkan);
 
 	//debugTimer = new Timer();
 
@@ -40,19 +38,10 @@ MJCache::MJCache(Vulkan* vulkan_,
 		std::string nameWithoutExtension = Tui::removeExtensionForPath(name);
 		availableFontFileNames.insert(nameWithoutExtension);
     }
-
-
-    brdfMap = new MJRawImageTexture(vulkan, Katipo::getResourcePath("common/img/brdf.RAW"), ivec2(64, 64), VK_FORMAT_R16G16B16A16_SFLOAT);
-
-	//atmosphere = new MJAtmosphere(this);
 }
 
 MJCache::~MJCache()
 {
-    delete uiLightingManager;
-    delete brdfMap;
-	//delete atmosphere;
-	//delete debugTimer;
 
     for(auto const& textureI : textures)
     {
@@ -337,7 +326,7 @@ GPipeline* MJCache::getPipeline(std::string name,
     }
     
     //MJLog("Loading shader:%s", name.c_str());
-    std::string shaderPath = Katipo::getResourcePath("common/shaders/" + name + ".tui");
+    std::string shaderPath = Katipo::getResourcePath("app/common/shaders/" + name + ".tui");
     //MJLog("shaderPath:%s", shaderPath.c_str());
     
     TuiTable* shaderTable = (TuiTable*)TuiRef::load(shaderPath, nullptr);
@@ -448,8 +437,8 @@ GPipeline* MJCache::getPipeline(std::string name,
     delete shaderTable;
     shaderTable = nullptr;
 
-	std::string vertPathNameToUse = Katipo::getResourcePath("common/spv/" + vertPathname);
-	std::string fragPathNameToUse = Katipo::getResourcePath("common/spv/" + fragPathname);
+	std::string vertPathNameToUse = Katipo::getResourcePath("app/common/spv/" + vertPathname);
+	std::string fragPathNameToUse = Katipo::getResourcePath("app/common/spv/" + fragPathname);
 
 	//debugTimer->getDt();
     GPipeline* pipeline = new GPipeline(vulkan,

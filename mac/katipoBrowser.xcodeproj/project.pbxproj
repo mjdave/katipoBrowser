@@ -26,7 +26,8 @@
 		5B49FDFD2F2C5A43007C1980 /* libsodium.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 5B49FDFC2F2C5A3E007C1980 /* libsodium.a */; };
 		5B49FE002F2C6D3A007C1980 /* SDL3.framework in Embed Libraries */ = {isa = PBXBuildFile; fileRef = 5B49FDFF2F2C6D3A007C1980 /* SDL3.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		5B49FE022F2C6D4E007C1980 /* SDL3_mixer.framework in Embed Libraries */ = {isa = PBXBuildFile; fileRef = 5B49FE012F2C6D4E007C1980 /* SDL3_mixer.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
-		5B735EBB2EF9041000630636 /* katipoBrowser.icon in Resources */ = {isa = PBXBuildFile; fileRef = 5B735EBA2EF9041000630636 /* katipoBrowser.icon */; };
+		5B49FE042F2C72C5007C1980 /* katipoBrowser.icon in Resources */ = {isa = PBXBuildFile; fileRef = 5B49FE032F2C72C5007C1980 /* katipoBrowser.icon */; };
+		5B49FE062F2C7EBC007C1980 /* app in Resources */ = {isa = PBXBuildFile; fileRef = 5B49FE052F2C7EBC007C1980 /* app */; };
 		5BED52FC2E6014340028ED11 /* MediaPlayer.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5BED52FB2E6014340028ED11 /* MediaPlayer.framework */; };
 		5BFDBDA92CC82F1600247D8D /* MurmurHash3.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5BFDBDA72CC82F1600247D8D /* MurmurHash3.cpp */; };
 		5BFDBDAA2CC82F1600247D8D /* MurmurHash2.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5BFDBDA52CC82F1600247D8D /* MurmurHash2.cpp */; };
@@ -78,7 +79,8 @@
 		5B49FDFC2F2C5A3E007C1980 /* libsodium.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libsodium.a; path = ../katipo/thirdParty/libsodium/macos/lib/libsodium.a; sourceTree = "<group>"; };
 		5B49FDFF2F2C6D3A007C1980 /* SDL3.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SDL3.framework; path = thirdPartyMac/SDL3.framework; sourceTree = "<group>"; };
 		5B49FE012F2C6D4E007C1980 /* SDL3_mixer.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SDL3_mixer.framework; path = thirdPartyMac/SDL3_mixer.framework; sourceTree = "<group>"; };
-		5B735EBA2EF9041000630636 /* katipoBrowser.icon */ = {isa = PBXFileReference; lastKnownFileType = folder.iconcomposer.icon; name = katipoBrowser.icon; path = ../working/images/katipoBrowser.icon; sourceTree = SOURCE_ROOT; };
+		5B49FE032F2C72C5007C1980 /* katipoBrowser.icon */ = {isa = PBXFileReference; lastKnownFileType = folder.iconcomposer.icon; name = katipoBrowser.icon; path = ../working/katipoBrowser.icon; sourceTree = SOURCE_ROOT; };
+		5B49FE052F2C7EBC007C1980 /* app */ = {isa = PBXFileReference; lastKnownFileType = folder; name = app; path = ../app; sourceTree = "<group>"; };
 		5BED52FB2E6014340028ED11 /* MediaPlayer.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MediaPlayer.framework; path = System/Library/Frameworks/MediaPlayer.framework; sourceTree = SDKROOT; };
 		5BFDBD012CC78B1E00247D8D /* katipoBrowser.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = katipoBrowser.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		5BFDBDA52CC82F1600247D8D /* MurmurHash2.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = MurmurHash2.cpp; path = /Users/davidframpton/Documents/ambience/thirdParty/MurmurHash2.cpp; sourceTree = "<absolute>"; };
@@ -162,6 +164,7 @@
 		5BFDBCF82CC78B1E00247D8D = {
 			isa = PBXGroup;
 			children = (
+				5B49FE052F2C7EBC007C1980 /* app */,
 				5B49FE012F2C6D4E007C1980 /* SDL3_mixer.framework */,
 				5B49FDFF2F2C6D3A007C1980 /* SDL3.framework */,
 				5B2E9B162DE302DF00B8DF1E /* katipoBrowser */,
@@ -186,7 +189,7 @@
 				5B11E6F92CED1A370049F911 /* protocol.c */,
 				5B11E6FA2CED1A370049F911 /* unix.c */,
 				5B8CB8652D9105DE008DDB36 /* Frameworks */,
-				5B735EBA2EF9041000630636 /* katipoBrowser.icon */,
+				5B49FE032F2C72C5007C1980 /* katipoBrowser.icon */,
 			);
 			sourceTree = "<group>";
 		};
@@ -267,7 +270,8 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				5B735EBB2EF9041000630636 /* katipoBrowser.icon in Resources */,
+				5B49FE042F2C72C5007C1980 /* katipoBrowser.icon in Resources */,
+				5B49FE062F2C7EBC007C1980 /* app in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -438,6 +442,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = katipoBrowser;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = NO;
 				CLANG_ENABLE_OBJC_ARC = NO;
 				CLANG_WARN_DOCUMENTATION_COMMENTS = NO;
 				CODE_SIGN_ENTITLEMENTS = katipoBrowser/katipoBrowser.entitlements;
@@ -486,7 +491,7 @@
 					"\"$(SRCROOT)/../thirdParty/rapidjson-1.1.0/include\"",
 					"\"$(SRCROOT)/../katipo/thirdParty/libsodium/macos/include\"",
 					"\"$(SRCROOT)/../katipo/thirdParty/liblmdb\"",
-					"\"$(SRCROOT)/../katipo/thirdParty/utfcpp-3.2.1/source\"",
+					"\"$(SRCROOT)/../thirdParty/utfcpp-3.2.1/source\"",
 				);
 				WARNING_CFLAGS = "-Wno-nullability-completeness";
 			};
@@ -497,6 +502,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = katipoBrowser;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = NO;
 				CLANG_ENABLE_OBJC_ARC = NO;
 				CLANG_WARN_DOCUMENTATION_COMMENTS = NO;
 				CODE_SIGN_ENTITLEMENTS = katipoBrowser/katipoBrowser.entitlements;
@@ -545,7 +551,7 @@
 					"\"$(SRCROOT)/../thirdParty/rapidjson-1.1.0/include\"",
 					"\"$(SRCROOT)/../katipo/thirdParty/libsodium/macos/include\"",
 					"\"$(SRCROOT)/../katipo/thirdParty/liblmdb\"",
-					"\"$(SRCROOT)/../katipo/thirdParty/utfcpp-3.2.1/source\"",
+					"\"$(SRCROOT)/../thirdParty/utfcpp-3.2.1/source\"",
 				);
 				WARNING_CFLAGS = "-Wno-nullability-completeness";
 			};

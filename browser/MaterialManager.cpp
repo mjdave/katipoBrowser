@@ -13,7 +13,7 @@
 
 MaterialManager::MaterialManager()
 {
-    std::string materialsPath = Katipo::getResourcePath("common/materials.tui");
+    std::string materialsPath = Katipo::getResourcePath("app/common/materials.tui");
     MJLog("materialsPath:%s", materialsPath.c_str());
     TuiTable* materialsTable = (TuiTable*)TuiRef::load(materialsPath);
     

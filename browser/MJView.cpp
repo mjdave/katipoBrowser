@@ -18,7 +18,6 @@
 
 #include "MJColorView.h"
 #include "MJTextView.h"
-#include "MJModelView.h"
 #include "MJImageView.h"
 
 MJView* MJView::loadUnknownViewFromTable(TuiTable* subViewTable, MJView* parentView, bool isRoot) //static
@@ -33,12 +32,6 @@ MJView* MJView::loadUnknownViewFromTable(TuiTable* subViewTable, MJView* parentV
     else if(viewTypeString == "text")
     {
         MJTextView* subView = new MJTextView(parentView);
-        subView->loadFromTable(subViewTable, isRoot);
-        return subView;
-    }
-    else if(viewTypeString == "model")
-    {
-        MJModelView* subView = new MJModelView(parentView);
         subView->loadFromTable(subViewTable, isRoot);
         return subView;
     }

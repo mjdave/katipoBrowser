@@ -20,13 +20,9 @@
 #include "GPipeline.h"
 
 #include "MaterialManager.h"
-#include "UILightingManager.h"
 
-class MJRenderTarget;
 class Database;
-class MJRawImageTexture;
 class Camera;
-class MJAtmosphere;
 class MJDataTexture;
 
 struct CachedModelViewBuffers {
@@ -77,10 +73,7 @@ public:
     Database* appDatabase;
 
     MaterialManager* materialManager;
-    UILightingManager* uiLightingManager;
-    MJRawImageTexture* brdfMap;
 	Camera* camera;
-	MJAtmosphere* atmosphere;
 	MJDataTexture* noiseTexture;
 
     
