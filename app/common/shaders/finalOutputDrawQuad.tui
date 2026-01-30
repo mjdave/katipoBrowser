@@ -1,0 +1,7 @@
+{
+    vertPath = "finalOutputDrawQuad.vert.spv",
+    fragPath = "finalOutputDrawQuad.frag.spv",
+    blendMode = "disabled",
+    depth = "disabled",
+    cull = "disabled",
+}

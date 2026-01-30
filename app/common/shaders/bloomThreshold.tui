@@ -1,0 +1,8 @@
+
+{
+    vertPath = "bloomThreshold.vert.spv",
+    fragPath = "bloomThreshold.frag.spv",
+    blendMode = "disabled",
+    depth = "disabled",
+    cull = "disabled",
+}

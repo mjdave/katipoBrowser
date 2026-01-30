@@ -1,0 +1,8 @@
+
+{
+    vertPath = "bloomBlur.vert.spv",
+    fragPath = "bloomBlur.frag.spv",
+    blendMode = "disabled",
+    depth = "disabled",
+    cull = "disabled",
+}

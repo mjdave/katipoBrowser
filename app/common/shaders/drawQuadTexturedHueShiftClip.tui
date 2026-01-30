@@ -1,0 +1,7 @@
+{
+    vertPath = "drawQuadTexturedClip.vert.spv",
+    fragPath = "drawQuadTexturedHueShiftClip.frag.spv",
+    blendMode = "additive",
+    depth = "disabled",
+    cull = "disabled",
+}

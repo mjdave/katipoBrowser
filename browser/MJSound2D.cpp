@@ -17,7 +17,7 @@ MJSound2D::MJSound2D(MJAudio* audio_,
 {
 	debugName = filePath;
    
-    MJError("todo")
+    MJError("todo");
     /* FMOD_RESULT result;
     
     
@@ -57,7 +57,7 @@ uint32_t MJSound2D::play(double volume, double pitch)
     ERRCHECK(result);
     
     return playCommon(channel, volume, pitch);*/
-    MJError("todo")
+    MJError("todo");
     return 0;
 }
 

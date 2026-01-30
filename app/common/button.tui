@@ -1,0 +1,62 @@
+
+updateVisuals = function(view)
+{
+    userData = view.buttonData
+    #print("view:", view)
+    if(userData.mouseDown)
+    {
+        view.shaderUserData = vec4(userData.hueOffset + math.pi,0,0,0)
+    }
+    else if(userData.hover)
+    {
+        view.shaderUserData = vec4(userData.hueOffset + 0.5 * math.pi,0,0,0)
+    }
+    else
+    {
+        view.shaderUserData = vec4(userData.hueOffset,0,0,0)
+    }
+}
+
+create = function(view, hueOffset, clickFunction)
+{
+    userData = {
+        hover = false,
+        hueOffset = hueOffset,
+        clickFunction = clickFunction,
+    }
+    view.buttonData = userData
+
+    view.hoverStart = function()
+    {
+        userData.hover = true
+        updateVisuals(view)
+    }
+
+    view.hoverEnd = function()
+    {
+        userData.hover = false
+        updateVisuals(view)
+    }
+
+    view.mouseDown = function()
+    {
+        userData.mouseDown = true
+        updateVisuals(view)
+    }
+
+    view.mouseUp = function()
+    {
+        userData.mouseDown = false
+        updateVisuals(view)
+    }
+
+    view.click = function()
+    {
+        if(userData.clickFunction)
+        {
+            userData.clickFunction()
+        }
+    }
+
+    updateVisuals(view)
+}

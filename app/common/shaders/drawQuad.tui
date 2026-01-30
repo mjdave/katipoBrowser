@@ -1,0 +1,7 @@
+{
+    vertPath = "drawQuad.vert.spv",
+    fragPath = "drawQuad.frag.spv",
+    blendMode = "premultiplied",
+    depth = "disabled",
+    cull = "disabled",
+}

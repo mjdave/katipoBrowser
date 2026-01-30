@@ -86,7 +86,7 @@ MJDrawQuad::MJDrawQuad(MJCache* cache_, MJRenderPass renderPass, int renderTarge
 
 	if(!imageTexture->loaded)
 	{
-		MJError("MJDrawQuad init called when texture hasn't been loaded yet.")
+        MJError("MJDrawQuad init called when texture hasn't been loaded yet.");
 		return;
 	}
     

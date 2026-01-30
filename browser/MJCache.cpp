@@ -7,13 +7,12 @@
 //
 
 #include "MJCache.h"
-#include "FileUtils.h"
-#include "StringUtils.h"
+#include "TuiScript.h"
 #include "MJRawImageTexture.h"
 #include "Camera.h"
 //#include "MJAtmosphere.h"
 #include "GCommandBuffer.h"
-#include "Serialization.h"
+#include "KatipoUtilities.h"
 #include "ObjectVert.h"
 //#include "Timer.h"
 
@@ -33,17 +32,17 @@ MJCache::MJCache(Vulkan* vulkan_,
 	//debugTimer = new Timer();
 
 
-    std::string fontDirname = getResourcePath("common/fonts/fontFiles");
+    std::string fontDirname = Katipo::getResourcePath("common/fonts/fontFiles");
 
-    std::vector<std::string> availableFontFileNamesVec = getDirectoryContents(fontDirname);
+    std::vector<std::string> availableFontFileNamesVec = Tui::getDirectoryContents(fontDirname);
     for(auto& name : availableFontFileNamesVec)
     {
-		std::string nameWithoutExtension = removeExtensionForPath(name);
+		std::string nameWithoutExtension = Tui::removeExtensionForPath(name);
 		availableFontFileNames.insert(nameWithoutExtension);
     }
 
 
-    brdfMap = new MJRawImageTexture(vulkan, getResourcePath("common/img/brdf.RAW"), ivec2(64, 64), VK_FORMAT_R16G16B16A16_SFLOAT);
+    brdfMap = new MJRawImageTexture(vulkan, Katipo::getResourcePath("common/img/brdf.RAW"), ivec2(64, 64), VK_FORMAT_R16G16B16A16_SFLOAT);
 
 	//atmosphere = new MJAtmosphere(this);
 }
@@ -145,7 +144,7 @@ MJImageTexture* MJCache::getTextureAbsolutePathWithOptions(std::string path, MJI
         return texture;
     }
     
-	std::string key = string_format("%s_%d_%d_%d_%d_%d_%d_%s", path.c_str(), options.repeat, options.loadFlipped, options.mipmap, options.minFilter, options.magFilter, options.mipmapMode, alphaChannel_.c_str());
+	std::string key = Tui::string_format("%s_%d_%d_%d_%d_%d_%d_%s", path.c_str(), options.repeat, options.loadFlipped, options.mipmap, options.minFilter, options.magFilter, options.mipmapMode, alphaChannel_.c_str());
 	if(textures.count(key) > 0)
 	{
 		return textures[key];
@@ -171,7 +170,7 @@ MJImageTexture* MJCache::getTextureAbsolutePath(std::string path, bool repeat, b
 
 MJImageTexture* MJCache::getTexture(std::string name, bool repeat, bool loadFlipped, bool mipmap, bool disableCache)
 {
-    return getTextureAbsolutePath(getResourcePath(name), repeat, loadFlipped, mipmap, disableCache);
+    return getTextureAbsolutePath(Katipo::getResourcePath(name), repeat, loadFlipped, mipmap, disableCache);
 }
 
 MJImageTexture* MJCache::getTextureWithOptions(std::string name, MJImageTextureOptions options, std::string alphaChannel_, bool disableCache)
@@ -179,18 +178,18 @@ MJImageTexture* MJCache::getTextureWithOptions(std::string name, MJImageTextureO
 	std::string absoluteAlphaPath = "";
 	if(!alphaChannel_.empty())
 	{
-		absoluteAlphaPath = getResourcePath(alphaChannel_);
+		absoluteAlphaPath = Katipo::getResourcePath(alphaChannel_);
 	}
-	return getTextureAbsolutePathWithOptions(getResourcePath(name), options, absoluteAlphaPath, disableCache);
+	return getTextureAbsolutePathWithOptions(Katipo::getResourcePath(name), options, absoluteAlphaPath, disableCache);
 }
 
 MJFont* MJCache::getFont(std::string name, int pointSize, double* resultScale, bool isModel)
 {
     *resultScale = 1.0;
 
-	std::string combinedFontName = string_format("%s%d", name.c_str(), pointSize);
+	std::string combinedFontName = Tui::string_format("%s%d", name.c_str(), pointSize);
 
-	std::string key = string_format("%s_%d", combinedFontName.c_str(), isModel);
+	std::string key = Tui::string_format("%s_%d", combinedFontName.c_str(), isModel);
 
     if(fonts.count(key) > 0)
     {
@@ -217,8 +216,8 @@ MJFont* MJCache::getFont(std::string name, int pointSize, double* resultScale, b
 
     for(int i = pointSize + 1; i <= pointSize * 2; i++)
     {
-        std::string combinedFontName = string_format("%s%d", name.c_str(), i);
-		std::string key = string_format("%s_%d", combinedFontName.c_str(), isModel);
+        std::string combinedFontName = Tui::string_format("%s%d", name.c_str(), i);
+		std::string key = Tui::string_format("%s_%d", combinedFontName.c_str(), isModel);
         if(fonts.count(key) > 0)
         {
             *resultScale = ((double)pointSize) / i;
@@ -237,8 +236,8 @@ MJFont* MJCache::getFont(std::string name, int pointSize, double* resultScale, b
 
     for(int i = pointSize - 1; i >= pointSize / 2; i--)
     {
-        std::string combinedFontName = string_format("%s%d", name.c_str(), i);
-		std::string key = string_format("%s_%d", combinedFontName.c_str(), isModel);
+        std::string combinedFontName = Tui::string_format("%s%d", name.c_str(), i);
+		std::string key = Tui::string_format("%s_%d", combinedFontName.c_str(), isModel);
         if(fonts.count(key) > 0)
         {
             *resultScale = ((double)pointSize) / i;
@@ -259,8 +258,8 @@ MJFont* MJCache::getFont(std::string name, int pointSize, double* resultScale, b
 
 	for(int i = pointSize * 2; i <= 216; i++)
 	{
-		std::string combinedFontName = string_format("%s%d", name.c_str(), i);
-		std::string key = string_format("%s_%d", combinedFontName.c_str(), isModel);
+		std::string combinedFontName = Tui::string_format("%s%d", name.c_str(), i);
+		std::string key = Tui::string_format("%s_%d", combinedFontName.c_str(), isModel);
 		if(fonts.count(key) > 0)
 		{
 			*resultScale = ((double)pointSize) / i;
@@ -279,8 +278,8 @@ MJFont* MJCache::getFont(std::string name, int pointSize, double* resultScale, b
 
 	for(int i = pointSize / 2; i >= 8; i--)
 	{
-		std::string combinedFontName = string_format("%s%d", name.c_str(), i);
-		std::string key = string_format("%s_%d", combinedFontName.c_str(), isModel);
+		std::string combinedFontName = Tui::string_format("%s%d", name.c_str(), i);
+		std::string key = Tui::string_format("%s_%d", combinedFontName.c_str(), isModel);
 		if(fonts.count(key) > 0)
 		{
 			*resultScale = ((double)pointSize) / i;
@@ -338,7 +337,7 @@ GPipeline* MJCache::getPipeline(std::string name,
     }
     
     //MJLog("Loading shader:%s", name.c_str());
-    std::string shaderPath = getResourcePath("common/shaders/" + name + ".tui");
+    std::string shaderPath = Katipo::getResourcePath("common/shaders/" + name + ".tui");
     //MJLog("shaderPath:%s", shaderPath.c_str());
     
     TuiTable* shaderTable = (TuiTable*)TuiRef::load(shaderPath, nullptr);
@@ -449,8 +448,8 @@ GPipeline* MJCache::getPipeline(std::string name,
     delete shaderTable;
     shaderTable = nullptr;
 
-	std::string vertPathNameToUse = getResourcePath("common/spv/" + vertPathname);
-	std::string fragPathNameToUse = getResourcePath("common/spv/" + fragPathname);
+	std::string vertPathNameToUse = Katipo::getResourcePath("common/spv/" + vertPathname);
+	std::string fragPathNameToUse = Katipo::getResourcePath("common/spv/" + fragPathname);
 
 	//debugTimer->getDt();
     GPipeline* pipeline = new GPipeline(vulkan,
@@ -516,11 +515,11 @@ Model* MJCache::modelForModelIndex(int modelIndex)
 
 std::string getModelViewBufferHash(Model* model, std::map<std::string, std::string>& materialRemaps, std::string defaultMaterial)
 {
-	std::string hash = string_format("%s_%s_", model->modelPath.c_str(), defaultMaterial.c_str());
+	std::string hash = Tui::string_format("%s_%s_", model->modelPath.c_str(), defaultMaterial.c_str());
 
 	for(auto& remap : materialRemaps)
 	{
-		hash = hash + string_format("%s_%s_", remap.first.c_str(), remap.second.c_str());
+		hash = hash + Tui::string_format("%s_%s_", remap.first.c_str(), remap.second.c_str());
 	}
 	return hash;
 }

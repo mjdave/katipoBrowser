@@ -2,6 +2,7 @@
 
 #include "UILightingManager.h"
 #include "TuiScript.h"
+#include "KatipoUtilities.h"
 
 
 #define ENV_MAP_SIZE 64
@@ -50,7 +51,7 @@ UILightingManager::UILightingManager(Vulkan* vulkan_)
         int mipSize = ENV_MAP_SIZE_UI;
         for(int mip = 0; mip < PBR_MIP_LEVELS; mip++)
         {
-            std::string filePath = getResourcePath(Tui::string_format("common/img/objectPBR/pbr_%d_%d.RAW", face, mip));
+            std::string filePath = Katipo::getResourcePath(Tui::string_format("common/img/objectPBR/pbr_%d_%d.RAW", face, mip));
             std::string uncompressed = Tui::getFileContents(filePath);
 
             void* floatData = (void*)(uncompressed.data());

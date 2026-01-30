@@ -1,0 +1,7 @@
+{
+    vertPath = "drawQuadClip.vert.spv",
+    fragPath = "drawQuadClip.frag.spv",
+    blendMode = "premultiplied",
+    depth = "disabled",
+    cull = "disabled",
+}

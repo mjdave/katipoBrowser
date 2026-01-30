@@ -1,10 +1,10 @@
 #include "GPipeline.h"
 #include "Vulkan.h"
-#include "FileUtils.h"
+#include "TuiFileUtils.h"
 #include <array>
 
 #include "Database.h"
-#include "sha1.h"
+#include "TuiSha1.h"
 
 VkShaderModule createShaderModule(const VkDevice& device, const std::string& code) {
     VkShaderModuleCreateInfo createInfo = {};
@@ -67,8 +67,8 @@ GPipeline::GPipeline(Vulkan* vulkan_,
 
     createDescriptorSetLayout();
 
-    std::string vertShaderCode = getFileContents(vertShaderPathname);
-    std::string fragShaderCode = getFileContents(fragShaderPathname);
+    std::string vertShaderCode = Tui::getFileContents(vertShaderPathname);
+    std::string fragShaderCode = Tui::getFileContents(fragShaderPathname);
 
     if(vertShaderCode.empty() || fragShaderCode.empty())
     {

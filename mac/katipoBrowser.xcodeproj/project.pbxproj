@@ -23,6 +23,9 @@
 		5B49FD2A2F2C21BB007C1980 /* SDL3.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5B49FD282F2C21BB007C1980 /* SDL3.framework */; };
 		5B49FD2B2F2C21BB007C1980 /* SDL3_mixer.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5B49FD292F2C21BB007C1980 /* SDL3_mixer.framework */; };
 		5B49FD2D2F2C21CA007C1980 /* MoltenVK.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5B49FD2C2F2C21CA007C1980 /* MoltenVK.xcframework */; };
+		5B49FDFD2F2C5A43007C1980 /* libsodium.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 5B49FDFC2F2C5A3E007C1980 /* libsodium.a */; };
+		5B49FE002F2C6D3A007C1980 /* SDL3.framework in Embed Libraries */ = {isa = PBXBuildFile; fileRef = 5B49FDFF2F2C6D3A007C1980 /* SDL3.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		5B49FE022F2C6D4E007C1980 /* SDL3_mixer.framework in Embed Libraries */ = {isa = PBXBuildFile; fileRef = 5B49FE012F2C6D4E007C1980 /* SDL3_mixer.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		5B735EBB2EF9041000630636 /* katipoBrowser.icon in Resources */ = {isa = PBXBuildFile; fileRef = 5B735EBA2EF9041000630636 /* katipoBrowser.icon */; };
 		5BED52FC2E6014340028ED11 /* MediaPlayer.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5BED52FB2E6014340028ED11 /* MediaPlayer.framework */; };
 		5BFDBDA92CC82F1600247D8D /* MurmurHash3.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5BFDBDA72CC82F1600247D8D /* MurmurHash3.cpp */; };
@@ -36,6 +39,8 @@
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
+				5B49FE002F2C6D3A007C1980 /* SDL3.framework in Embed Libraries */,
+				5B49FE022F2C6D4E007C1980 /* SDL3_mixer.framework in Embed Libraries */,
 			);
 			name = "Embed Libraries";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -70,6 +75,9 @@
 		5B49FD282F2C21BB007C1980 /* SDL3.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SDL3.framework; path = thirdPartyMac/SDL3.framework; sourceTree = "<group>"; };
 		5B49FD292F2C21BB007C1980 /* SDL3_mixer.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SDL3_mixer.framework; path = thirdPartyMac/SDL3_mixer.framework; sourceTree = "<group>"; };
 		5B49FD2C2F2C21CA007C1980 /* MoltenVK.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; name = MoltenVK.xcframework; path = thirdPartyMac/MoltenVK/static/MoltenVK.xcframework; sourceTree = "<group>"; };
+		5B49FDFC2F2C5A3E007C1980 /* libsodium.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libsodium.a; path = ../katipo/thirdParty/libsodium/macos/lib/libsodium.a; sourceTree = "<group>"; };
+		5B49FDFF2F2C6D3A007C1980 /* SDL3.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SDL3.framework; path = thirdPartyMac/SDL3.framework; sourceTree = "<group>"; };
+		5B49FE012F2C6D4E007C1980 /* SDL3_mixer.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SDL3_mixer.framework; path = thirdPartyMac/SDL3_mixer.framework; sourceTree = "<group>"; };
 		5B735EBA2EF9041000630636 /* katipoBrowser.icon */ = {isa = PBXFileReference; lastKnownFileType = folder.iconcomposer.icon; name = katipoBrowser.icon; path = ../working/images/katipoBrowser.icon; sourceTree = SOURCE_ROOT; };
 		5BED52FB2E6014340028ED11 /* MediaPlayer.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MediaPlayer.framework; path = System/Library/Frameworks/MediaPlayer.framework; sourceTree = SDKROOT; };
 		5BFDBD012CC78B1E00247D8D /* katipoBrowser.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = katipoBrowser.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -78,6 +86,16 @@
 		5BFDBDA72CC82F1600247D8D /* MurmurHash3.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = MurmurHash3.cpp; path = /Users/davidframpton/Documents/ambience/thirdParty/MurmurHash3.cpp; sourceTree = "<absolute>"; };
 		5BFDBDA82CC82F1600247D8D /* stb_image.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = stb_image.h; path = /Users/davidframpton/Documents/ambience/thirdParty/stb_image.h; sourceTree = "<absolute>"; };
 /* End PBXFileReference section */
+
+/* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
+		5B49FDFE2F2C6CB1007C1980 /* Exceptions for "core" folder in "katipoBrowser" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				ClientHttpInterface.cpp,
+			);
+			target = 5BFDBD002CC78B1E00247D8D /* katipoBrowser */;
+		};
+/* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
 		5B2E9B162DE302DF00B8DF1E /* katipoBrowser */ = {
@@ -99,6 +117,9 @@
 		};
 		5B49FDED2F2C36FC007C1980 /* core */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				5B49FDFE2F2C6CB1007C1980 /* Exceptions for "core" folder in "katipoBrowser" target */,
+			);
 			name = core;
 			path = ../katipo/core;
 			sourceTree = SOURCE_ROOT;
@@ -114,6 +135,7 @@
 				5BED52FC2E6014340028ED11 /* MediaPlayer.framework in Frameworks */,
 				5B49FD2A2F2C21BB007C1980 /* SDL3.framework in Frameworks */,
 				5B49FD2D2F2C21CA007C1980 /* MoltenVK.xcframework in Frameworks */,
+				5B49FDFD2F2C5A43007C1980 /* libsodium.a in Frameworks */,
 				5B49FD2B2F2C21BB007C1980 /* SDL3_mixer.framework in Frameworks */,
 				5B1384B12E3A08F900AEF9AD /* AVFoundation.framework in Frameworks */,
 			);
@@ -125,6 +147,7 @@
 		5B8CB8652D9105DE008DDB36 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				5B49FDFC2F2C5A3E007C1980 /* libsodium.a */,
 				5B1AD7902E6069B6005D15BD /* CoreMedia.framework */,
 				5BED52FB2E6014340028ED11 /* MediaPlayer.framework */,
 				5B1384B02E3A08F900AEF9AD /* AVFoundation.framework */,
@@ -139,6 +162,8 @@
 		5BFDBCF82CC78B1E00247D8D = {
 			isa = PBXGroup;
 			children = (
+				5B49FE012F2C6D4E007C1980 /* SDL3_mixer.framework */,
+				5B49FDFF2F2C6D3A007C1980 /* SDL3.framework */,
 				5B2E9B162DE302DF00B8DF1E /* katipoBrowser */,
 				5BFDBD022CC78B1E00247D8D /* Products */,
 				5B49FD252F2C2019007C1980 /* KatipoBrowser.h */,
@@ -444,6 +469,7 @@
 				LIBRARY_SEARCH_PATHS = (
 					"\"$(SRCROOT)/../ThirdParty\"",
 					"\"$(SRCROOT)/../../../VulkanSDK/1.3.261.1/MoltenVK/MoltenVK.xcframework/macos-arm64_x86_64\"",
+					"\"$(SRCROOT)/../katipo/thirdParty/libsodium/macos/lib\"",
 				);
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.majicjungle.katipoBrowser;
@@ -457,6 +483,10 @@
 					"\"$(SRCROOT)/../katipo/thirdParty/tui/source\"",
 					"\"$(SRCROOT)/../katipo/thirdParty/tui/thirdParty/glm/glm\"",
 					"\"$(SRCROOT)/../thirdParty/VulkanMemoryAllocator-3.2.1/include\"",
+					"\"$(SRCROOT)/../thirdParty/rapidjson-1.1.0/include\"",
+					"\"$(SRCROOT)/../katipo/thirdParty/libsodium/macos/include\"",
+					"\"$(SRCROOT)/../katipo/thirdParty/liblmdb\"",
+					"\"$(SRCROOT)/../katipo/thirdParty/utfcpp-3.2.1/source\"",
 				);
 				WARNING_CFLAGS = "-Wno-nullability-completeness";
 			};
@@ -498,6 +528,7 @@
 				LIBRARY_SEARCH_PATHS = (
 					"\"$(SRCROOT)/../ThirdParty\"",
 					"\"$(SRCROOT)/../../../VulkanSDK/1.3.261.1/MoltenVK/MoltenVK.xcframework/macos-arm64_x86_64\"",
+					"\"$(SRCROOT)/../katipo/thirdParty/libsodium/macos/lib\"",
 				);
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.majicjungle.katipoBrowser;
@@ -511,6 +542,10 @@
 					"\"$(SRCROOT)/../katipo/thirdParty/tui/source\"",
 					"\"$(SRCROOT)/../katipo/thirdParty/tui/thirdParty/glm/glm\"",
 					"\"$(SRCROOT)/../thirdParty/VulkanMemoryAllocator-3.2.1/include\"",
+					"\"$(SRCROOT)/../thirdParty/rapidjson-1.1.0/include\"",
+					"\"$(SRCROOT)/../katipo/thirdParty/libsodium/macos/include\"",
+					"\"$(SRCROOT)/../katipo/thirdParty/liblmdb\"",
+					"\"$(SRCROOT)/../katipo/thirdParty/utfcpp-3.2.1/source\"",
 				);
 				WARNING_CFLAGS = "-Wno-nullability-completeness";
 			};

@@ -82,7 +82,7 @@ uint32_t randomIntegerValueForUniqueIDAndSeedWithLogging(uint64_t uniqueID, uint
     const uint8_t * data = (const uint8_t*)(&uniqueID);
     for(int i = 0; i < sizeof(uint64_t); i++)
     {
-        MJLog("%d", data[i])
+        MJLog("%d", data[i]);
     }
     uint32_t hash;
     MurmurHash3_x86_32(&uniqueID, sizeof(uint64_t), seed, &hash);
@@ -92,7 +92,7 @@ uint32_t randomIntegerValueForUniqueIDAndSeedWithLogging(uint64_t uniqueID, uint
     data = (const uint8_t*)(&uniqueID);
     for(int i = 0; i < sizeof(uint64_t); i++)
     {
-        MJLog("%d", data[i])
+        MJLog("%d", data[i]);
     }
 
     return MIN(hash, max - 1);

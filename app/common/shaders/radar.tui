@@ -1,0 +1,7 @@
+{
+    vertPath = "drawQuadTextured.vert.spv",
+    fragPath = "radar.frag.spv",
+    blendMode = "premultiplied",
+    depth = "disabled",
+    cull = "disabled",
+}

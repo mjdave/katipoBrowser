@@ -1,0 +1,8 @@
+
+{
+    vertPath = "texturedVertColoredClip.vert.spv",
+    fragPath = "texturedVertColoredClip.frag.spv",
+    blendMode = "premultiplied",
+    depth = "disabled",
+    cull = "disabled",
+}

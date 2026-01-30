@@ -1,0 +1,505 @@
+
+knobSize = vec2(20.0, 30.0)
+backgroundWidth = 20.0
+knobZOffset = 0
+
+
+updateYOffsets = function(scrollView, rowStartIndex)
+{
+    userData = scrollView.scrollViewData
+    for(i=rowStartIndex, i < table.count(userData.rowInfos), i++)
+    {
+        rowInfo = userData.rowInfos[i]
+        aboveRowInfo = userData.rowInfos[i - 1]
+        if(aboveRowInfo)
+        {
+            rowInfo.yOffsetFromTop = aboveRowInfo.yOffsetFromTop + aboveRowInfo.rowView.size.y
+        }
+        else
+        {
+            rowInfo.yOffsetFromTop = 0
+        }
+    }
+}
+
+updatePositionsAndVisibilities = function(scrollView)
+{
+    userData = scrollView.scrollViewData
+    for(i=0, i < table.count(userData.rowInfos), i++)
+    {
+        rowInfo = userData.rowInfos[i]
+        if(rowInfo.yOffsetFromTop + rowInfo.rowView.size.y + userData.scrollYOffset <= 0)
+        {
+            rowInfo.rowView.hidden = true
+        }
+        else
+        {
+            if(rowInfo.yOffsetFromTop + userData.scrollYOffset >= scrollView.size.y)
+            {
+                rowInfo.rowView.hidden = true
+            }
+            else
+            {
+                rowInfo.rowView.hidden = false
+            }
+        }
+    }
+    
+    knobView = userData.knobView
+    size = scrollView.size
+
+    fraction = -userData.scrollYOffset / userData.scrollYHeight
+    knobY = size.y * fraction
+    knobView.pos = vec3(2, size.y - (knobY - fraction * knobSize.y) - knobSize.y, knobZOffset)
+}
+
+recreateDerivedData = function(scrollView)
+{
+    userData = scrollView.scrollViewData
+    userData.scrollYIndexMax = 0
+    for(i=0, i < table.count(userData.rowInfos), i++)
+    {
+        rowInfo = userData.rowInfos[i]
+        if(rowInfo.yOffsetFromTop + rowInfo.rowView.size.y > scrollView.size.y + 0.5)
+        {
+            userData.scrollYIndexMax = userData.scrollYIndexMax + 1
+        }
+    }
+    userData.scrollYHeight = 0
+    for(i=0, i < userData.scrollYIndexMax, i++)
+    {
+        rowInfo = userData.rowInfos[i]
+        userData.scrollYHeight = userData.scrollYHeight + rowInfo.rowView.size.y
+    }
+
+    scrollerBackgroundView = userData.scrollerBackgroundView
+    knobView = userData.knobView
+    
+    if(userData.scrollYIndexMax == 0)
+    {
+        knobView.hidden = true
+    }
+    else
+    {
+        knobView.hidden = false
+    }
+    updatePositionsAndVisibilities(scrollView)
+    userData.dirty = false
+}
+
+create = function(parentView)
+{
+    scrollViewLayout = {
+        size = function(parentSize)
+        {
+            return parentSize
+        }
+        type = "view"
+    }
+
+    scrollView = parentView.addView(scrollViewLayout)
+    scrollView.setClipChildren(true)
+
+    userData = {
+        rowInfos = {},
+        contentHeight = 0.0,
+        scrollYIndexMax = 0,
+        scrollYOffset = 0.0,
+        scrollVelocity = 0,
+
+        backgroundHover = false,
+        knobHover = false,
+    }
+    scrollView.scrollViewData = userData
+
+    baseItemLayout = {
+        size = vec2(0,0)
+        alignmentX = "left"
+        alignmentY = "top"
+        type = "view"
+    }
+    
+    baseItemView = scrollView.addView(baseItemLayout)
+    userData.baseItemView = baseItemView
+
+    scrollerBackgroundLayout = {
+        id = "scrollerBackground"
+        size = function(parentSize)
+        {
+            return vec2(backgroundWidth, parentSize.y)
+        }
+        alignmentX = "right"
+        alignmentY = "top"
+        type = "color"
+        color = vec4(0.2,0.3,0.5,0.1)
+    }
+
+    scrollerBackgroundView = scrollView.addView(scrollerBackgroundLayout)
+    userData.scrollerBackgroundView = scrollerBackgroundView
+
+
+    knobLayout = {
+        size = knobSize
+        alignmentY = "bottom"
+        type = "color"
+        color = vec4(1.0,1.0,1.0,0.2)
+        layoutParentID = "scrollerBackground"
+        pos = vec3(2, 0, knobZOffset)
+    }
+
+    knobView = scrollView.addView(knobLayout)
+    userData.knobView = knobView
+
+    mainViewMouseDown = function(buttonIndex, mouseLoc)
+    {
+        if(!userData.disabled and userData.scrollYIndexMax != 0)
+        {
+            userData.lastY = mouseLoc.y
+            userData.startY = mouseLoc.y
+        }
+    }
+    
+    mainViewMouseDragged = function(mouseLoc)
+    {
+        if(!userData.disabled and userData.scrollYIndexMax != 0 and !userData.isScrollBarMouseDown)
+        {
+            diff = userData.lastY - mouseLoc.y
+            if(diff > 1 or diff < -1)
+            {
+                startDiff = mouseLoc.y - userData.startY
+                if(startDiff > 4.0 or startDiff < -4.0)
+                {
+                    userData.scrollInProgress = true
+                    minScroll = -userData.scrollYHeight
+                    maxScroll = 0
+                    
+                    if(userData.scrollYOffset + diff < minScroll or userData.scrollYOffset + diff > maxScroll)
+                    {
+                        diff *= 0.5
+                    }
+                    
+                    userData.scrollVelocity = diff * 2.0
+                    userData.scrollYOffset += diff
+                    userData.lastY = mouseLoc.y
+                }
+            }
+        }
+    }
+
+    mainViewMouseUp = function(buttonIndex, mouseLoc)
+    {
+        userData.isScrollBarMouseDown = false
+        userData.scrollInProgress = false
+    }
+
+    scrollerMouseDown = function(buttonIndex, mouseLoc)
+    {
+        if(!userData.disabled and userData.scrollYIndexMax != 0)
+        {
+            userData.isScrollBarMouseDown = true
+
+            desiredY = -(1.0 - (mouseLoc.y / scrollView.size.y)) * userData.scrollYHeight
+            offset = desiredY - userData.scrollYOffset
+            userData.scrollVelocity = offset * 0.3
+        }
+    }
+    
+    scrollerMouseDragged = function(mouseLoc)
+    {
+        if(!userData.disabled and userData.scrollYIndexMax != 0)
+        {
+            userData.scrollBarScrollInProgress = true
+
+            desiredY = -(1.0 - (mouseLoc.y / scrollView.size.y)) * userData.scrollYHeight
+            offset = desiredY - userData.scrollYOffset
+            userData.scrollVelocity = offset * 0.3
+        }
+    }
+
+    scrollerMouseUp = function(buttonIndex, mouseLoc)
+    {
+        userData.isScrollBarMouseDown = false
+
+        if(!userData.disabled and userData.scrollYIndexMax != 0)
+        {
+            userData.scrollBarScrollInProgress = false
+        }
+    }
+
+
+    scrollerBackgroundView.mouseDown = scrollerMouseDown
+    scrollerBackgroundView.mouseDragged = scrollerMouseDragged
+    scrollerBackgroundView.mouseUp = scrollerMouseUp
+
+    scrollView.mouseDown = mainViewMouseDown
+    scrollView.mouseDragged = mainViewMouseDragged
+    scrollView.mouseUp = mainViewMouseUp
+    
+    knobView.mouseDown = function(buttonIndex, mouseLoc)
+    {
+        backgroundLoc = knobView.locationRelativeToView(mouseLoc, scrollerBackgroundView)
+        scrollerMouseDown(buttonIndex, backgroundLoc)
+    }
+
+    knobView.mouseDragged = function(mouseLoc) 
+    {
+        backgroundLoc = knobView.locationRelativeToView(mouseLoc, scrollerBackgroundView)
+        scrollerMouseDragged(backgroundLoc)
+    }
+
+    scrollView.mouseWheel = function(position, scrollChange)
+    {
+        offset = scrollChange.y
+        if(scrollChange.y >= 1)
+        {
+            offset = math.floor(scrollChange.y)
+        }
+        elseif(scrollChange.y <= -1)
+        {
+            offset = math.ceil(scrollChange.y)
+        }
+
+        userData.scrollVelocity += offset * 2.0
+    }
+
+    hoverStart = function()
+    {
+        if(!userData.hover)
+        {
+            if(userData.backgroundHover or userData.knobHover)
+            {
+                if(!userData.disabled and userData.scrollYIndexMax != 0)
+                {
+                    userData.hover = true
+                    #audio:playUISound(uiCommon.hoverSoundFile)
+                    #knobView:setModel(model:modelIndexForName("ui_slider_knob"), {
+                    #    [material.types.ui_standard.index] = material.types.ui_selected.index
+                    #})
+                    #scrollerBackgroundView:setModel(model:modelIndexForName("ui_slider_vertical_bg"), {
+                    #    [material.types.ui_standard.index] = material.types.ui_selected.index
+                    #})
+                }
+            }
+        }
+    }
+
+    hoverEnd = function()
+    {
+        if(userData.hover)
+        {
+            if((!userData.backgroundHover) and (!userData.knobHover))
+            {
+                userData.hover = false
+                userData.mouseDown = false
+                #knobView:setModel(model:modelIndexForName("ui_slider_knob"))
+                #scrollerBackgroundView:setModel(model:modelIndexForName("ui_slider_vertical_bg"))
+            }
+        }
+    }
+    
+    scrollerBackgroundView.hoverStart = function()
+    {
+        userData.backgroundHover = true
+        hoverStart()
+    }
+
+    scrollerBackgroundView.hoverEnd = function()
+    {
+        userData.backgroundHover = false
+        hoverEnd()
+    }
+    
+    
+    knobView.hoverStart = function()
+    {
+        userData.knobHover = true
+        hoverStart()
+    }
+
+    knobView.hoverEnd = function()
+    {
+        userData.knobHover = false
+        hoverEnd()
+    }
+
+    
+    scrollView.update = function(dt)
+    {
+        if(userData.dirty)
+        {
+            recreateDerivedData(scrollView)
+        }
+
+        if(!userData.scrollInProgress)
+        {
+            userData.scrollYOffset += userData.scrollVelocity
+
+            userData.scrollVelocity = userData.scrollVelocity * (1.0 - math.min(dt * 16, 1))
+            
+            minScroll = -userData.scrollYHeight
+            maxScroll = 0
+            
+            if(userData.scrollYOffset < minScroll)
+            {
+                userData.scrollYOffset -= (userData.scrollYOffset - minScroll) * math.min(dt * 16, 1)
+            }
+            else if(userData.scrollYOffset > maxScroll)
+            {
+                userData.scrollYOffset -= (userData.scrollYOffset - maxScroll) * math.min(dt * 16, 1)
+            }
+        }
+
+        userData.baseItemView.pos = vec3(0, - userData.scrollYOffset,0)
+        updatePositionsAndVisibilities(scrollView)
+    }
+
+    removeAllRows(scrollView)
+    
+    return scrollView
+}
+
+
+scrollerIsVisible = function(scrollView)
+{
+    return (scrollView.userData.scrollYIndexMax != 0)
+}
+
+scrollToVisible = function(scrollView, itemListIndex, viewToVerifyMatch)
+{
+    error("todo")
+    #userData = scrollView.scrollViewData
+    #if(userData.dirty)
+    #{
+    #    recreateDerivedData(scrollView)
+    #}
+    ##mj:log("uiScrollView:scrollToVisible:", itemListIndex, " scrollView.scrollYIndexMax:", scrollView.scrollYIndexMax, " rowInfo:", scrollView.rowInfos[itemListIndex])
+    #if(userData.scrollYIndexMax != 0) 
+    #{
+    #    rowInfo = userData.rowInfos[itemListIndex]
+    #    if(rowInfo and rowInfo.rowView == viewToVerifyMatch)
+    #    {
+    #        if(userData.scrollYIndex > itemListIndex - 2)
+    #        {
+    #            updateScrollGoal(userData, itemListIndex - 2)
+    #        }
+    #        else if(-userData.goalY < rowInfo.yOffsetFromTop - userData.size.y + rowInfo.rowView.size.y * 2.0)
+    #        {
+    #            updateScrollGoal(scrollView, itemListIndex - 2)
+    #        }
+    #    }
+    #}
+}
+
+insertRow = function(scrollView, insertRowView, rowIndexOrNil)
+{
+    userData = scrollView.scrollViewData
+    insertIndex = rowIndexOrNil
+    if((!insertIndex) or insertIndex > table.count(userData.rowInfos))
+    {
+        insertIndex = table.count(userData.rowInfos)
+    }
+
+    addedRowHeight = insertRowView.size.y
+
+    oldRowInfoAtThisPos = userData.rowInfos[insertIndex]
+    aboveRowInfo = userData.rowInfos[insertIndex - 1]
+
+    insertRowView.alignmentX = "left"
+    #insertRowView.size.x = scrollView.size.x - backgroundWidth
+
+    if(aboveRowInfo)
+    {
+        insertRowView.layoutParent = aboveRowInfo.rowView
+        insertRowView.alignmentY = "below"
+    }
+    else
+    {
+        insertRowView.layoutParent = userData.baseItemView
+        insertRowView.alignmentY = "top"
+    }
+
+    if(oldRowInfoAtThisPos)
+    {
+        oldRowInfoAtThisPos.rowView.layoutParent = insertRowView
+    }
+
+    
+   # insertRowView.allowViewMovementUnderCursorToTriggerHoverStartEvents = true // todo maybe
+
+    rowInfo = {
+        rowView = insertRowView,
+    }
+
+    table.insert(userData.rowInfos, insertIndex, rowInfo)
+
+
+    userData.contentHeight = userData.contentHeight + addedRowHeight
+
+    updateYOffsets(scrollView, insertIndex)
+
+    userData.dirty = true
+
+}
+
+
+removeAllRows = function(scrollView)
+{
+    userData = scrollView.scrollViewData
+    for(rowInfo in userData.rowInfos)
+    {
+        scrollView.removeView(rowInfo.rowView)
+    }
+    userData.rowInfos = {}
+    userData.contentHeight = 0.0
+
+    userData.scrollYIndexMax = 0
+    userData.dirty = true
+
+}
+
+removeRowAtIndex = function(scrollView, rowIndex)
+{
+    userData = scrollView.scrollViewData
+    if(rowIndex and rowIndex > 0 and rowIndex <= table.count(userData.rowInfos))
+    {
+        userData.contentHeight = userData.contentHeight - userData.rowInfos[rowIndex].rowView.size.y
+        viewToRemove = userData.rowInfos[rowIndex].rowView
+
+        table.remove(userData.rowInfos, rowIndex)
+
+        newCurrentPositionRowInfo = userData.rowInfos[rowIndex]
+        if(newCurrentPositionRowInfo)
+        {
+            aboveRowInfo = userData.rowInfos[rowIndex - 1]
+
+            if(aboveRowInfo)
+            {
+                newCurrentPositionRowInfo.rowView.layoutParent = aboveRowInfo.rowView
+                newCurrentPositionRowInfo.rowView.relativePosition = ViewPosition(userData.contentHorizontalAlignment, MJPositionBelow)
+            }
+            else
+            {
+                newCurrentPositionRowInfo.rowView.layoutParent = userData.baseItemView
+                newCurrentPositionRowInfo.rowView.relativePosition = ViewPosition(userData.contentHorizontalAlignment, MJPositionTop)
+            }
+        }
+
+        scrollView.removeView(viewToRemove)
+        updateYOffsets(scrollView, rowIndex)
+        userData.dirty = true
+    }
+}
+
+removeRow = function(scrollView, rowView)
+{
+    userData = scrollView.scrollViewData
+    for(rowIndex,rowInfo in userData.rowInfos) 
+    {
+        if(rowInfo.rowView == rowView)
+        {
+            removeRowAtIndex(scrollView, rowIndex)
+            return
+        }
+    }
+
+}

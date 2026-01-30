@@ -6,7 +6,7 @@
 #include "WindowInfo.h"
 
 #include <vector>
-#include "Serialization.h"
+#include "SDL.h"
 //#include "MJLua.h"
 
 class Shader;
@@ -26,11 +26,8 @@ class MaterialManager;
 class MJRenderTarget;
 class Camera;
 class MJDrawQuad;
-class RandomNumberGenerator;
 class MJDrawable;
 class MJDataTexture;
-
-class UserSettings;
 
 
 #define MJ_WINDOW_MODE_WINDOWED 1
@@ -54,7 +51,6 @@ public:
     MJView* mainMJView = nullptr;
     MJCache* cache;
     MaterialManager* materialManager;
-    UserSettings* userSettings;
     WindowInfo* windowInfo;
 
     Vulkan* vulkan;
@@ -156,8 +152,6 @@ protected:
 
     Timer* renderTimer;
 	Timer* debugTimer;
-
-	RandomNumberGenerator* randomNumberGenerator;
     
 private:
 

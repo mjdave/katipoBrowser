@@ -7,11 +7,11 @@
 //
 
 #include "MJModelView.h"
-#include "FileUtils.h"
+#include "TuiScript.h"
+#include "KatipoUtilities.h"
 #include "MJCache.h"
 #include "MJDrawQuad.h"
 #include "MJRenderTarget.h"
-#include "StringUtils.h"
 #include "UILightingManager.h"
 #include "MJDrawable.h"
 #include "MJRawImageTexture.h"
@@ -479,7 +479,7 @@ void MJModelView::setRadialMaskFraction(double radialMaskFraction_)
 
 std::string MJModelView::getDescription()
 {
-    std::string result = string_format("MJModelView %p (%.2f,%.2f)\nsubviews:\n", size.x, size.y, (void*)this);
+    std::string result = Tui::string_format("MJModelView %p (%.2f,%.2f)\nsubviews:\n", size.x, size.y, (void*)this);
     for(MJView* subView : subviews)
     {
         result = result + subView->getDescription();
@@ -496,7 +496,7 @@ void MJModelView::loadFromTable(TuiTable* table, bool isRoot)
     
     if(table->hasKey("modelName"))
     {
-        setModel(getResourcePath("models/" + table->getString("modelName")));
+        setModel(Katipo::getResourcePath("models/" + table->getString("modelName")));
     }
     if(table->hasKey("modelScale"))
     {

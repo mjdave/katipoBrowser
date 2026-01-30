@@ -1,0 +1,260 @@
+topStatusBarPadding = 50
+sidePadding = 30
+headerHeight = 140
+footerHeight = 120
+
+#mainContentSize = vec2(screenSize.x, screenSize.y - headerHeight - footerHeight)
+
+mainView = {
+    type = "image"
+    path = "img/colorsBackground.png"
+    shader = "drawQuadTexturedHueShift"
+    size = function(parentSize)
+    {
+        return parentSize
+    }
+    crop = true
+    subviews = {
+        {
+            id = "playlistsHeader"
+            type = "color"
+            color = vec4(0.1,0.2,0.3,0.1)
+            #size = vec2(screenSize.x,headerHeight)
+            size = function(parentSize)
+            {
+                return vec2(parentSize.x, headerHeight)
+            }
+            alignmentX = "left"
+            alignmentY = "top"
+            subviews = {
+                {
+                    id = "settingsButton"
+                    type = "image"
+                    path = "img/settings.png"
+                    shader = "drawQuadTexturedHueShift"
+                    #pos = vec3(80,-10 - topStatusBarPadding, 0)
+                    pos = vec3(40,0, 0)
+                    size = vec2(40,40)
+                    alignmentX = "left"
+                }
+                {
+                    id = "title"
+                    type = "text"
+                    #pos = vec3(0,-10 - topStatusBarPadding, 0)
+                    text = "Playlists"
+                    font = "blockheadsHue"
+                    additiveBlend = true
+                    fontSize = 24
+                }
+                {
+                    id = "addButton"
+                    type = "image"
+                    path = "img/add.png"
+                    shader = "drawQuadTexturedHueShift"
+                    #pos = vec3(-80,-10 - topStatusBarPadding, 0)
+                    pos = vec3(-40,0, 0)
+                    size = vec2(40,40)
+                    alignmentX = "right"
+                }
+            }
+        }
+
+        {
+            id = "settingsHeader"
+            type = "color"
+            hidden = true
+            color = vec4(0.4,0.1,0.2,0.1)
+            #size = vec2(screenSize.x,headerHeight)
+            size = function(parentSize)
+            {
+                return vec2(parentSize.x, headerHeight)
+            }
+            alignmentX = "left"
+            alignmentY = "top"
+            subviews = {
+                {
+                    id = "backButton"
+                    type = "image"
+                    path = "img/back.png"
+                    shader = "drawQuadTexturedHueShift"
+                    #pos = vec3(80,-10 - topStatusBarPadding, 0)
+                    pos = vec3(40,0, 0)
+                    size = vec2(40,40)
+                    alignmentX = "left"
+                }
+                {
+                    id = "title"
+                    type = "text"
+                    #pos = vec3(0,-10 - topStatusBarPadding, 0)
+                    text = "Settings"
+                    font = "blockheadsHue"
+                    additiveBlend = true
+                    fontSize = 24
+                }
+            }
+        }
+
+        {
+            id = "mainContent"
+            type = "view"
+            alignmentY = "top"
+            #size = mainContentSize
+            size = function(parentSize)
+            {
+                return vec2(parentSize.x, parentSize.y - headerHeight - footerHeight)
+            }
+            pos = vec3(0,1.0 - headerHeight, 0)
+            subviews = {
+                {
+                    id = "playlistContent"
+                    type = "view"
+                    size = function(parentSize)
+                    {
+                        return parentSize
+                    }
+                }
+
+                {
+                    id = "settingsContent"
+                    hidden = true
+                    type = "view"
+                    size = function(parentSize)
+                    {
+                        return parentSize
+                    }
+                    subviews = {
+                        {
+                            id = "ipTitle"
+                            type = "text"
+                            text = "IP:"
+                            alignmentY = "top"
+                            alignmentX = "right"
+                            font = "blockheadsHue"
+                            #pos = vec3(-mainContentSize.x * 0.5, -40,0)
+                            fontSize = 18
+                        }
+                        {
+                            id = "ipTextEntry"
+                            layoutParentID = "ipTitle"
+                            type = "color"
+                            color = vec4(0.1,0.5,0.5,0.2)
+                            alignmentX = "outerRight"
+                            pos = vec3(10, 0,0)
+                            size = vec2(200,40)
+                            
+                        }
+                        {
+                            id = "ipPort"
+                            layoutParentID = "ipTitle"
+                            type = "text"
+                            text = "Port:"
+                            alignmentY = "below"
+                            alignmentX = "right"
+                            font = "blockheadsHue"
+                            pos = vec3(0.0,-20,0)
+                            fontSize = 18
+                        }
+                        {
+                            id = "ipTextEntry"
+                            layoutParentID = "ipPort"
+                            type = "color"
+                            color = vec4(0.1,0.5,0.5,0.2)
+                            alignmentX = "outerRight"
+                            pos = vec3(10, 0,0)
+                            size = vec2(200,40)
+                            
+                        }
+                    }
+                }
+            }
+        }
+
+        {
+            id = "footer"
+            type = "color"
+            color = vec4(0.1,0.5,0.2,0.1)
+            #size = vec2(screenSize.x,footerHeight)
+            size = function(parentSize)
+            {
+                return vec2(parentSize.x,footerHeight)
+            }
+            alignmentX = "left"
+            alignmentY = "bottom"
+            subviews = {
+                {
+                    id = "playPauseButton"
+                    type = "image"
+                    path = "img/play.png"
+                    shader = "drawQuadTexturedHueShift"
+                    pos = vec3(0, -10, 0)
+                    size = vec2(40,40)
+                    alignmentY = "top"
+                }
+                {
+                    id = "nextButton"
+                    type = "image"
+                    path = "img/next.png"
+                    shader = "drawQuadTexturedHueShift"
+                    pos = vec3(60, -10, 0)
+                    size = vec2(40,40)
+                    alignmentY = "top"
+                }
+                {
+                    id = "currentlyPlayingTitle"
+                    type = "text"
+                    text = " "
+                    font = "blockheadsHue"
+                    additiveBlend = true
+                    #pos = vec3(0,-5,0)
+                    fontSize = 18
+                    alignmentY = "below"
+                    layoutParentID = "playPauseButton"
+                }
+                {
+                    id = "statusSubtitle"
+                    type = "text"
+                    text = "Connecting..."
+                    font = "blockheadsHue"
+                    additiveBlend = true
+                    alignmentY = "below"
+                    layoutParentID = "currentlyPlayingTitle"
+                    #pos = vec3(0,0,0)
+                    fontSize = 12
+                }
+            }
+        }
+    }
+}
+
+playlistItemPlayMode = {
+    id = "playlistItemBackground"
+    type = "color"
+    color = vec4(0.04,0.12,0.15,0.1)
+    #size = vec2(screenSize.x - 20.0,60) // -20 due to scroller width
+    size = function(parentSize)
+    {
+        return vec2(parentSize.x - 20.0,60)
+    }
+
+    subviews = {
+        {
+            id = "playlistItemTitle"
+            type = "text"
+            text = "Playlist Title"
+            font = "blockheadsHue"
+            alignmentX = "left"
+            additiveBlend = true
+            pos = vec3(20,0,0)
+            fontSize = 18
+        }
+        {
+            id = "dotDotDotButton"
+            type = "image"
+            path = "img/dotDotDot.png"
+            shader = "drawQuadTexturedHueShiftClip"
+            pos = vec3(-20,0, 0)
+            size = vec2(40,40)
+            alignmentX = "right"
+        }
+    }
+}

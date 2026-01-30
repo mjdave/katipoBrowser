@@ -9,7 +9,7 @@
 #include "MJColorView.h"
 #include "MJCache.h"
 #include "MJDrawQuad.h"
-#include "StringUtils.h"
+#include "TuiStringUtils.h"
 #include "GCommandBuffer.h"
 #include "MJDrawable.h"
 #include "Camera.h"
@@ -163,7 +163,7 @@ void MJColorView::updateUBOs(float parentAlpha, dvec3 camPos, dvec3 viewPos)
 
 std::string MJColorView::getDescription()
 {
-    std::string result = string_format("MJColorView %p (%.2f,%.2f) - (%.2f,%.2f,%.2f,%.2f)\nsubviews:\n", (void*)this, size.x, size.y, color.x, color.y, color.z, color.w);
+    std::string result = Tui::string_format("MJColorView %p (%.2f,%.2f) - (%.2f,%.2f,%.2f,%.2f)\nsubviews:\n", (void*)this, size.x, size.y, color.x, color.y, color.z, color.w);
     for(MJView* subView : subviews)
     {
         result = result + subView->getDescription();

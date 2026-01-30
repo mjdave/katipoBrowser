@@ -15,24 +15,22 @@
 #include "MJColorView.h"
 #include "MJTextView.h"
 
-#include "GameConstants.h"
 #include "EventManager.h"
 //#include "MacroFace.h"
 //#include "ClientNetInterface.h"
-#include "FileUtils.h"
+#include "TuiFileUtils.h"
+#include "KatipoUtilities.h"
 #include "MJImageTexture.h"
 #include "MJFont.h"
 //#include "MJTextView.h"
 #include "MJCache.h"
-#include "StringUtils.h"
-#include "sha1.h"
+#include "TuiScript.h"
 #include "MJImageView.h"
 //#include "ServerWorld.h"
 #include "Timer.h"
 //#include "MJAudio.h"
 //#include "BugReporting.h"
 #include "MJDrawable.h"
-#include "UserSettings.h"
 #include "MJTimer.h"
 
 
@@ -46,13 +44,16 @@
 #include "GCommandBuffer.h"
 #include "Camera.h"
 #include "MJDrawQuad.h"
-#include "RandomNumberGenerator.h"
 #include "MJDataTexture.h"
 
 #include "Noise3DFast.h" //debug
 
 #include "TuiScript.h"
 
+
+#define DEFAULT_FOVY (70.0 * 0.0174533)
+#define DEPTH_BUFFER_NEAR 0.01
+#define DEPTH_BUFFER_FAR 10000000.0
 
 #ifdef WIN32
 #if !IS_FOR_INTERNAL_DEVELOPMENT 
@@ -65,8 +66,6 @@ namespace backward {
 } 
 #endif
 #endif
-
-MJLogInfo MJLogInfoGlobal;
 
 
 void MainController::addResolution(ivec2 resolution)
@@ -270,16 +269,10 @@ void MainController::init(std::string windowTitle, std::string organizationName,
         MJError("%s\n", SDL_GetError());
     }
 
-    MJLogInfoGlobal.startTime = std::chrono::high_resolution_clock::now();
-    MJLogSetupThread(getSavePath("mainLog.log"));
-
-
 	MJLog("SDL version:%d.%d.%d", SDL_MAJOR_VERSION, SDL_MINOR_VERSION, SDL_MICRO_VERSION);
     
     
 	initializeDatabase();
-    
-    userSettings = new UserSettings();
 
 
     int screenX = SDL_WINDOWPOS_CENTERED;
@@ -710,7 +703,7 @@ void MainController::save()
 // sapiens used to store a player id by itself in a player database. Now uses Steam ID.
 void MainController::initializeDatabase()
 {
-    appDatabaseEnvironment = new DatabaseEnvironment(getSavePath("appdb"),
+    appDatabaseEnvironment = new DatabaseEnvironment(Katipo::getSavePath("appdb"),
                                                      1,
                                                      2);
     appDatabase = new Database(appDatabaseEnvironment, "app");
@@ -879,7 +872,7 @@ void MainController::draw(double frameLerp)
 
 	if(!recordStarted)
 	{
-		MJLog("returning early")
+        MJLog("returning early");
         EventManager::getInstance()->doCPUWork();
 		return;
 	}
@@ -987,21 +980,10 @@ void MainController::unload()
         cache = nullptr;
     }
     
-    if(userSettings)
-    {
-        delete userSettings;
-        userSettings = nullptr;
-    }
-    
     if(mainMJView)
     {
         delete mainMJView;
         mainMJView = nullptr;
-    }
-    if(randomNumberGenerator)
-    {
-        delete randomNumberGenerator;
-        randomNumberGenerator = nullptr;
     }
     
     
@@ -1310,45 +1292,4 @@ void MainController::setVsync(bool newValue)
 dvec2 MainController::getWindowSize()
 {
 	return dvec2(windowInfo->windowWidth, windowInfo->windowHeight);
-}
-
-std::string MainController::getVersionString()
-{
-	return VERSION_STRING;
-}
-
-bool MainController::getIsDevelopmentBuild()
-{
-	return IS_FOR_INTERNAL_DEVELOPMENT;
-}
-
-/*LuaRef MainController::getVRAMUsageInfo()
-{
-	LuaRef result = luabridge::newTable(luaEnvironment->state);
-
-	VmaBudget& budget = vulkan->vmaBudget;
-
-
-	result["usage"] = (double)budget.usage;
-	result["budget"] = (double)budget.budget;
-
-#ifndef __APPLE__
-	result["blockBytes"] = (double)budget.blockBytes;
-	result["allocationBytes"] = (double)budget.allocationBytes;
-#else
-	result["blockBytes"] = (double)budget.statistics.blockBytes;
-	result["allocationBytes"] = (double)budget.statistics.allocationBytes;
-#endif
-
-	return result;
-}*/
-
-void MainController::generateVRAMProfile()
-{
-	char* statsString;
-	vmaBuildStatsString(vulkan->vmaAllocator, &statsString, true);
-
-	writeToFile(getSavePath("vramProfile.json"), statsString);
-
-	vmaFreeStatsString(vulkan->vmaAllocator, statsString);
 }

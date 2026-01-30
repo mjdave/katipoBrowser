@@ -9,11 +9,11 @@
 #include "MaterialManager.h"
 
 #include "TuiScript.h"
-#include "FileUtils.h"
+#include "KatipoUtilities.h"
 
 MaterialManager::MaterialManager()
 {
-    std::string materialsPath = getResourcePath("common/materials.tui");
+    std::string materialsPath = Katipo::getResourcePath("common/materials.tui");
     MJLog("materialsPath:%s", materialsPath.c_str());
     TuiTable* materialsTable = (TuiTable*)TuiRef::load(materialsPath);
     
@@ -54,7 +54,7 @@ MaterialManager::MaterialManager()
             }
             else
             {
-                MJError("Missing textureLocations or size in materials.tui edgeDecal")
+                MJError("Missing textureLocations or size in materials.tui edgeDecal");
             }
         }
         

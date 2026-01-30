@@ -70,7 +70,7 @@ uint32_t MJSound3D::play(dvec3 pos, double volume, double pitch)
     positions[channelID] = pos;
     
     return channelID;*/
-    MJError("todo")
+    MJError("todo");
     return 0;
 }
 
@@ -92,7 +92,7 @@ void MJSound3D::setPos(dvec3 pos)
 		}
 	}*/
     
-    MJError("todo")
+    MJError("todo");
 }
 
 void MJSound3D::originShifted()
@@ -109,7 +109,7 @@ void MJSound3D::originShifted()
         }
     }*/
     
-    MJError("todo")
+    MJError("todo");
 }
 
 float MJSound3D::getCombinedVolume(uint32_t channelID)

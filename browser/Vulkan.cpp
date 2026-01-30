@@ -24,12 +24,13 @@
 #include "MainController.h"
 #include "MJRenderTarget.h"
 #include "MJDrawQuad.h"
-#include "FileUtils.h"
+#include "TuiScript.h"
+#include "KatipoUtilities.h"
 //#include "backward.hpp"
 
 #define MAX_FRAMES_IN_FLIGHT 2
 
-#define enableValidationLayers (IS_FOR_INTERNAL_DEVELOPMENT && 0)
+#define enableValidationLayers 0
 
 #define VULKAN_ERROR_TITLE "Failed to initialize Vulkan"
 #define VULKAN_SWAPCHAIN_ERROR_TITLE "Failed to submit Vulkan image"
@@ -210,7 +211,7 @@ Vulkan::Vulkan(MainController* controller_, SDL_Window* window_, ivec2 screenSiz
 	int sanityCount = 0;
 	while(!createSwapChain())
 	{
-		MJWarn("Failed to create swapchain. Trying again soon.")
+        MJWarn("Failed to create swapchain. Trying again soon.");
 		sanityCount++;
 		if(sanityCount > 100)
 		{
@@ -242,7 +243,7 @@ Vulkan::Vulkan(MainController* controller_, SDL_Window* window_, ivec2 screenSiz
     setupStaticBuffer(tempCommandBuffer, &drawQuadVertBuffer, VK_BUFFER_USAGE_VERTEX_BUFFER_BIT, sizeof(DrawQuadVertex) * vertices.size(), vertices.data(), "main output draw quad");
     endSingleTimeCommands(tempCommandBuffer);
 
-	std::string logFilePath = getSavePath("memoryThread.log");
+	std::string logFilePath = Katipo::getSavePath("memoryThread.log");
 	memoryQueue = new ThreadSafeQueue<VulkanMemoryThreadInput>();
 	memoryThread = new VulkanMemoryThread(memoryQueue, vmaAllocator, logFilePath);
 }
@@ -435,7 +436,7 @@ std::string getDriverVerson(VkPhysicalDeviceProperties physicalDeviceProperties)
 		// NVIDIA
 	if (physicalDeviceProperties.vendorID == 4318)
 	{
-		return string_format("%d.%d.%d.%d",
+		return Tui::string_format("%d.%d.%d.%d",
 			(physicalDeviceProperties.driverVersion >> 22) & 0x3ff,
 			(physicalDeviceProperties.driverVersion >> 14) & 0x0ff,
 			(physicalDeviceProperties.driverVersion >> 6) & 0x0ff,
@@ -444,13 +445,13 @@ std::string getDriverVerson(VkPhysicalDeviceProperties physicalDeviceProperties)
 	}
 	if (physicalDeviceProperties.vendorID == 0x8086) //intel
 	{
-		return string_format("%d.%d",
+		return Tui::string_format("%d.%d",
 			(physicalDeviceProperties.driverVersion >> 14),
 			(physicalDeviceProperties.driverVersion) & 0x3fff
 		);
 	}
 	// Use Vulkan version conventions if vendor mapping is not available
-	return string_format("%d.%d.%d",
+	return Tui::string_format("%d.%d.%d",
 		(physicalDeviceProperties.driverVersion >> 22),
 		(physicalDeviceProperties.driverVersion >> 12) & 0x3ff,
 		physicalDeviceProperties.driverVersion & 0xfff);
@@ -579,7 +580,7 @@ int Vulkan::getDeviceSuitabilityScore(VkPhysicalDevice device)
 	}
     else
     {
-        MJLog("extensionsSupported:%d swapChainAdequate:%d", extensionsSupported, swapChainAdequate)
+        MJLog("extensionsSupported:%d swapChainAdequate:%d", extensionsSupported, swapChainAdequate);
     }
 
     return 0;
@@ -725,7 +726,7 @@ bool Vulkan::createSwapChain()
 
 	if(extent.width < 40 || extent.height < 40)
 	{
-		MJError("window size too small, not supported: (%d,%d)", extent.width, extent.height)
+        MJError("window size too small, not supported: (%d,%d)", extent.width, extent.height);
 		return false;
 	}
 
@@ -807,7 +808,7 @@ void Vulkan::recreateSwapChain()
 	//MJLog("drawable size:(%d,%d)", width, height)
 	if(width < 40 || height < 40)
 	{
-		MJError("Zero size window")
+        MJError("Zero size window");
 		return;
 	}
     vkDeviceWaitIdle(device);
@@ -1344,7 +1345,7 @@ bool Vulkan::startRecord()
 
 	if(fencesResult == VK_ERROR_DEVICE_LOST)
 	{
-		MJError("vkWaitForFences VK_ERROR_DEVICE_LOST")
+        MJError("vkWaitForFences VK_ERROR_DEVICE_LOST");
 		VULKAN_ERROR("Device lost.");
 		//printDebugCommandBuffer(graphicsQueue);
 		//printDebugCommandBuffer(transferQueue);
@@ -1421,7 +1422,7 @@ void Vulkan::endRecord()
 	debugTimerC->getDt();
 	VkResult result = vkQueueSubmit(graphicsQueue, 1, &submitInfo, inFlightFences[currentRecordingImageIndex]);
     if (result != VK_SUCCESS) {
-		MJError("failed to submit draw command buffer:%d", result)
+        MJError("failed to submit draw command buffer:%d", result);
         VULKAN_ERROR("failed to submit draw command buffer!");
 
 		//printDebugCommandBuffer(graphicsQueue);
@@ -1470,7 +1471,7 @@ void Vulkan::submit()
 	} else if (result != VK_SUCCESS) {
 		MJError("vkQueuePresentKHR failed. swapChainExtent:(%d,%d)", swapChainExtent.width, swapChainExtent.height);
 		SHOW_ERROR_WINDOW(VULKAN_SWAPCHAIN_ERROR_TITLE, VULKAN_ERROR_MESSAGE);
-		std::string errorMessage = string_format("failed to present swap chain image:%d", result);
+		std::string errorMessage = Tui::string_format("failed to present swap chain image:%d", result);
 		VULKAN_ERROR(errorMessage.c_str());
 	}
 

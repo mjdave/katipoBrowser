@@ -1,0 +1,355 @@
+
+scrollView = require("common/scrollView.tui")
+button = require("common/button.tui")
+
+playlistsCachePath = file.getSavePath("playlists.tuib")
+songsCachePath = file.getSavePath("songs/")
+
+file.createDirectoriesIfNeededForDirPath(songsCachePath)
+
+print("songsCachePath:", songsCachePath)
+
+disableCache = false #when true, will ignore the cached playlists, and only download from server
+resetCache = false
+hasConnection = false
+
+hasStartedCache = false
+cacheDownloadInProgress = false
+
+paused = true
+
+songsToDownload = {}
+
+
+
+downloadToCache = function(downloadSongIndex)
+{
+    songCount = table.count(songsToDownload)
+    if(downloadSongIndex >= songCount)
+    {
+        .cacheDownloadInProgress = true #hacks
+        print("all files cached.")
+        statusSubtitleTextView.text = "Sync complete"
+        client.disconnect()
+        return
+    }
+
+    songInfo = songsToDownload[downloadSongIndex]
+    songID = songInfo.songID
+    
+    thisSongCachePath = songsCachePath + songInfo.localPath
+
+    #print("songInfo:", songInfo)
+    #print("thisSongCachePath:", thisSongCachePath)
+
+    file.createDirectoriesIfNeededForFilePath(thisSongCachePath)
+
+    songDownloaded = function(result)
+    {
+        print("cache song downloaded: ", string.length(result))
+        file.saveData(thisSongCachePath, result)
+        .cacheDownloadInProgress = false
+        #downloadToCache(downloadSongIndex + 1)
+    }
+
+    if(resetCache or !file.fileExists(thisSongCachePath) or file.fileSize(thisSongCachePath) == 0)
+    {
+        print("downloading song:", songInfo.fileName)
+        statusSubtitleTextView.text = "Downloading: " + songInfo.fileName
+        .cacheDownloadInProgress = true
+        client.downloadFromServer("song", songID, songDownloaded)
+    }
+    else
+    {
+        print("file exists:", songInfo.fileName)
+        statusSubtitleTextView.text = "Syncing"
+        #downloadToCache(downloadSongIndex + 1)
+    }
+}
+
+cacheDownloadIndex = 0
+
+mainLoopFunction = function(dt)
+{
+    if(hasConnection)
+    {
+        if(!hasStartedCache)
+        {
+            print("starting cache update:", playlists)
+            .hasStartedCache = true
+            for(playlist in playlists)
+            {
+                songs = playlist.songs
+                for(song in songs)
+                {
+                    table.insert(songsToDownload, song)
+                }
+            }
+        }
+
+        if(hasStartedCache and !cacheDownloadInProgress)
+        {
+            downloadToCache(cacheDownloadIndex)
+            cacheDownloadIndex++
+        }
+    }
+}
+mainLoopTimer = updateTimer(mainLoopFunction)
+
+songIndex = 0
+currentlyPlayingTitleTextView = scene.getView("currentlyPlayingTitle")
+statusSubtitleTextView = scene.getView("statusSubtitle")
+
+settingsButton = scene.getView("settingsButton")
+backButton = scene.getView("backButton")
+playPauseButton = scene.getView("playPauseButton")
+nextButton = scene.getView("nextButton")
+
+playlistsHeader = scene.getView("playlistsHeader")
+settingsHeader = scene.getView("settingsHeader")
+
+settingsContent = scene.getView("settingsContent")
+
+settingsClick = function()
+{
+    playlistsHeader.hidden = true
+    settingsHeader.hidden = false
+    playlistContentView.hidden = true
+    settingsContent.hidden = false
+}
+button.create(settingsButton, -0.1, settingsClick)
+
+
+backClick = function()
+{
+    playlistsHeader.hidden = false
+    settingsHeader.hidden = true
+    playlistContentView.hidden = false
+    settingsContent.hidden = true
+}
+button.create(backButton, -0.1, backClick)
+
+updatePauseButton = function()
+{
+    if(paused)
+    {
+        playPauseButton.path = "img/play.png"
+    }
+    else
+    {
+        playPauseButton.path = "img/pause.png"
+    }
+}
+
+playPauseButtonClick = function()
+{
+    .paused = !paused
+    if(paused)
+    {
+        audio.stop()
+    }
+    else
+    {
+        audio.play()
+    }
+    updatePauseButton()
+}
+
+button.create(playPauseButton, -0.1, playPauseButtonClick)
+
+nextButtonClick = function()
+{
+    audio.next()
+}
+
+button.create(nextButton, -0.1, nextButtonClick)
+
+
+addButtonView = scene.getView("addButton")
+button.create(addButtonView, 0.0)
+
+loadFirstSongAndStartQueue = function(songID)
+{
+    print("loadFirstSongAndStartQueue")
+    queue = {
+    }
+
+    currentPlaylist = playlists[currentPlaylistIndex]
+    for(songInfo in currentPlaylist.songs)
+    {
+
+        thisSongCachePath = songsCachePath + songInfo.localPath
+        #thisSongCachePath = songsCachePath + songInfo.songID + file.extension(songInfo.fileName)
+        table.insert(queue, thisSongCachePath)
+    }
+
+    firstItem = currentPlaylist.songs[0]
+    print("firstItem:", firstItem)
+    firstSongCachePath = songsCachePath + firstItem.localPath
+    if(!file.fileExists(firstSongCachePath))
+    {
+        print("Need to download:", firstSongCachePath)
+        statusSubtitleTextView.text = "Downloading: " + firstItem.fileName
+
+        audio.stop()
+
+        file.createDirectoriesIfNeededForFilePath(firstSongCachePath)
+
+        songDownloaded = function(result)
+        {
+            print("cache song downloaded: ", string.length(result))
+            file.saveData(firstSongCachePath, result)
+            .cacheDownloadInProgress = false
+            #downloadToCache(downloadSongIndex + 1)
+
+            audio.queueSongs(queue)
+            statusSubtitleTextView.text = ""
+            #currentlyPlayingTitleTextView.text = firstItem.fileName
+            .paused = false
+            updatePauseButton()
+        }
+
+        .cacheDownloadInProgress = true
+        client.downloadFromServer("song", firstItem.songID, songDownloaded)
+
+    }
+    else
+    {
+        audio.queueSongs(queue)
+        .paused = false
+        updatePauseButton()
+    }
+}
+
+startCurrentPlaylist = function()
+{
+    currentPlaylist = playlists[currentPlaylistIndex]
+    table.shuffle(currentPlaylist.songs)
+    loadFirstSongAndStartQueue()
+}
+
+audio.playingSongChanged = function(title, artist, duration)
+{
+    print("got song changed:", title, " artist:", artist)
+    currentlyPlayingTitleTextView.text = title
+    if(!hasConnection)
+    {
+        statusSubtitleTextView.text = artist
+    }
+}
+
+
+audio.playingSongPausedChanged = function(newPaused)
+{
+    .paused = newPaused
+    updatePauseButton()
+}
+
+loadPlaylists = function(playlists_)
+{
+    .playlists = playlists_
+    playlistCount = table.count(playlists)
+    print("got ", playlistCount, " playlists")
+
+    if(table.count(playlists) > 0)
+    {
+        #..currentPlaylistIndex = 2
+
+       # currentPlaylist = playlists[currentPlaylistIndex]
+       # songID = currentPlaylist.songs[0].songID
+       # loadSong(songID)
+
+        .playlistContentView = scene.getView("playlistContent")
+
+        if(playlistScrollView)
+        {
+            playlistContentView.removeView(playlistScrollView)
+        }
+
+        .playlistScrollView = scrollView.create(playlistContentView)
+        viewTable = scene.playlistItemPlayMode
+
+        for(i,playlist in playlists)
+        {
+            itemView = playlistScrollView.addView(viewTable)
+            titleTextView = itemView.getView("playlistItemTitle")
+            titleTextView.text = playlist.title
+            //itemView.pos.y -= i * viewTable.size.y
+
+            dotDotDotButton = itemView.getView("dotDotDotButton")
+            button.create(dotDotDotButton, 0.2 * i)
+
+
+            itemView.click = function()
+            {
+                #print("i:", i)
+                .currentPlaylistIndex = i
+                #print("currentPlaylistIndex:", currentPlaylistIndex)
+                #print("itemView.click parent:", ...)
+                startCurrentPlaylist()
+            }
+
+            #shuffleButton = itemView.getView("shuffleButton")
+            #button.create(shuffleButton, 0.55 * i)
+
+            if(i % 2 == 0)
+            {
+                itemView.color = itemView.color * 0.5
+                itemView.color.w = 0.1
+            }
+
+            scrollView.insertRow(playlistScrollView, itemView)
+        }
+    }
+
+    
+    #editButtonView.butonData = {}
+
+}
+
+#loadPlaylists(testPlaylists)
+
+fileDownloaded = function(filePath)
+{
+
+}
+
+cachePlaylists = function()
+{
+    if(playlists)
+    {
+        file.saveBinary(playlistsCachePath, playlists)
+        print("saved cache:", playlistsCachePath)
+    }
+}
+
+
+setPlaylists = function(playlists_)
+{
+    .hasConnection = true
+    if(!cacheMode or !playlists)
+    {
+        print("in setPlaylists")
+        loadPlaylists(playlists_[0])
+        cachePlaylists()
+    }
+}
+
+disconnected = function()
+{
+    .hasConnection = false
+    print("Disconnected")
+    statusSubtitleTextView.text = "Disconnected"
+}
+
+client.register("setPlaylists", setPlaylists)
+
+client.register("disconnected", disconnected)
+
+
+if(!disableCache and file.fileExists(playlistsCachePath))
+{
+    print("found cache file")
+    playlists = file.loadBinary(playlistsCachePath)
+    loadPlaylists(playlists)
+}

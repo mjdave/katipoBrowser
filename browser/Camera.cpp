@@ -8,7 +8,6 @@
 
 #include "Camera.h"
 #include "GCommandBuffer.h"
-#include "GameConstants.h"
 
 Camera::Camera(Vulkan* vulkan_)
 {

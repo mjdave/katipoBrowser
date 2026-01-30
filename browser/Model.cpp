@@ -7,7 +7,7 @@
 //
 
 #include "Model.h"
-#include "FileUtils.h"
+#include "TuiFileUtils.h"
 #include "rapidjson/document.h"
 #include "rapidjson/filereadstream.h"
 #include "MaterialManager.h"
@@ -291,9 +291,7 @@ Model::Model(const std::string& modelPath_,
     std::vector<std::string> boneNames;
     std::map<std::string,std::string> materialRemaps;
     
-    MJLog("DAVE:%s", fileExtensionFromPath(modelPath).c_str());
-    
-    if(fileExtensionFromPath(modelPath) == ".glb")
+    if(Tui::fileExtensionFromPath(modelPath) == ".glb")
     {
         pathnames.push_back(modelPath);
     }
@@ -340,12 +338,12 @@ Model::Model(const std::string& modelPath_,
         {
             if(modelTable->hasKey("filePath"))
             {
-                std::string directory = pathByRemovingLastPathComponent(modelPath);
+                std::string directory = Tui::pathByRemovingLastPathComponent(modelPath);
                 pathnames.push_back(directory + modelTable->getString("filePath"));
             }
             else
             {
-                pathnames.push_back(changeExtensionForPath(modelPath, ".glb"));
+                pathnames.push_back(Tui::changeExtensionForPath(modelPath, ".glb"));
             }
             /*std::string pathname = modelTable["path"];
              pathname = getResourcePath("models/" + pathname);
@@ -384,7 +382,7 @@ Model::Model(const std::string& modelPath_,
     int pathIndex = 0;
     for(auto pathname : pathnames)
     {
-        if(fileSizeAtPath(pathname) <= 0)
+        if(Tui::fileSizeAtPath(pathname) <= 0)
         {
             MJLog("Can't find model file at path:%s", pathname.c_str());
             return;
@@ -392,15 +390,15 @@ Model::Model(const std::string& modelPath_,
 
 		//MJLog("loading pathname:%s", pathname.c_str());
         
-        if(fileExtensionFromPath(pathname) == ".glb")
+        if(Tui::fileExtensionFromPath(pathname) == ".glb")
         {
 			if(debugName.empty())
 			{
-				debugName = fileNameFromPath(pathname);
+				debugName = Tui::fileNameFromPath(pathname);
 			}
 			else
 			{
-				debugName = debugName + " + " + fileNameFromPath(pathname);
+				debugName = debugName + " + " + Tui::fileNameFromPath(pathname);
 			}
 
             int compositePathBoneJoint = -1;
@@ -459,7 +457,7 @@ Model::Model(const std::string& modelPath_,
                     std::vector<GLTFAccessor> accessors;
                     std::vector<GLTFMesh> meshes;
                     
-                    std::string basePath = pathByRemovingLastPathComponent(pathname);
+                    std::string basePath = Tui::pathByRemovingLastPathComponent(pathname);
                     
                     if(document.HasMember("buffers"))
                     {
@@ -721,7 +719,7 @@ Model::Model(const std::string& modelPath_,
 										bool found = false;
 										std::string test;
 
-										std::vector<std::string> splitName = splitString(name, '_');
+										std::vector<std::string> splitName = Tui::splitString(name, '_');
 
 										if(splitName.size() >= 2 && splitName[1].size() >= 3)
 										{

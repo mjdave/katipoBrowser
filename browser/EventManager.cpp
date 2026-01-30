@@ -10,9 +10,10 @@
 #include "MJLog.h"
 #include "MainController.h"
 #include "Timer.h"
-#include "FileUtils.h"
 #include "TuiScript.h"
+#include "KatipoUtilities.h"
 #include "MJTimer.h"
+#include <thread>
 
 #define RUN_GAME_LOOP_CODE 1
 
@@ -52,8 +53,8 @@ void EventManager::init(MainController* mainController_,
     textEntryActive = false;
     
     runLoopRunning = true;
-	writeToFile(getSavePath("running.txt"), "true");
-	if(!fileExistsAtPath(getSavePath("running.txt")))
+	Tui::writeToFile(Katipo::getSavePath("running.txt"), "true");
+	if(!Tui::fileExistsAtPath(Katipo::getSavePath("running.txt")))
 	{
 		SDL_ShowSimpleMessageBox(SDL_MESSAGEBOX_ERROR,"Failed to write to save files location", "You might be able to work around this by running the applications as an administrator, or by fixing issues with file permissions.",NULL);
 		exit(0);
@@ -374,7 +375,7 @@ void EventManager::handleEvent(SDL_Event* event)
     case SDL_EVENT_QUIT:
         {
             needsToExit = true;
-            removeFile(getSavePath("running.txt"));
+            Tui::removeFile(Katipo::getSavePath("running.txt"));
             return;
             break;
         }
@@ -391,7 +392,7 @@ void EventManager::handleEvent(SDL_Event* event)
         runLoopRunning = true;
         break;
     case SDL_EVENT_WINDOW_RESIZED:
-        MJLog("reszize")
+            MJLog("resize");
         mainController->mainWindowChangedSize();
         runLoopRunning = true;
         break;

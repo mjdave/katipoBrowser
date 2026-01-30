@@ -8,7 +8,7 @@
 
 #include "MJImageTexture.h"
 #include "MJLog.h"
-#include "StringUtils.h"
+#include "TuiStringUtils.h"
 
 #define STB_IMAGE_IMPLEMENTATION
 #define STBI_NO_HDR

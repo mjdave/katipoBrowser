@@ -9,10 +9,10 @@
 #ifndef EventManager_hpp
 #define EventManager_hpp
 
-
-#include "GameConstants.h"
 #include "WindowInfo.h"
+#include "SDL.h"
 #include <functional>
+#include <map>
 
 class MainController;
 class Timer;

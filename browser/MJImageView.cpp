@@ -7,12 +7,12 @@
 //
 
 #include "MJImageView.h"
-#include "FileUtils.h"
+#include "TuiFileUtils.h"
 #include "GPipeline.h"
 #include "MJImageTexture.h"
 #include "MJCache.h"
 #include "MJDrawQuad.h"
-#include "StringUtils.h"
+#include "TuiStringUtils.h"
 #include "TuiScript.h"
 
 MJImageView::MJImageView(MJView* parentView_)
@@ -194,7 +194,7 @@ void MJImageView::setCropImage(bool cropImage_) //todo recalc this if cropImage 
 
 std::string MJImageView::getDescription()
 {
-    std::string result = string_format("MJImageView %p (%.2f,%.2f) - (%s)\nsubviews:\n", (void*)this, size.x, size.y, (imageTexture ? imageTexture->pathname.c_str() : "null"));
+    std::string result = Tui::string_format("MJImageView %p (%.2f,%.2f) - (%s)\nsubviews:\n", (void*)this, size.x, size.y, (imageTexture ? imageTexture->pathname.c_str() : "null"));
     for(MJView* subView : subviews)
     {
         result = result + subView->getDescription();

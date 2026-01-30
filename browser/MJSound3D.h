@@ -11,6 +11,7 @@
 
 #include "MJSound.h"
 #include "MathUtils.h"
+#include <map>
 
 class MJSound3D : public MJSound {
 

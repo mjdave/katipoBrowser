@@ -8,7 +8,7 @@
 
 #include "MJView.h"
 #include "MJLog.h"
-#include "StringUtils.h"
+#include "TuiStringUtils.h"
 #include "MJCache.h"
 #include "MJRenderTarget.h"
 #include "MJDrawQuad.h"
@@ -119,7 +119,7 @@ void MJView::initInternals()
                 MJView* viewToRemove = (MJView*)((TuiTable*)viewTableRef)->getUserData("_view");
                 if(!viewToRemove)
                 {
-                    MJError("no _view ptr found")
+                    MJError("no _view ptr found");
                     return nullptr;
                 }
                 removeSubview(viewToRemove);
@@ -161,7 +161,7 @@ void MJView::initInternals()
             }
             else
             {
-                MJError("bad args")
+                MJError("bad args");
             }
         }
         return nullptr;
@@ -178,7 +178,7 @@ void MJView::initInternals()
             }
             else
             {
-                MJError("bad arg")
+                MJError("bad arg");
             }
         }
         return nullptr;
@@ -1560,7 +1560,7 @@ void MJView::removeAllSubviews()
 
 std::string MJView::getDescription()
 {
-    std::string result = string_format("MJView %p (%.2f,%.2f)\nsubviews:\n", (void*)this, size.x, size.y);
+    std::string result = Tui::string_format("MJView %p (%.2f,%.2f)\nsubviews:\n", (void*)this, size.x, size.y);
     for(MJView* subView : subviews)
     {
         result = result + subView->getDescription();

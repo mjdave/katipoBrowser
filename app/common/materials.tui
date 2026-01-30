@@ -1,0 +1,61 @@
+{
+    ui_button_blue = {
+        color = vec3(0.1,0.1,0.3),
+        roughness = 0.0,
+        colorB = vec3(0.1,0.1,0.3),
+        roughnessB = 0.2,
+    },
+    ui_button_blue_hover = {
+        color = vec3(0.2,0.2,0.4),
+        roughness = 0.0,
+        colorB = vec3(0.2,0.2,0.4),
+        roughnessB = 0.2,
+    },
+
+    ui_button_green = {
+        color = vec3(0.1,0.3,0.1),
+        roughness = 0.0,
+        colorB = vec3(0.1,0.3,0.1),
+        roughnessB = 0.2,
+    },
+    ui_button_green_hover = {
+        color = vec3(0.2,0.4,0.2),
+        roughness = 0.0,
+        colorB = vec3(0.2,0.4,0.2),
+        roughnessB = 0.2,
+    },
+    ui_button_green_mouseDown = {
+        color = vec3(0.2,0.4,0.2),
+        roughness = 0.0,
+        colorB = vec3(0.2,0.4,0.2),
+        roughnessB = 0.2,
+    },
+
+    ui_button_red = {
+        color = vec3(0.3,0.1,0.1),
+        roughness = 0.0,
+        colorB = vec3(0.3,0.1,0.1),
+        roughnessB = 0.2,
+    },
+    ui_button_red_hover = {
+        color = vec3(0.4,0.2,0.2),
+        roughness = 0.0,
+        colorB = vec3(0.4,0.2,0.2),
+        roughnessB = 0.2,
+    },
+
+    ui_button_disabled = {
+        color = vec3(0.1,0.1,0.1),
+        roughness = 0.0,
+        colorB = vec3(0.2,0.2,0.2),
+        roughnessB = 0.2,
+    },
+    ui_textEntry_blue = {
+        color = vec3(0.0,0.01,0.02),
+        roughness = 0.0,
+    },
+    ui_white = {
+        color = vec3(1.0,1.0,1.0),
+        roughness = 1.0,
+    },
+}

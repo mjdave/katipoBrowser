@@ -7,10 +7,10 @@
 //
 
 #include "MJTextView.h"
-#include "FileUtils.h"
+#include "TuiFileUtils.h"
 #include "MJImageTexture.h"
 #include "MJCache.h"
-#include "StringUtils.h"
+#include "TuiStringUtils.h"
 #include "GCommandBuffer.h"
 #include "MJDrawable.h"
 #include "Camera.h"
@@ -280,7 +280,7 @@ void MJTextView::setFontNameAndSize(FontNameAndSize fontNameAndSize_)
 
 	if(!newFont)
 	{
-		MJWarn("Failed to load font:%s size:%d", fontNameAndSize_.name.c_str(), fontNameAndSize_.size * scaleToUse)
+        MJWarn("Failed to load font:%s size:%d", fontNameAndSize_.name.c_str(), fontNameAndSize_.size * scaleToUse);
 	}
 }
 
@@ -579,7 +579,7 @@ bool MJTextView::getAdditiveBlend() const
 
 std::string MJTextView::getDescription()
 {
-    std::string result = string_format("MJTextView %p (%.2f,%.2f) - (%s)\nsubviews:\n", (void*)this, size.x, size.y, textString.c_str());
+    std::string result = Tui::string_format("MJTextView %p (%.2f,%.2f) - (%s)\nsubviews:\n", (void*)this, size.x, size.y, textString.c_str());
     for(MJView* subView : subviews)
     {
         result = result + subView->getDescription();

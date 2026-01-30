@@ -259,14 +259,14 @@ bool MJSound::playing(uint32_t channelID)
         
         return isPlaying;
     }*/
-    MJError("todo")
+    MJError("todo");
     
     return false;
 }
 
 void MJSound::stop(uint32_t channelID)
 {
-    MJError("todo")
+    MJError("todo");
     /*FMOD_RESULT result;
     
     if(channelID == 0)
@@ -291,7 +291,7 @@ void MJSound::stop(uint32_t channelID)
 
 bool MJSound::paused(uint32_t channelID)
 {
-    MJError("todo")
+    MJError("todo");
     /*
     if(channelID == 0)
     {
@@ -313,7 +313,7 @@ bool MJSound::paused(uint32_t channelID)
 
 void MJSound::setPaused(bool paused, uint32_t channelID)
 {
-    MJError("todo")
+    MJError("todo");
     /*
     FMOD_RESULT result;
     
@@ -341,7 +341,7 @@ void MJSound::setPaused(bool paused, uint32_t channelID)
 
 void MJSound::setVolume(double volume, uint32_t channelID)
 {
-    MJError("todo")
+    MJError("todo");
     /*
 	if(channelID == 0)
 	{
@@ -363,7 +363,7 @@ void MJSound::setVolume(double volume, uint32_t channelID)
 
 void MJSound::updateVolume(uint32_t channelID)
 {
-    MJError("todo")
+    MJError("todo");
     /*FMOD_RESULT result;
     
     if(channelID == 0)
@@ -394,7 +394,7 @@ void MJSound::updateVolume(uint32_t channelID)
 
 void MJSound::setLooping(bool looping_)
 {
-    MJError("todo")
+    MJError("todo");
     /*
     FMOD_RESULT result;
     if(looping_ != looping)

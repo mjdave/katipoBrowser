@@ -1,0 +1,8 @@
+
+{
+    vertPath = "objectUI.vert.spv",
+    fragPath = "objectUI.frag.spv",
+    blendMode = "premultiplied",
+    depth = "testAndMask",
+    cull = "back",
+}

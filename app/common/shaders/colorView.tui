@@ -1,0 +1,7 @@
+{
+    vertPath = "colorView.vert.spv",
+    fragPath = "colorView.frag.spv",
+    blendMode = "premultiplied",
+    depth = "disabled",
+    cull = "disabled",
+}

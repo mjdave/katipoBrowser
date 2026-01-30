@@ -1,0 +1,698 @@
+standardColor = vec4(1.0,1.0,1.0,1.0)
+disabledColor = vec4(0.5,0.5,0.5,0.5)
+selectedColor = vec4(0.5,0.5,1.0,0.5)
+
+resize = function(textEntryView, size)
+{
+    userData = textEntryView.textEntryViewData
+    textEntryView.size = size
+    backgroundView = userData.backgroundView
+    backgroundView.size = size
+}
+
+updateVisuals = function(textEntryView)
+{
+    userData = textEntryView.textEntryViewData
+    if(userData.textView)
+    {
+        if(userData.text)
+        {
+            userData.textView.text = userData.text
+        }
+        else
+        {
+            userData.textView.text = ""
+        }
+
+        desiredBackgroundSize = userData.textView.size.x + 12
+        if(userData.promptTextView)
+        {
+            desiredBackgroundSize = desiredBackgroundSize + userData.promptTextView.size.x
+        }
+
+        if(desiredBackgroundSize > userData.backgroundView.size.x)
+        {
+            newSize = vec2(desiredBackgroundSize, userData.backgroundView.size.y)
+            resize(textEntryView, newSize)
+        }
+        elseif(desiredBackgroundSize < userData.backgroundView.size.x)
+        {
+            newWidth = math.max(desiredBackgroundSize, userData.minWidth)
+            newSize = vec2(newWidth, userData.backgroundView.size.y)
+            resize(textEntryView, newSize)
+        }
+
+        if(userData.disabled)
+        {
+            userData.textView.color = disabledColor
+            #userData.textView:setText(userData.text, material.types.disabledText.index)
+        }
+        else
+        {
+            if(userData.selected or userData.editing)
+            {
+                userData.textView.color = selectedColor
+                #userData.textView:setText(userData.text, material.types.selectedText.index)
+            }
+            else
+            {
+                userData.textView.color = standardColor
+            }
+        }
+    }
+}
+
+#uiTextEntry.types = mj:enum {
+#    "standard_10x3",
+#    "wide",
+#    "multiLine",
+#    "chatInput",
+#}
+
+updateCursorPosition = function(textEntryView)
+{
+    userData = textEntryView.textEntryViewData
+    rect = userData.textView.getRectForCharAtIndex(-1 + userData.cursorOffset)
+    #mj:log("index:", -1 + (userData.cursorOffset or 0), " rect:", rect)
+    userData.cursorView.pos = vec3(rect.x + rect.z + 1,rect.y + 1,0)
+}
+
+updateText = function(textEntryView, newText)
+{
+    userData = textEntryView.textEntryViewData
+    setText(textEntryView, newText)
+
+    if(userData.editing)
+    {
+        userData.cursorView.hidden = false
+        userData.cursorTimer = 0.0
+
+        updateCursorPosition(textEntryView)
+    }
+    
+    if(userData.textEntryChangedContinuousFunction)
+    {
+        userData.textEntryChangedContinuousFunction(userData.text)
+    }
+}
+
+finishEditing = function(textEntryView, confirmChanges)
+{
+    userData = textEntryView.textEntryViewData
+    if(userData.editing)
+    {
+        userData.view.keyChanged = nil
+        userData.editing = false
+        userData.backgroundView.update = nil
+        userData.cursorView.hidden = true
+        updateVisuals(textEntryView)
+        eventManager.removeTextEntryListener(userData.textEntryListenerID)
+        userData.textEntryListenerID = nil
+
+        if((!userData.text) or string.length(userData.text) == 0)
+        {
+            if(userData.allowsEmpty)
+            {
+                userData.textEntryFinishedFunction("")
+            }
+            else
+            {
+                updateText(textEntryView, userData.editStartTextValue)
+            }
+        }
+        else
+        {
+            if(userData.textEntryFinishedFunction)
+            {
+                userData.textEntryFinishedFunction(userData.text, confirmChanges)
+            }
+        }
+    }
+}
+
+showCursorAndResetTimerIfEditingForCursorChanged = function(textEntryView)
+{
+    userData = textEntryView.textEntryViewData
+    if(userData.editing)
+    {
+        userData.cursorView.hidden = false
+        userData.cursorTimer = 0.0
+        updateCursorPosition(textEntryView)
+    }
+}
+
+cursorChanged = function(textEntryView, horizontalOffset, verticalOffset)
+{
+    userData = textEntryView.textEntryViewData
+    if(userData.text)
+    {
+        textLength = string.length(userData.text)
+        if(textLength > 0)
+        {
+            if(horizontalOffset)
+            {
+                userData.cursorOffset = userData.cursorOffset + horizontalOffset
+                userData.textView.resetVerticalCursorMovementAnchors()
+            }
+            elseif(verticalOffset)
+            {
+                userData.cursorOffset = userData.textView.getCursorOffsetForVerticalCursorMovement(userData.cursorOffset, verticalOffset)
+            }
+            userData.cursorOffset = math.clamp(userData.cursorOffset, -textLength, 0)
+            showCursorAndResetTimerIfEditingForCursorChanged(textEntryView)
+        }
+    }
+}
+
+function uiTextEntry:create(parentView, size, typeOrNilFor10x3, horizontalAlignmentOrNilForCentered, descriptionTextOrNil)
+    
+    horizontalAlignment = horizontalAlignmentOrNilForCentered or MJPositionCenter
+    
+    userData = {
+        horizontalAlignment = horizontalAlignment,
+        isUiTextEntry = true,
+        selected = false,
+        mouseDown = false,
+        editing = false,
+        text = nil,
+        fontSize = 16,
+        fontName = uiCommon.fontName,
+        textOffset = nil,
+        cursorView = nil,
+        editStartTextValue = nil,
+        cursorTimer = 0.0,
+        cursorOffset = 0,
+        minWidth = size.x,
+        descriptionText = descriptionTextOrNil,
+    }
+
+    buttonView = View.new(parentView)
+    userData.view = buttonView
+    buttonView.size = size
+
+    backgroundHeightMultiplier = 0.3
+    modelName = "ui_inset_10x3"
+    backgroundColor = nil
+    verticalAlignment = MJPositionCenter
+    allowWrapping = false
+
+
+    yOffset = -1
+    xOffset = 0
+    
+    if(verticalAlignment == MJPositionTop)
+    {
+        yOffset = -7
+    }
+    if(userData.textOffset)
+    {
+        yOffset = yOffset + userData.textOffset
+    }
+    if(horizontalAlignment == MJPositionInnerLeft)
+    {
+        xOffset = 4
+    }
+
+    if(typeOrNilFor10x3 == uiTextEntry.types.multiLine)
+    {
+        modelName = "ui_inset_lg_4x3"
+        backgroundHeightMultiplier = 0.75
+        verticalAlignment = MJPositionTop
+        allowWrapping = true
+        userData.mutliLine = true
+    }
+    elseif(typeOrNilFor10x3 == uiTextEntry.types.wide)
+    {
+        modelName = "ui_inset_20x1"
+        backgroundHeightMultiplier = 0.05
+    }
+    elseif(typeOrNilFor10x3 == uiTextEntry.types.chatInput)
+    {
+        userData.fontSize = 13
+        userData.fontName = uiCommon.consoleFontName
+        modelName = nil
+        backgroundColor = vec4(0.0,0.0,0.0,0.8)
+        #xOffset = xOffset - 4
+    }
+
+    userData.verticalAlignment = verticalAlignment
+    userData.backgroundHeightMultiplier = backgroundHeightMultiplier
+    
+    backgroundView = nil
+    if(modelName)
+    {
+        backgroundView = ModelView.new(buttonView)
+        backgroundView:setModel(model:modelIndexForName(modelName))
+        scaleToUseX = size.x * 0.5
+        scaleToUseY = size.y * 0.5 / backgroundHeightMultiplier
+        backgroundView.scale3D = vec3(scaleToUseX,scaleToUseY,scaleToUseX)
+        userData.hasModelBackground = true
+    }
+    elseif(backgroundColor)
+    {
+        backgroundView = ColorView.new(buttonView)
+        backgroundView.color = backgroundColor
+    }
+    else
+    {
+        backgroundView = View.new(buttonView)
+    }
+
+    backgroundView.size = size
+    userData.backgroundView = backgroundView
+
+    cursorView = ImageView.new(buttonView)
+    cursorView.imageTexture = MJCache:getTexture("img/white8.png")
+    cursorView.color = vec4(1.0,1.0,1.0,1.0)
+    cursorView.hidden = true
+    cursorView.size = vec2(1,18)
+    cursorView.relativePosition = ViewPosition(MJPositionInnerLeft, verticalAlignment)
+    cursorView.pos = vec3(2,1,0)
+    userData.cursorView = cursorView
+
+    
+    textView = TextView.new(buttonView)
+    textView.size = vec2(1, buttonView.size.y) #hack to set a default for cursor to be offset from, otherwise undefined position.
+    textView.font = Font(userData.fontName, userData.fontSize)
+    textView.relativePosition = ViewPosition(horizontalAlignment, verticalAlignment)
+    if(allowWrapping)
+    {
+        textView.wrapWidth = buttonView.size.x - 20
+    }
+
+
+    textView.pos = vec3(xOffset,yOffset,0)
+    userData.initialOffset = textView.pos
+
+    userData.textView = textView
+    userData.cursorView.relativeView = textView
+
+    updateCursorFunction = function(dt)
+    {
+        userData.cursorTimer = userData.cursorTimer + dt
+        if(userData.cursorTimer > 0.5)
+        {
+            userData.cursorTimer = userData.cursorTimer - 0.5
+            if(userData.cursorTimer > 0.5)
+            {
+                userData.cursorTimer = 0.0
+            }
+            cursorView.hidden = (!cursorView.hidden)
+        }
+    }
+
+    buttonView.hoverStart = function ()
+    {
+        if(!userData.selected)
+        {
+            if(!userData.disabled)
+            {
+                userData.selected = true
+                audio:playUISound(uiCommon.hoverSoundFile)
+                updateVisuals(userData)
+            }
+        }
+    }
+
+    buttonView.hoverEnd = function ()
+    {
+        if(userData.selected)
+        {
+            userData.selected = false
+            userData.mouseDown = false
+            updateVisuals(userData)
+        }
+    }
+
+    buttonView.mouseDown = function (buttonIndex)
+    {
+        if(buttonIndex == 0)
+        {
+            if(!userData.mouseDown)
+            {
+                if(!userData.disabled)
+                {
+                    userData.mouseDown = true
+                    updateVisuals(userData)
+                    audio:playUISound(uiCommon.clickDownSoundFile)
+                }
+            }
+        }
+    }
+
+    buttonView.mouseUp = function (buttonIndex)
+    {
+        if(buttonIndex == 0)
+        {
+            if(userData.mouseDown)
+            {
+                userData.mouseDown = false
+                updateVisuals(userData)
+                audio:playUISound(uiCommon.clickReleaseSoundFile)
+            }
+        }
+    }
+
+    textViewClickFunction = function(mouseLoc)
+    {
+        if(!userData.disabled)
+        {
+            if(userData.clickFunction)
+            {
+                userData.clickFunction()
+            }
+            if(userData.editing)
+            {
+                if(userData.text)
+                {
+                    textViewLoc = buttonView:locationRelativeToView(mouseLoc, userData.textView)
+
+                    charIndex = userData.textView:getCharIndexForPos(textViewLoc)
+                    textLength = string.length(userData.text)
+                    if(textLength > 0)
+                    {
+                        charIndex = mjm.clamp(charIndex, 0, textLength)
+                        userData.cursorOffset = charIndex - textLength
+                        userData.cursorView.hidden = false
+                        userData.cursorTimer = 0.0
+                        updateCursorPosition(userData)
+                        buttonView.userData.textView:resetVerticalCursorMovementAnchors()
+                    }
+                }
+                #mj:log("mouseLoc:", mouseLoc - vec2(textView.pos.x, textView.pos.y), " charIndex:", charIndex)
+            }
+            else
+            {
+                userData.editing = true
+                buttonView.userData.textView:resetVerticalCursorMovementAnchors()
+                userData.editStartTextValue = userData.text
+                cursorView.hidden = false
+                userData.cursorTimer = 0.0
+                userData.cursorOffset = 0
+                backgroundView.update = updateCursorFunction
+                updateVisuals(userData)
+                updateCursorPosition(userData)
+                
+                #todo
+                #keyMap = {
+                #    [keyMapping:getMappingIndex("textEntry", "send")] = function(isDown, isRepeat)
+                #    {
+                #        if(isDown and (!isRepeat))
+                #        {
+                #            finishEditing(userData, true)
+                #        }
+                #        return true 
+                #    end,
+                #    [keyMapping:getMappingIndex("textEntry", "newline")] = function(isDown, isRepeat)
+                #        if(isDown)
+                #        {
+                #            newText = userData.text .. "\n"
+                #            updateText(userData, newText)
+                #        }
+                #        return true 
+                #    end,
+                #    [keyMapping:getMappingIndex("textEntry", "backspace")] = function(isDown, isRepeat)
+                #        if(isDown)
+                #            {
+                #            if(userData.text and string.length(userData.text) > 0)
+                #            {
+                #                newText = ""
+                #                if(userData.cursorOffset and userData.cursorOffset ~= 0)
+                #                {
+                #                    textLength = string.length(userData.text)
+                #                    if(textLength > 0)
+                #                    {
+                #                        removeBeforePos = math.max(textLength + userData.cursorOffset, 0) + 1
+                #                        if(removeBeforePos > 1)
+                #                        {
+                #                            newText = userData.text:sub(1,removeBeforePos - 2) .. userData.text:sub(removeBeforePos,-1)
+                #                        }
+                #                        else
+                #                        {
+                #                            return 
+                #                        }
+                #                    }
+                #                    else
+                #                    {
+                #                        return
+                #                    }
+                #                }
+                #                else
+                #                {
+                #                    newText = userData.text:sub(1, -2)
+                #                }
+#
+                #                updateText(userData, newText)
+                #            }
+                #        }
+                #        return true
+                #    end,
+                #    [keyMapping:getMappingIndex("textEntry", "delete")] = function(isDown, isRepeat)
+                #        if(isDown)
+                #            {
+                #            if(userData.text and string.length(userData.text) > 0)
+                #            {
+#
+                #                newText = ""
+                #                if(userData.cursorOffset and userData.cursorOffset ~= 0)
+                #                {
+                #                    textLength = string.length(userData.text)
+                #                    if(textLength > 0)
+                #                    {
+                #                        removeAfterPos = math.max(textLength + userData.cursorOffset, 0) + 1
+                #                        if(removeAfterPos > 0 and removeAfterPos < textLength)
+                #                        {
+                #                            newText = userData.text:sub(1,removeAfterPos - 1) .. userData.text:sub(removeAfterPos + 1,-1)
+                #                            userData.cursorOffset = userData.cursorOffset + 1
+                #                        }
+                #                        else
+                #                        {
+                #                            return 
+                #                        }
+                #                    }
+                #                    else
+                #                    {
+                #                        return
+                #                    }
+                #                }
+                #                else
+                #                {
+                #                    newText = userData.text:sub(1, -2)
+                #                }
+#
+                #                updateText(userData, newText)
+                #            }
+                #        }
+                #        return true
+                #    end,
+                #    [keyMapping:getMappingIndex("game", "escape")] = function(isDown, isRepeat)
+                #        if(isDown and (!isRepeat))
+                #        {
+                #            finishEditing(userData, false)
+                #        }
+                #        return true 
+                #    end,
+                #    [keyMapping:getMappingIndex("textEntry", "cursorLeft")] = function(isDown, isRepeat) if(isDown then cursorChanged(userData, -1, nil) end return true end,
+                #    [keyMapping:getMappingIndex("textEntry", "cursorRight")] = function(isDown, isRepeat) if(isDown then cursorChanged(userData, 1, nil) end return true end,
+                #    [keyMapping:getMappingIndex("textEntry", "prevCommand")] = function(isDown, isRepeat) if(isDown then cursorChanged(userData, nil, 1) end return true end,
+                #    [keyMapping:getMappingIndex("textEntry", "nextCommand")] = function(isDown, isRepeat) if(isDown then cursorChanged(userData, nil, -1) end return true end,
+                #}
+#
+                keyChanged = function(isDown, mapIndexes, isRepeat)
+                {
+                    #for(i,mapIndex in mapIndexes)
+                    #{
+                    #    if(keyMap[mapIndex])
+                    #    {
+                    #        return keyMap[mapIndex](isDown, isRepeat)
+                    #    }
+                    #}
+                    #return true 
+                }
+
+                stringInsert = function(str1, str2, pos)
+                {
+                    return str1:sub(1,pos)..str2..str1:sub(pos+1)
+                }
+
+                textEntry = function(text)
+                {
+                    newText = text
+                    if(userData.text)
+                    {
+                        if(userData.cursorOffset < 0)
+                        {
+                            textLength = string.length(userData.text)
+                            if(textLength > 0)
+                            {
+                                insertAfterPos = math.max(textLength + userData.cursorOffset, 0)
+                                newText = stringInsert(userData.text, text, insertAfterPos)
+                            }
+                        }
+                        else
+                        {
+                            newText = userData.text .. text
+                        }
+                    }
+                    updateText(userData, newText)
+                }
+                
+                userData.textEntryListenerID = eventManager.setTextEntryListener(textEntry, keyChanged)
+            }
+        }
+    }
+
+    userData.textViewClickFunction = textViewClickFunction
+    buttonView.click = textViewClickFunction
+    
+    buttonView.clickDownOutside = function()
+    {
+        finishEditing(userData, false)
+    }
+
+    #
+
+    #buttonView.update = uiCommon:createButtonUpdateFunction(userData, buttonView)
+
+    buttonView.userData = userData
+
+    return buttonView
+}
+
+function uiTextEntry:setFunction(buttonView, func)
+    buttonView.userData.textEntryFinishedFunction = func
+}
+
+function uiTextEntry:setAllowsEmpty(buttonView, allowsEmpty) #defaults to not allowing empty strings
+    buttonView.userData.allowsEmpty = allowsEmpty
+}
+
+function uiTextEntry:setChangedContinuousFunction(buttonView, func)
+    buttonView.userData.textEntryChangedContinuousFunction = func
+}
+
+function uiTextEntry:setSelected(buttonView, selected)
+    if(selected ~= buttonView.userData.selected)
+{
+        buttonView.userData.selected = selected
+        updateVisuals(buttonView.userData)
+    }
+}
+
+function uiTextEntry:setDisabled(buttonView, disabled)
+    if(disabled ~= buttonView.userData.disabled)
+{
+        buttonView.userData.disabled = disabled
+        updateVisuals(buttonView.userData)
+    }
+}
+
+function uiTextEntry:isEditing(buttonView)
+    return buttonView.userData.editing
+}
+
+function uiTextEntry:callClickFunction(buttonView)
+    buttonView.userData.textViewClickFunction()
+    if(eventManager.controllerIsPrimary)
+{
+        userData = buttonView.userData
+        textEntryCallback = function(submitted, inputText)
+{
+            if(buttonView.userData.editing)
+{
+                if(submitted)
+{
+                    updateText(userData, inputText)
+                }
+                finishEditing(userData, true)
+            }
+        }
+
+        steam:showGamepadTextInput(textEntryCallback, buttonView.userData.maxChars or 1000, buttonView.userData.text, buttonView.userData.descriptionText or "", buttonView.userData.mutliLine, false)
+    }
+}
+
+function uiTextEntry:finishEditing(buttonView, confirmChanges)
+    finishEditing(buttonView.userData, confirmChanges)
+}
+
+function uiTextEntry:setText(buttonView, text_)
+    textToUse = text_
+    if(!textToUse)
+{
+        textToUse = ""
+    }
+elseif(type(textToUse) ~= "string")
+{
+        textToUse = mj:tostring(textToUse)
+    }
+
+    if(buttonView.userData.maxChars and textToUse and string.length(textToUse) > buttonView.userData.maxChars)
+{
+        textToUse = string.sub(textToUse, 1, buttonView.userData.maxChars)
+    }
+    buttonView.userData.text = textToUse
+    if(!buttonView.userData.editing)
+{
+        buttonView.userData.cursorOffset = 0
+    }
+else
+{
+        if(textToUse)
+{
+            if(buttonView.userData.cursorOffset < -string.length(textToUse))
+{
+                buttonView.userData.cursorOffset = -string.length(textToUse)
+            }
+        }
+else
+{
+            buttonView.userData.cursorOffset = 0
+        }
+    }
+    
+    updateVisuals(buttonView.userData)
+    buttonView.userData.textView:resetVerticalCursorMovementAnchors()
+    showCursorAndResetTimerIfEditingForCursorChanged(buttonView.userData)
+}
+
+function uiTextEntry:clearText(buttonView)
+    uiTextEntry:setText(buttonView, "")
+}
+
+function uiTextEntry:setMaxChars(buttonView, maxChars)
+    buttonView.userData.maxChars = maxChars
+}
+
+function uiTextEntry:getText(buttonView)
+    return buttonView.userData.text
+}
+
+function uiTextEntry:setPromptText(buttonView, promptText, promptColor)
+    userData = buttonView.userData
+    if(buttonView.userData.promptTextView)
+{
+        buttonView.removeView(buttonView.userData.promptTextView)
+    }
+
+    if(promptText and promptText ~= "")
+{
+
+        promptTextView = TextView.new(buttonView)
+        promptTextView.font = Font(userData.fontName, userData.fontSize)
+        promptTextView.relativePosition = ViewPosition(userData.horizontalAlignment, userData.verticalAlignment)
+        promptTextView.pos = userData.initialOffset
+
+        promptTextView:addColoredText(promptText, promptColor)
+    
+        buttonView.userData.promptTextView = promptTextView
+
+        userData.textView.pos = userData.initialOffset + vec3(promptTextView.size.x,0,0) #todo this only supports left alignment
+    }
+}
+
+function uiTextEntry:init(controller_)
+    #controller = controller_
+}
+
+return uiTextEntry

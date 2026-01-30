@@ -1,6 +1,7 @@
 #include "MJRenderTarget3D.h"
 #include "Vulkan.h"
 #include "GPipeline.h"
+#include <fstream>
 
 
 MJRenderTarget3D::MJRenderTarget3D(Vulkan* vulkan_,

@@ -80,7 +80,7 @@
 
 
 - (void)playerItemDidReachEnd:(NSNotification *)notification {
-    MJLog("got playerItemDidReachEnd notifcation callback")
+    MJLog("got playerItemDidReachEnd notifcation callback");
 //song reached end of playing - respond appropriately
     /*AVPlayerItem* currentItem = [notification object];//[player currentItem];
     

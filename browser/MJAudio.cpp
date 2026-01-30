@@ -10,10 +10,9 @@
 #include "MJSound2D.h"
 #include "MJSound3D.h"
 #include "MJSong.h"
-#include "GameConstants.h"
 #include "TuiScript.h"
 //#include "SDL_mixer.h"
-#include "FileUtils.h"
+#include "KatipoUtilities.h"
 
 //todo APPLE
 #include "MJAudioApple.h"
@@ -149,7 +148,7 @@ void MJAudio::bindTui(TuiTable* rootTable)
                 //todo MIX_DestroyTrack
                 
                 
-                MJLog("playing song")
+                MJLog("playing song");
             }
             else
             {
