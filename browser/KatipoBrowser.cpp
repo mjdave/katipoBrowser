@@ -12,7 +12,7 @@
 
 void KatipoBrowser::init()
 {
-    MainController::getInstance()->init("KatipoBrowser");
+    MainController::getInstance()->init("Katipo Browser");
     cache = MainController::getInstance()->cache;
     
     TuiTable* rootTable = Tui::getRootTable();
@@ -54,9 +54,6 @@ void KatipoBrowser::init()
         return nullptr;
     });
     
-    TuiTable* appTable = new TuiTable(rootTable);
-    rootTable->setTable("app", appTable);
-    appTable->release();
     rootTable->setVec2("screenSize", dvec2(MainController::getInstance()->windowInfo->screenWidth, MainController::getInstance()->windowInfo->screenHeight));
     
     EventManager::getInstance()->bindTui(rootTable);
@@ -139,7 +136,7 @@ void KatipoBrowser::init()
     netInterface->bindTui(rootTable);*/
     
     
-    scriptState = TuiRef::runScriptFile(Katipo::getResourcePath("scripts/code.tui"), rootTable);
+    scriptState = TuiRef::runScriptFile(Katipo::getResourcePath("app/katipoBrowser/scripts/code.tui"), rootTable);
     
     
     /*updateTimerID = MJTimer::getInstance()->addUpdateTimer([netInterface](uint32_t timerID, float dt) {

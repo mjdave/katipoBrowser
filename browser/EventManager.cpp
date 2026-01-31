@@ -600,7 +600,7 @@ void EventManager::removeKeyChangedListener(int index)
 void EventManager::bindTui(TuiTable* rootTable)
 {
     TuiTable* eventManagerTable = new TuiTable(rootTable);
-    eventManagerTable->setTable("eventManager", eventManagerTable);
+    rootTable->setTable("eventManager", eventManagerTable);
     eventManagerTable->release();
     
     eventManagerTable->setFunction("addKeyEventListener", [this](TuiTable* args, TuiRef* existingResult, TuiDebugInfo* callingDebugInfo) -> TuiRef* {

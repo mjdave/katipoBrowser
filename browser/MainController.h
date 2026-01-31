@@ -61,7 +61,7 @@ public:
     MainController();
     ~MainController();
     
-    void init(std::string windowTitle = "Ambience", std::string organizationName = "majicjungle", std::string appTitle = "ambience");
+    void init(std::string windowTitle = "Katipo Browser", std::string organizationName = "majicjungle", std::string appTitle = "katipoBrowser");
     
     void applicationWillTerminate();
 

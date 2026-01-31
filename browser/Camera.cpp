@@ -1,10 +1,3 @@
-//
-//  Materials.cpp
-//  Ambience
-//
-//  Created by David Frampton on 27/08/18.
-//Copyright � 2018 Majic Jungle. All rights reserved.
-//
 
 #include "Camera.h"
 #include "GCommandBuffer.h"

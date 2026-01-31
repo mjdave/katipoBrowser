@@ -1,6 +1,6 @@
 standardColor = vec4(1.0,1.0,1.0,1.0)
 disabledColor = vec4(0.5,0.5,0.5,0.5)
-selectedColor = vec4(0.5,0.5,1.0,0.5)
+selectedColor = vec4(0.5,0.5,1.0,1.0)
 
 resize = function(textEntryView, size)
 {
@@ -10,9 +10,9 @@ resize = function(textEntryView, size)
     backgroundView.size = size
 }
 
-updateVisuals = function(textEntryView)
+updateVisuals = function(userData)
 {
-    userData = textEntryView.textEntryViewData
+    textEntryView = userData.view
     if(userData.textView)
     {
         if(userData.text)
@@ -45,14 +45,12 @@ updateVisuals = function(textEntryView)
         if(userData.disabled)
         {
             userData.textView.color = disabledColor
-            #userData.textView:setText(userData.text, material.types.disabledText.index)
         }
         else
         {
             if(userData.selected or userData.editing)
             {
                 userData.textView.color = selectedColor
-                #userData.textView:setText(userData.text, material.types.selectedText.index)
             }
             else
             {
@@ -69,25 +67,23 @@ updateVisuals = function(textEntryView)
 #    "chatInput",
 #}
 
-updateCursorPosition = function(textEntryView)
+updateCursorPosition = function(userData)
 {
-    userData = textEntryView.textEntryViewData
     rect = userData.textView.getRectForCharAtIndex(-1 + userData.cursorOffset)
     #mj:log("index:", -1 + (userData.cursorOffset or 0), " rect:", rect)
     userData.cursorView.pos = vec3(rect.x + rect.z + 1,rect.y + 1,0)
 }
 
-updateText = function(textEntryView, newText)
+updateText = function(userData, newText)
 {
-    userData = textEntryView.textEntryViewData
-    setText(textEntryView, newText)
+    setText(userData, newText)
 
     if(userData.editing)
     {
         userData.cursorView.hidden = false
         userData.cursorTimer = 0.0
 
-        updateCursorPosition(textEntryView)
+        updateCursorPosition(userData)
     }
     
     if(userData.textEntryChangedContinuousFunction)
@@ -105,7 +101,7 @@ finishEditing = function(textEntryView, confirmChanges)
         userData.editing = false
         userData.backgroundView.update = nil
         userData.cursorView.hidden = true
-        updateVisuals(textEntryView)
+        updateVisuals(userData)
         eventManager.removeTextEntryListener(userData.textEntryListenerID)
         userData.textEntryListenerID = nil
 
@@ -117,7 +113,7 @@ finishEditing = function(textEntryView, confirmChanges)
             }
             else
             {
-                updateText(textEntryView, userData.editStartTextValue)
+                updateText(userData, userData.editStartTextValue)
             }
         }
         else
@@ -130,14 +126,13 @@ finishEditing = function(textEntryView, confirmChanges)
     }
 }
 
-showCursorAndResetTimerIfEditingForCursorChanged = function(textEntryView)
+showCursorAndResetTimerIfEditingForCursorChanged = function(userData)
 {
-    userData = textEntryView.textEntryViewData
     if(userData.editing)
     {
         userData.cursorView.hidden = false
         userData.cursorTimer = 0.0
-        updateCursorPosition(textEntryView)
+        updateCursorPosition(userData)
     }
 }
 
@@ -159,48 +154,54 @@ cursorChanged = function(textEntryView, horizontalOffset, verticalOffset)
                 userData.cursorOffset = userData.textView.getCursorOffsetForVerticalCursorMovement(userData.cursorOffset, verticalOffset)
             }
             userData.cursorOffset = math.clamp(userData.cursorOffset, -textLength, 0)
-            showCursorAndResetTimerIfEditingForCursorChanged(textEntryView)
+            showCursorAndResetTimerIfEditingForCursorChanged(userData)
         }
     }
 }
 
-function uiTextEntry:create(parentView, size, typeOrNilFor10x3, horizontalAlignmentOrNilForCentered, descriptionTextOrNil)
-    
-    horizontalAlignment = horizontalAlignmentOrNilForCentered or MJPositionCenter
+create = function(parentView, sizeOrNilForParentSize, typeOrNilFor10x3, horizontalAlignmentOrNilForCentered, descriptionTextOrNil)
+{
+    horizontalAlignment = horizontalAlignmentOrNilForCentered
+    if(!horizontalAlignment)
+    {
+        horizontalAlignment = MJPositionCenter
+    }
+    size = sizeOrNilForParentSize
+    if(!sizeOrNilForParentSize)
+    {
+        size = parentView.size
+    }
     
     userData = {
-        horizontalAlignment = horizontalAlignment,
-        isUiTextEntry = true,
-        selected = false,
-        mouseDown = false,
-        editing = false,
-        text = nil,
-        fontSize = 16,
-        fontName = uiCommon.fontName,
-        textOffset = nil,
-        cursorView = nil,
-        editStartTextValue = nil,
-        cursorTimer = 0.0,
-        cursorOffset = 0,
-        minWidth = size.x,
-        descriptionText = descriptionTextOrNil,
+        horizontalAlignment = horizontalAlignment
+        fontSize = 16
+        font = "sapiensInternational" //todo
+        cursorTimer = 0.0
+        cursorOffset = 0
+        minWidth = size.x
+        descriptionText = descriptionTextOrNil
     }
 
-    buttonView = View.new(parentView)
-    userData.view = buttonView
-    buttonView.size = size
+    textEntryViewLayout = {
+        size = function(parentSize)
+        {
+            return parentSize
+        }
+        type = "view"
+    }
 
-    backgroundHeightMultiplier = 0.3
-    modelName = "ui_inset_10x3"
-    backgroundColor = nil
+    textEntryView = parentView.addView(textEntryViewLayout)
+    userData.view = textEntryView
+    textEntryView.textEntryViewData = userData
+
+    backgroundColor = vec4(0.0,0.0,0.0,0.8)
     verticalAlignment = MJPositionCenter
-    allowWrapping = false
 
 
     yOffset = -1
     xOffset = 0
     
-    if(verticalAlignment == MJPositionTop)
+    if(verticalAlignment == "top")
     {
         yOffset = -7
     }
@@ -208,83 +209,54 @@ function uiTextEntry:create(parentView, size, typeOrNilFor10x3, horizontalAlignm
     {
         yOffset = yOffset + userData.textOffset
     }
-    if(horizontalAlignment == MJPositionInnerLeft)
+    if(horizontalAlignment == "innerLeft")
     {
         xOffset = 4
     }
 
-    if(typeOrNilFor10x3 == uiTextEntry.types.multiLine)
-    {
-        modelName = "ui_inset_lg_4x3"
-        backgroundHeightMultiplier = 0.75
-        verticalAlignment = MJPositionTop
-        allowWrapping = true
-        userData.mutliLine = true
-    }
-    elseif(typeOrNilFor10x3 == uiTextEntry.types.wide)
-    {
-        modelName = "ui_inset_20x1"
-        backgroundHeightMultiplier = 0.05
-    }
-    elseif(typeOrNilFor10x3 == uiTextEntry.types.chatInput)
-    {
-        userData.fontSize = 13
-        userData.fontName = uiCommon.consoleFontName
-        modelName = nil
-        backgroundColor = vec4(0.0,0.0,0.0,0.8)
-        #xOffset = xOffset - 4
-    }
-
     userData.verticalAlignment = verticalAlignment
-    userData.backgroundHeightMultiplier = backgroundHeightMultiplier
-    
-    backgroundView = nil
-    if(modelName)
-    {
-        backgroundView = ModelView.new(buttonView)
-        backgroundView:setModel(model:modelIndexForName(modelName))
-        scaleToUseX = size.x * 0.5
-        scaleToUseY = size.y * 0.5 / backgroundHeightMultiplier
-        backgroundView.scale3D = vec3(scaleToUseX,scaleToUseY,scaleToUseX)
-        userData.hasModelBackground = true
-    }
-    elseif(backgroundColor)
-    {
-        backgroundView = ColorView.new(buttonView)
-        backgroundView.color = backgroundColor
-    }
-    else
-    {
-        backgroundView = View.new(buttonView)
+
+    backgroundViewLayout = {
+        size = function(parentSize)
+        {
+            return parentSize
+        }
+        type = "color"
+        color = backgroundColor
     }
 
-    backgroundView.size = size
+    backgroundView = textEntryView.addView(backgroundViewLayout)
     userData.backgroundView = backgroundView
 
-    cursorView = ImageView.new(buttonView)
-    cursorView.imageTexture = MJCache:getTexture("img/white8.png")
-    cursorView.color = vec4(1.0,1.0,1.0,1.0)
+
+    cursorViewLayout = {
+        size = vec2(1,18)
+        type = "color"
+        color = vec4(1.0,1.0,1.0,1.0)
+        horizontalAlignment = "left"
+        verticalAlignment = verticalAlignment
+        pos = vec3(2,1,0)
+    }
+    
+    cursorView = textEntryView.addView(cursorViewLayout)
     cursorView.hidden = true
-    cursorView.size = vec2(1,18)
-    cursorView.relativePosition = ViewPosition(MJPositionInnerLeft, verticalAlignment)
-    cursorView.pos = vec3(2,1,0)
     userData.cursorView = cursorView
 
-    
-    textView = TextView.new(buttonView)
-    textView.size = vec2(1, buttonView.size.y) #hack to set a default for cursor to be offset from, otherwise undefined position.
-    textView.font = Font(userData.fontName, userData.fontSize)
-    textView.relativePosition = ViewPosition(horizontalAlignment, verticalAlignment)
-    if(allowWrapping)
-    {
-        textView.wrapWidth = buttonView.size.x - 20
+
+    textViewLayout = {
+        size = vec2(1,18)
+        type = "text"
+        font = userData.font
+        fontSize = userData.fontSize
+        horizontalAlignment = horizontalAlignment
+        verticalAlignment = verticalAlignment
+        pos = vec3(xOffset,yOffset,0)
     }
 
-
-    textView.pos = vec3(xOffset,yOffset,0)
-    userData.initialOffset = textView.pos
-
+    textView = textEntryView.addView(textViewLayout)
+    userData.initialOffset = textViewLayout.pos
     userData.textView = textView
+
     userData.cursorView.relativeView = textView
 
     updateCursorFunction = function(dt)
@@ -300,21 +272,22 @@ function uiTextEntry:create(parentView, size, typeOrNilFor10x3, horizontalAlignm
             cursorView.hidden = (!cursorView.hidden)
         }
     }
+    #backgroundView.update = updateCursorFunction
 
-    buttonView.hoverStart = function ()
+    textEntryView.hoverStart = function()
     {
         if(!userData.selected)
         {
             if(!userData.disabled)
             {
                 userData.selected = true
-                audio:playUISound(uiCommon.hoverSoundFile)
+                #audio:playUISound(uiCommon.hoverSoundFile)
                 updateVisuals(userData)
             }
         }
     }
 
-    buttonView.hoverEnd = function ()
+    textEntryView.hoverEnd = function()
     {
         if(userData.selected)
         {
@@ -324,7 +297,7 @@ function uiTextEntry:create(parentView, size, typeOrNilFor10x3, horizontalAlignm
         }
     }
 
-    buttonView.mouseDown = function (buttonIndex)
+    textEntryView.mouseDown = function (buttonIndex)
     {
         if(buttonIndex == 0)
         {
@@ -334,13 +307,13 @@ function uiTextEntry:create(parentView, size, typeOrNilFor10x3, horizontalAlignm
                 {
                     userData.mouseDown = true
                     updateVisuals(userData)
-                    audio:playUISound(uiCommon.clickDownSoundFile)
+                    #audio:playUISound(uiCommon.clickDownSoundFile)
                 }
             }
         }
     }
 
-    buttonView.mouseUp = function (buttonIndex)
+    textEntryView.mouseUp = function (buttonIndex)
     {
         if(buttonIndex == 0)
         {
@@ -348,7 +321,7 @@ function uiTextEntry:create(parentView, size, typeOrNilFor10x3, horizontalAlignm
             {
                 userData.mouseDown = false
                 updateVisuals(userData)
-                audio:playUISound(uiCommon.clickReleaseSoundFile)
+                #audio:playUISound(uiCommon.clickReleaseSoundFile)
             }
         }
     }
@@ -363,9 +336,10 @@ function uiTextEntry:create(parentView, size, typeOrNilFor10x3, horizontalAlignm
             }
             if(userData.editing)
             {
-                if(userData.text)
+                error("todo")
+                /*if(userData.text)
                 {
-                    textViewLoc = buttonView:locationRelativeToView(mouseLoc, userData.textView)
+                    textViewLoc = textEntryView:locationRelativeToView(mouseLoc, userData.textView)
 
                     charIndex = userData.textView:getCharIndexForPos(textViewLoc)
                     textLength = string.length(userData.text)
@@ -376,15 +350,15 @@ function uiTextEntry:create(parentView, size, typeOrNilFor10x3, horizontalAlignm
                         userData.cursorView.hidden = false
                         userData.cursorTimer = 0.0
                         updateCursorPosition(userData)
-                        buttonView.userData.textView:resetVerticalCursorMovementAnchors()
+                        textEntryView.textEntryViewData.textView:resetVerticalCursorMovementAnchors()
                     }
-                }
+                }*/
                 #mj:log("mouseLoc:", mouseLoc - vec2(textView.pos.x, textView.pos.y), " charIndex:", charIndex)
             }
             else
             {
                 userData.editing = true
-                buttonView.userData.textView:resetVerticalCursorMovementAnchors()
+                #textEntryView.textEntryViewData.textView:resetVerticalCursorMovementAnchors()
                 userData.editStartTextValue = userData.text
                 cursorView.hidden = false
                 userData.cursorTimer = 0.0
@@ -512,7 +486,8 @@ function uiTextEntry:create(parentView, size, typeOrNilFor10x3, horizontalAlignm
 
                 stringInsert = function(str1, str2, pos)
                 {
-                    return str1:sub(1,pos)..str2..str1:sub(pos+1)
+                    #return str1:sub(1,pos)..str2..str1:sub(pos+1)
+                    string.subString(str1, 0, pos) + str2 + string.subString(str1, pos)
                 }
 
                 textEntry = function(text)
@@ -531,7 +506,7 @@ function uiTextEntry:create(parentView, size, typeOrNilFor10x3, horizontalAlignm
                         }
                         else
                         {
-                            newText = userData.text .. text
+                            newText = userData.text + text
                         }
                     }
                     updateText(userData, newText)
@@ -543,156 +518,140 @@ function uiTextEntry:create(parentView, size, typeOrNilFor10x3, horizontalAlignm
     }
 
     userData.textViewClickFunction = textViewClickFunction
-    buttonView.click = textViewClickFunction
+    textEntryView.click = textViewClickFunction
     
-    buttonView.clickDownOutside = function()
+    textEntryView.clickDownOutside = function()
     {
         finishEditing(userData, false)
     }
 
     #
 
-    #buttonView.update = uiCommon:createButtonUpdateFunction(userData, buttonView)
+    #textEntryView.update = uiCommon:createButtonUpdateFunction(userData, textEntryView)
 
-    buttonView.userData = userData
 
-    return buttonView
+    return textEntryView
 }
 
-function uiTextEntry:setFunction(buttonView, func)
-    buttonView.userData.textEntryFinishedFunction = func
-}
-
-function uiTextEntry:setAllowsEmpty(buttonView, allowsEmpty) #defaults to not allowing empty strings
-    buttonView.userData.allowsEmpty = allowsEmpty
-}
-
-function uiTextEntry:setChangedContinuousFunction(buttonView, func)
-    buttonView.userData.textEntryChangedContinuousFunction = func
-}
-
-function uiTextEntry:setSelected(buttonView, selected)
-    if(selected ~= buttonView.userData.selected)
+setFunction = function(textEntryView, func)
 {
-        buttonView.userData.selected = selected
-        updateVisuals(buttonView.userData)
+    textEntryView.textEntryViewData.textEntryFinishedFunction = func
+}
+
+setAllowsEmpty = function(textEntryView, allowsEmpty)
+{ #defaults to not allowing empty strings
+    textEntryView.textEntryViewData.allowsEmpty = allowsEmpty
+}
+
+setChangedContinuousFunction = function(textEntryView, func)
+{
+    textEntryView.textEntryViewData.textEntryChangedContinuousFunction = func
+}
+
+setSelected = function(textEntryView, selected)
+{
+    if(selected != textEntryView.textEntryViewData.selected)
+    {
+        textEntryView.textEntryViewData.selected = selected
+        updateVisuals(textEntryView.textEntryViewData)
     }
 }
 
-function uiTextEntry:setDisabled(buttonView, disabled)
-    if(disabled ~= buttonView.userData.disabled)
+setDisabled = function(textEntryView, disabled)
 {
-        buttonView.userData.disabled = disabled
-        updateVisuals(buttonView.userData)
+    if(disabled != textEntryView.textEntryViewData.disabled)
+    {
+        textEntryView.textEntryViewData.disabled = disabled
+        updateVisuals(textEntryView.textEntryViewData)
     }
 }
 
-function uiTextEntry:isEditing(buttonView)
-    return buttonView.userData.editing
+isEditing = function(textEntryView)
+{
+    return textEntryView.textEntryViewData.editing
 }
 
-function uiTextEntry:callClickFunction(buttonView)
-    buttonView.userData.textViewClickFunction()
-    if(eventManager.controllerIsPrimary)
+callClickFunction = function(textEntryView)
 {
-        userData = buttonView.userData
-        textEntryCallback = function(submitted, inputText)
-{
-            if(buttonView.userData.editing)
-{
-                if(submitted)
-{
-                    updateText(userData, inputText)
-                }
-                finishEditing(userData, true)
-            }
-        }
-
-        steam:showGamepadTextInput(textEntryCallback, buttonView.userData.maxChars or 1000, buttonView.userData.text, buttonView.userData.descriptionText or "", buttonView.userData.mutliLine, false)
-    }
+    textEntryView.textEntryViewData.textViewClickFunction()
 }
 
-function uiTextEntry:finishEditing(buttonView, confirmChanges)
-    finishEditing(buttonView.userData, confirmChanges)
-}
-
-function uiTextEntry:setText(buttonView, text_)
+setText = function(userData, text_)
+{
     textToUse = text_
     if(!textToUse)
-{
+    {
         textToUse = ""
     }
-elseif(type(textToUse) ~= "string")
-{
-        textToUse = mj:tostring(textToUse)
+    elseif(type(textToUse) != "string")
+    {
+        #textToUse = mj:tostring(textToUse) todo
     }
 
-    if(buttonView.userData.maxChars and textToUse and string.length(textToUse) > buttonView.userData.maxChars)
-{
-        textToUse = string.sub(textToUse, 1, buttonView.userData.maxChars)
+    if(userData.maxChars and textToUse and string.length(textToUse) > userData.maxChars)
+    {
+        textToUse = string.subString(textToUse, 0, userData.maxChars)
     }
-    buttonView.userData.text = textToUse
-    if(!buttonView.userData.editing)
-{
-        buttonView.userData.cursorOffset = 0
+    userData.text = textToUse
+    if(!userData.editing)
+    {
+        userData.cursorOffset = 0
     }
-else
-{
+    else
+    {
         if(textToUse)
-{
-            if(buttonView.userData.cursorOffset < -string.length(textToUse))
-{
-                buttonView.userData.cursorOffset = -string.length(textToUse)
+        {
+            if(userData.cursorOffset < -string.length(textToUse))
+            {
+                userData.cursorOffset = -string.length(textToUse)
             }
         }
-else
-{
-            buttonView.userData.cursorOffset = 0
+        else
+        {
+            userData.cursorOffset = 0
         }
     }
     
-    updateVisuals(buttonView.userData)
-    buttonView.userData.textView:resetVerticalCursorMovementAnchors()
-    showCursorAndResetTimerIfEditingForCursorChanged(buttonView.userData)
+    updateVisuals(userData)
+    #userData.textView:resetVerticalCursorMovementAnchors() #todo
+    showCursorAndResetTimerIfEditingForCursorChanged(userData)
 }
 
-function uiTextEntry:clearText(buttonView)
-    uiTextEntry:setText(buttonView, "")
-}
-
-function uiTextEntry:setMaxChars(buttonView, maxChars)
-    buttonView.userData.maxChars = maxChars
-}
-
-function uiTextEntry:getText(buttonView)
-    return buttonView.userData.text
-}
-
-function uiTextEntry:setPromptText(buttonView, promptText, promptColor)
-    userData = buttonView.userData
-    if(buttonView.userData.promptTextView)
+clearText = function(userData)
 {
-        buttonView.removeView(buttonView.userData.promptTextView)
+    setText(userData, "")
+}
+
+setMaxChars = function(textEntryView, maxChars)
+{
+    textEntryView.textEntryViewData.maxChars = maxChars
+}
+
+getText = function(textEntryView)
+{
+    return textEntryView.textEntryViewData.text
+}
+
+setPromptText = function(textEntryView, promptText, promptColor)
+{
+    userData = textEntryView.textEntryViewData
+    if(textEntryView.textEntryViewData.promptTextView)
+    {
+        textEntryView.removeView(textEntryView.textEntryViewData.promptTextView)
     }
 
-    if(promptText and promptText ~= "")
-{
-
-        promptTextView = TextView.new(buttonView)
+    if(promptText and promptText != "")
+    {
+        /*promptTextView = TextView.new(textEntryView) #todo
         promptTextView.font = Font(userData.fontName, userData.fontSize)
         promptTextView.relativePosition = ViewPosition(userData.horizontalAlignment, userData.verticalAlignment)
         promptTextView.pos = userData.initialOffset
 
         promptTextView:addColoredText(promptText, promptColor)
     
-        buttonView.userData.promptTextView = promptTextView
+        textEntryView.textEntryViewData.promptTextView = promptTextView
 
         userData.textView.pos = userData.initialOffset + vec3(promptTextView.size.x,0,0) #todo this only supports left alignment
+        */
     }
 }
-
-function uiTextEntry:init(controller_)
-    #controller = controller_
-}
-
-return uiTextEntry

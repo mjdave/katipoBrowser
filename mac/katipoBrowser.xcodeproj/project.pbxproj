@@ -82,7 +82,7 @@
 		5B49FE032F2C72C5007C1980 /* katipoBrowser.icon */ = {isa = PBXFileReference; lastKnownFileType = folder.iconcomposer.icon; name = katipoBrowser.icon; path = ../working/katipoBrowser.icon; sourceTree = SOURCE_ROOT; };
 		5B49FE052F2C7EBC007C1980 /* app */ = {isa = PBXFileReference; lastKnownFileType = folder; name = app; path = ../app; sourceTree = "<group>"; };
 		5BED52FB2E6014340028ED11 /* MediaPlayer.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MediaPlayer.framework; path = System/Library/Frameworks/MediaPlayer.framework; sourceTree = SDKROOT; };
-		5BFDBD012CC78B1E00247D8D /* katipoBrowser.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = katipoBrowser.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		5BFDBD012CC78B1E00247D8D /* Katipo Browser.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Katipo Browser.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		5BFDBDA52CC82F1600247D8D /* MurmurHash2.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = MurmurHash2.cpp; path = /Users/davidframpton/Documents/ambience/thirdParty/MurmurHash2.cpp; sourceTree = "<absolute>"; };
 		5BFDBDA62CC82F1600247D8D /* MurmurHash3.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = MurmurHash3.h; path = /Users/davidframpton/Documents/ambience/thirdParty/MurmurHash3.h; sourceTree = "<absolute>"; };
 		5BFDBDA72CC82F1600247D8D /* MurmurHash3.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = MurmurHash3.cpp; path = /Users/davidframpton/Documents/ambience/thirdParty/MurmurHash3.cpp; sourceTree = "<absolute>"; };
@@ -90,12 +90,12 @@
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
-		5B49FDFE2F2C6CB1007C1980 /* Exceptions for "core" folder in "katipoBrowser" target */ = {
+		5B49FDFE2F2C6CB1007C1980 /* Exceptions for "core" folder in "Katipo Browser" target */ = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
 				ClientHttpInterface.cpp,
 			);
-			target = 5BFDBD002CC78B1E00247D8D /* katipoBrowser */;
+			target = 5BFDBD002CC78B1E00247D8D /* Katipo Browser */;
 		};
 /* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
 
@@ -120,7 +120,7 @@
 		5B49FDED2F2C36FC007C1980 /* core */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
 			exceptions = (
-				5B49FDFE2F2C6CB1007C1980 /* Exceptions for "core" folder in "katipoBrowser" target */,
+				5B49FDFE2F2C6CB1007C1980 /* Exceptions for "core" folder in "Katipo Browser" target */,
 			);
 			name = core;
 			path = ../katipo/core;
@@ -169,10 +169,10 @@
 				5B49FDFF2F2C6D3A007C1980 /* SDL3.framework */,
 				5B2E9B162DE302DF00B8DF1E /* katipoBrowser */,
 				5BFDBD022CC78B1E00247D8D /* Products */,
-				5B49FD252F2C2019007C1980 /* KatipoBrowser.h */,
 				5B49FD402F2C23A8007C1980 /* source */,
 				5B49FDA92F2C3690007C1980 /* browser */,
 				5B49FDED2F2C36FC007C1980 /* core */,
+				5B49FD252F2C2019007C1980 /* KatipoBrowser.h */,
 				5B49FD262F2C2019007C1980 /* KatipoBrowser.cpp */,
 				5BFDBDA52CC82F1600247D8D /* MurmurHash2.cpp */,
 				5BFDBDA62CC82F1600247D8D /* MurmurHash3.h */,
@@ -196,7 +196,7 @@
 		5BFDBD022CC78B1E00247D8D /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				5BFDBD012CC78B1E00247D8D /* katipoBrowser.app */,
+				5BFDBD012CC78B1E00247D8D /* Katipo Browser.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -204,9 +204,9 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		5BFDBD002CC78B1E00247D8D /* katipoBrowser */ = {
+		5BFDBD002CC78B1E00247D8D /* Katipo Browser */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 5BFDBD1A2CC78B1F00247D8D /* Build configuration list for PBXNativeTarget "katipoBrowser" */;
+			buildConfigurationList = 5BFDBD1A2CC78B1F00247D8D /* Build configuration list for PBXNativeTarget "Katipo Browser" */;
 			buildPhases = (
 				5BFDBCFD2CC78B1E00247D8D /* Sources */,
 				5BFDBCFE2CC78B1E00247D8D /* Frameworks */,
@@ -225,11 +225,11 @@
 				5B49FDA92F2C3690007C1980 /* browser */,
 				5B49FDED2F2C36FC007C1980 /* core */,
 			);
-			name = katipoBrowser;
+			name = "Katipo Browser";
 			packageProductDependencies = (
 			);
 			productName = katipoBrowser;
-			productReference = 5BFDBD012CC78B1E00247D8D /* katipoBrowser.app */;
+			productReference = 5BFDBD012CC78B1E00247D8D /* Katipo Browser.app */;
 			productType = "com.apple.product-type.application";
 		};
 /* End PBXNativeTarget section */
@@ -260,7 +260,7 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				5BFDBD002CC78B1E00247D8D /* katipoBrowser */,
+				5BFDBD002CC78B1E00247D8D /* Katipo Browser */,
 			);
 		};
 /* End PBXProject section */
@@ -461,7 +461,7 @@
 				GCC_WARN_64_TO_32_BIT_CONVERSION = NO;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = katipoBrowser/Info.plist;
-				INFOPLIST_KEY_CFBundleDisplayName = Ambience;
+				INFOPLIST_KEY_CFBundleDisplayName = "Katipo Browser";
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.developer-tools";
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";
 				INFOPLIST_KEY_NSMainStoryboardFile = Main;
@@ -521,7 +521,7 @@
 				GCC_WARN_64_TO_32_BIT_CONVERSION = NO;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = katipoBrowser/Info.plist;
-				INFOPLIST_KEY_CFBundleDisplayName = Ambience;
+				INFOPLIST_KEY_CFBundleDisplayName = "Katipo Browser";
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.developer-tools";
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";
 				INFOPLIST_KEY_NSMainStoryboardFile = Main;
@@ -569,7 +569,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		5BFDBD1A2CC78B1F00247D8D /* Build configuration list for PBXNativeTarget "katipoBrowser" */ = {
+		5BFDBD1A2CC78B1F00247D8D /* Build configuration list for PBXNativeTarget "Katipo Browser" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				5BFDBD1B2CC78B1F00247D8D /* Debug */,

@@ -23,8 +23,8 @@ MJFont::MJFont(Vulkan* vulkan, MJCache* cache, std::string fontName, bool isMode
 	isModel = isModel_;
 	reversed = reversed_;
     
-    std::string fontFilename = Katipo::getResourcePath("common/fonts/fontFiles/" + fontName + ".fnt");
-    std::string fontImageFilename = Katipo::getResourcePath("common/fonts/maps/" + fontName + ".png");
+    std::string fontFilename = Katipo::getResourcePath("app/common/fonts/fontFiles/" + fontName + ".fnt");
+    std::string fontImageFilename = Katipo::getResourcePath("app/common/fonts/maps/" + fontName + ".png");
     
     std::ifstream stream((fontFilename).c_str());
     if ( !stream.is_open() )
@@ -39,12 +39,12 @@ MJFont::MJFont(Vulkan* vulkan, MJCache* cache, std::string fontName, bool isMode
 
 	if(isModel)
 	{
-		std::string fontNormalImageFilename = Katipo::getResourcePath("common/fonts/normalMaps/" + fontName + ".png");
+		std::string fontNormalImageFilename = Katipo::getResourcePath("app/common/fonts/normalMaps/" + fontName + ".png");
 		normalTexture = cache->getTextureAbsolutePath(fontNormalImageFilename, repeat, loadFlipped, true);
 		if(!normalTexture->valid)
 		{
 			MJWarn("Failed to load normal texture for font:%s, falling back to flat default", fontName.c_str());
-			std::string defaultFontNormalImageFilename = Katipo::getResourcePath("common/fonts/normalMaps/default.png");
+			std::string defaultFontNormalImageFilename = Katipo::getResourcePath("app/common/fonts/normalMaps/default.png");
 			normalTexture = cache->getTextureAbsolutePath(defaultFontNormalImageFilename, repeat, loadFlipped, true);
 		}
 	}

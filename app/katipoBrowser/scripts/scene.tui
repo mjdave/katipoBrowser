@@ -8,4 +8,20 @@ mainView = {
         return parentSize
     }
     crop = true
+    subviews = {
+        {
+            id = "urlTextEntry"
+            type = "image"
+            path = "app/katipoBrowser/img/colorsBackground.png"
+            shader = "drawQuadTexturedHueShift"
+            #pos = vec3(80,-10 - topStatusBarPadding, 0)
+            pos = vec3(0,0, 0)
+            size = function(parentSize)
+            {
+                return vec2(parentSize.x, 40)
+            }
+            alignmentY = "bottom"
+            crop = true
+        }
+    }
 }

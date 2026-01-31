@@ -1,1 +1,8 @@
+textEntry = require("app/common/textEntry.tui")
+
 print("katipoBrowser is running")
+
+
+urlTextEntry = scene.getView("urlTextEntry")
+textEntry.create(urlTextEntry)
+

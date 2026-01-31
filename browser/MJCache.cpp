@@ -30,7 +30,7 @@ MJCache::MJCache(Vulkan* vulkan_,
 	//debugTimer = new Timer();
 
 
-    std::string fontDirname = Katipo::getResourcePath("common/fonts/fontFiles");
+    std::string fontDirname = Katipo::getResourcePath("app/common/fonts/fontFiles");
 
     std::vector<std::string> availableFontFileNamesVec = Tui::getDirectoryContents(fontDirname);
     for(auto& name : availableFontFileNamesVec)

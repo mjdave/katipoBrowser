@@ -42,4 +42,4 @@ protected: // functions
 
 };
 
-#endif /* MaterialManager_h */
+#endif // !Camera_h
