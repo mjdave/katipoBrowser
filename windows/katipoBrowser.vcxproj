@@ -1,0 +1,268 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Debug|x64">
+      <Configuration>Debug</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|x64">
+      <Configuration>Release</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <VCProjectVersion>17.0</VCProjectVersion>
+    <Keyword>Win32Proj</Keyword>
+    <ProjectGuid>{9e3cae0f-5c86-4a5f-81c5-640c69b923ac}</ProjectGuid>
+    <RootNamespace>katipoBrowser</RootNamespace>
+    <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v143</PlatformToolset>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v143</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v143</PlatformToolset>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v143</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Label="Shared">
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <SDLCheck>true</SDLCheck>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ConformanceMode>true</ConformanceMode>
+    </ClCompile>
+    <Link>
+      <SubSystem>Console</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <SDLCheck>true</SDLCheck>
+      <PreprocessorDefinitions>WIN32;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ConformanceMode>true</ConformanceMode>
+    </ClCompile>
+    <Link>
+      <SubSystem>Console</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <SDLCheck>true</SDLCheck>
+      <PreprocessorDefinitions>_DEBUG;_CONSOLE;_SILENCE_CXX17_ITERATOR_BASE_CLASS_DEPRECATION_WARNING;_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ConformanceMode>true</ConformanceMode>
+      <AdditionalIncludeDirectories>$(SolutionDir)..\browser;$(SolutionDir)..\katipo\core;$(SolutionDir)..\katipo\thirdParty\tui\source;$(SolutionDir)..\katipo\thirdParty\tui\thirdParty\glm\glm;$(SolutionDir)thirdPartyWindows\SDL3-3.4.0\include;$(SolutionDir)thirdPartyWindows\SDL3-3.4.0\include\SDL3;$(VULKAN_SDK)\Include;$(SolutionDir)..\thirdParty\VulkanMemoryAllocator-3.2.1\include;$(SolutionDir)..\thirdParty;$(SolutionDir)..\thirdParty\utfcpp-3.2.1\source;$(SolutionDir)..\katipo\thirdParty\liblmdb;$(SolutionDir)..\katipo\thirdParty\libsodium\windows\include;$(SolutionDir)..\thirdParty\rapidjson-1.1.0\include;$(SolutionDir)..\katipo\thirdParty\enet-1.3.18\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <DisableSpecificWarnings>4244;4267;4305</DisableSpecificWarnings>
+      <LanguageStandard>stdcpp17</LanguageStandard>
+    </ClCompile>
+    <Link>
+      <SubSystem>Console</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <SDLCheck>true</SDLCheck>
+      <PreprocessorDefinitions>NDEBUG;_CONSOLE;_SILENCE_CXX17_ITERATOR_BASE_CLASS_DEPRECATION_WARNING;_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ConformanceMode>true</ConformanceMode>
+      <AdditionalIncludeDirectories>$(SolutionDir)..\browser;$(SolutionDir)..\katipo\core;$(SolutionDir)..\katipo\thirdParty\tui\source;$(SolutionDir)..\katipo\thirdParty\tui\thirdParty\glm\glm;$(SolutionDir)thirdPartyWindows\SDL3-3.4.0\include;$(SolutionDir)thirdPartyWindows\SDL3-3.4.0\include\SDL3;$(VULKAN_SDK)\Include;$(SolutionDir)..\thirdParty\VulkanMemoryAllocator-3.2.1\include;$(SolutionDir)..\thirdParty;$(SolutionDir)..\thirdParty\utfcpp-3.2.1\source;$(SolutionDir)..\katipo\thirdParty\liblmdb;$(SolutionDir)..\katipo\thirdParty\libsodium\windows\include;$(SolutionDir)..\thirdParty\rapidjson-1.1.0\include;$(SolutionDir)..\katipo\thirdParty\enet-1.3.18\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <DisableSpecificWarnings>4244;4267;4305</DisableSpecificWarnings>
+      <LanguageStandard>stdcpp17</LanguageStandard>
+    </ClCompile>
+    <Link>
+      <SubSystem>Console</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClCompile Include="..\browser\Camera.cpp" />
+    <ClCompile Include="..\browser\ClientModel.cpp" />
+    <ClCompile Include="..\browser\EventManager.cpp" />
+    <ClCompile Include="..\browser\GCommandBuffer.cpp" />
+    <ClCompile Include="..\browser\GPipeline.cpp" />
+    <ClCompile Include="..\browser\KatipoBrowser.cpp" />
+    <ClCompile Include="..\browser\KatipoUtilities.cpp" />
+    <ClCompile Include="..\browser\MainController.cpp" />
+    <ClCompile Include="..\browser\MaterialManager.cpp" />
+    <ClCompile Include="..\browser\MathUtils.cpp" />
+    <ClCompile Include="..\browser\MJAudio.cpp" />
+    <ClCompile Include="..\browser\MJCache.cpp" />
+    <ClCompile Include="..\browser\MJColorView.cpp" />
+    <ClCompile Include="..\browser\MJDataTexture.cpp" />
+    <ClCompile Include="..\browser\MJDrawable.cpp" />
+    <ClCompile Include="..\browser\MJDrawQuad.cpp" />
+    <ClCompile Include="..\browser\MJFinalOutputQuad.cpp" />
+    <ClCompile Include="..\browser\MJFont.cpp" />
+    <ClCompile Include="..\browser\MJImageTexture.cpp" />
+    <ClCompile Include="..\browser\MJImageView.cpp" />
+    <ClCompile Include="..\browser\MJRawImageTexture.cpp" />
+    <ClCompile Include="..\browser\MJRawImageTexture3D.cpp" />
+    <ClCompile Include="..\browser\MJRenderBuffer2.cpp" />
+    <ClCompile Include="..\browser\MJRenderBufferIndexed2.cpp" />
+    <ClCompile Include="..\browser\MJRenderTarget.cpp" />
+    <ClCompile Include="..\browser\MJRenderTarget3D.cpp" />
+    <ClCompile Include="..\browser\MJRenderTargetAccumulation.cpp" />
+    <ClCompile Include="..\browser\MJRenderTargetShadow.cpp" />
+    <ClCompile Include="..\browser\MJRenderTargetSSAO.cpp" />
+    <ClCompile Include="..\browser\MJSong.cpp" />
+    <ClCompile Include="..\browser\MJSound.cpp" />
+    <ClCompile Include="..\browser\MJSound2D.cpp" />
+    <ClCompile Include="..\browser\MJSound3D.cpp" />
+    <ClCompile Include="..\browser\MJStaticRenderBuffer.cpp" />
+    <ClCompile Include="..\browser\MJStaticRenderBuffer2.cpp" />
+    <ClCompile Include="..\browser\MJTextView.cpp" />
+    <ClCompile Include="..\browser\MJTimer.cpp" />
+    <ClCompile Include="..\browser\MJView.cpp" />
+    <ClCompile Include="..\browser\Model.cpp" />
+    <ClCompile Include="..\browser\Noise3DFast.cpp" />
+    <ClCompile Include="..\browser\Vulkan.cpp" />
+    <ClCompile Include="..\browser\VulkanMemoryThread.cpp" />
+    <ClCompile Include="..\katipo\core\ClientNetInterface.cpp" />
+    <ClCompile Include="..\katipo\core\Database.cpp" />
+    <ClCompile Include="..\katipo\core\DatabaseEnvironment.cpp" />
+    <ClCompile Include="..\katipo\core\NetServerClient.cpp" />
+    <ClCompile Include="..\katipo\core\Server.cpp" />
+    <ClCompile Include="..\katipo\core\ServerNetInterface.cpp" />
+    <ClCompile Include="..\katipo\core\Timer.cpp" />
+    <ClCompile Include="..\katipo\thirdParty\tui\source\TuiBuiltInFunctions.cpp" />
+    <ClCompile Include="..\katipo\thirdParty\tui\source\TuiFileUtils.cpp" />
+    <ClCompile Include="..\katipo\thirdParty\tui\source\TuiFunction.cpp" />
+    <ClCompile Include="..\katipo\thirdParty\tui\source\TuiRef.cpp" />
+    <ClCompile Include="..\katipo\thirdParty\tui\source\TuiSha1.cpp" />
+    <ClCompile Include="..\katipo\thirdParty\tui\source\TuiTable.cpp" />
+    <ClCompile Include="..\thirdParty\MurmurHash3.cpp" />
+    <ClCompile Include="main.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\browser\Camera.h" />
+    <ClInclude Include="..\browser\ClientModel.h" />
+    <ClInclude Include="..\browser\EventManager.h" />
+    <ClInclude Include="..\browser\GCommandBuffer.h" />
+    <ClInclude Include="..\browser\GPipeline.h" />
+    <ClInclude Include="..\browser\KatipoBrowser.h" />
+    <ClInclude Include="..\browser\KatipoUtilities.h" />
+    <ClInclude Include="..\browser\MainController.h" />
+    <ClInclude Include="..\browser\MaterialManager.h" />
+    <ClInclude Include="..\browser\MathUtils.h" />
+    <ClInclude Include="..\browser\MJAudio.h" />
+    <ClInclude Include="..\browser\MJAudioApple.h" />
+    <ClInclude Include="..\browser\MJAudioAppleDelegate.h" />
+    <ClInclude Include="..\browser\MJCache.h" />
+    <ClInclude Include="..\browser\MJColorView.h" />
+    <ClInclude Include="..\browser\MJDataTexture.h" />
+    <ClInclude Include="..\browser\MJDrawable.h" />
+    <ClInclude Include="..\browser\MJDrawQuad.h" />
+    <ClInclude Include="..\browser\MJFinalOutputQuad.h" />
+    <ClInclude Include="..\browser\MJFont.h" />
+    <ClInclude Include="..\browser\MJImageTexture.h" />
+    <ClInclude Include="..\browser\MJImageView.h" />
+    <ClInclude Include="..\browser\MJRawImageTexture.h" />
+    <ClInclude Include="..\browser\MJRawImageTexture3D.h" />
+    <ClInclude Include="..\browser\MJRenderBuffer2.h" />
+    <ClInclude Include="..\browser\MJRenderBufferIndexed2.h" />
+    <ClInclude Include="..\browser\MJRenderTarget.h" />
+    <ClInclude Include="..\browser\MJRenderTarget3D.h" />
+    <ClInclude Include="..\browser\MJRenderTargetAccumulation.h" />
+    <ClInclude Include="..\browser\MJRenderTargetShadow.h" />
+    <ClInclude Include="..\browser\MJRenderTargetSSAO.h" />
+    <ClInclude Include="..\browser\MJSong.h" />
+    <ClInclude Include="..\browser\MJSound.h" />
+    <ClInclude Include="..\browser\MJSound2D.h" />
+    <ClInclude Include="..\browser\MJSound3D.h" />
+    <ClInclude Include="..\browser\MJStaticRenderBuffer.h" />
+    <ClInclude Include="..\browser\MJStaticRenderBuffer2.h" />
+    <ClInclude Include="..\browser\MJTextView.h" />
+    <ClInclude Include="..\browser\MJTimer.h" />
+    <ClInclude Include="..\browser\MJVersion.h" />
+    <ClInclude Include="..\browser\MJView.h" />
+    <ClInclude Include="..\browser\Model.h" />
+    <ClInclude Include="..\browser\Noise3DFast.h" />
+    <ClInclude Include="..\browser\ObjectVert.h" />
+    <ClInclude Include="..\browser\Vulkan.h" />
+    <ClInclude Include="..\browser\VulkanMemoryThread.h" />
+    <ClInclude Include="..\browser\WindowInfo.h" />
+    <ClInclude Include="..\katipo\core\ClientHttpInterface.h" />
+    <ClInclude Include="..\katipo\core\ClientNetInterface.h" />
+    <ClInclude Include="..\katipo\core\Database.h" />
+    <ClInclude Include="..\katipo\core\DatabaseEnvironment.h" />
+    <ClInclude Include="..\katipo\core\MJLog.h" />
+    <ClInclude Include="..\katipo\core\MJVersion.h" />
+    <ClInclude Include="..\katipo\core\NetConstants.h" />
+    <ClInclude Include="..\katipo\core\NetServerClient.h" />
+    <ClInclude Include="..\katipo\core\Server.h" />
+    <ClInclude Include="..\katipo\core\ServerNetInterface.h" />
+    <ClInclude Include="..\katipo\core\ThreadSafeQueue.h" />
+    <ClInclude Include="..\katipo\core\Timer.h" />
+    <ClInclude Include="..\katipo\thirdParty\tui\source\TuiBuiltInFunctions.h" />
+    <ClInclude Include="..\katipo\thirdParty\tui\source\TuiFileUtils.h" />
+    <ClInclude Include="..\katipo\thirdParty\tui\source\TuiFunction.h" />
+    <ClInclude Include="..\katipo\thirdParty\tui\source\TuiLog.h" />
+    <ClInclude Include="..\katipo\thirdParty\tui\source\TuiNumber.h" />
+    <ClInclude Include="..\katipo\thirdParty\tui\source\TuiRef.h" />
+    <ClInclude Include="..\katipo\thirdParty\tui\source\TuiScript.h" />
+    <ClInclude Include="..\katipo\thirdParty\tui\source\TuiSha1.h" />
+    <ClInclude Include="..\katipo\thirdParty\tui\source\TuiStatement.h" />
+    <ClInclude Include="..\katipo\thirdParty\tui\source\TuiString.h" />
+    <ClInclude Include="..\katipo\thirdParty\tui\source\TuiStringUtils.h" />
+    <ClInclude Include="..\katipo\thirdParty\tui\source\TuiTable.h" />
+    <ClInclude Include="..\thirdParty\MurmurHash3.h" />
+    <ClInclude Include="..\thirdParty\stb_image.h" />
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>

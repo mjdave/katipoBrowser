@@ -8,13 +8,18 @@
 
 #include "Model.h"
 #include "TuiFileUtils.h"
+
 #include "rapidjson/document.h"
 #include "rapidjson/filereadstream.h"
+
 #include "MaterialManager.h"
 #include "TuiScript.h"
 
 #include "gtx/spline.hpp"
 
+#ifndef M_PI
+#define M_PI 3.14159265358979323846
+#endif
 
 #define DUMP_JSON 0
 

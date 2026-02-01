@@ -338,7 +338,7 @@ void Vulkan::createInstance()
     
     extensions.push_back(VK_EXT_DEBUG_REPORT_EXTENSION_NAME);
     
-    for(int i = 0; i < count; i++)
+    for(int i = 0; i < (int)count; i++)
     {
 
         if(std::string(instance_extensions[i]) != "VK_KHR_portability_enumeration") //todo hacks around SDL3 on macos

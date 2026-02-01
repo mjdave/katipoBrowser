@@ -29,7 +29,7 @@ MJImageTexture::MJImageTexture(Vulkan* vulkan_, std::string pathname_, MJImageTe
 
 	unsigned char* pixels = NULL;
 #ifdef WIN32
-	FILE *f = _wfopen(convertUtf8ToWide(pathname).c_str(), L"rb");
+	FILE *f = _wfopen(Tui::convertUtf8ToWide(pathname).c_str(), L"rb");
 #else
     FILE *f = fopen(pathname.c_str(), "rb");
 #endif
@@ -61,7 +61,7 @@ MJImageTexture::MJImageTexture(Vulkan* vulkan_, std::string pathname_, MJImageTe
 
 		unsigned char* alphaPixels = NULL;
 #ifdef WIN32
-		FILE *f = _wfopen(convertUtf8ToWide(alphaChannelPath).c_str(), L"rb");
+		FILE *f = _wfopen(Tui::convertUtf8ToWide(alphaChannelPath).c_str(), L"rb");
 #else
         FILE *f = fopen(alphaChannelPath.c_str(), "rb");
 #endif

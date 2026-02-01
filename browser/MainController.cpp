@@ -55,18 +55,6 @@
 #define DEPTH_BUFFER_NEAR 0.01
 #define DEPTH_BUFFER_FAR 10000000.0
 
-#ifdef WIN32
-#if !IS_FOR_INTERNAL_DEVELOPMENT 
-#define NOMINMAX
-#include "backward.hpp"
-
-namespace backward {
-
-	backward::SignalHandling sh(getSavePath("crashLog.log"));
-} 
-#endif
-#endif
-
 
 void MainController::addResolution(ivec2 resolution)
 {
@@ -279,13 +267,15 @@ void MainController::init(std::string windowTitle, std::string organizationName,
     
     int flags = SDL_WINDOW_RESIZABLE;
     
-#if WIN32
+/*#ifdef WIN32
     int screenY = SDL_WINDOWPOS_CENTERED;
     
     flags = flags | SDL_WINDOW_ALLOW_HIGHDPI;
 #else
     int screenY = 0;
-#endif
+#endif*/
+
+	int screenY = 0;
 
 
 

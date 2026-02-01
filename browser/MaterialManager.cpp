@@ -97,7 +97,7 @@ MaterialManager::MaterialManager()
                 metalB = matTable->getBool("metalB") ? 1.0 : 0.0;
             }
             
-            if(metalB > 0.5)
+            if(metalB)
             {
                 mat.shaderMaterialB.w = (uint8_t)128 + (uint8_t)clamp(roughnessB * 127.0, 0.0, 127.0);
             }

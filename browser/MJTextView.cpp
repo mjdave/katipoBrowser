@@ -306,7 +306,7 @@ void MJTextView::setFontNameAndSize(FontNameAndSize fontNameAndSize_)
 
 	if(!newFont)
 	{
-        MJWarn("Failed to load font:%s size:%d", fontNameAndSize_.name.c_str(), fontNameAndSize_.size * scaleToUse);
+        MJWarn("Failed to load font:%s size:%d", fontNameAndSize_.name.c_str(), (int)fontNameAndSize_.size);
 	}
 }
 

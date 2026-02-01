@@ -474,7 +474,7 @@ void MJRenderTarget3D::writeToDisk(const std::string& filepath)
     file.write(outData.data(), outData.size());
     file.close();
 
-    MJLog("Wrote image %s. width:%d height:%d size:%d (expected %d)", filepath.c_str(), size.x, size.y, outData.size(), sizeof(uint16) * size.x * size.y * size.z * 4);
+    //MJLog("Wrote image %s. width:%d height:%d size:%d (expected %d)", filepath.c_str(), size.x, size.y, outData.size(), sizeof(uint16) * size.x * size.y * size.z * 4);
 
 
     vulkan->endSingleTimeCommands(commandBuffer);
