@@ -1,3 +1,5 @@
+keys = require("app/common/keys.tui")
+
 standardColor = vec4(1.0,1.0,1.0,1.0)
 disabledColor = vec4(0.5,0.5,0.5,0.5)
 selectedColor = vec4(0.5,0.5,1.0,1.0)
@@ -70,8 +72,13 @@ updateVisuals = function(userData)
 updateCursorPosition = function(userData)
 {
     rect = userData.textView.getRectForCharAtIndex(-1 + userData.cursorOffset)
-    #mj:log("index:", -1 + (userData.cursorOffset or 0), " rect:", rect)
-    userData.cursorView.pos = vec3(rect.x + rect.z + 1,rect.y + 1,0)
+    xOffset = rect.x + rect.z
+    if(!userData.horizontalAlignment or userData.horizontalAlignment == "center")
+    {
+        xOffset /= 2
+    }
+    #todo handle right alignment
+    userData.cursorView.pos = vec3(xOffset + 1,rect.y + 1,0)
 }
 
 updateText = function(userData, newText)
@@ -92,9 +99,8 @@ updateText = function(userData, newText)
     }
 }
 
-finishEditing = function(textEntryView, confirmChanges)
+finishEditing = function(userData, confirmChanges)
 {
-    userData = textEntryView.textEntryViewData
     if(userData.editing)
     {
         userData.view.keyChanged = nil
@@ -162,10 +168,6 @@ cursorChanged = function(textEntryView, horizontalOffset, verticalOffset)
 create = function(parentView, sizeOrNilForParentSize, typeOrNilFor10x3, horizontalAlignmentOrNilForCentered, descriptionTextOrNil)
 {
     horizontalAlignment = horizontalAlignmentOrNilForCentered
-    if(!horizontalAlignment)
-    {
-        horizontalAlignment = MJPositionCenter
-    }
     size = sizeOrNilForParentSize
     if(!sizeOrNilForParentSize)
     {
@@ -198,7 +200,7 @@ create = function(parentView, sizeOrNilForParentSize, typeOrNilFor10x3, horizont
     verticalAlignment = MJPositionCenter
 
 
-    yOffset = -1
+    yOffset = 0
     xOffset = 0
     
     if(verticalAlignment == "top")
@@ -367,121 +369,115 @@ create = function(parentView, sizeOrNilForParentSize, typeOrNilFor10x3, horizont
                 updateVisuals(userData)
                 updateCursorPosition(userData)
                 
-                #todo
-                #keyMap = {
-                #    [keyMapping:getMappingIndex("textEntry", "send")] = function(isDown, isRepeat)
-                #    {
-                #        if(isDown and (!isRepeat))
-                #        {
-                #            finishEditing(userData, true)
-                #        }
-                #        return true 
-                #    end,
-                #    [keyMapping:getMappingIndex("textEntry", "newline")] = function(isDown, isRepeat)
-                #        if(isDown)
-                #        {
-                #            newText = userData.text .. "\n"
-                #            updateText(userData, newText)
-                #        }
-                #        return true 
-                #    end,
-                #    [keyMapping:getMappingIndex("textEntry", "backspace")] = function(isDown, isRepeat)
-                #        if(isDown)
-                #            {
-                #            if(userData.text and string.length(userData.text) > 0)
-                #            {
-                #                newText = ""
-                #                if(userData.cursorOffset and userData.cursorOffset ~= 0)
-                #                {
-                #                    textLength = string.length(userData.text)
-                #                    if(textLength > 0)
-                #                    {
-                #                        removeBeforePos = math.max(textLength + userData.cursorOffset, 0) + 1
-                #                        if(removeBeforePos > 1)
-                #                        {
-                #                            newText = userData.text:sub(1,removeBeforePos - 2) .. userData.text:sub(removeBeforePos,-1)
-                #                        }
-                #                        else
-                #                        {
-                #                            return 
-                #                        }
-                #                    }
-                #                    else
-                #                    {
-                #                        return
-                #                    }
-                #                }
-                #                else
-                #                {
-                #                    newText = userData.text:sub(1, -2)
-                #                }
-#
-                #                updateText(userData, newText)
-                #            }
-                #        }
-                #        return true
-                #    end,
-                #    [keyMapping:getMappingIndex("textEntry", "delete")] = function(isDown, isRepeat)
-                #        if(isDown)
-                #            {
-                #            if(userData.text and string.length(userData.text) > 0)
-                #            {
-#
-                #                newText = ""
-                #                if(userData.cursorOffset and userData.cursorOffset ~= 0)
-                #                {
-                #                    textLength = string.length(userData.text)
-                #                    if(textLength > 0)
-                #                    {
-                #                        removeAfterPos = math.max(textLength + userData.cursorOffset, 0) + 1
-                #                        if(removeAfterPos > 0 and removeAfterPos < textLength)
-                #                        {
-                #                            newText = userData.text:sub(1,removeAfterPos - 1) .. userData.text:sub(removeAfterPos + 1,-1)
-                #                            userData.cursorOffset = userData.cursorOffset + 1
-                #                        }
-                #                        else
-                #                        {
-                #                            return 
-                #                        }
-                #                    }
-                #                    else
-                #                    {
-                #                        return
-                #                    }
-                #                }
-                #                else
-                #                {
-                #                    newText = userData.text:sub(1, -2)
-                #                }
-#
-                #                updateText(userData, newText)
-                #            }
-                #        }
-                #        return true
-                #    end,
-                #    [keyMapping:getMappingIndex("game", "escape")] = function(isDown, isRepeat)
-                #        if(isDown and (!isRepeat))
-                #        {
-                #            finishEditing(userData, false)
-                #        }
-                #        return true 
-                #    end,
-                #    [keyMapping:getMappingIndex("textEntry", "cursorLeft")] = function(isDown, isRepeat) if(isDown then cursorChanged(userData, -1, nil) end return true end,
-                #    [keyMapping:getMappingIndex("textEntry", "cursorRight")] = function(isDown, isRepeat) if(isDown then cursorChanged(userData, 1, nil) end return true end,
-                #    [keyMapping:getMappingIndex("textEntry", "prevCommand")] = function(isDown, isRepeat) if(isDown then cursorChanged(userData, nil, 1) end return true end,
-                #    [keyMapping:getMappingIndex("textEntry", "nextCommand")] = function(isDown, isRepeat) if(isDown then cursorChanged(userData, nil, -1) end return true end,
-                #}
-#
-                keyChanged = function(isDown, mapIndexes, isRepeat)
-                {
-                    #for(i,mapIndex in mapIndexes)
-                    #{
-                    #    if(keyMap[mapIndex])
+                keyMap = {
+                    [keys.keyCodes.key_return] = function(isDown, keyCode, modCode, isRepeat)
+                    {
+                        if(isDown and (!isRepeat))
+                        {
+                            finishEditing(userData, true)
+                        }
+                    }
+                    #[keyMapping:getMappingIndex("textEntry", "newline")] = function(isDown, isRepeat)
+                    #    if(isDown)
                     #    {
-                    #        return keyMap[mapIndex](isDown, isRepeat)
+                    #        newText = userData.text .. "\n"
+                    #        updateText(userData, newText)
                     #    }
-                    #}
-                    #return true 
+                    #    return true 
+                    #end,
+                    /*[keyMapping:getMappingIndex("textEntry", "backspace")] = function(isDown, isRepeat)
+                        if(isDown)
+                            {
+                            if(userData.text and string.length(userData.text) > 0)
+                            {
+                                newText = ""
+                                if(userData.cursorOffset and userData.cursorOffset ~= 0)
+                                {
+                                    textLength = string.length(userData.text)
+                                    if(textLength > 0)
+                                    {
+                                        removeBeforePos = math.max(textLength + userData.cursorOffset, 0) + 1
+                                        if(removeBeforePos > 1)
+                                        {
+                                            newText = userData.text:sub(1,removeBeforePos - 2) .. userData.text:sub(removeBeforePos,-1)
+                                        }
+                                        else
+                                        {
+                                            return 
+                                        }
+                                    }
+                                    else
+                                    {
+                                        return
+                                    }
+                                }
+                                else
+                                {
+                                    newText = userData.text:sub(1, -2)
+                                }
+                                updateText(userData, newText)
+                            }
+                        }
+                        return true
+                    end,
+                    [keyMapping:getMappingIndex("textEntry", "delete")] = function(isDown, isRepeat)
+                        if(isDown)
+                            {
+                            if(userData.text and string.length(userData.text) > 0)
+                            {
+                                newText = ""
+                                if(userData.cursorOffset and userData.cursorOffset ~= 0)
+                                {
+                                    textLength = string.length(userData.text)
+                                    if(textLength > 0)
+                                    {
+                                        removeAfterPos = math.max(textLength + userData.cursorOffset, 0) + 1
+                                        if(removeAfterPos > 0 and removeAfterPos < textLength)
+                                        {
+                                            newText = userData.text:sub(1,removeAfterPos - 1) .. userData.text:sub(removeAfterPos + 1,-1)
+                                            userData.cursorOffset = userData.cursorOffset + 1
+                                        }
+                                        else
+                                        {
+                                            return 
+                                        }
+                                    }
+                                    else
+                                    {
+                                        return
+                                    }
+                                }
+                                else
+                                {
+                                    newText = userData.text:sub(1, -2)
+                                }
+
+                                updateText(userData, newText)
+                            }
+                        }
+                        return true
+                    end,
+                    [keyMapping:getMappingIndex("game", "escape")] = function(isDown, isRepeat)
+                        if(isDown and (!isRepeat))
+                        {
+                            finishEditing(userData, false)
+                        }
+                        return true 
+                    end,
+                    [keyMapping:getMappingIndex("textEntry", "cursorLeft")] = function(isDown, isRepeat) if(isDown then cursorChanged(userData, -1, nil) end return true end,
+                    [keyMapping:getMappingIndex("textEntry", "cursorRight")] = function(isDown, isRepeat) if(isDown then cursorChanged(userData, 1, nil) end return true end,
+                    [keyMapping:getMappingIndex("textEntry", "prevCommand")] = function(isDown, isRepeat) if(isDown then cursorChanged(userData, nil, 1) end return true end,
+                    [keyMapping:getMappingIndex("textEntry", "nextCommand")] = function(isDown, isRepeat) if(isDown then cursorChanged(userData, nil, -1) end return true end,
+                    */
+                }
+
+                keyChanged = function(isDown, keyCode, modCode, isRepeat)
+                {
+                    func = keyMap[keyCode]
+                    if(func)
+                    {
+                        func(isDown, keyCode, modCode, isRepeat)
+                    }
                 }
 
                 stringInsert = function(str1, str2, pos)
