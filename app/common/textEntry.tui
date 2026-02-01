@@ -128,6 +128,11 @@ finishEditing = function(userData, confirmChanges)
             {
                 userData.textEntryFinishedFunction(userData.text, confirmChanges)
             }
+
+            if(!confirmChanges)
+            {
+                updateText(userData, userData.editStartTextValue)
+            }
         }
     }
 }
@@ -142,9 +147,8 @@ showCursorAndResetTimerIfEditingForCursorChanged = function(userData)
     }
 }
 
-cursorChanged = function(textEntryView, horizontalOffset, verticalOffset)
+cursorChanged = function(userData, horizontalOffset, verticalOffset)
 {
-    userData = textEntryView.textEntryViewData
     if(userData.text)
     {
         textLength = string.length(userData.text)
@@ -352,7 +356,7 @@ create = function(parentView, sizeOrNilForParentSize, typeOrNilFor10x3, horizont
                         userData.cursorView.hidden = false
                         userData.cursorTimer = 0.0
                         updateCursorPosition(userData)
-                        textEntryView.textEntryViewData.textView:resetVerticalCursorMovementAnchors()
+                        textEntryView.textEntryViewData.textView.resetVerticalCursorMovementAnchors()
                     }
                 }*/
                 #mj:log("mouseLoc:", mouseLoc - vec2(textView.pos.x, textView.pos.y), " charIndex:", charIndex)
@@ -374,32 +378,26 @@ create = function(parentView, sizeOrNilForParentSize, typeOrNilFor10x3, horizont
                     {
                         if(isDown and (!isRepeat))
                         {
+                            #print("modCode:", modCode)
                             finishEditing(userData, true)
                         }
                     }
-                    #[keyMapping:getMappingIndex("textEntry", "newline")] = function(isDown, isRepeat)
-                    #    if(isDown)
-                    #    {
-                    #        newText = userData.text .. "\n"
-                    #        updateText(userData, newText)
-                    #    }
-                    #    return true 
-                    #end,
-                    /*[keyMapping:getMappingIndex("textEntry", "backspace")] = function(isDown, isRepeat)
+                    [keys.keyCodes.backspace] = function(isDown, keyCode, modCode, isRepeat)
+                    {
                         if(isDown)
-                            {
+                        {
                             if(userData.text and string.length(userData.text) > 0)
                             {
                                 newText = ""
-                                if(userData.cursorOffset and userData.cursorOffset ~= 0)
+                                if(userData.cursorOffset and userData.cursorOffset != 0)
                                 {
                                     textLength = string.length(userData.text)
                                     if(textLength > 0)
                                     {
-                                        removeBeforePos = math.max(textLength + userData.cursorOffset, 0) + 1
-                                        if(removeBeforePos > 1)
+                                        removePos = math.max(textLength + userData.cursorOffset, 0)
+                                        if(removePos > 0)
                                         {
-                                            newText = userData.text:sub(1,removeBeforePos - 2) .. userData.text:sub(removeBeforePos,-1)
+                                            newText = string.subString(userData.text,0,removePos) + string.subString(userData.text, removePos + 1)
                                         }
                                         else
                                         {
@@ -413,13 +411,43 @@ create = function(parentView, sizeOrNilForParentSize, typeOrNilFor10x3, horizont
                                 }
                                 else
                                 {
-                                    newText = userData.text:sub(1, -2)
+                                    newText = string.subString(userData.text, 0, string.length(userData.text) - 1)
                                 }
                                 updateText(userData, newText)
                             }
                         }
                         return true
-                    end,
+                    }
+                    [keys.keyCodes.escape] = function(isDown, keyCode, modCode, isRepeat)
+                    {
+                        if(isDown and (!isRepeat))
+                        {
+                            finishEditing(userData, false)
+                        }
+                    }
+                    [keys.keyCodes.left] = function(isDown, keyCode, modCode, isRepeat)
+                    {
+                        if(isDown)
+                        {
+                            cursorChanged(userData, -1, nil)
+                        }
+                    }
+                    [keys.keyCodes.right] = function(isDown, keyCode, modCode, isRepeat)
+                    {
+                        if(isDown)
+                        {
+                            cursorChanged(userData, 1, nil)
+                        }
+                    }
+                    #[keyMapping:getMappingIndex("textEntry", "newline")] = function(isDown, isRepeat)
+                    #    if(isDown)
+                    #    {
+                    #        newText = userData.text .. "\n"
+                    #        updateText(userData, newText)
+                    #    }
+                    #    return true 
+                    #end,
+                    /*[
                     [keyMapping:getMappingIndex("textEntry", "delete")] = function(isDown, isRepeat)
                         if(isDown)
                             {
@@ -464,9 +492,7 @@ create = function(parentView, sizeOrNilForParentSize, typeOrNilFor10x3, horizont
                         }
                         return true 
                     end,
-                    [keyMapping:getMappingIndex("textEntry", "cursorLeft")] = function(isDown, isRepeat) if(isDown then cursorChanged(userData, -1, nil) end return true end,
-                    [keyMapping:getMappingIndex("textEntry", "cursorRight")] = function(isDown, isRepeat) if(isDown then cursorChanged(userData, 1, nil) end return true end,
-                    [keyMapping:getMappingIndex("textEntry", "prevCommand")] = function(isDown, isRepeat) if(isDown then cursorChanged(userData, nil, 1) end return true end,
+                   [keyMapping:getMappingIndex("textEntry", "prevCommand")] = function(isDown, isRepeat) if(isDown then cursorChanged(userData, nil, 1) end return true end,
                     [keyMapping:getMappingIndex("textEntry", "nextCommand")] = function(isDown, isRepeat) if(isDown then cursorChanged(userData, nil, -1) end return true end,
                     */
                 }
@@ -483,7 +509,7 @@ create = function(parentView, sizeOrNilForParentSize, typeOrNilFor10x3, horizont
                 stringInsert = function(str1, str2, pos)
                 {
                     #return str1:sub(1,pos)..str2..str1:sub(pos+1)
-                    string.subString(str1, 0, pos) + str2 + string.subString(str1, pos)
+                    return string.subString(str1, 0, pos) + str2 + string.subString(str1, pos)
                 }
 
                 textEntry = function(text)
@@ -529,9 +555,9 @@ create = function(parentView, sizeOrNilForParentSize, typeOrNilFor10x3, horizont
     return textEntryView
 }
 
-setFunction = function(textEntryView, func)
+setOnChangeCallback = function(textEntryView, callbackFunc)
 {
-    textEntryView.textEntryViewData.textEntryFinishedFunction = func
+    textEntryView.textEntryViewData.textEntryFinishedFunction = callbackFunc
 }
 
 setAllowsEmpty = function(textEntryView, allowsEmpty)
@@ -539,9 +565,9 @@ setAllowsEmpty = function(textEntryView, allowsEmpty)
     textEntryView.textEntryViewData.allowsEmpty = allowsEmpty
 }
 
-setChangedContinuousFunction = function(textEntryView, func)
+setChangedContinuousCallback = function(textEntryView, callbackFunc)
 {
-    textEntryView.textEntryViewData.textEntryChangedContinuousFunction = func
+    textEntryView.textEntryViewData.textEntryChangedContinuousFunction = callbackFunc
 }
 
 setSelected = function(textEntryView, selected)

@@ -3,6 +3,9 @@ textEntry = require("app/common/textEntry.tui")
 print("katipoBrowser is running")
 
 
-urlTextEntry = scene.getView("urlTextEntry")
-textEntry.create(urlTextEntry)
+urlTextEntryContainer = scene.getView("urlTextEntry")
+urlTextEntry = textEntry.create(urlTextEntryContainer)
 
+textEntry.setOnChangeCallback(urlTextEntry, function(textValue, confirmChanges){
+    print("got value:", textValue)
+})
