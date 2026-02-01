@@ -225,7 +225,15 @@ void MJAudio::updateCurrentlyPlayingInfo(const std::string& titleString, const s
 {
     if(playingSongChangedFunction)
     {
-        playingSongChangedFunction->call("updateCurrentlyPlayingTrackInfo", new TuiString(titleString), new TuiString(artistString), new TuiNumber(duration));
+        TuiRef* titleRef = new TuiString(titleString);
+        TuiRef* artistRef = new TuiString(artistString);
+        TuiRef* durationRef = new TuiNumber(duration);
+        
+        playingSongChangedFunction->call("updateCurrentlyPlayingTrackInfo", titleRef, artistRef, durationRef);
+        
+        titleRef->release();
+        artistRef->release();
+        durationRef->release();
     }
     MJAudioApple::getInstance()->updateCurrentlyPlayingOSInfo(titleString, artistString, duration, 0, imageBytes, imageLength);
 }

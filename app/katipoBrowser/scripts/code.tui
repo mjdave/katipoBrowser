@@ -1,7 +1,16 @@
 textEntry = require("app/common/textEntry.tui")
+defaultSiteScene = require("app/katipoBrowser/scripts/defaultSiteScene.tui")
 
 print("katipoBrowser is running")
 
+
+urlTextEntryContainer = scene.getView("urlTextEntry")
+urlTextEntry = textEntry.create(urlTextEntryContainer)
+
+siteContentBackground = scene.getView("siteContent")
+
+siteContent = siteContentBackground.addView(defaultSiteScene.mainView)
+siteContent.hidden = true
 
 getCallback = function(result)
 {
@@ -9,13 +18,39 @@ getCallback = function(result)
     if(!result or result.status != "ok")
     {
         siteContentBackground.color = vec4(0.2,0.0,0.0,0.6)
+        siteContent.hidden = false
+
+        pageTitle = siteContent.getView("pageTitle")
+        print("setting pageTitle:", pageTitle, " value:", result.status)
+        pageTitle.text = result.status
+
+        pageBody = siteContent.getView("pageBody")
+        pageBody.text = result.message
+    }
+    else if(result.pageTitle)
+    {
+        siteContentBackground.color = vec4(0.0,0.0,0.2,0.4)
+        siteContent.hidden = false
+
+        pageTitle = siteContent.getView("pageTitle")
+        pageTitle.text = result.pageTitle
+
+        pageBody = siteContent.getView("pageBody")
+
+        if(result.pageBody)
+        {
+            pageBody.text = result.pageBody
+        }
+        else
+        {
+            pageBody.text = ""
+        }
+    }
+    else
+    {
+        siteContent.hidden = true
     }
 }
-
-urlTextEntryContainer = scene.getView("urlTextEntry")
-urlTextEntry = textEntry.create(urlTextEntryContainer)
-
-siteContentBackground = scene.getView("siteContent")
 
 textEntry.setOnChangeCallback(urlTextEntry, function(textValue, confirmChanges){
     if(confirmChanges)

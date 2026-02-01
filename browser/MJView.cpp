@@ -322,8 +322,10 @@ void MJView::setSize(dvec2 size_)
         {
             if(subView->parentSizeChangedFunction)
             {
-                TuiRef* sizeRef = subView->parentSizeChangedFunction->call("parentSizeChangedFunction", new TuiVec2(size));
+                TuiRef* inRef = new TuiVec2(size);
+                TuiRef* sizeRef = subView->parentSizeChangedFunction->call("parentSizeChangedFunction", inRef);
                 subView->stateTable->setVec2("size", ((TuiVec2*)sizeRef)->value);
+                inRef->release();
                 sizeRef->release();
             }
         }
@@ -1048,7 +1050,9 @@ bool MJView::mouseMoved3D(dvec3 windowRayStart, dvec3 windowRayDirection, bool o
 
 					if(hoverStartFunction)
 					{
-                        hoverStartFunction->call("hoverStartFunction", new TuiVec2(localPoint / renderScale));
+                        TuiRef* localPointRef = new TuiVec2(localPoint / renderScale);
+                        hoverStartFunction->call("hoverStartFunction", localPointRef);
+                        localPointRef->release();
 					}
 				}
 			}
@@ -1056,7 +1060,9 @@ bool MJView::mouseMoved3D(dvec3 windowRayStart, dvec3 windowRayDirection, bool o
 			{
 				if(hoverMovedFunction)
 				{
-                    hoverMovedFunction->call("hoverMovedFunction", new TuiVec2(localPoint / renderScale));
+                    TuiRef* localPointRef = new TuiVec2(localPoint / renderScale);
+                    hoverMovedFunction->call("hoverMovedFunction", localPointRef);
+                    localPointRef->release();
 				}
 			}
 
@@ -1173,7 +1179,11 @@ bool MJView::mouseDown3D(dvec3 windowRayStart, dvec3 windowRayDirection, bool ob
 		{
             //mouseDownFunction(buttonIndex, localPoint / renderScale);
             
-            mouseDownFunction->call("mouseDownFunction", new TuiNumber(buttonIndex), new TuiVec2(localPoint / renderScale));
+            TuiRef* buttonIndexRef = new TuiNumber(buttonIndex);
+            TuiRef* localPointRef = new TuiVec2(localPoint / renderScale);
+            mouseDownFunction->call("mouseDownFunction", buttonIndexRef, localPointRef);
+            buttonIndexRef->release();
+            localPointRef->release();
             
             /*TuiDebugInfo debugInfo;
             debugInfo.fileName = "mouseDown3D";
@@ -1237,7 +1247,12 @@ bool MJView::mouseDown3D(dvec3 windowRayStart, dvec3 windowRayDirection, bool ob
 			if(!visibleUIContainsPointIncludingSubViews3D(windowRayStart, windowRayDirection))
 			{ 
 				dvec2 localPoint = windowPointToLocal(windowRayStart, windowRayDirection);
-                clickDownOutsideFunction->call("clickDownOutsideFunction", new TuiNumber(buttonIndex), new TuiVec2(localPoint / renderScale));
+                
+                TuiRef* buttonIndexRef = new TuiNumber(buttonIndex);
+                TuiRef* localPointRef = new TuiVec2(localPoint / renderScale);
+                clickDownOutsideFunction->call("clickDownOutsideFunction", buttonIndexRef, localPointRef);
+                buttonIndexRef->release();
+                localPointRef->release();
 			}
 		}
 	}
@@ -1371,12 +1386,16 @@ bool MJView::mouseUp3D(dvec3 windowRayStart, dvec3 windowRayDirection, int butto
 				if(buttonIndex == 0 && clickFunction)
 				{
 					dvec2 localPoint = windowPointToLocal(windowRayStart, windowRayDirection);
-                    clickFunction->call("clickFunction", new TuiVec2(localPoint / renderScale));
+                    TuiRef* localPointRef = new TuiVec2(localPoint / renderScale);
+                    clickFunction->call("clickFunction", localPointRef);
+                    localPointRef->release();
 				}
                 else if(buttonIndex == 1 && rightClickFunction)
 				{
 					dvec2 localPoint = windowPointToLocal(windowRayStart, windowRayDirection);
-                    rightClickFunction->call("rightClickFunction", new TuiVec2(localPoint / renderScale));
+                    TuiRef* localPointRef = new TuiVec2(localPoint / renderScale);
+                    clickFunction->call("rightClickFunction", localPointRef);
+                    localPointRef->release();
 				}
 			}
 		}
@@ -1406,7 +1425,11 @@ bool MJView::mouseUp3D(dvec3 windowRayStart, dvec3 windowRayDirection, int butto
 				if(!visibleUIContainsPointIncludingSubViews3D(windowRayStart, windowRayDirection))
 				{ 
 					dvec2 localPoint = windowPointToLocal(windowRayStart, windowRayDirection);
-                    clickOutsideFunction->call("clickOutsideFunction", new TuiNumber(buttonIndex), new TuiVec2(localPoint / renderScale));
+                    TuiRef* buttonIndexRef = new TuiNumber(buttonIndex);
+                    TuiRef* localPointRef = new TuiVec2(localPoint / renderScale);
+                    mouseDownFunction->call("clickOutsideFunction", buttonIndexRef, localPointRef);
+                    buttonIndexRef->release();
+                    localPointRef->release();
 				}
 			}
 		}
@@ -1420,7 +1443,11 @@ bool MJView::mouseUp3D(dvec3 windowRayStart, dvec3 windowRayDirection, int butto
 			if(!visibleUIContainsPointIncludingSubViews3D(windowRayStart, windowRayDirection))
 			{ 
 				dvec2 localPoint = windowPointToLocal(windowRayStart, windowRayDirection);
-                clickOutsideFunction->call("clickOutsideFunction", new TuiNumber(buttonIndex), new TuiVec2(localPoint / renderScale));
+                TuiRef* buttonIndexRef = new TuiNumber(buttonIndex);
+                TuiRef* localPointRef = new TuiVec2(localPoint / renderScale);
+                mouseDownFunction->call("clickOutsideFunction", buttonIndexRef, localPointRef);
+                buttonIndexRef->release();
+                localPointRef->release();
 			}
 		}
 
@@ -1734,8 +1761,12 @@ void MJView::loadFromTable(TuiTable* table, bool isRoot)
             parentSizeChangedFunction = (TuiFunction*)ref;
             parentSizeChangedFunction->retain();
             
-            TuiRef* sizeRef = parentSizeChangedFunction->call("parentSizeChangedFunction", new TuiVec2(parentView->size));
+            TuiRef* inSizeRef = new TuiVec2(parentView->size);
+            
+            TuiRef* sizeRef = parentSizeChangedFunction->call("parentSizeChangedFunction", inSizeRef);
             stateTable->setVec2("size", ((TuiVec2*)sizeRef)->value);
+            
+            inSizeRef->release();
             sizeRef->release();
         }
         else
@@ -1833,8 +1864,10 @@ void MJView::tableKeyChanged(const std::string& key, TuiRef* value)
                 parentSizeChangedFunction = (TuiFunction*)value;
                 parentSizeChangedFunction->retain();
                 
-                TuiRef* sizeRef = parentSizeChangedFunction->call("parentSizeChangedFunction", new TuiVec2(parentView->size));
+                TuiRef* inSizeRef = new TuiVec2(parentView->size);
+                TuiRef* sizeRef = parentSizeChangedFunction->call("parentSizeChangedFunction", inSizeRef);
                 stateTable->setVec2("size", ((TuiVec2*)sizeRef)->value);
+                inSizeRef->release();
                 sizeRef->release();
             }
                 

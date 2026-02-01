@@ -22,7 +22,9 @@ void doGet(ClientNetInterface* netInterface, const std::string& remoteURL, const
         if(!netInterface->connected)
         {
             MJError("attempt to call get before first request has returned or while disconnected"); //todo need to cancel first request maybe?
-            mainGetCallbackFunction->call("mainGetCallbackFunction", new TuiTable("{status='error',message='not connected'}"));
+            TuiRef* statusResult = new TuiTable("{status='error',message='not connected'}");
+            mainGetCallbackFunction->call("mainGetCallbackFunction", statusResult);
+            statusResult->release();
             return;
         }
         
@@ -86,21 +88,27 @@ void doGet(ClientNetInterface* netInterface, const std::string& remoteURL, const
                 else
                 {
                     MJError("missing public key");
-                    mainGetCallbackFunction->call("mainGetCallbackFunction", new TuiTable("{status='error',message='missing public key'}"));
+                    TuiRef* statusResult = new TuiTable("{status='error',message='missing public key'}");
+                    mainGetCallbackFunction->call("mainGetCallbackFunction", statusResult);
+                    mainGetCallbackFunction->release();
+                    statusResult->release();
                 }
                 
             }
             else
             {
-                mainGetCallbackFunction->call("mainGetCallbackFunction", result->retain()); //status not ok. retain for all call() args
+                mainGetCallbackFunction->call("mainGetCallbackFunction", result); //status not ok
+                mainGetCallbackFunction->release();
             }
         }
         else
         {
-            mainGetCallbackFunction->call("mainGetCallbackFunction", new TuiTable("{status='error',message='no connection'}"));
+            TuiRef* statusResult = new TuiTable("{status='error',message='no connection'}");
+            mainGetCallbackFunction->call("mainGetCallbackFunction", statusResult);
+            mainGetCallbackFunction->release();
+            statusResult->release();
         }
         
-        mainGetCallbackFunction->release();
         return TUI_NIL;
     });
     
@@ -212,7 +220,7 @@ void KatipoBrowser::init()
                     std::string publicKey = "";
                     std::string secretKey = "";
                     
-                    std::string clientKeyPath = "client_privateKey.tui"; //todo these should be saved in the database, not files
+                    std::string clientKeyPath = Katipo::getSavePath("client_privateKey.tui"); //todo these should be saved in the database, not files
                     
                     if(Tui::fileExistsAtPath(clientKeyPath))
                     {

@@ -251,7 +251,9 @@ void EventManager::handleEvent(SDL_Event* event)
                     //luaModule->callFunction("textEntry",text);
                     if(hasTextEntryListener)
                     {
-                        textEntryListener->call("textEntryListener", new TuiString(text));
+                        TuiString* textRef = new TuiString(text);
+                        textEntryListener->call("textEntryListener", textRef);
+                        textRef->release();
                     }
                 }
             }
@@ -268,22 +270,32 @@ void EventManager::handleEvent(SDL_Event* event)
         for(auto& indexAndFunc : anyKeyChangedListenerFunctions)
         {
             //indexAndFunc.second(keyDown, event->key.key, getModKey(), (event->key.repeat != 0));
-            indexAndFunc.second->call("keyChangedListenerFunction", TUI_BOOL(keyDown), new TuiNumber(event->key.key), new TuiNumber(getModKey()), TUI_BOOL(event->key.repeat != 0));
+            TuiRef* keyRef = new TuiNumber(event->key.key);
+            TuiRef* modRef = new TuiNumber(getModKey());
+            indexAndFunc.second->call("keyChangedListenerFunction", TUI_BOOL(keyDown), keyRef, modRef, TUI_BOOL(event->key.repeat != 0));
+            keyRef->release();
+            modRef->release();
         }
         
         if(keyChangedByKeyListenerFunctions.count(event->key.key) != 0)
         {
             for(auto& indexAndFunc : keyChangedByKeyListenerFunctions[event->key.key])
             {
-                //indexAndFunc.second(keyDown, event->key.key, getModKey(), (event->key.repeat != 0));
-                indexAndFunc.second->call("keyChangedListenerFunction", TUI_BOOL(keyDown), new TuiNumber(event->key.key), new TuiNumber(getModKey()), TUI_BOOL(event->key.repeat != 0));
+                TuiRef* keyRef = new TuiNumber(event->key.key);
+                TuiRef* modRef = new TuiNumber(getModKey());
+                indexAndFunc.second->call("keyChangedListenerFunction", TUI_BOOL(keyDown), keyRef, modRef, TUI_BOOL(event->key.repeat != 0));
+                keyRef->release();
+                modRef->release();
             }
         }
         
         if(hasTextEntryListener)
         {
-            //listenerKeyChangedFunc(keyDown, event->key.key, getModKey(), (event->key.repeat != 0));
-            listenerKeyChangedFunc->call("listenerKeyChangedFunc", TUI_BOOL(keyDown), new TuiNumber(event->key.key), new TuiNumber(getModKey()), TUI_BOOL(event->key.repeat != 0));
+            TuiRef* keyRef = new TuiNumber(event->key.key);
+            TuiRef* modRef = new TuiNumber(getModKey());
+            listenerKeyChangedFunc->call("listenerKeyChangedFunc", TUI_BOOL(keyDown), keyRef, modRef, TUI_BOOL(event->key.repeat != 0));
+            keyRef->release();
+            modRef->release();
         }
 
         if(event->type == SDL_EVENT_KEY_DOWN && event->key.repeat == 0)
@@ -297,7 +309,9 @@ void EventManager::handleEvent(SDL_Event* event)
                     if(hasTextEntryListener)
                     {
                         //textEntryListener(text);
-                        textEntryListener->call("textEntryListener", new TuiString(text));
+                        TuiRef* textRef = new TuiString(text);
+                        textEntryListener->call("textEntryListener", textRef);
+                        textRef->release();
                     }
                 }
             }

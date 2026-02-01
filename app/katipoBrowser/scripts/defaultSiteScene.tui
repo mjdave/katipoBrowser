@@ -1,0 +1,27 @@
+mainView = {
+    type = "view"
+    size = function(parentSize)
+    {
+        return parentSize
+    }
+    subviews = {
+        {
+            id = "pageTitle"
+            type = "text"
+            font = "roboto"
+            fontSize = 24
+            alignmentY = "above"
+            layoutParentID = "pageBody"
+        }
+        {
+            id = "pageBody"
+            type = "text"
+            font = "roboto"
+            fontSize = 18
+            size = function(parentSize) #todo wrapWidth?
+            {
+                return vec2(parentSize.x, parentSize.y - 40)
+            }
+        }
+    }
+}
