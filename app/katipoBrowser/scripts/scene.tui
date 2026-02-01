@@ -1,3 +1,4 @@
+urlTextEntryHeight = 40
 
 mainView = {
     type = "image"
@@ -10,15 +11,23 @@ mainView = {
     crop = true
     subviews = {
         {
+            id = "siteContent"
+            type = "color"
+            color = vec4(0.0,0.0,0.0,0.5)
+            size = function(parentSize)
+            {
+                return vec2(parentSize.x, parentSize.y - urlTextEntryHeight)
+            }
+            alignmentY = "top"
+        }
+        {
             id = "urlTextEntry"
             type = "image"
             path = "app/katipoBrowser/img/colorsBackground.png"
             shader = "drawQuadTexturedHueShift"
-            #pos = vec3(80,-10 - topStatusBarPadding, 0)
-            pos = vec3(0,0, 0)
             size = function(parentSize)
             {
-                return vec2(parentSize.x, 40)
+                return vec2(parentSize.x, urlTextEntryHeight)
             }
             alignmentY = "bottom"
             crop = true

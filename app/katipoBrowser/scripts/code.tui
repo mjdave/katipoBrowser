@@ -3,9 +3,24 @@ textEntry = require("app/common/textEntry.tui")
 print("katipoBrowser is running")
 
 
+getCallback = function(result)
+{
+    print("got result:", result)
+    if(!result or result.status != "ok")
+    {
+        siteContentBackground.color = vec4(0.2,0.0,0.0,0.6)
+    }
+}
+
 urlTextEntryContainer = scene.getView("urlTextEntry")
 urlTextEntry = textEntry.create(urlTextEntryContainer)
 
+siteContentBackground = scene.getView("siteContent")
+
 textEntry.setOnChangeCallback(urlTextEntry, function(textValue, confirmChanges){
-    print("got value:", textValue)
+    if(confirmChanges)
+    {
+        siteContentBackground.color = vec4(0.0,0.015,0.01,0.6)
+        katipo.get(textValue, getCallback)
+    }
 })

@@ -14,16 +14,20 @@ class MJView;
 class TuiRef;
 class TuiFunction;
 class TuiTable;
+class ClientNetInterface;
 
 class KatipoBrowser {
 public:
     MainMenu* mainMenu;
     MJView* mainView;
     TuiTable* rootTable;
+    TuiTable* katipoTable;
+    TuiTable* scriptState;
+    
+    std::map<std::string, ClientNetInterface*> netInterfaces;
     
     MJCache* cache;
     
-    TuiRef* scriptState;
     
     uint32_t updateTimerID;
     
