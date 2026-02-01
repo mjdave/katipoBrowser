@@ -19,7 +19,6 @@
 		5B49FE042F2C72C5007C1980 /* katipoBrowser.icon in Resources */ = {isa = PBXBuildFile; fileRef = 5B49FE032F2C72C5007C1980 /* katipoBrowser.icon */; };
 		5B49FE062F2C7EBC007C1980 /* app in Resources */ = {isa = PBXBuildFile; fileRef = 5B49FE052F2C7EBC007C1980 /* app */; };
 		5BED52FC2E6014340028ED11 /* MediaPlayer.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5BED52FB2E6014340028ED11 /* MediaPlayer.framework */; };
-		5BF1036F2F30041C0012FC48 /* MurmurHash3.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5BF1036E2F30041C0012FC48 /* MurmurHash3.cpp */; };
 		5BF103792F3004410012FC48 /* protocol.c in Sources */ = {isa = PBXBuildFile; fileRef = 5BF103772F3004410012FC48 /* protocol.c */; };
 		5BF1037A2F3004410012FC48 /* unix.c in Sources */ = {isa = PBXBuildFile; fileRef = 5BF103782F3004410012FC48 /* unix.c */; };
 		5BF1037B2F3004410012FC48 /* callbacks.c in Sources */ = {isa = PBXBuildFile; fileRef = 5BF103712F3004410012FC48 /* callbacks.c */; };
@@ -30,6 +29,7 @@
 		5BF103802F3004410012FC48 /* peer.c in Sources */ = {isa = PBXBuildFile; fileRef = 5BF103762F3004410012FC48 /* peer.c */; };
 		5BF103842F3004790012FC48 /* mdb.c in Sources */ = {isa = PBXBuildFile; fileRef = 5BF103822F3004790012FC48 /* mdb.c */; };
 		5BF103852F3004790012FC48 /* midl.c in Sources */ = {isa = PBXBuildFile; fileRef = 5BF103832F3004790012FC48 /* midl.c */; };
+		5BF103892F3009100012FC48 /* MurmurHash3.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5BF103872F3009100012FC48 /* MurmurHash3.cpp */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -71,20 +71,20 @@
 		5B49FE032F2C72C5007C1980 /* katipoBrowser.icon */ = {isa = PBXFileReference; lastKnownFileType = folder.iconcomposer.icon; name = katipoBrowser.icon; path = ../working/katipoBrowser.icon; sourceTree = SOURCE_ROOT; };
 		5B49FE052F2C7EBC007C1980 /* app */ = {isa = PBXFileReference; lastKnownFileType = folder; name = app; path = ../app; sourceTree = "<group>"; };
 		5BED52FB2E6014340028ED11 /* MediaPlayer.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MediaPlayer.framework; path = System/Library/Frameworks/MediaPlayer.framework; sourceTree = SDKROOT; };
-		5BF1036D2F30041C0012FC48 /* MurmurHash3.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = MurmurHash3.h; path = /Users/davidframpton/katipo/thirdParty/MurmurHash3.h; sourceTree = "<absolute>"; };
-		5BF1036E2F30041C0012FC48 /* MurmurHash3.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = MurmurHash3.cpp; path = /Users/davidframpton/katipo/thirdParty/MurmurHash3.cpp; sourceTree = "<absolute>"; };
-		5BF103702F30042A0012FC48 /* stb_image.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = stb_image.h; path = /Users/davidframpton/katipo/thirdParty/stb_image.h; sourceTree = "<absolute>"; };
-		5BF103712F3004410012FC48 /* callbacks.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; name = callbacks.c; path = "/Users/davidframpton/katipo/thirdParty/enet-1.3.18/callbacks.c"; sourceTree = "<absolute>"; };
-		5BF103722F3004410012FC48 /* compress.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; name = compress.c; path = "/Users/davidframpton/katipo/thirdParty/enet-1.3.18/compress.c"; sourceTree = "<absolute>"; };
-		5BF103732F3004410012FC48 /* host.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; name = host.c; path = "/Users/davidframpton/katipo/thirdParty/enet-1.3.18/host.c"; sourceTree = "<absolute>"; };
-		5BF103742F3004410012FC48 /* list.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; name = list.c; path = "/Users/davidframpton/katipo/thirdParty/enet-1.3.18/list.c"; sourceTree = "<absolute>"; };
-		5BF103752F3004410012FC48 /* packet.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; name = packet.c; path = "/Users/davidframpton/katipo/thirdParty/enet-1.3.18/packet.c"; sourceTree = "<absolute>"; };
-		5BF103762F3004410012FC48 /* peer.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; name = peer.c; path = "/Users/davidframpton/katipo/thirdParty/enet-1.3.18/peer.c"; sourceTree = "<absolute>"; };
-		5BF103772F3004410012FC48 /* protocol.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; name = protocol.c; path = "/Users/davidframpton/katipo/thirdParty/enet-1.3.18/protocol.c"; sourceTree = "<absolute>"; };
-		5BF103782F3004410012FC48 /* unix.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; name = unix.c; path = "/Users/davidframpton/katipo/thirdParty/enet-1.3.18/unix.c"; sourceTree = "<absolute>"; };
-		5BF103812F3004790012FC48 /* lmdb.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = lmdb.h; path = /Users/davidframpton/katipo/thirdParty/liblmdb/lmdb.h; sourceTree = "<absolute>"; };
-		5BF103822F3004790012FC48 /* mdb.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; name = mdb.c; path = /Users/davidframpton/katipo/thirdParty/liblmdb/mdb.c; sourceTree = "<absolute>"; };
-		5BF103832F3004790012FC48 /* midl.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; name = midl.c; path = /Users/davidframpton/katipo/thirdParty/liblmdb/midl.c; sourceTree = "<absolute>"; };
+		5BF103712F3004410012FC48 /* callbacks.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; name = callbacks.c; path = "../katipo/thirdParty/enet-1.3.18/callbacks.c"; sourceTree = SOURCE_ROOT; };
+		5BF103722F3004410012FC48 /* compress.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; name = compress.c; path = "../katipo/thirdParty/enet-1.3.18/compress.c"; sourceTree = SOURCE_ROOT; };
+		5BF103732F3004410012FC48 /* host.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; name = host.c; path = "../katipo/thirdParty/enet-1.3.18/host.c"; sourceTree = SOURCE_ROOT; };
+		5BF103742F3004410012FC48 /* list.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; name = list.c; path = "../katipo/thirdParty/enet-1.3.18/list.c"; sourceTree = SOURCE_ROOT; };
+		5BF103752F3004410012FC48 /* packet.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; name = packet.c; path = "../katipo/thirdParty/enet-1.3.18/packet.c"; sourceTree = SOURCE_ROOT; };
+		5BF103762F3004410012FC48 /* peer.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; name = peer.c; path = "../katipo/thirdParty/enet-1.3.18/peer.c"; sourceTree = SOURCE_ROOT; };
+		5BF103772F3004410012FC48 /* protocol.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; name = protocol.c; path = "../katipo/thirdParty/enet-1.3.18/protocol.c"; sourceTree = SOURCE_ROOT; };
+		5BF103782F3004410012FC48 /* unix.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; name = unix.c; path = "../katipo/thirdParty/enet-1.3.18/unix.c"; sourceTree = SOURCE_ROOT; };
+		5BF103812F3004790012FC48 /* lmdb.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = lmdb.h; path = ../katipo/thirdParty/liblmdb/lmdb.h; sourceTree = SOURCE_ROOT; };
+		5BF103822F3004790012FC48 /* mdb.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; name = mdb.c; path = ../katipo/thirdParty/liblmdb/mdb.c; sourceTree = SOURCE_ROOT; };
+		5BF103832F3004790012FC48 /* midl.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; name = midl.c; path = ../katipo/thirdParty/liblmdb/midl.c; sourceTree = SOURCE_ROOT; };
+		5BF103862F3009100012FC48 /* MurmurHash3.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = MurmurHash3.h; path = ../thirdParty/MurmurHash3.h; sourceTree = SOURCE_ROOT; };
+		5BF103872F3009100012FC48 /* MurmurHash3.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = MurmurHash3.cpp; path = ../thirdParty/MurmurHash3.cpp; sourceTree = SOURCE_ROOT; };
+		5BF103882F3009100012FC48 /* stb_image.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = stb_image.h; path = ../thirdParty/stb_image.h; sourceTree = SOURCE_ROOT; };
 		5BFDBD012CC78B1E00247D8D /* Katipo Browser.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Katipo Browser.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
@@ -173,9 +173,6 @@
 				5B49FDED2F2C36FC007C1980 /* core */,
 				5B49FD252F2C2019007C1980 /* KatipoBrowser.h */,
 				5B49FD262F2C2019007C1980 /* KatipoBrowser.cpp */,
-				5BF1036D2F30041C0012FC48 /* MurmurHash3.h */,
-				5BF1036E2F30041C0012FC48 /* MurmurHash3.cpp */,
-				5BF103702F30042A0012FC48 /* stb_image.h */,
 				5BF103712F3004410012FC48 /* callbacks.c */,
 				5BF103722F3004410012FC48 /* compress.c */,
 				5BF103732F3004410012FC48 /* host.c */,
@@ -187,6 +184,9 @@
 				5BF103812F3004790012FC48 /* lmdb.h */,
 				5BF103822F3004790012FC48 /* mdb.c */,
 				5BF103832F3004790012FC48 /* midl.c */,
+				5BF103862F3009100012FC48 /* MurmurHash3.h */,
+				5BF103872F3009100012FC48 /* MurmurHash3.cpp */,
+				5BF103882F3009100012FC48 /* stb_image.h */,
 				5B8CB8652D9105DE008DDB36 /* Frameworks */,
 				5B49FE032F2C72C5007C1980 /* katipoBrowser.icon */,
 			);
@@ -302,7 +302,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				5BF1036F2F30041C0012FC48 /* MurmurHash3.cpp in Sources */,
+				5BF103892F3009100012FC48 /* MurmurHash3.cpp in Sources */,
 				5BF103842F3004790012FC48 /* mdb.c in Sources */,
 				5BF103852F3004790012FC48 /* midl.c in Sources */,
 				5BF103792F3004410012FC48 /* protocol.c in Sources */,
