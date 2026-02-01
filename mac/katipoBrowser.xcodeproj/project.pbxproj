@@ -7,18 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		5B11E6FB2CED1A370049F911 /* host.c in Sources */ = {isa = PBXBuildFile; fileRef = 5B11E6F52CED1A370049F911 /* host.c */; };
-		5B11E6FC2CED1A370049F911 /* callbacks.c in Sources */ = {isa = PBXBuildFile; fileRef = 5B11E6F32CED1A370049F911 /* callbacks.c */; };
-		5B11E6FD2CED1A370049F911 /* peer.c in Sources */ = {isa = PBXBuildFile; fileRef = 5B11E6F82CED1A370049F911 /* peer.c */; };
-		5B11E6FE2CED1A370049F911 /* unix.c in Sources */ = {isa = PBXBuildFile; fileRef = 5B11E6FA2CED1A370049F911 /* unix.c */; };
-		5B11E6FF2CED1A370049F911 /* list.c in Sources */ = {isa = PBXBuildFile; fileRef = 5B11E6F62CED1A370049F911 /* list.c */; };
-		5B11E7002CED1A370049F911 /* protocol.c in Sources */ = {isa = PBXBuildFile; fileRef = 5B11E6F92CED1A370049F911 /* protocol.c */; };
-		5B11E7012CED1A370049F911 /* packet.c in Sources */ = {isa = PBXBuildFile; fileRef = 5B11E6F72CED1A370049F911 /* packet.c */; };
-		5B11E7022CED1A370049F911 /* compress.c in Sources */ = {isa = PBXBuildFile; fileRef = 5B11E6F42CED1A370049F911 /* compress.c */; };
 		5B1384B12E3A08F900AEF9AD /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5B1384B02E3A08F900AEF9AD /* AVFoundation.framework */; };
 		5B1AD7912E6069B6005D15BD /* CoreMedia.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5B1AD7902E6069B6005D15BD /* CoreMedia.framework */; };
-		5B2916322CC9C00100C035A1 /* mdb.c in Sources */ = {isa = PBXBuildFile; fileRef = 5B2916302CC9C00100C035A1 /* mdb.c */; };
-		5B2916332CC9C00100C035A1 /* midl.c in Sources */ = {isa = PBXBuildFile; fileRef = 5B2916312CC9C00100C035A1 /* midl.c */; };
 		5B49FD272F2C2019007C1980 /* KatipoBrowser.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5B49FD262F2C2019007C1980 /* KatipoBrowser.cpp */; };
 		5B49FD2A2F2C21BB007C1980 /* SDL3.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5B49FD282F2C21BB007C1980 /* SDL3.framework */; };
 		5B49FD2B2F2C21BB007C1980 /* SDL3_mixer.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5B49FD292F2C21BB007C1980 /* SDL3_mixer.framework */; };
@@ -29,8 +19,17 @@
 		5B49FE042F2C72C5007C1980 /* katipoBrowser.icon in Resources */ = {isa = PBXBuildFile; fileRef = 5B49FE032F2C72C5007C1980 /* katipoBrowser.icon */; };
 		5B49FE062F2C7EBC007C1980 /* app in Resources */ = {isa = PBXBuildFile; fileRef = 5B49FE052F2C7EBC007C1980 /* app */; };
 		5BED52FC2E6014340028ED11 /* MediaPlayer.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5BED52FB2E6014340028ED11 /* MediaPlayer.framework */; };
-		5BFDBDA92CC82F1600247D8D /* MurmurHash3.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5BFDBDA72CC82F1600247D8D /* MurmurHash3.cpp */; };
-		5BFDBDAA2CC82F1600247D8D /* MurmurHash2.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5BFDBDA52CC82F1600247D8D /* MurmurHash2.cpp */; };
+		5BF1036F2F30041C0012FC48 /* MurmurHash3.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5BF1036E2F30041C0012FC48 /* MurmurHash3.cpp */; };
+		5BF103792F3004410012FC48 /* protocol.c in Sources */ = {isa = PBXBuildFile; fileRef = 5BF103772F3004410012FC48 /* protocol.c */; };
+		5BF1037A2F3004410012FC48 /* unix.c in Sources */ = {isa = PBXBuildFile; fileRef = 5BF103782F3004410012FC48 /* unix.c */; };
+		5BF1037B2F3004410012FC48 /* callbacks.c in Sources */ = {isa = PBXBuildFile; fileRef = 5BF103712F3004410012FC48 /* callbacks.c */; };
+		5BF1037C2F3004410012FC48 /* compress.c in Sources */ = {isa = PBXBuildFile; fileRef = 5BF103722F3004410012FC48 /* compress.c */; };
+		5BF1037D2F3004410012FC48 /* list.c in Sources */ = {isa = PBXBuildFile; fileRef = 5BF103742F3004410012FC48 /* list.c */; };
+		5BF1037E2F3004410012FC48 /* host.c in Sources */ = {isa = PBXBuildFile; fileRef = 5BF103732F3004410012FC48 /* host.c */; };
+		5BF1037F2F3004410012FC48 /* packet.c in Sources */ = {isa = PBXBuildFile; fileRef = 5BF103752F3004410012FC48 /* packet.c */; };
+		5BF103802F3004410012FC48 /* peer.c in Sources */ = {isa = PBXBuildFile; fileRef = 5BF103762F3004410012FC48 /* peer.c */; };
+		5BF103842F3004790012FC48 /* mdb.c in Sources */ = {isa = PBXBuildFile; fileRef = 5BF103822F3004790012FC48 /* mdb.c */; };
+		5BF103852F3004790012FC48 /* midl.c in Sources */ = {isa = PBXBuildFile; fileRef = 5BF103832F3004790012FC48 /* midl.c */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -58,19 +57,9 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
-		5B11E6F32CED1A370049F911 /* callbacks.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; name = callbacks.c; path = "/Users/davidframpton/Documents/ambience/thirdParty/enet-1.3.18/callbacks.c"; sourceTree = "<absolute>"; };
-		5B11E6F42CED1A370049F911 /* compress.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; name = compress.c; path = "/Users/davidframpton/Documents/ambience/thirdParty/enet-1.3.18/compress.c"; sourceTree = "<absolute>"; };
-		5B11E6F52CED1A370049F911 /* host.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; name = host.c; path = "/Users/davidframpton/Documents/ambience/thirdParty/enet-1.3.18/host.c"; sourceTree = "<absolute>"; };
-		5B11E6F62CED1A370049F911 /* list.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; name = list.c; path = "/Users/davidframpton/Documents/ambience/thirdParty/enet-1.3.18/list.c"; sourceTree = "<absolute>"; };
-		5B11E6F72CED1A370049F911 /* packet.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; name = packet.c; path = "/Users/davidframpton/Documents/ambience/thirdParty/enet-1.3.18/packet.c"; sourceTree = "<absolute>"; };
-		5B11E6F82CED1A370049F911 /* peer.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; name = peer.c; path = "/Users/davidframpton/Documents/ambience/thirdParty/enet-1.3.18/peer.c"; sourceTree = "<absolute>"; };
-		5B11E6F92CED1A370049F911 /* protocol.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; name = protocol.c; path = "/Users/davidframpton/Documents/ambience/thirdParty/enet-1.3.18/protocol.c"; sourceTree = "<absolute>"; };
-		5B11E6FA2CED1A370049F911 /* unix.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; name = unix.c; path = "/Users/davidframpton/Documents/ambience/thirdParty/enet-1.3.18/unix.c"; sourceTree = "<absolute>"; };
 		5B1384AD2E3A08B600AEF9AD /* AudioToolbox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioToolbox.framework; path = System/Library/Frameworks/AudioToolbox.framework; sourceTree = SDKROOT; };
 		5B1384B02E3A08F900AEF9AD /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = System/Library/Frameworks/AVFoundation.framework; sourceTree = SDKROOT; };
 		5B1AD7902E6069B6005D15BD /* CoreMedia.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreMedia.framework; path = System/Library/Frameworks/CoreMedia.framework; sourceTree = SDKROOT; };
-		5B2916302CC9C00100C035A1 /* mdb.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; name = mdb.c; path = /Users/davidframpton/Documents/ambience/thirdParty/liblmdb/mdb.c; sourceTree = "<absolute>"; };
-		5B2916312CC9C00100C035A1 /* midl.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; name = midl.c; path = /Users/davidframpton/Documents/ambience/thirdParty/liblmdb/midl.c; sourceTree = "<absolute>"; };
 		5B49FD252F2C2019007C1980 /* KatipoBrowser.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = KatipoBrowser.h; path = ../browser/KatipoBrowser.h; sourceTree = SOURCE_ROOT; };
 		5B49FD262F2C2019007C1980 /* KatipoBrowser.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = KatipoBrowser.cpp; path = ../browser/KatipoBrowser.cpp; sourceTree = SOURCE_ROOT; };
 		5B49FD282F2C21BB007C1980 /* SDL3.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SDL3.framework; path = thirdPartyMac/SDL3.framework; sourceTree = "<group>"; };
@@ -82,11 +71,21 @@
 		5B49FE032F2C72C5007C1980 /* katipoBrowser.icon */ = {isa = PBXFileReference; lastKnownFileType = folder.iconcomposer.icon; name = katipoBrowser.icon; path = ../working/katipoBrowser.icon; sourceTree = SOURCE_ROOT; };
 		5B49FE052F2C7EBC007C1980 /* app */ = {isa = PBXFileReference; lastKnownFileType = folder; name = app; path = ../app; sourceTree = "<group>"; };
 		5BED52FB2E6014340028ED11 /* MediaPlayer.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MediaPlayer.framework; path = System/Library/Frameworks/MediaPlayer.framework; sourceTree = SDKROOT; };
+		5BF1036D2F30041C0012FC48 /* MurmurHash3.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = MurmurHash3.h; path = /Users/davidframpton/katipo/thirdParty/MurmurHash3.h; sourceTree = "<absolute>"; };
+		5BF1036E2F30041C0012FC48 /* MurmurHash3.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = MurmurHash3.cpp; path = /Users/davidframpton/katipo/thirdParty/MurmurHash3.cpp; sourceTree = "<absolute>"; };
+		5BF103702F30042A0012FC48 /* stb_image.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = stb_image.h; path = /Users/davidframpton/katipo/thirdParty/stb_image.h; sourceTree = "<absolute>"; };
+		5BF103712F3004410012FC48 /* callbacks.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; name = callbacks.c; path = "/Users/davidframpton/katipo/thirdParty/enet-1.3.18/callbacks.c"; sourceTree = "<absolute>"; };
+		5BF103722F3004410012FC48 /* compress.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; name = compress.c; path = "/Users/davidframpton/katipo/thirdParty/enet-1.3.18/compress.c"; sourceTree = "<absolute>"; };
+		5BF103732F3004410012FC48 /* host.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; name = host.c; path = "/Users/davidframpton/katipo/thirdParty/enet-1.3.18/host.c"; sourceTree = "<absolute>"; };
+		5BF103742F3004410012FC48 /* list.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; name = list.c; path = "/Users/davidframpton/katipo/thirdParty/enet-1.3.18/list.c"; sourceTree = "<absolute>"; };
+		5BF103752F3004410012FC48 /* packet.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; name = packet.c; path = "/Users/davidframpton/katipo/thirdParty/enet-1.3.18/packet.c"; sourceTree = "<absolute>"; };
+		5BF103762F3004410012FC48 /* peer.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; name = peer.c; path = "/Users/davidframpton/katipo/thirdParty/enet-1.3.18/peer.c"; sourceTree = "<absolute>"; };
+		5BF103772F3004410012FC48 /* protocol.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; name = protocol.c; path = "/Users/davidframpton/katipo/thirdParty/enet-1.3.18/protocol.c"; sourceTree = "<absolute>"; };
+		5BF103782F3004410012FC48 /* unix.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; name = unix.c; path = "/Users/davidframpton/katipo/thirdParty/enet-1.3.18/unix.c"; sourceTree = "<absolute>"; };
+		5BF103812F3004790012FC48 /* lmdb.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = lmdb.h; path = /Users/davidframpton/katipo/thirdParty/liblmdb/lmdb.h; sourceTree = "<absolute>"; };
+		5BF103822F3004790012FC48 /* mdb.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; name = mdb.c; path = /Users/davidframpton/katipo/thirdParty/liblmdb/mdb.c; sourceTree = "<absolute>"; };
+		5BF103832F3004790012FC48 /* midl.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; name = midl.c; path = /Users/davidframpton/katipo/thirdParty/liblmdb/midl.c; sourceTree = "<absolute>"; };
 		5BFDBD012CC78B1E00247D8D /* Katipo Browser.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Katipo Browser.app"; sourceTree = BUILT_PRODUCTS_DIR; };
-		5BFDBDA52CC82F1600247D8D /* MurmurHash2.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = MurmurHash2.cpp; path = /Users/davidframpton/Documents/ambience/thirdParty/MurmurHash2.cpp; sourceTree = "<absolute>"; };
-		5BFDBDA62CC82F1600247D8D /* MurmurHash3.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = MurmurHash3.h; path = /Users/davidframpton/Documents/ambience/thirdParty/MurmurHash3.h; sourceTree = "<absolute>"; };
-		5BFDBDA72CC82F1600247D8D /* MurmurHash3.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = MurmurHash3.cpp; path = /Users/davidframpton/Documents/ambience/thirdParty/MurmurHash3.cpp; sourceTree = "<absolute>"; };
-		5BFDBDA82CC82F1600247D8D /* stb_image.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = stb_image.h; path = /Users/davidframpton/Documents/ambience/thirdParty/stb_image.h; sourceTree = "<absolute>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
@@ -174,20 +173,20 @@
 				5B49FDED2F2C36FC007C1980 /* core */,
 				5B49FD252F2C2019007C1980 /* KatipoBrowser.h */,
 				5B49FD262F2C2019007C1980 /* KatipoBrowser.cpp */,
-				5BFDBDA52CC82F1600247D8D /* MurmurHash2.cpp */,
-				5BFDBDA62CC82F1600247D8D /* MurmurHash3.h */,
-				5BFDBDA72CC82F1600247D8D /* MurmurHash3.cpp */,
-				5BFDBDA82CC82F1600247D8D /* stb_image.h */,
-				5B2916302CC9C00100C035A1 /* mdb.c */,
-				5B2916312CC9C00100C035A1 /* midl.c */,
-				5B11E6F32CED1A370049F911 /* callbacks.c */,
-				5B11E6F42CED1A370049F911 /* compress.c */,
-				5B11E6F52CED1A370049F911 /* host.c */,
-				5B11E6F62CED1A370049F911 /* list.c */,
-				5B11E6F72CED1A370049F911 /* packet.c */,
-				5B11E6F82CED1A370049F911 /* peer.c */,
-				5B11E6F92CED1A370049F911 /* protocol.c */,
-				5B11E6FA2CED1A370049F911 /* unix.c */,
+				5BF1036D2F30041C0012FC48 /* MurmurHash3.h */,
+				5BF1036E2F30041C0012FC48 /* MurmurHash3.cpp */,
+				5BF103702F30042A0012FC48 /* stb_image.h */,
+				5BF103712F3004410012FC48 /* callbacks.c */,
+				5BF103722F3004410012FC48 /* compress.c */,
+				5BF103732F3004410012FC48 /* host.c */,
+				5BF103742F3004410012FC48 /* list.c */,
+				5BF103752F3004410012FC48 /* packet.c */,
+				5BF103762F3004410012FC48 /* peer.c */,
+				5BF103772F3004410012FC48 /* protocol.c */,
+				5BF103782F3004410012FC48 /* unix.c */,
+				5BF103812F3004790012FC48 /* lmdb.h */,
+				5BF103822F3004790012FC48 /* mdb.c */,
+				5BF103832F3004790012FC48 /* midl.c */,
 				5B8CB8652D9105DE008DDB36 /* Frameworks */,
 				5B49FE032F2C72C5007C1980 /* katipoBrowser.icon */,
 			);
@@ -303,19 +302,18 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				5B2916322CC9C00100C035A1 /* mdb.c in Sources */,
-				5B11E6FB2CED1A370049F911 /* host.c in Sources */,
-				5B11E6FC2CED1A370049F911 /* callbacks.c in Sources */,
-				5B11E6FD2CED1A370049F911 /* peer.c in Sources */,
-				5B11E6FE2CED1A370049F911 /* unix.c in Sources */,
-				5B11E6FF2CED1A370049F911 /* list.c in Sources */,
-				5B11E7002CED1A370049F911 /* protocol.c in Sources */,
-				5B11E7012CED1A370049F911 /* packet.c in Sources */,
+				5BF1036F2F30041C0012FC48 /* MurmurHash3.cpp in Sources */,
+				5BF103842F3004790012FC48 /* mdb.c in Sources */,
+				5BF103852F3004790012FC48 /* midl.c in Sources */,
+				5BF103792F3004410012FC48 /* protocol.c in Sources */,
+				5BF1037A2F3004410012FC48 /* unix.c in Sources */,
+				5BF1037B2F3004410012FC48 /* callbacks.c in Sources */,
+				5BF1037C2F3004410012FC48 /* compress.c in Sources */,
+				5BF1037D2F3004410012FC48 /* list.c in Sources */,
+				5BF1037E2F3004410012FC48 /* host.c in Sources */,
+				5BF1037F2F3004410012FC48 /* packet.c in Sources */,
+				5BF103802F3004410012FC48 /* peer.c in Sources */,
 				5B49FD272F2C2019007C1980 /* KatipoBrowser.cpp in Sources */,
-				5B11E7022CED1A370049F911 /* compress.c in Sources */,
-				5B2916332CC9C00100C035A1 /* midl.c in Sources */,
-				5BFDBDA92CC82F1600247D8D /* MurmurHash3.cpp in Sources */,
-				5BFDBDAA2CC82F1600247D8D /* MurmurHash2.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
