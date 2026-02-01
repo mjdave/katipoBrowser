@@ -8,6 +8,13 @@ urlTextEntryContainer = scene.getView("urlTextEntry")
 urlTextEntry = textEntry.create(urlTextEntryContainer)
 
 siteContentBackground = scene.getView("siteContent")
+siteContentBackground.update = function(dt)
+{
+    if(siteContentBackground.goalColor and siteContentBackground.goalColor != siteContentBackground.color)
+    {
+        siteContentBackground.color = math.mix(siteContentBackground.color, siteContentBackground.goalColor, dt * 4.0)
+    }
+}
 
 siteContent = siteContentBackground.addView(defaultSiteScene.mainView)
 siteContent.hidden = true
@@ -17,7 +24,7 @@ getCallback = function(result)
     print("got result:", result)
     if(!result or result.status != "ok")
     {
-        siteContentBackground.color = vec4(0.2,0.0,0.0,0.6)
+        siteContentBackground.goalColor = vec4(0.2,0.0,0.0,0.6)
         siteContent.hidden = false
 
         pageTitle = siteContent.getView("pageTitle")
@@ -29,7 +36,7 @@ getCallback = function(result)
     }
     else if(result.pageTitle)
     {
-        siteContentBackground.color = vec4(0.0,0.0,0.2,0.4)
+        siteContentBackground.goalColor = vec4(0.0,0.0,0.2,0.4)
         siteContent.hidden = false
 
         pageTitle = siteContent.getView("pageTitle")
@@ -55,7 +62,7 @@ getCallback = function(result)
 textEntry.setOnChangeCallback(urlTextEntry, function(textValue, confirmChanges){
     if(confirmChanges)
     {
-        siteContentBackground.color = vec4(0.0,0.015,0.01,0.6)
+        siteContentBackground.goalColor = vec4(0.0,0.015,0.01,0.6)
         katipo.get(textValue, getCallback)
     }
 })

@@ -165,7 +165,7 @@ void MJTextView::updateDimensions()
 		double scaleToUse = renderScale;
 		double textRenderScaleToUse = textRenderScale;
 		irect enclosingRect = font->calculateEnclosingRect(text, textAlignment, wrapWidth * scaleToUse, 1.0 / textRenderScaleToUse);
-		setSize((dvec2(enclosingRect.size) * fontGeometryScale) / scaleToUse);
+		setSizeInternal((dvec2(enclosingRect.size) * fontGeometryScale) / scaleToUse);
 
 		textRenderOffset = dvec2(-enclosingRect.origin.x, -enclosingRect.origin.y) * fontGeometryScale;
 
@@ -194,7 +194,7 @@ void MJTextView::updateBuffer(GCommandBuffer* commandBuffer)
 		double scaleToUse = renderScale;
         nextVertices = font->print(text, textAlignment, wrapWidth * scaleToUse, &enclosingRect, 1.0 / textRenderScale).fontVerts;
         
-        setSize((dvec2(enclosingRect.size) * fontGeometryScale) / scaleToUse);
+        setSizeInternal((dvec2(enclosingRect.size) * fontGeometryScale) / scaleToUse);
         textRenderOffset = dvec2(-enclosingRect.origin.x, -enclosingRect.origin.y) * fontGeometryScale;
 
 		if(!nextVertices.empty())
@@ -213,6 +213,7 @@ void MJTextView::updateBuffer(GCommandBuffer* commandBuffer)
             vulkan->destroySingleBuffer(vertexBuffer);
         }
         hasRenderData = false;
+        setSizeInternal(dvec2(0.0,0.0));
     }
 }
 
@@ -228,10 +229,35 @@ void MJTextView::setText(std::string text_)
 		}
 		else
 		{
-			setSize(dvec2(0.0,0.0));
 			textRenderOffset = dvec2(0.0,0.0);
 		}
 		bufferNeedsUpdating = true;
+    }
+}
+
+void MJTextView::setSizeInternal(dvec2 size_)
+{
+    size = size_;
+    updateMatrix();
+    
+    for(MJView* subView : subviews)
+    {
+        if(subView->parentSizeChangedFunction)
+        {
+            TuiRef* inRef = new TuiVec2(size);
+            TuiRef* sizeRef = subView->parentSizeChangedFunction->call("parentSizeChangedFunction", inRef);
+            subView->stateTable->setVec2("size", ((TuiVec2*)sizeRef)->value);
+            inRef->release();
+            sizeRef->release();
+        }
+    }
+}
+
+void MJTextView::setSize(dvec2 size_) //this is intended to be a max size, but constraining by y isn't implemented yet, so it's just a word wrap convenience function
+{
+    if(!approxEqualVec2(size, size_))
+    {
+        setWrapWidth(size_.x);
     }
 }
 

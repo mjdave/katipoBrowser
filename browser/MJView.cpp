@@ -311,7 +311,7 @@ dvec2 MJView::getSize() const
     return size;
 }
 
-void MJView::setSize(dvec2 size_)
+void MJView::setSize(dvec2 size_) //WARNING! MJTextView completely overrides this, so changes made here should be made there
 {
 	if(!approxEqualVec2(size, size_))
 	{
@@ -1773,6 +1773,24 @@ void MJView::loadFromTable(TuiTable* table, bool isRoot)
         {
             stateTable->setVec2("size", table->getVec2("size"));
         }
+    }
+    else
+    {
+        parentSizeChangedFunction = new TuiFunction([this](TuiTable* args, TuiRef* existingResult, TuiDebugInfo* callingDebugInfo) -> TuiRef* {
+            if(args && !args->arrayObjects.empty())
+            {
+                return args->arrayObjects[0]->retain();
+            }
+            return TUI_NIL;
+        });
+        
+        TuiRef* inSizeRef = new TuiVec2(parentView->size);
+        
+        TuiRef* sizeRef = parentSizeChangedFunction->call("parentSizeChangedFunction", inSizeRef);
+        stateTable->setVec2("size", ((TuiVec2*)sizeRef)->value);
+        
+        inSizeRef->release();
+        sizeRef->release();
     }
     
     if(table->hasKey("pos"))

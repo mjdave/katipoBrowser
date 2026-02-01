@@ -6,6 +6,7 @@ selectedColor = vec4(0.5,0.5,1.0,1.0)
 
 resize = function(textEntryView, size)
 {
+    print("resizing:", size)
     userData = textEntryView.textEntryViewData
     textEntryView.size = size
     backgroundView = userData.backgroundView
@@ -189,10 +190,6 @@ create = function(parentView, sizeOrNilForParentSize, typeOrNilFor10x3, horizont
     }
 
     textEntryViewLayout = {
-        size = function(parentSize)
-        {
-            return parentSize
-        }
         type = "view"
     }
 
@@ -223,10 +220,6 @@ create = function(parentView, sizeOrNilForParentSize, typeOrNilFor10x3, horizont
     userData.verticalAlignment = verticalAlignment
 
     backgroundViewLayout = {
-        size = function(parentSize)
-        {
-            return parentSize
-        }
         type = "color"
         color = backgroundColor
     }
@@ -250,7 +243,6 @@ create = function(parentView, sizeOrNilForParentSize, typeOrNilFor10x3, horizont
 
 
     textViewLayout = {
-        size = vec2(1,18)
         type = "text"
         font = userData.font
         fontSize = userData.fontSize

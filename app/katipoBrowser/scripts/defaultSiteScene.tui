@@ -18,9 +18,9 @@ mainView = {
             type = "text"
             font = "roboto"
             fontSize = 18
-            size = function(parentSize) #todo wrapWidth?
+            size = function(parentSize)
             {
-                return vec2(parentSize.x, parentSize.y - 40)
+                return vec2(parentSize.x - 20, parentSize.y - 80)
             }
         }
     }

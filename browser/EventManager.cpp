@@ -29,7 +29,9 @@ EventManager::EventManager()
 static bool resizingEventWatcher(void* data, SDL_Event* event) {
   if (event->type == SDL_EVENT_WINDOW_RESIZED) {
       MainController::getInstance()->mainWindowChangedSize();
+      EventManager::getInstance()->isResizingWindow = true;
       EventManager::getInstance()->idle();
+      EventManager::getInstance()->isResizingWindow = false;
   }
   return 0;
 }
@@ -158,7 +160,10 @@ void EventManager::doCPUWork()
 
 	while(accumulator >= MAIN_THREAD_FIXED_TIME_STEP)
 	{
-		checkEvents();
+        if(!isResizingWindow)
+        {
+            checkEvents();
+        }
 
 		if(mouseMoved)
 		{

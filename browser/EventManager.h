@@ -82,6 +82,8 @@ public:
 
 	dvec2 mouseLoc;
 	dvec2 mouseHideLoc = dvec2(0.0,0.0);
+    
+    bool isResizingWindow = false;
 
 private:
     MainController* mainController;
@@ -105,6 +107,7 @@ private:
 	bool needsToExit = false;
     bool shouldPreventMouseWarpUntilAfterNextShow = false;
     //dvec2 mouseLocOnLastHide;
+    
 
 	dvec2 mouseMovementAccumulation = dvec2(0.0);
 	bool mouseMoved = false;
