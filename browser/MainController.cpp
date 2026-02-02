@@ -501,15 +501,11 @@ void MainController::init(std::string windowTitle, std::string organizationName,
 		//resolutionType = MJ_WINDOW_RESOLUTION_NATIVE_DISPLAY;
 		//windowModeToUse = MJ_WINDOW_MODE_BORDERLESS;
     
-        resolutionType = MJ_WINDOW_RESOLUTION_STANDARD;        
-		windowModeToUse = MJ_WINDOW_MODE_FULLSCREEN;
-
-		#ifdef __APPLE__   
+        resolutionType = MJ_WINDOW_RESOLUTION_STANDARD;   
 		windowModeToUse = MJ_WINDOW_MODE_BORDERLESS;
 #if !TARGET_OS_IPHONE
-				windowModeToUse = MJ_WINDOW_MODE_WINDOWED;
+		windowModeToUse = MJ_WINDOW_MODE_WINDOWED;
 #endif
-		#endif
     
 		/*if(screenWidth > 1920)
 		{
@@ -1062,9 +1058,7 @@ void MainController::load()
 	windowInfoChanged();
     
     vulkan->logMainDeviceDetails();
-#ifdef __APPLE__ //todo this is not good enough for a shipping engine
     EventManager::getInstance()->setMouseHidden(false);
-#endif
 
 }
 

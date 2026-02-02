@@ -186,6 +186,36 @@
     <ClCompile Include="..\thirdParty\MurmurHash3.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="..\katipo\thirdParty\enet-1.3.18\callbacks.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\katipo\thirdParty\enet-1.3.18\compress.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\katipo\thirdParty\enet-1.3.18\host.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\katipo\thirdParty\enet-1.3.18\list.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\katipo\thirdParty\enet-1.3.18\packet.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\katipo\thirdParty\enet-1.3.18\peer.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\katipo\thirdParty\enet-1.3.18\protocol.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\katipo\thirdParty\enet-1.3.18\win32.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\katipo\thirdParty\liblmdb\midl.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\katipo\thirdParty\liblmdb\mdb.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\browser\Camera.h">

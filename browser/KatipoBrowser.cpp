@@ -134,7 +134,6 @@ void doGet(ClientNetInterface* netInterface, const std::string& remoteURL, const
 void KatipoBrowser::init()
 {
     MainController::getInstance()->init("Katipo Browser");
-    cache = MainController::getInstance()->cache;
     
      if(sodium_init() < 0) //this is safe to call multiple times
      {

@@ -82,9 +82,6 @@ public:
 	double getFOVY() const;
 	double getFOVYIncludingUnappliedChange() const;
 	void setFOVY(double fovY_);
-
-	std::string getLocale() const;
-	void setLocale(std::string locale_);
     
     void appLostFocus();
     void appGainedFocus();
@@ -99,9 +96,6 @@ public:
 
 	void selectScreenResolutionAndWindowMode(int screenResolutionIndex, int windowModeIndex);
 
-	std::string getVersionString();
-	bool getIsDevelopmentBuild();
-
 	void recreateDrawablesAndSaveSize();
     void mainWindowChangedSize();
     void mainWindowChangedPosition();
@@ -112,8 +106,6 @@ public:
 	uint64_t getVulkanDeviceVendorID() const;
 	std::string getVulkanDeviceName() const;
 	uint32_t getVulkanDriverVersion() const;
-
-	void generateVRAMProfile();
     
     
 protected:

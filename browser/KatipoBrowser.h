@@ -9,7 +9,6 @@
 
 class MainController;
 class MainMenu;
-class MJCache;
 class MJView;
 class TuiRef;
 class TuiFunction;
@@ -25,8 +24,6 @@ public:
     TuiTable* scriptState;
     
     std::map<std::string, ClientNetInterface*> netInterfaces;
-    
-    MJCache* cache;
     
     
     uint32_t updateTimerID;

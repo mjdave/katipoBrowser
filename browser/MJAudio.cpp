@@ -14,8 +14,9 @@
 //#include "SDL_mixer.h"
 #include "KatipoUtilities.h"
 
-//todo APPLE
+#ifdef __APPLE__
 #include "MJAudioApple.h"
+#endif
 
 static const SDL_AudioSpec audioSpec = {SDL_AUDIO_S16, 2, 44100};
 
@@ -87,21 +88,27 @@ void MJAudio::bindTui(TuiTable* rootTable)
     
     audioTable->setFunction("stop", [this](TuiTable* args, TuiRef* existingResult, TuiDebugInfo* callingDebugInfo) -> TuiRef* {
         //MIX_StopAllTracks(mixer, 1000);
+#ifdef __APPLE__
         MJAudioApple::getInstance()->stop();
+#endif
         return nullptr;;
     });
     
     
     audioTable->setFunction("play", [this](TuiTable* args, TuiRef* existingResult, TuiDebugInfo* callingDebugInfo) -> TuiRef* {
         //MIX_StopAllTracks(mixer, 1000);
+#ifdef __APPLE__
         MJAudioApple::getInstance()->play(nullptr);
+#endif
         return nullptr;;
     });
     
     
     audioTable->setFunction("next", [this](TuiTable* args, TuiRef* existingResult, TuiDebugInfo* callingDebugInfo) -> TuiRef* {
         //MIX_StopAllTracks(mixer, 1000);
+#ifdef __APPLE__
         MJAudioApple::getInstance()->skipToNextTrack();
+#endif
         
         return nullptr;;
     });
@@ -112,7 +119,9 @@ void MJAudio::bindTui(TuiTable* rootTable)
             TuiRef* arrayRef = args->arrayObjects[0];
             if(arrayRef->type() == Tui_ref_type_TABLE)
             {
+#ifdef __APPLE__
                 MJAudioApple::getInstance()->play((TuiTable*)arrayRef);
+#endif
                 /*MIX_Track* track = MIX_CreateTrack(mixer);
                 
                 int dataSize = ((TuiString*)dataRef)->value.size();
@@ -235,7 +244,9 @@ void MJAudio::updateCurrentlyPlayingInfo(const std::string& titleString, const s
         artistRef->release();
         durationRef->release();
     }
+#ifdef __APPLE__
     MJAudioApple::getInstance()->updateCurrentlyPlayingOSInfo(titleString, artistString, duration, 0, imageBytes, imageLength);
+#endif
 }
 
 void MJAudio::updatePausedState(bool pauseSate)
