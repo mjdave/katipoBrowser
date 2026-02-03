@@ -53,7 +53,7 @@ MJTextView::MJTextView(MJView* parentView_)
     
     stateTable->setFunction("resetVerticalCursorMovementAnchors", [this](TuiTable* args, TuiRef* existingResult, TuiDebugInfo* callingDebugInfo) -> TuiRef* {
         resetVerticalCursorMovementAnchors();
-        return nullptr;
+        return TUI_NIL;
     });
     
     stateTable->setFunction("getCursorOffsetForVerticalCursorMovement", [this](TuiTable* args, TuiRef* existingResult, TuiDebugInfo* callingDebugInfo) -> TuiRef* {
@@ -72,7 +72,7 @@ MJTextView::MJTextView(MJView* parentView_)
             }
             
         }
-        return nullptr;
+        return TUI_NIL;
     });
     
 

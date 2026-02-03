@@ -4,33 +4,35 @@ mainView = {
     type = "image"
     path = "app/katipoBrowser/img/colorsBackground.png"
     shader = "drawQuadTexturedHueShift"
-    size = function(parentSize)
-    {
-        return parentSize
-    }
-    crop = true
     subviews = {
         {
-            id = "siteContent"
-            type = "color"
-            color = vec4(0.0,0.0,0.0,0.5)
-            size = function(parentSize)
-            {
-                return vec2(parentSize.x, parentSize.y - urlTextEntryHeight)
-            }
+            id = "windowSafeBackground"
+            type = "view"
+            alignmentX = "left"
             alignmentY = "top"
-        }
-        {
-            id = "urlTextEntry"
-            type = "image"
-            path = "app/katipoBrowser/img/colorsBackground.png"
-            shader = "drawQuadTexturedHueShift"
-            size = function(parentSize)
-            {
-                return vec2(parentSize.x, urlTextEntryHeight)
+            subviews = {
+                {
+                    id = "siteContent"
+                    type = "color"
+                    color = vec4(0.1,0.2,0.0,0.2)
+                    size = function(parentSize)
+                    {
+                        return vec2(parentSize.x, parentSize.y - urlTextEntryHeight)
+                    }
+                    alignmentY = "top"
+                }
+                {
+                    id = "urlTextEntry"
+                    type = "image"
+                    path = "app/katipoBrowser/img/colorsBackground.png"
+                    shader = "drawQuadTexturedHueShift"
+                    size = function(parentSize)
+                    {
+                        return vec2(parentSize.x, urlTextEntryHeight)
+                    }
+                    alignmentY = "bottom"
+                }
             }
-            alignmentY = "bottom"
-            crop = true
         }
     }
 }

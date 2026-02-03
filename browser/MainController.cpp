@@ -607,7 +607,7 @@ void MainController::init(std::string windowTitle, std::string organizationName,
 	}
 
 
-	if(windowMode == MJ_WINDOW_MODE_BORDERLESS || windowMode == MJ_WINDOW_MODE_FULLSCREEN)
+	//if(windowMode == MJ_WINDOW_MODE_BORDERLESS || windowMode == MJ_WINDOW_MODE_FULLSCREEN)
 	{
 		int w,h;
 		SDL_GetWindowSize(displayWindow, &w, &h);

@@ -44,6 +44,14 @@ static bool resizingEventWatcher(void* data, SDL_Event* event) {
             MainController::getInstance()->mainWindowChangedSize();
         }
             break;
+        case SDL_EVENT_WINDOW_SAFE_AREA_CHANGED:
+        {
+            SDL_Rect rect;
+            SDL_GetWindowSafeArea(EventManager::getInstance()->window, &rect);
+            MJLog("SDL_EVENT_WINDOW_SAFE_AREA_CHANGED setting windowSafeArea:(%d, %d, %d, %d)", rect.x, rect.y, rect.w, rect.h);
+            EventManager::getInstance()->windowSafeArea = dvec4(rect.x, rect.y, rect.w, rect.h);
+        }
+            break;
     }
   return 0;
 }
@@ -55,6 +63,11 @@ void EventManager::init(MainController* mainController_,
     mainController = mainController_;
 	window = window_;
     windowInfo = windowInfo_;
+    
+    SDL_Rect rect;
+    SDL_GetWindowSafeArea(EventManager::getInstance()->window, &rect);
+    MJLog("init setting windowSafeArea:(%d, %d, %d, %d)", rect.x, rect.y, rect.w, rect.h);
+    EventManager::getInstance()->windowSafeArea = dvec4(rect.x, rect.y, rect.w, rect.h);
     
     SDL_AddEventWatch(resizingEventWatcher, window);
     
@@ -239,6 +252,12 @@ void EventManager::update(float dt)
     if(needsToStartTextEntry)
     {
         needsToStartTextEntry = false;
+        SDL_Rect rect;
+        rect.x = 0;
+        rect.y = windowInfo->screenHeight;
+        rect.w = windowInfo->screenWidth;
+        rect.h = 20;
+        SDL_SetTextInputArea(window, &rect, NULL);
         SDL_StartTextInput(window);
         textEntryActive = true;
     }
@@ -649,7 +668,7 @@ void EventManager::bindTui(TuiTable* rootTable)
                 TuiParseError(callingDebugInfo->fileName.c_str(), callingDebugInfo->lineNumber, "Incorrect type");
             }
         }
-        return nullptr;
+        return TUI_NIL;
     });
     
     
@@ -671,7 +690,7 @@ void EventManager::bindTui(TuiTable* rootTable)
                 TuiParseError(callingDebugInfo->fileName.c_str(), callingDebugInfo->lineNumber, "Incorrect type");
             }
         }
-        return nullptr;
+        return TUI_NIL;
     });
     
     
@@ -689,12 +708,18 @@ void EventManager::bindTui(TuiTable* rootTable)
                 TuiParseError(callingDebugInfo->fileName.c_str(), callingDebugInfo->lineNumber, "Incorrect type");
             }
         }
-        return nullptr;
+        return TUI_NIL;
     });
     
     eventManagerTable->setFunction("removeTextEntryListener", [this](TuiTable* args, TuiRef* existingResult, TuiDebugInfo* callingDebugInfo) -> TuiRef* {
         removeTextEntryListener();
-        return nullptr;
+        return TUI_NIL;
     });
+    
+    
+    eventManagerTable->setFunction("getWindowSafeArea", [this](TuiTable* args, TuiRef* existingResult, TuiDebugInfo* callingDebugInfo) -> TuiRef* {
+        return new TuiVec4(windowSafeArea);
+    });
+    
     
 }

@@ -471,12 +471,23 @@ extern int SDL_AppleTVRemoteOpenedAsJoystick;
 
 - (void)safeAreaInsetsDidChange
 {
+    const CGSize size = self.bounds.size;
+    int w = (int)size.width;
+    int h = (int)size.height;
+    int prevW = sdlwindow->w;
+    int prevH = sdlwindow->h;
+    sdlwindow->w = w;
+    sdlwindow->h = h;
+    
     // Update the safe area insets
     SDL_SetWindowSafeAreaInsets(sdlwindow,
                                 (int)SDL_ceilf(self.safeAreaInsets.left),
                                 (int)SDL_ceilf(self.safeAreaInsets.right),
                                 (int)SDL_ceilf(self.safeAreaInsets.top),
                                 (int)SDL_ceilf(self.safeAreaInsets.bottom));
+    
+    sdlwindow->w = prevW;
+    sdlwindow->h = prevH;
 }
 
 #if !defined(SDL_PLATFORM_TVOS)

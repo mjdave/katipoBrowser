@@ -26,7 +26,7 @@ public:
     dvec2 imageSize;
     dvec2 imageOffset;
     
-    bool cropImage = false;
+    bool cropImage = true;
     vec4 shaderUserData = vec4(0.0,0.0,0.0,0.0);
 
 private:

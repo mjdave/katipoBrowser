@@ -79,16 +79,18 @@ public:
 	Timer* debugTimer;
 
 public:
+    MainController* mainController;
+    WindowInfo* windowInfo;
+    SDL_Window* window;
 
 	dvec2 mouseLoc;
 	dvec2 mouseHideLoc = dvec2(0.0,0.0);
     
+    dvec4 windowSafeArea;
+    
     bool isResizingWindow = false;
 
 private:
-    MainController* mainController;
-    WindowInfo* windowInfo;
-	SDL_Window* window;
     
     SDL_TimerID sdlTimer;
     Timer* timer;

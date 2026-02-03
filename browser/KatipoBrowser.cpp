@@ -158,7 +158,7 @@ void KatipoBrowser::init()
         {
             return TuiRef::load(Katipo::getResourcePath(args->arrayObjects[0]->getStringValue()), rootTable); //override require to use our resource path, not tui's
         }
-        return nullptr;
+        return TUI_NIL;
     });
     
     rootTable->setFunction("updateTimer", [](TuiTable* args, TuiRef* existingResult, TuiDebugInfo* callingDebugInfo) -> TuiRef* {
@@ -177,7 +177,7 @@ void KatipoBrowser::init()
                 callbackArgs->release();
             });
         }
-        return nullptr;
+        return TUI_NIL;
     });
     
     //rootTable->setVec2("screenSize", dvec2(MainController::getInstance()->windowInfo->screenWidth, MainController::getInstance()->windowInfo->screenHeight));
@@ -303,7 +303,7 @@ void KatipoBrowser::init()
                 return subView->stateTable->retain();
             }
         }
-        return nullptr;
+        return TUI_NIL;
     });
     
     mainView = MJView::loadUnknownViewFromTable(sceneTable->getTable("mainView"), MainController::getInstance()->mainMJView, true);

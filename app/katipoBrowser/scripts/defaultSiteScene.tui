@@ -1,9 +1,5 @@
 mainView = {
     type = "view"
-    size = function(parentSize)
-    {
-        return parentSize
-    }
     subviews = {
         {
             id = "pageTitle"

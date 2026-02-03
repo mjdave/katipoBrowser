@@ -7,6 +7,15 @@ print("katipoBrowser is running")
 urlTextEntryContainer = scene.getView("urlTextEntry")
 urlTextEntry = textEntry.create(urlTextEntryContainer)
 
+windowSafeBackground = scene.getView("windowSafeBackground")
+windowSafeBackground.size = function(parentSize)
+{
+    windowSafeArea = eventManager.getWindowSafeArea()
+    print("parentSize:", parentSize, " windowSafeArea:", windowSafeArea)
+    windowSafeBackground.pos = vec3(windowSafeArea.x, -windowSafeArea.y, 0)
+    return vec2(windowSafeArea.z, windowSafeArea.w)
+}
+
 siteContentBackground = scene.getView("siteContent")
 siteContentBackground.update = function(dt)
 {

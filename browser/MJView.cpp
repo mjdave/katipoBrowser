@@ -101,7 +101,7 @@ void MJView::initInternals()
                 }
             }
         }
-        return nullptr;
+        return TUI_NIL;
     });
     stateTable->setFunction("removeView", [this](TuiTable* args, TuiRef* existingResult, TuiDebugInfo* callingDebugInfo) -> TuiRef* {
         if(args->arrayObjects.size() >= 1)
@@ -118,7 +118,7 @@ void MJView::initInternals()
                 removeSubview(viewToRemove);
             }
         }
-        return nullptr;
+        return TUI_NIL;
     });
     
     stateTable->setFunction("getView", [this](TuiTable* args, TuiRef* existingResult, TuiDebugInfo* callingDebugInfo) -> TuiRef* {
@@ -135,7 +135,7 @@ void MJView::initInternals()
                 return subView->stateTable->retain();
             }
         }
-        return nullptr;
+        return TUI_NIL;
     });
     
     stateTable->setFunction("locationRelativeToView", [this](TuiTable* args, TuiRef* existingResult, TuiDebugInfo* callingDebugInfo) -> TuiRef* {
@@ -157,7 +157,7 @@ void MJView::initInternals()
                 MJError("bad args");
             }
         }
-        return nullptr;
+        return TUI_NIL;
     });
     
     stateTable->setFunction("setClipChildren", [this](TuiTable* args, TuiRef* existingResult, TuiDebugInfo* callingDebugInfo) -> TuiRef* {
@@ -174,7 +174,7 @@ void MJView::initInternals()
                 MJError("bad arg");
             }
         }
-        return nullptr;
+        return TUI_NIL;
     });
     
     

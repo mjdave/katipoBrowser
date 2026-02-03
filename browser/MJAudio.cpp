@@ -91,7 +91,7 @@ void MJAudio::bindTui(TuiTable* rootTable)
 #ifdef __APPLE__
         MJAudioApple::getInstance()->stop();
 #endif
-        return nullptr;;
+        return TUI_NIL;
     });
     
     
@@ -100,7 +100,7 @@ void MJAudio::bindTui(TuiTable* rootTable)
 #ifdef __APPLE__
         MJAudioApple::getInstance()->play(nullptr);
 #endif
-        return nullptr;;
+        return TUI_NIL;
     });
     
     
@@ -110,7 +110,7 @@ void MJAudio::bindTui(TuiTable* rootTable)
         MJAudioApple::getInstance()->skipToNextTrack();
 #endif
         
-        return nullptr;;
+        return TUI_NIL;
     });
     
     audioTable->setFunction("queueSongs", [this](TuiTable* args, TuiRef* existingResult, TuiDebugInfo* callingDebugInfo) -> TuiRef* {
@@ -168,7 +168,7 @@ void MJAudio::bindTui(TuiTable* rootTable)
         {
             TuiParseError(callingDebugInfo->fileName.c_str(), callingDebugInfo->lineNumber, "Missing args");
         }
-        return nullptr;
+        return TUI_NIL;
     });
 }
 
