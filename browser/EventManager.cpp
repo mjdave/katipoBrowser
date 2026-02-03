@@ -27,12 +27,24 @@ EventManager::EventManager()
 
 
 static bool resizingEventWatcher(void* data, SDL_Event* event) {
-  if (event->type == SDL_EVENT_WINDOW_RESIZED) {
-      MainController::getInstance()->mainWindowChangedSize();
-      EventManager::getInstance()->isResizingWindow = true;
-      EventManager::getInstance()->idle();
-      EventManager::getInstance()->isResizingWindow = false;
-  }
+    
+    //MJLog("got type:%d", event->type);
+    switch(event->type)
+    {
+        case SDL_EVENT_WINDOW_RESIZED:
+        {
+            MainController::getInstance()->mainWindowChangedSize();
+            EventManager::getInstance()->isResizingWindow = true;
+            EventManager::getInstance()->idle();
+            EventManager::getInstance()->isResizingWindow = false;
+        }
+            break;
+        case SDL_EVENT_WINDOW_METAL_VIEW_RESIZED:
+        {
+            MainController::getInstance()->mainWindowChangedSize();
+        }
+            break;
+    }
   return 0;
 }
 
@@ -45,6 +57,7 @@ void EventManager::init(MainController* mainController_,
     windowInfo = windowInfo_;
     
     SDL_AddEventWatch(resizingEventWatcher, window);
+    
 
 	smoothedTimeStep = MAIN_THREAD_FIXED_TIME_STEP;
     
@@ -410,11 +423,10 @@ void EventManager::handleEvent(SDL_Event* event)
         mainController->mainWindowChangedPosition();
         runLoopRunning = true;
         break;
-    case SDL_EVENT_WINDOW_RESIZED:
-            MJLog("resize");
-        mainController->mainWindowChangedSize();
-        runLoopRunning = true;
-        break;
+    //case SDL_EVENT_WINDOW_RESIZED: //handled above
+        //mainController->mainWindowChangedSize();
+        //runLoopRunning = true;
+        //break;
     default:
         break;
     }
@@ -523,7 +535,7 @@ void EventManager::setMouseHidden(bool mouseHidden_)
 		{
 			//mouseLoc = dvec2(0.0,0.0);//mouseHideLoc; //commented out as it causes problems with dragging objects in build ui. If this is really desirable in other cases, needs to be passed as an option.
             mouseLoc = mouseHideLoc;
-            MJLog("setMouseHidden (%.2f, %.2f)", mouseLoc.x, mouseLoc.y);
+            //MJLog("setMouseHidden (%.2f, %.2f)", mouseLoc.x, mouseLoc.y);
 		}
 		else
 		{

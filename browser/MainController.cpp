@@ -251,6 +251,7 @@ void MainController::init(std::string windowTitle, std::string organizationName,
     FPSCounterTimer = 0;
     //SDL_SetMainReady();
     int result = SDL_Init(SDL_INIT_VIDEO | SDL_INIT_EVENTS);
+    SDL_SetHint(SDL_HINT_ENABLE_SCREEN_KEYBOARD, "1");
 	if(result < 0)
     {
         MJError("Failed to initialize SDL:%d", result);
@@ -502,10 +503,7 @@ void MainController::init(std::string windowTitle, std::string organizationName,
 		//windowModeToUse = MJ_WINDOW_MODE_BORDERLESS;
     
         resolutionType = MJ_WINDOW_RESOLUTION_STANDARD;   
-		windowModeToUse = MJ_WINDOW_MODE_BORDERLESS;
-#if !TARGET_OS_IPHONE
 		windowModeToUse = MJ_WINDOW_MODE_WINDOWED;
-#endif
     
 		/*if(screenWidth > 1920)
 		{

@@ -127,7 +127,7 @@ protected:
 	int newWindowMode;
 	bool needsToUpdateResolution = false;
 
-	int windowMode = MJ_WINDOW_MODE_BORDERLESS;
+	int windowMode = MJ_WINDOW_MODE_WINDOWED;
 	int resolutionType = MJ_WINDOW_RESOLUTION_STANDARD;
     
     bool multiSamplingEnabled;

@@ -212,7 +212,6 @@
 				5B2916512CCED4CE00C035A1 /* CopyFiles */,
 				5BFDBCFF2CC78B1E00247D8D /* Resources */,
 				5B29163B2CC9C07600C035A1 /* Embed Libraries */,
-				5B2916502CCED37600C035A1 /* ShellScript */,
 			);
 			buildRules = (
 			);
@@ -275,27 +274,6 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
-
-/* Begin PBXShellScriptBuildPhase section */
-		5B2916502CCED37600C035A1 /* ShellScript */ = {
-			isa = PBXShellScriptBuildPhase;
-			alwaysOutOfDate = 1;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-			);
-			inputPaths = (
-			);
-			outputFileListPaths = (
-			);
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "# Type a script or drag a script file from your workspace to insert its path.\n#(cd ${BUILT_PRODUCTS_DIR}/${CONTENTS_FOLDER_PATH}/MacOS && ln -s ../Resources/steam_appid.txt steam_appid.txt) || true\n#echo  ${BUILT_PRODUCTS_DIR}/${CONTENTS_FOLDER_PATH}/Resources\necho ${SRCROOT}/../resources\nif [ \"${ACTION}\" = \"build\" ]; then\n(cd ${BUILT_PRODUCTS_DIR}/${CONTENTS_FOLDER_PATH}/Resources && rm -rf common) || true\n(cd ${BUILT_PRODUCTS_DIR}/${CONTENTS_FOLDER_PATH}/Resources && ln -s ${SRCROOT}/../common common) || true\n(cd ${BUILT_PRODUCTS_DIR}/${CONTENTS_FOLDER_PATH}/Resources && rm -rf scripts) || true\n(cd ${BUILT_PRODUCTS_DIR}/${CONTENTS_FOLDER_PATH}/Resources && ln -s ${SRCROOT}/../apps/katipoBrowser/scripts scripts) || true\nfi\n\n";
-		};
-/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		5BFDBCFD2CC78B1E00247D8D /* Sources */ = {

@@ -1,0 +1,629 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 77;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		5B1AD7982E606C3D005D15BD /* CoreMedia.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5B1AD7922E606C3D005D15BD /* CoreMedia.framework */; };
+		5B5A474C2F3087B5004809C0 /* MurmurHash3.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5B5A474B2F3087B5004809C0 /* MurmurHash3.cpp */; };
+		5B5A48142F308843004809C0 /* protocol.c in Sources */ = {isa = PBXBuildFile; fileRef = 5B5A48122F308843004809C0 /* protocol.c */; };
+		5B5A48152F308843004809C0 /* unix.c in Sources */ = {isa = PBXBuildFile; fileRef = 5B5A48132F308843004809C0 /* unix.c */; };
+		5B5A48162F308843004809C0 /* compress.c in Sources */ = {isa = PBXBuildFile; fileRef = 5B5A480D2F308843004809C0 /* compress.c */; };
+		5B5A48172F308843004809C0 /* list.c in Sources */ = {isa = PBXBuildFile; fileRef = 5B5A480F2F308843004809C0 /* list.c */; };
+		5B5A48182F308843004809C0 /* packet.c in Sources */ = {isa = PBXBuildFile; fileRef = 5B5A48102F308843004809C0 /* packet.c */; };
+		5B5A48192F308843004809C0 /* peer.c in Sources */ = {isa = PBXBuildFile; fileRef = 5B5A48112F308843004809C0 /* peer.c */; };
+		5B5A481A2F308843004809C0 /* callbacks.c in Sources */ = {isa = PBXBuildFile; fileRef = 5B5A480C2F308843004809C0 /* callbacks.c */; };
+		5B5A481B2F308843004809C0 /* host.c in Sources */ = {isa = PBXBuildFile; fileRef = 5B5A480E2F308843004809C0 /* host.c */; };
+		5B5A481E2F308860004809C0 /* mdb.c in Sources */ = {isa = PBXBuildFile; fileRef = 5B5A481C2F308860004809C0 /* mdb.c */; };
+		5B5A481F2F308860004809C0 /* midl.c in Sources */ = {isa = PBXBuildFile; fileRef = 5B5A481D2F308860004809C0 /* midl.c */; };
+		5B7843EE2F3130D2008D7F87 /* libsodium.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 5B7843ED2F3130D2008D7F87 /* libsodium.a */; };
+		5B7843F02F3131E5008D7F87 /* app in Resources */ = {isa = PBXBuildFile; fileRef = 5B7843EF2F3131E5008D7F87 /* app */; };
+		5B7843FB2F313EEC008D7F87 /* SDL3.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5B7843FA2F313E86008D7F87 /* SDL3.framework */; };
+		5B7843FC2F313EF0008D7F87 /* SDL3.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 5B7843FA2F313E86008D7F87 /* SDL3.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		5B86CD442F30840000330C7C /* katipoBrowser.icon in Resources */ = {isa = PBXBuildFile; fileRef = 5B86CD432F30840000330C7C /* katipoBrowser.icon */; };
+		5BA345382E113538004A7F87 /* libz.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 5BA345372E113538004A7F87 /* libz.tbd */; };
+		5BA346192E11359C004A7F87 /* Metal.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5BA346182E11359C004A7F87 /* Metal.framework */; };
+		5BA3461B2E1135AF004A7F87 /* IOSurface.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5BA3461A2E1135AF004A7F87 /* IOSurface.framework */; };
+		5BA3461D2E1135CF004A7F87 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5BA3461C2E1135CF004A7F87 /* UIKit.framework */; };
+		5BA3461F2E1135DA004A7F87 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5BA3461E2E1135DA004A7F87 /* CoreGraphics.framework */; };
+		5BA346232E11365A004A7F87 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5BA346222E11365A004A7F87 /* QuartzCore.framework */; };
+		5BA7DF992E3ADB7D00A73AB2 /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5BA7DF932E3ADB7C00A73AB2 /* AVFoundation.framework */; };
+		5BED53032E6014BD0028ED11 /* MediaPlayer.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5BED52FD2E6014BD0028ED11 /* MediaPlayer.framework */; };
+		5BF359292F30817300B0427E /* MoltenVK.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5BF359282F30817300B0427E /* MoltenVK.xcframework */; };
+		5BF3592B2F30817C00B0427E /* SDL3_mixer.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5BF3592A2F30817B00B0427E /* SDL3_mixer.framework */; };
+		5BF3592C2F30818000B0427E /* SDL3_mixer.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 5BF3592A2F30817B00B0427E /* SDL3_mixer.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		5B7843F92F313E86008D7F87 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 5B7843F12F313E86008D7F87 /* SDL.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = BECDF66C0761BA81005FE872;
+			remoteInfo = SDL3;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		5B4ABEBF2E112202009220AE /* Embed Frameworks */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+				5B7843FC2F313EF0008D7F87 /* SDL3.framework in Embed Frameworks */,
+				5BF3592C2F30818000B0427E /* SDL3_mixer.framework in Embed Frameworks */,
+			);
+			name = "Embed Frameworks";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
+/* Begin PBXFileReference section */
+		5B1AD7922E606C3D005D15BD /* CoreMedia.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreMedia.framework; path = System/Library/Frameworks/CoreMedia.framework; sourceTree = SDKROOT; };
+		5B4ABDAE2E111EBE009220AE /* katipoBrowser.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = katipoBrowser.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		5B5A47492F3087A4004809C0 /* stb_image.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = stb_image.h; path = ../thirdParty/stb_image.h; sourceTree = SOURCE_ROOT; };
+		5B5A474A2F3087B5004809C0 /* MurmurHash3.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = MurmurHash3.h; path = ../thirdParty/MurmurHash3.h; sourceTree = SOURCE_ROOT; };
+		5B5A474B2F3087B5004809C0 /* MurmurHash3.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = MurmurHash3.cpp; path = ../thirdParty/MurmurHash3.cpp; sourceTree = SOURCE_ROOT; };
+		5B5A480C2F308843004809C0 /* callbacks.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; name = callbacks.c; path = "../katipo/thirdParty/enet-1.3.18/callbacks.c"; sourceTree = SOURCE_ROOT; };
+		5B5A480D2F308843004809C0 /* compress.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; name = compress.c; path = "../katipo/thirdParty/enet-1.3.18/compress.c"; sourceTree = SOURCE_ROOT; };
+		5B5A480E2F308843004809C0 /* host.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; name = host.c; path = "../katipo/thirdParty/enet-1.3.18/host.c"; sourceTree = SOURCE_ROOT; };
+		5B5A480F2F308843004809C0 /* list.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; name = list.c; path = "../katipo/thirdParty/enet-1.3.18/list.c"; sourceTree = SOURCE_ROOT; };
+		5B5A48102F308843004809C0 /* packet.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; name = packet.c; path = "../katipo/thirdParty/enet-1.3.18/packet.c"; sourceTree = SOURCE_ROOT; };
+		5B5A48112F308843004809C0 /* peer.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; name = peer.c; path = "../katipo/thirdParty/enet-1.3.18/peer.c"; sourceTree = SOURCE_ROOT; };
+		5B5A48122F308843004809C0 /* protocol.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; name = protocol.c; path = "../katipo/thirdParty/enet-1.3.18/protocol.c"; sourceTree = SOURCE_ROOT; };
+		5B5A48132F308843004809C0 /* unix.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; name = unix.c; path = "../katipo/thirdParty/enet-1.3.18/unix.c"; sourceTree = SOURCE_ROOT; };
+		5B5A481C2F308860004809C0 /* mdb.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; name = mdb.c; path = ../katipo/thirdParty/liblmdb/mdb.c; sourceTree = SOURCE_ROOT; };
+		5B5A481D2F308860004809C0 /* midl.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; name = midl.c; path = ../katipo/thirdParty/liblmdb/midl.c; sourceTree = SOURCE_ROOT; };
+		5B7843ED2F3130D2008D7F87 /* libsodium.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libsodium.a; path = ../katipo/thirdParty/libsodium/ios/lib/libsodium.a; sourceTree = "<group>"; };
+		5B7843EF2F3131E5008D7F87 /* app */ = {isa = PBXFileReference; lastKnownFileType = folder; name = app; path = ../app; sourceTree = "<group>"; };
+		5B7843F12F313E86008D7F87 /* SDL.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = SDL.xcodeproj; path = "../thirdParty/SDL3-3.4.0/Xcode/SDL/SDL.xcodeproj"; sourceTree = SOURCE_ROOT; };
+		5B86CD432F30840000330C7C /* katipoBrowser.icon */ = {isa = PBXFileReference; lastKnownFileType = folder.iconcomposer.icon; name = katipoBrowser.icon; path = ../working/katipoBrowser.icon; sourceTree = SOURCE_ROOT; };
+		5BA345372E113538004A7F87 /* libz.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libz.tbd; path = usr/lib/libz.tbd; sourceTree = SDKROOT; };
+		5BA346182E11359C004A7F87 /* Metal.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Metal.framework; path = System/Library/Frameworks/Metal.framework; sourceTree = SDKROOT; };
+		5BA3461A2E1135AF004A7F87 /* IOSurface.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = IOSurface.framework; path = System/Library/Frameworks/IOSurface.framework; sourceTree = SDKROOT; };
+		5BA3461C2E1135CF004A7F87 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
+		5BA3461E2E1135DA004A7F87 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
+		5BA346202E1135F0004A7F87 /* MetalKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MetalKit.framework; path = System/Library/Frameworks/MetalKit.framework; sourceTree = SDKROOT; };
+		5BA346222E11365A004A7F87 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
+		5BA7DF932E3ADB7C00A73AB2 /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = System/Library/Frameworks/AVFoundation.framework; sourceTree = SDKROOT; };
+		5BED52FD2E6014BD0028ED11 /* MediaPlayer.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MediaPlayer.framework; path = System/Library/Frameworks/MediaPlayer.framework; sourceTree = SDKROOT; };
+		5BF359282F30817300B0427E /* MoltenVK.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; name = MoltenVK.xcframework; path = thirdPartyiOS/MoltenVK/static/MoltenVK.xcframework; sourceTree = "<group>"; };
+		5BF3592A2F30817B00B0427E /* SDL3_mixer.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SDL3_mixer.framework; path = thirdPartyiOS/SDL3_mixer.framework; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
+		5B5A482A2F308971004809C0 /* Exceptions for "core" folder in "katipoBrowser" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				ClientHttpInterface.cpp,
+			);
+			target = 5B4ABDAD2E111EBE009220AE /* katipoBrowser */;
+		};
+		5B5A482B2F3089D4004809C0 /* Exceptions for "katipoBrowser" folder in "katipoBrowser" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				Info.plist,
+			);
+			target = 5B4ABDAD2E111EBE009220AE /* katipoBrowser */;
+		};
+/* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
+
+/* Begin PBXFileSystemSynchronizedRootGroup section */
+		5B5A47A82F3087D9004809C0 /* browser */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			name = browser;
+			path = ../browser;
+			sourceTree = SOURCE_ROOT;
+		};
+		5B5A47EA2F3087F2004809C0 /* core */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				5B5A482A2F308971004809C0 /* Exceptions for "core" folder in "katipoBrowser" target */,
+			);
+			name = core;
+			path = ../katipo/core;
+			sourceTree = SOURCE_ROOT;
+		};
+		5B5A48052F308810004809C0 /* source */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			name = source;
+			path = ../katipo/thirdParty/tui/source;
+			sourceTree = SOURCE_ROOT;
+		};
+		5B5A48252F308900004809C0 /* katipoBrowser */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				5B5A482B2F3089D4004809C0 /* Exceptions for "katipoBrowser" folder in "katipoBrowser" target */,
+			);
+			path = katipoBrowser;
+			sourceTree = "<group>";
+		};
+/* End PBXFileSystemSynchronizedRootGroup section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		5B4ABDAB2E111EBE009220AE /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				5B1AD7982E606C3D005D15BD /* CoreMedia.framework in Frameworks */,
+				5BED53032E6014BD0028ED11 /* MediaPlayer.framework in Frameworks */,
+				5BA7DF992E3ADB7D00A73AB2 /* AVFoundation.framework in Frameworks */,
+				5BA346232E11365A004A7F87 /* QuartzCore.framework in Frameworks */,
+				5BA3461F2E1135DA004A7F87 /* CoreGraphics.framework in Frameworks */,
+				5BA3461D2E1135CF004A7F87 /* UIKit.framework in Frameworks */,
+				5BA3461B2E1135AF004A7F87 /* IOSurface.framework in Frameworks */,
+				5BA346192E11359C004A7F87 /* Metal.framework in Frameworks */,
+				5BF359292F30817300B0427E /* MoltenVK.xcframework in Frameworks */,
+				5BF3592B2F30817C00B0427E /* SDL3_mixer.framework in Frameworks */,
+				5B7843FB2F313EEC008D7F87 /* SDL3.framework in Frameworks */,
+				5B7843EE2F3130D2008D7F87 /* libsodium.a in Frameworks */,
+				5BA345382E113538004A7F87 /* libz.tbd in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		5B4ABDA52E111EBE009220AE = {
+			isa = PBXGroup;
+			children = (
+				5B7843EF2F3131E5008D7F87 /* app */,
+				5B4ABEBA2E1121D9009220AE /* Frameworks */,
+				5B4ABDAF2E111EBE009220AE /* Products */,
+				5B86CD432F30840000330C7C /* katipoBrowser.icon */,
+				5B5A47492F3087A4004809C0 /* stb_image.h */,
+				5B5A474A2F3087B5004809C0 /* MurmurHash3.h */,
+				5B5A474B2F3087B5004809C0 /* MurmurHash3.cpp */,
+				5B5A47A82F3087D9004809C0 /* browser */,
+				5B5A47EA2F3087F2004809C0 /* core */,
+				5B5A48052F308810004809C0 /* source */,
+				5B5A480C2F308843004809C0 /* callbacks.c */,
+				5B5A480D2F308843004809C0 /* compress.c */,
+				5B5A480E2F308843004809C0 /* host.c */,
+				5B5A480F2F308843004809C0 /* list.c */,
+				5B5A48102F308843004809C0 /* packet.c */,
+				5B5A48112F308843004809C0 /* peer.c */,
+				5B5A48122F308843004809C0 /* protocol.c */,
+				5B5A48132F308843004809C0 /* unix.c */,
+				5B5A481C2F308860004809C0 /* mdb.c */,
+				5B5A481D2F308860004809C0 /* midl.c */,
+				5B5A48252F308900004809C0 /* katipoBrowser */,
+				5B7843F12F313E86008D7F87 /* SDL.xcodeproj */,
+			);
+			sourceTree = "<group>";
+		};
+		5B4ABDAF2E111EBE009220AE /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				5B4ABDAE2E111EBE009220AE /* katipoBrowser.app */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		5B4ABEBA2E1121D9009220AE /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				5B7843ED2F3130D2008D7F87 /* libsodium.a */,
+				5BF3592A2F30817B00B0427E /* SDL3_mixer.framework */,
+				5BF359282F30817300B0427E /* MoltenVK.xcframework */,
+				5B1AD7922E606C3D005D15BD /* CoreMedia.framework */,
+				5BED52FD2E6014BD0028ED11 /* MediaPlayer.framework */,
+				5BA7DF932E3ADB7C00A73AB2 /* AVFoundation.framework */,
+				5BA346222E11365A004A7F87 /* QuartzCore.framework */,
+				5BA346202E1135F0004A7F87 /* MetalKit.framework */,
+				5BA3461E2E1135DA004A7F87 /* CoreGraphics.framework */,
+				5BA3461C2E1135CF004A7F87 /* UIKit.framework */,
+				5BA3461A2E1135AF004A7F87 /* IOSurface.framework */,
+				5BA346182E11359C004A7F87 /* Metal.framework */,
+				5BA345372E113538004A7F87 /* libz.tbd */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		5B7843F42F313E86008D7F87 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				5B7843FA2F313E86008D7F87 /* SDL3.framework */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		5B4ABDAD2E111EBE009220AE /* katipoBrowser */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 5B4ABDC92E111EBF009220AE /* Build configuration list for PBXNativeTarget "katipoBrowser" */;
+			buildPhases = (
+				5B4ABDAA2E111EBE009220AE /* Sources */,
+				5B4ABDAB2E111EBE009220AE /* Frameworks */,
+				5B4ABDAC2E111EBE009220AE /* Resources */,
+				5B4ABEBF2E112202009220AE /* Embed Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			fileSystemSynchronizedGroups = (
+				5B5A47A82F3087D9004809C0 /* browser */,
+				5B5A47EA2F3087F2004809C0 /* core */,
+				5B5A48052F308810004809C0 /* source */,
+				5B5A48252F308900004809C0 /* katipoBrowser */,
+			);
+			name = katipoBrowser;
+			packageProductDependencies = (
+			);
+			productName = katipoBrowser;
+			productReference = 5B4ABDAE2E111EBE009220AE /* katipoBrowser.app */;
+			productType = "com.apple.product-type.application";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		5B4ABDA62E111EBE009220AE /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = 1;
+				LastUpgradeCheck = 1640;
+				TargetAttributes = {
+					5B4ABDAD2E111EBE009220AE = {
+						CreatedOnToolsVersion = 16.4;
+					};
+				};
+			};
+			buildConfigurationList = 5B4ABDA92E111EBE009220AE /* Build configuration list for PBXProject "katipoBrowser" */;
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = 5B4ABDA52E111EBE009220AE;
+			minimizedProjectReferenceProxies = 1;
+			preferredProjectObjectVersion = 77;
+			productRefGroup = 5B4ABDAF2E111EBE009220AE /* Products */;
+			projectDirPath = "";
+			projectReferences = (
+				{
+					ProductGroup = 5B7843F42F313E86008D7F87 /* Products */;
+					ProjectRef = 5B7843F12F313E86008D7F87 /* SDL.xcodeproj */;
+				},
+			);
+			projectRoot = "";
+			targets = (
+				5B4ABDAD2E111EBE009220AE /* katipoBrowser */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXReferenceProxy section */
+		5B7843FA2F313E86008D7F87 /* SDL3.framework */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.framework;
+			path = SDL3.framework;
+			remoteRef = 5B7843F92F313E86008D7F87 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+/* End PBXReferenceProxy section */
+
+/* Begin PBXResourcesBuildPhase section */
+		5B4ABDAC2E111EBE009220AE /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				5B7843F02F3131E5008D7F87 /* app in Resources */,
+				5B86CD442F30840000330C7C /* katipoBrowser.icon in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		5B4ABDAA2E111EBE009220AE /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				5B5A481E2F308860004809C0 /* mdb.c in Sources */,
+				5B5A481F2F308860004809C0 /* midl.c in Sources */,
+				5B5A48142F308843004809C0 /* protocol.c in Sources */,
+				5B5A48152F308843004809C0 /* unix.c in Sources */,
+				5B5A48162F308843004809C0 /* compress.c in Sources */,
+				5B5A48172F308843004809C0 /* list.c in Sources */,
+				5B5A48182F308843004809C0 /* packet.c in Sources */,
+				5B5A48192F308843004809C0 /* peer.c in Sources */,
+				5B5A481A2F308843004809C0 /* callbacks.c in Sources */,
+				5B5A481B2F308843004809C0 /* host.c in Sources */,
+				5B5A474C2F3087B5004809C0 /* MurmurHash3.cpp in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin XCBuildConfiguration section */
+		5B4ABDC72E111EBF009220AE /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				DEVELOPMENT_TEAM = 9Q78V5BF2N;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				HEADER_SEARCH_PATHS = (
+					"\"$(SRCROOT)/../../thirdParty/glm\"",
+					"\"$(SRCROOT)/../../thirdParty/VulkanMemoryAllocator-3.1.0/include\"",
+					"\"$(SRCROOT)/../thirdPartyiOS/MoltenVK/include\"",
+					"\"$(SRCROOT)/../../thirdParty/liblmdb\"",
+					"\"$(SRCROOT)/../../thirdParty/rapidjson-1.1.0/include\"",
+					"\"$(SRCROOT)/../../thirdParty/utfcpp-3.2.1/source\"",
+					"\"$(SRCROOT)/../../thirdParty/enet-1.3.18/include\"",
+					"\"$(SRCROOT)/../../thirdParty/civetweb-1.13/include\"",
+					"\"$(SRCROOT)/../../thirdParty/curl-ios-8.14.1/build/curl_arm64-iphoneos/artifacts/include\"",
+					"\"$(SRCROOT)/../../thirdParty/SDL3-3.2.16/include/SDL3\"",
+				);
+				IPHONEOS_DEPLOYMENT_TARGET = 18.5;
+				LIBRARY_SEARCH_PATHS = (
+					"\"$(SRCROOT)/../thirdPartyiOS\"",
+					"\"$(SRCROOT)/../../thirdParty\"",
+					"\"$(SRCROOT)/../thirdPartyiOS/curl\"",
+				);
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = iphoneos;
+			};
+			name = Debug;
+		};
+		5B4ABDC82E111EBF009220AE /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				DEVELOPMENT_TEAM = 9Q78V5BF2N;
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				HEADER_SEARCH_PATHS = (
+					"\"$(SRCROOT)/../../thirdParty/glm\"",
+					"\"$(SRCROOT)/../../thirdParty/VulkanMemoryAllocator-3.1.0/include\"",
+					"\"$(SRCROOT)/../thirdPartyiOS/MoltenVK/include\"",
+					"\"$(SRCROOT)/../../thirdParty/liblmdb\"",
+					"\"$(SRCROOT)/../../thirdParty/rapidjson-1.1.0/include\"",
+					"\"$(SRCROOT)/../../thirdParty/utfcpp-3.2.1/source\"",
+					"\"$(SRCROOT)/../../thirdParty/enet-1.3.18/include\"",
+					"\"$(SRCROOT)/../../thirdParty/civetweb-1.13/include\"",
+					"\"$(SRCROOT)/../../thirdParty/curl-ios-8.14.1/build/curl_arm64-iphoneos/artifacts/include\"",
+					"\"$(SRCROOT)/../../thirdParty/SDL3-3.2.16/include/SDL3\"",
+				);
+				IPHONEOS_DEPLOYMENT_TARGET = 18.5;
+				LIBRARY_SEARCH_PATHS = (
+					"\"$(SRCROOT)/../thirdPartyiOS\"",
+					"\"$(SRCROOT)/../../thirdParty\"",
+					"\"$(SRCROOT)/../thirdPartyiOS/curl\"",
+				);
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				SDKROOT = iphoneos;
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		5B4ABDCA2E111EBF009220AE /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = katipoBrowser;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = NO;
+				CLANG_ENABLE_OBJC_ARC = NO;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 9Q78V5BF2N;
+				FRAMEWORK_SEARCH_PATHS = (
+					"\"$(SRCROOT)/../thirdPartyiOS\"",
+					"$(PROJECT_DIR)/thirdPartyiOS",
+				);
+				GENERATE_INFOPLIST_FILE = YES;
+				HEADER_SEARCH_PATHS = (
+					"\"$(SRCROOT)/../katipo/thirdParty/enet-1.3.18/include\"",
+					"\"$(SRCROOT)/thirdPartyiOS/MoltenVK/include\"",
+					"\"$(SRCROOT)/../katipo/thirdParty/tui/source\"",
+					"\"$(SRCROOT)/../katipo/thirdParty/tui/thirdParty/glm/glm\"",
+					"\"$(SRCROOT)/../thirdParty/VulkanMemoryAllocator-3.2.1/include\"",
+					"\"$(SRCROOT)/../thirdParty/rapidjson-1.1.0/include\"",
+					"\"$(SRCROOT)/../katipo/thirdParty/libsodium/ios/include\"",
+					"\"$(SRCROOT)/../katipo/thirdParty/liblmdb\"",
+					"\"$(SRCROOT)/../thirdParty/utfcpp-3.2.1/source\"",
+					"\"$(SRCROOT)/../thirdParty/SDL3-3.4.0/include/SDL3\"",
+					"\"$(SRCROOT)/thirdPartyiOS/SDL3_mixer.framework/Headers\"",
+				);
+				INFOPLIST_FILE = katipoBrowser/Info.plist;
+				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
+				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
+				INFOPLIST_KEY_UIRequiredDeviceCapabilities = metal;
+				INFOPLIST_KEY_UIStatusBarHidden = YES;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				LIBRARY_SEARCH_PATHS = (
+					"\"$(SRCROOT)/../thirdPartyiOS\"",
+					"\"$(SRCROOT)/../../thirdParty\"",
+					"\"$(SRCROOT)/../thirdPartyiOS/curl\"",
+					"\"$(SRCROOT)/../katipo/thirdParty/libsodium/ios/lib\"",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.majicjungle.katipoBrowser;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		5B4ABDCB2E111EBF009220AE /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = katipoBrowser;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = NO;
+				CLANG_ENABLE_OBJC_ARC = NO;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 9Q78V5BF2N;
+				FRAMEWORK_SEARCH_PATHS = (
+					"\"$(SRCROOT)/../thirdPartyiOS\"",
+					"$(PROJECT_DIR)/thirdPartyiOS",
+				);
+				GENERATE_INFOPLIST_FILE = YES;
+				HEADER_SEARCH_PATHS = (
+					"\"$(SRCROOT)/../katipo/thirdParty/enet-1.3.18/include\"",
+					"\"$(SRCROOT)/thirdPartyiOS/MoltenVK/include\"",
+					"\"$(SRCROOT)/../katipo/thirdParty/tui/source\"",
+					"\"$(SRCROOT)/../katipo/thirdParty/tui/thirdParty/glm/glm\"",
+					"\"$(SRCROOT)/../thirdParty/VulkanMemoryAllocator-3.2.1/include\"",
+					"\"$(SRCROOT)/../thirdParty/rapidjson-1.1.0/include\"",
+					"\"$(SRCROOT)/../katipo/thirdParty/libsodium/ios/include\"",
+					"\"$(SRCROOT)/../katipo/thirdParty/liblmdb\"",
+					"\"$(SRCROOT)/../thirdParty/utfcpp-3.2.1/source\"",
+					"\"$(SRCROOT)/../thirdParty/SDL3-3.4.0/include/SDL3\"",
+					"\"$(SRCROOT)/thirdPartyiOS/SDL3_mixer.framework/Headers\"",
+				);
+				INFOPLIST_FILE = katipoBrowser/Info.plist;
+				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
+				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
+				INFOPLIST_KEY_UIRequiredDeviceCapabilities = metal;
+				INFOPLIST_KEY_UIStatusBarHidden = YES;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				LIBRARY_SEARCH_PATHS = (
+					"\"$(SRCROOT)/../thirdPartyiOS\"",
+					"\"$(SRCROOT)/../../thirdParty\"",
+					"\"$(SRCROOT)/../thirdPartyiOS/curl\"",
+					"\"$(SRCROOT)/../katipo/thirdParty/libsodium/ios/lib\"",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.majicjungle.katipoBrowser;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		5B4ABDA92E111EBE009220AE /* Build configuration list for PBXProject "katipoBrowser" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				5B4ABDC72E111EBF009220AE /* Debug */,
+				5B4ABDC82E111EBF009220AE /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		5B4ABDC92E111EBF009220AE /* Build configuration list for PBXNativeTarget "katipoBrowser" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				5B4ABDCA2E111EBF009220AE /* Debug */,
+				5B4ABDCB2E111EBF009220AE /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 5B4ABDA62E111EBE009220AE /* Project object */;
+}
