@@ -2,3 +2,5 @@ mac/katipoBrowser.xcodeproj/project.xcworkspace/xcuserdata/davidframpton.xcuserd
 *.tlog
 windows/katipoBrowser/x64
 windows/x64
+xcuserdata
+.DS_Store

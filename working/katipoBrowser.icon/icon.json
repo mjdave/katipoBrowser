@@ -8,8 +8,23 @@
         {
           "blend-mode" : "plus-lighter",
           "glass" : false,
+          "hidden" : true,
           "image-name" : "iconTopLayer 3.png",
           "name" : "iconTopLayer 3"
+        },
+        {
+          "blend-mode" : "plus-lighter",
+          "fill" : "automatic",
+          "glass" : false,
+          "image-name" : "katipoIcon2.png",
+          "name" : "katipoIcon2",
+          "position" : {
+            "scale" : 0.47,
+            "translation-in-points" : [
+              0,
+              0
+            ]
+          }
         },
         {
           "glass" : true,

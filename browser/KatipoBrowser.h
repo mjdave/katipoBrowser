@@ -8,7 +8,6 @@
 #include "TuiScript.h"
 
 class MainController;
-class MainMenu;
 class MJView;
 class TuiRef;
 class TuiFunction;
@@ -17,14 +16,16 @@ class ClientNetInterface;
 
 class KatipoBrowser {
 public:
-    MainMenu* mainMenu;
     MJView* mainView;
     TuiTable* rootTable;
-    TuiTable* katipoTable;
     TuiTable* scriptState;
+    TuiTable* katipoTable;
     
     std::map<std::string, ClientNetInterface*> netInterfaces;
     
+    MJView* currentSiteMainView = nullptr;
+    TuiTable* currentSiteRootTable = nullptr;
+    TuiTable* currentSiteScriptState = nullptr;
     
     uint32_t updateTimerID;
     
