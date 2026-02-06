@@ -16,14 +16,12 @@
 //#include "Timer.h"
 
 MJCache::MJCache(Vulkan* vulkan_,
-    MaterialManager* materialManager_, 
     Database* appDatabase_,
 	Camera* camera_,
 	MJDataTexture* noiseTexture_)
 {
     vulkan = vulkan_;
     appDatabase = appDatabase_;
-    materialManager = materialManager_;
 	camera = camera_;
 	noiseTexture = noiseTexture_;
 
@@ -58,10 +56,6 @@ MJCache::~MJCache()
 			delete pipelineI.second;
 		}
 	}
-    for(auto const& modelI : models)
-    {
-        delete modelI.second;
-    }
     for(auto const& imageDrawQuadDescriptorSetsI : imageDrawQuadDescriptorSets)
     {
         vulkan->destroyDescriptorPool(imageDrawQuadDescriptorSetsI.second.descriptorPool);
@@ -156,29 +150,46 @@ MJImageTexture* MJCache::getTextureAbsolutePath(std::string path, bool repeat, b
 	return getTextureAbsolutePathWithOptions(path, options, "", disableCache);
 }
 
-
-MJImageTexture* MJCache::getTexture(std::string name, bool repeat, bool loadFlipped, bool mipmap, bool disableCache)
+static inline std::string getKatipoResourcePath(const std::string& inPath, TuiTable* rootTable)
 {
-    return getTextureAbsolutePath(Katipo::getResourcePath(name), repeat, loadFlipped, mipmap, disableCache);
+    TuiRef* getResourcePathFunc = ((TuiTable*)rootTable->get("file"))->get("getResourcePath");
+    if(getResourcePathFunc)
+    {
+        TuiString* inPathRef = new TuiString(inPath);
+        TuiRef* pathResult = ((TuiFunction*)getResourcePathFunc)->call("getResourcePathFunc", inPathRef);
+        inPathRef->release();
+        if(pathResult)
+        {
+            std::string returnResult = pathResult->getStringValue();
+            pathResult->release();
+            return returnResult;
+        }
+    }
+    return Katipo::getResourcePath(inPath);
 }
 
-MJImageTexture* MJCache::getTextureWithOptions(std::string name, MJImageTextureOptions options, std::string alphaChannel_, bool disableCache)
+MJImageTexture* MJCache::getTexture(std::string name, TuiTable* rootTable, bool repeat, bool loadFlipped, bool mipmap, bool disableCache)
+{
+    return getTextureAbsolutePath(getKatipoResourcePath(name, rootTable), repeat, loadFlipped, mipmap, disableCache);
+}
+
+MJImageTexture* MJCache::getTextureWithOptions(std::string name, TuiTable* rootTable, MJImageTextureOptions options, std::string alphaChannel_, bool disableCache)
 {
 	std::string absoluteAlphaPath = "";
 	if(!alphaChannel_.empty())
 	{
-		absoluteAlphaPath = Katipo::getResourcePath(alphaChannel_);
+		absoluteAlphaPath = getKatipoResourcePath(alphaChannel_, rootTable);
 	}
-	return getTextureAbsolutePathWithOptions(Katipo::getResourcePath(name), options, absoluteAlphaPath, disableCache);
+	return getTextureAbsolutePathWithOptions(getKatipoResourcePath(name, rootTable), options, absoluteAlphaPath, disableCache);
 }
 
-MJFont* MJCache::getFont(std::string name, int pointSize, double* resultScale, bool isModel)
+MJFont* MJCache::getFont(std::string name, int pointSize, double* resultScale)
 {
     *resultScale = 1.0;
 
 	std::string combinedFontName = Tui::string_format("%s%d", name.c_str(), pointSize);
 
-	std::string key = Tui::string_format("%s_%d", combinedFontName.c_str(), isModel);
+	std::string key = combinedFontName;
 
     if(fonts.count(key) > 0)
     {
@@ -198,7 +209,7 @@ MJFont* MJCache::getFont(std::string name, int pointSize, double* resultScale, b
 
     if(availableFontFileNames.count(combinedFontName) != 0)
     {
-        MJFont* font = new MJFont(vulkan, this, combinedFontName, isModel, offset, reversed);
+        MJFont* font = new MJFont(vulkan, this, combinedFontName, offset, reversed);
         fonts[key] = font;
         return font;
     }
@@ -206,7 +217,7 @@ MJFont* MJCache::getFont(std::string name, int pointSize, double* resultScale, b
     for(int i = pointSize + 1; i <= pointSize * 2; i++)
     {
         std::string combinedFontName = Tui::string_format("%s%d", name.c_str(), i);
-		std::string key = Tui::string_format("%s_%d", combinedFontName.c_str(), isModel);
+		std::string key = combinedFontName;
         if(fonts.count(key) > 0)
         {
             *resultScale = ((double)pointSize) / i;
@@ -215,7 +226,7 @@ MJFont* MJCache::getFont(std::string name, int pointSize, double* resultScale, b
 
         if(availableFontFileNames.count(combinedFontName) != 0)
         {
-            MJFont* font = new MJFont(vulkan, this, combinedFontName, isModel, offset, reversed);
+            MJFont* font = new MJFont(vulkan, this, combinedFontName, offset, reversed);
             fonts[key] = font;
             *resultScale = ((double)pointSize) / i;
             MJLog("WARNING: using larger substitute font of size:%d for:%s at size:%d", i, name.c_str(), pointSize);
@@ -226,7 +237,7 @@ MJFont* MJCache::getFont(std::string name, int pointSize, double* resultScale, b
     for(int i = pointSize - 1; i >= pointSize / 2; i--)
     {
         std::string combinedFontName = Tui::string_format("%s%d", name.c_str(), i);
-		std::string key = Tui::string_format("%s_%d", combinedFontName.c_str(), isModel);
+		std::string key = combinedFontName;
         if(fonts.count(key) > 0)
         {
             *resultScale = ((double)pointSize) / i;
@@ -235,7 +246,7 @@ MJFont* MJCache::getFont(std::string name, int pointSize, double* resultScale, b
 
         if(availableFontFileNames.count(combinedFontName) != 0)
         {
-            MJFont* font = new MJFont(vulkan, this, combinedFontName, isModel, offset, reversed);
+            MJFont* font = new MJFont(vulkan, this, combinedFontName, offset, reversed);
             fonts[key] = font;
             *resultScale = ((double)pointSize) / i;
             MJLog("WARNING: using smaller substitute font of size:%d for:%s at size:%d", i, name.c_str(), pointSize);
@@ -248,7 +259,7 @@ MJFont* MJCache::getFont(std::string name, int pointSize, double* resultScale, b
 	for(int i = pointSize * 2; i <= 216; i++)
 	{
 		std::string combinedFontName = Tui::string_format("%s%d", name.c_str(), i);
-		std::string key = Tui::string_format("%s_%d", combinedFontName.c_str(), isModel);
+		std::string key = combinedFontName;
 		if(fonts.count(key) > 0)
 		{
 			*resultScale = ((double)pointSize) / i;
@@ -257,7 +268,7 @@ MJFont* MJCache::getFont(std::string name, int pointSize, double* resultScale, b
 
 		if(availableFontFileNames.count(combinedFontName) != 0)
 		{
-			MJFont* font = new MJFont(vulkan, this, combinedFontName, isModel, offset, reversed);
+			MJFont* font = new MJFont(vulkan, this, combinedFontName, offset, reversed);
 			fonts[key] = font;
 			*resultScale = ((double)pointSize) / i;
 			MJLog("WARNING: using larger substitute font of size:%d for:%s at size:%d", i, name.c_str(), pointSize);
@@ -268,7 +279,7 @@ MJFont* MJCache::getFont(std::string name, int pointSize, double* resultScale, b
 	for(int i = pointSize / 2; i >= 8; i--)
 	{
 		std::string combinedFontName = Tui::string_format("%s%d", name.c_str(), i);
-		std::string key = Tui::string_format("%s_%d", combinedFontName.c_str(), isModel);
+		std::string key = combinedFontName;
 		if(fonts.count(key) > 0)
 		{
 			*resultScale = ((double)pointSize) / i;
@@ -277,7 +288,7 @@ MJFont* MJCache::getFont(std::string name, int pointSize, double* resultScale, b
 
 		if(availableFontFileNames.count(combinedFontName) != 0)
 		{
-			MJFont* font = new MJFont(vulkan, this, combinedFontName, isModel, offset, reversed);
+			MJFont* font = new MJFont(vulkan, this, combinedFontName, offset, reversed);
 			fonts[key] = font;
 			*resultScale = ((double)pointSize) / i;
 			MJLog("WARNING: using smaller substitute font of size:%d for:%s at size:%d", i, name.c_str(), pointSize);
@@ -326,7 +337,7 @@ GPipeline* MJCache::getPipeline(std::string name,
     }
     
     //MJLog("Loading shader:%s", name.c_str());
-    std::string shaderPath = Katipo::getResourcePath("app/common/shaders/" + name + ".tui");
+    std::string shaderPath = Katipo::getResourcePath("app/common/shaders/" + name + ".tui"); //todo allow sites to supply shaders
     //MJLog("shaderPath:%s", shaderPath.c_str());
     
     TuiTable* shaderTable = (TuiTable*)TuiRef::load(shaderPath, nullptr);
@@ -437,7 +448,7 @@ GPipeline* MJCache::getPipeline(std::string name,
     delete shaderTable;
     shaderTable = nullptr;
 
-	std::string vertPathNameToUse = Katipo::getResourcePath("app/common/spv/" + vertPathname);
+	std::string vertPathNameToUse = Katipo::getResourcePath("app/common/spv/" + vertPathname); //todo sites
 	std::string fragPathNameToUse = Katipo::getResourcePath("app/common/spv/" + fragPathname);
 
 	//debugTimer->getDt();
@@ -455,168 +466,6 @@ GPipeline* MJCache::getPipeline(std::string name,
 	//MJLog("total pipiline creation time:%dms", (int)(totalLoadTime * 1000.0));
 	pipelines[key][renderPassVarient] = pipeline;
     return pipeline;
-}
-
-
-void MJCache::cacheModel(const std::string& modelPath)
-{
-	if(models.count(modelPath) == 0)
-	{
-        Model* model = new Model(modelPath,
-			materialManager);
-        
-        model->index = ++modelIndexCounter;
-        modelsByIndex[model->index] = model;
-
-		models[modelPath] = model;
-	}
-}
-
-Model* MJCache::getModel(const std::string& modelPath)
-{
-    if(models.count(modelPath) == 0)
-	{
-		Model* model = new Model(modelPath,
-			materialManager);
-        
-        model->index = ++modelIndexCounter;
-        modelsByIndex[model->index] = model;
-        
-        models[modelPath] = model;
-        return model;
-    }
-    
-    return models[modelPath];
-}
-
-
-Model* MJCache::modelForModelIndex(int modelIndex)
-{
-    if(modelsByIndex.count(modelIndex != 0))
-    {
-        return modelsByIndex[modelIndex];
-    }
-    
-    return nullptr;
-}
-
-
-
-std::string getModelViewBufferHash(Model* model, std::map<std::string, std::string>& materialRemaps, std::string defaultMaterial)
-{
-	std::string hash = Tui::string_format("%s_%s_", model->modelPath.c_str(), defaultMaterial.c_str());
-
-	for(auto& remap : materialRemaps)
-	{
-		hash = hash + Tui::string_format("%s_%s_", remap.first.c_str(), remap.second.c_str());
-	}
-	return hash;
-}
-
-
-CachedModelViewBuffers MJCache::getModelViewBuffers(GCommandBuffer* commandBuffer,
-	Model* model, 
-	std::map<std::string, std::string>& materialRemaps,
-                                                    const std::string& defaultMaterial)
-{
-	CachedModelViewBuffers buffers;
-
-	std::string hash = getModelViewBufferHash(model, materialRemaps, defaultMaterial);
-	if(modelViewBuffers.count(hash) != 0)
-	{
-		return modelViewBuffers[hash];
-	}
-
-	std::vector<ObjectVert> renderVerts;
-	std::vector<ObjectDecalVert> decalVerts;
-
-
-	bool hasMaterialRemaps = false;
-	if((defaultMaterial != "") || !materialRemaps.empty())
-	{
-		hasMaterialRemaps = true;
-	}
-
-	std::vector<ModelFace>& faces = model->faces;
-	buffers.vertCount = (int)faces.size() * 3;
-
-	renderVerts.resize(buffers.vertCount);
-	for(int f = 0; f < faces.size(); f++)
-	{
-		u8vec4 shaderMaterial = faces[f].shaderMaterial;
-        u8vec4 shaderMaterialB = faces[f].shaderMaterialB;
-		if(hasMaterialRemaps)
-		{
-			int materialTypeIndex = faces[f].materialTypeIndex;
-            const std::string& materialName = materialManager->materialNamesByID[materialTypeIndex];
-            if(materialRemaps.count(materialName) != 0)
-			{
-				shaderMaterial = materialManager->getShaderMaterial(materialRemaps[materialName]);
-                shaderMaterialB = materialManager->getShaderMaterialB(materialRemaps[materialName]);
-			}
-			else if(defaultMaterial != "")
-			{
-				shaderMaterial = materialManager->getShaderMaterial(defaultMaterial);
-                shaderMaterialB = materialManager->getShaderMaterialB(defaultMaterial);
-			}
-		}
-
-		for(int v = 0; v < 3; v++)
-		{
-			renderVerts[f * 3 + v].pos = faces[f].verts[v];
-			renderVerts[f * 3 + v].uv = faces[f].uvs[v];
-			renderVerts[f * 3 + v].normal = vec4(faces[f].normals[v] * 127.0f, 0);
-			renderVerts[f * 3 + v].tangent = vec4(faces[f].tangents[v] * 127.0f, 0);
-			renderVerts[f * 3 + v].material = shaderMaterial;
-            renderVerts[f * 3 + v].materialB = shaderMaterialB;
-		}
-	}
-
-	std::vector<ModelEdgeDecal>& edgeDecals = model->edgeDecals;
-	if(!edgeDecals.empty())
-	{
-		buffers.edgeDecalCount = edgeDecals.size() * 6;
-		decalVerts.resize(buffers.edgeDecalCount);
-		for(int d = 0; d < edgeDecals.size(); d++)
-		{
-			for(int t = 0; t < 2; t++)
-			{
-				for(int v = 0; v < 3; v++)
-				{
-					int quadVertIndex = (v + (t == 0 ? 0 : 1)) % 4;
-					int normalIndex = (v + (t == 0 ? 0 : 1)) % 2;
-					int offsetIndex = (v + (t == 0 ? 0 : 1)) / 2;
-
-					decalVerts[d * 6 + t * 3 + v].pos = edgeDecals[d].verts[quadVertIndex];
-					decalVerts[d * 6 + t * 3 + v].normal = vec4(edgeDecals[d].normals[normalIndex] * vec3(127.0), 0);
-					decalVerts[d * 6 + t * 3 + v].faceNormal = vec4(edgeDecals[d].faceNormal * vec3(127.0), 0);
-					decalVerts[d * 6 + t * 3 + v].uv = vec3(edgeDecals[d].uvs[quadVertIndex], offsetIndex);
-					decalVerts[d * 6 + t * 3 + v].material = edgeDecals[d].shaderMaterial;
-                    decalVerts[d * 6 + t * 3 + v].materialB = edgeDecals[d].shaderMaterialB;
-					decalVerts[d * 6 + t * 3 + v].decalLocalOrigin = (edgeDecals[d].verts[0] + edgeDecals[d].verts[1]) * vec3(0.5);
-				}
-			}
-		}
-	}
-
-
-	std::string debugName = "MJCache::getModelViewBuffers_";
-	debugName = debugName + model->debugName;
-
-	VkDeviceSize vertexBufferSize = sizeof(renderVerts[0]) * renderVerts.size();
-	vulkan->setupStaticBuffer(*commandBuffer->getBuffer(), &buffers.vertexBuffer, VK_BUFFER_USAGE_VERTEX_BUFFER_BIT, vertexBufferSize, renderVerts.data(), debugName.c_str());
-
-	if(!model->edgeDecals.empty())
-	{
-		std::string debugName = "MJCache::getModelViewBuffers_edgeDecal_";
-		debugName = debugName + model->debugName;
-
-		VkDeviceSize edgeDecalBufferSize = sizeof(decalVerts[0]) * decalVerts.size();
-		vulkan->setupStaticBuffer(*commandBuffer->getBuffer(), &buffers.edgeDecalBuffer, VK_BUFFER_USAGE_VERTEX_BUFFER_BIT, edgeDecalBufferSize, decalVerts.data(), debugName.c_str());
-	}
-
-	modelViewBuffers[hash] = buffers;
-	return buffers;
 }
 
 std::vector<MJVMABuffer> MJCache::getCameraBuffer()

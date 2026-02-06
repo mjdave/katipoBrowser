@@ -152,13 +152,13 @@ void KatipoBrowser::init()
         return new TuiString(Katipo::getSavePath());
     });
     
-    
-    rootTable->setFunction("require", [rootTable](TuiTable* args, TuiRef* existingResult, TuiDebugInfo* callingDebugInfo) -> TuiRef* {
+    rootTable->getTable("file")->setFunction("getResourcePath", [](TuiTable* args, TuiRef* existingResult, TuiDebugInfo* callingDebugInfo) -> TuiRef* {
         if(args->arrayObjects.size() > 0 && args->arrayObjects[0]->type() == Tui_ref_type_STRING)
         {
-            return TuiRef::load(Katipo::getResourcePath(args->arrayObjects[0]->getStringValue()), rootTable); //override require to use our resource path, not tui's
+            const std::string& appendPath = args->arrayObjects[0]->getStringValue();
+            return new TuiString(Katipo::getResourcePath(appendPath));
         }
-        return TUI_NIL;
+        return new TuiString(Katipo::getResourcePath());
     });
     
     rootTable->setFunction("updateTimer", [](TuiTable* args, TuiRef* existingResult, TuiDebugInfo* callingDebugInfo) -> TuiRef* {
@@ -211,6 +211,29 @@ void KatipoBrowser::init()
             }
             currentSiteRootTable = Tui::initSafeRootTable(permissionCallbackFunction, siteSavePath);
             
+            currentSiteRootTable->getTable("file")->setFunction("getSavePath", [siteSavePath](TuiTable* args, TuiRef* existingResult, TuiDebugInfo* callingDebugInfo) -> TuiRef* {
+                if(args->arrayObjects.size() > 0 && args->arrayObjects[0]->type() == Tui_ref_type_STRING)
+                {
+                    const std::string& appendPath = args->arrayObjects[0]->getStringValue();
+                    return new TuiString(Katipo::getSavePath(siteSavePath + "/" + appendPath));
+                }
+                return new TuiString(Katipo::getSavePath(siteSavePath + "/"));
+            });
+            
+            currentSiteRootTable->getTable("file")->setFunction("getResourcePath", [siteSavePath](TuiTable* args, TuiRef* existingResult, TuiDebugInfo* callingDebugInfo) -> TuiRef* {
+                if(args->arrayObjects.size() > 0 && args->arrayObjects[0]->type() == Tui_ref_type_STRING)
+                {
+                    const std::string& appendPath = args->arrayObjects[0]->getStringValue();
+                    std::string siteResourcePath = siteSavePath + "/" + appendPath;
+                    if(Tui::fileExistsAtPath(siteResourcePath))
+                    {
+                        return new TuiString(siteResourcePath); //todo ensure within allowed dirs
+                    }
+                    
+                    return new TuiString(Katipo::getResourcePath(appendPath)); //todo ensure within allowed dirs
+                }
+                return new TuiString(Katipo::getResourcePath(Katipo::getSavePath(siteSavePath + "/"))); //todo ensure within allowed dirs
+            });
             
             TuiTable* sceneTable = (TuiTable*)TuiRef::load(siteSavePath + "/scripts/scene.tui", currentSiteRootTable);
             currentSiteRootTable->setTable("scene", sceneTable);
@@ -230,7 +253,6 @@ void KatipoBrowser::init()
             });
             
             currentSiteMainView = MJView::loadUnknownViewFromTable(sceneTable->getTable("mainView"), MainController::getInstance()->mainMJView->getSubViewWithID("siteContent"), true);
-            
             currentSiteScriptState = (TuiTable*)TuiRef::runScriptFile(siteSavePath + "/scripts/code.tui", currentSiteRootTable);
         }
         return TUI_NIL;

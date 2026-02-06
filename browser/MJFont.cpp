@@ -1,10 +1,3 @@
-//
-//  BMFont.cpp
-//  World
-//
-//  Created by David Frampton on 3/08/15.
-//  Copyright (c) 2015 Majic Jungle. All rights reserved.
-//
 
 #include "MJFont.h"
 
@@ -16,14 +9,13 @@
 #include <sstream>
 #include "utf8.h"
 
-MJFont::MJFont(Vulkan* vulkan, MJCache* cache, std::string fontName, bool isModel_, dvec2 offset, bool reversed_)
+MJFont::MJFont(Vulkan* vulkan, MJCache* cache, std::string fontName, dvec2 offset, bool reversed_)
 {
     kernCount = 0;
     useKern = true;
-	isModel = isModel_;
 	reversed = reversed_;
     
-    std::string fontFilename = Katipo::getResourcePath("app/common/fonts/fontFiles/" + fontName + ".fnt");
+    std::string fontFilename = Katipo::getResourcePath("app/common/fonts/fontFiles/" + fontName + ".fnt"); //todo we need to look for fonts in sites too, use the root table's getResourcePath() function
     std::string fontImageFilename = Katipo::getResourcePath("app/common/fonts/maps/" + fontName + ".png");
     
     std::ifstream stream((fontFilename).c_str());
@@ -36,18 +28,6 @@ MJFont::MJFont(Vulkan* vulkan, MJCache* cache, std::string fontName, bool isMode
     bool loadFlipped = true;
     bool repeat = false;
     texture = cache->getTextureAbsolutePath(fontImageFilename, repeat, loadFlipped, false);
-
-	if(isModel)
-	{
-		std::string fontNormalImageFilename = Katipo::getResourcePath("app/common/fonts/normalMaps/" + fontName + ".png");
-		normalTexture = cache->getTextureAbsolutePath(fontNormalImageFilename, repeat, loadFlipped, true);
-		if(!normalTexture->valid)
-		{
-			MJWarn("Failed to load normal texture for font:%s, falling back to flat default", fontName.c_str());
-			std::string defaultFontNormalImageFilename = Katipo::getResourcePath("app/common/fonts/normalMaps/default.png");
-			normalTexture = cache->getTextureAbsolutePath(defaultFontNormalImageFilename, repeat, loadFlipped, true);
-		}
-	}
     
     std::string line;
     std::string read, key, value;
@@ -338,15 +318,7 @@ FontPrintResult MJFont::print(std::vector<AttributedText>& attributedText,
 				alignedChar.charD = charD;
 
 				alignedChar.xAdvance = ((float)charD->xAdvance) / scale;
-
-				if(isModel)
-				{
-					alignedChar.material = attributedText[group].material;
-				}
-				else
-				{
-					alignedChar.color = attributedText[group].color;
-				}
+                alignedChar.color = attributedText[group].color;
 
 				if(text.size() > 1 && it != end_it)
 				{
@@ -414,35 +386,17 @@ FontPrintResult MJFont::print(std::vector<AttributedText>& attributedText,
             vec2 charMin = vec2(x + charD->xOffset / scale, y - charD->h / scale - charD->yOffset / scale);
             vec2 charMax = vec2(charMin.x + charD->w / scale, y - charD->yOffset / scale);
             
-			if(isModel)
-			{
-				ModelFontVert bl = {{charMin.x, charMin.y}, {advX*charD->x, (advY*(charD->y+charD->h))}, alignedChar.material };
-				ModelFontVert tl = {{charMin.x, charMax.y}, {advX*charD->x,  (advY*charD->y)}, alignedChar.material};
-				ModelFontVert tr = {{charMax.x, charMax.y}, {advX*(charD->x+charD->w),(advY*charD->y)}, alignedChar.material};
-				ModelFontVert br = {{charMax.x, charMin.y}, {advX*(charD->x+charD->w),(advY*(charD->y+charD->h))}, alignedChar.material };
-
-				result.modelFontVerts.push_back(bl);
-				result.modelFontVerts.push_back(tl);
-				result.modelFontVerts.push_back(tr);
-				result.modelFontVerts.push_back(tr);
-				result.modelFontVerts.push_back(br);
-				result.modelFontVerts.push_back(bl);
-			}
-			else
-			{
-            
-				FontVert bl = {{charMin.x, charMin.y}, {advX*charD->x, (advY*(charD->y+charD->h))}, alignedChar.color };
-				FontVert tl = {{charMin.x, charMax.y}, {advX*charD->x,  (advY*charD->y)}, alignedChar.color};
-				FontVert tr = {{charMax.x, charMax.y}, {advX*(charD->x+charD->w),(advY*charD->y)}, alignedChar.color};
-				FontVert br = {{charMax.x, charMin.y}, {advX*(charD->x+charD->w),(advY*(charD->y+charD->h))}, alignedChar.color };
-            
-				result.fontVerts.push_back(bl);
-				result.fontVerts.push_back(tl);
-				result.fontVerts.push_back(tr);
-				result.fontVerts.push_back(tr);
-				result.fontVerts.push_back(br);
-				result.fontVerts.push_back(bl);
-			}
+            FontVert bl = {{charMin.x, charMin.y}, {advX*charD->x, (advY*(charD->y+charD->h))}, alignedChar.color };
+            FontVert tl = {{charMin.x, charMax.y}, {advX*charD->x,  (advY*charD->y)}, alignedChar.color};
+            FontVert tr = {{charMax.x, charMax.y}, {advX*(charD->x+charD->w),(advY*charD->y)}, alignedChar.color};
+            FontVert br = {{charMax.x, charMin.y}, {advX*(charD->x+charD->w),(advY*(charD->y+charD->h))}, alignedChar.color };
+        
+            result.fontVerts.push_back(bl);
+            result.fontVerts.push_back(tl);
+            result.fontVerts.push_back(tr);
+            result.fontVerts.push_back(tr);
+            result.fontVerts.push_back(br);
+            result.fontVerts.push_back(bl);
             
             x += alignedChar.xAdvance;
         }

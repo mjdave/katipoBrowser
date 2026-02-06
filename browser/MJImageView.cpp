@@ -1,10 +1,3 @@
-//
-//  MJTextView.cpp
-//  World
-//
-//  Created by David Frampton on 4/08/15.
-//  Copyright (c) 2015 Majic Jungle. All rights reserved.
-//
 
 #include "MJImageView.h"
 #include "TuiFileUtils.h"
@@ -223,10 +216,6 @@ void MJImageView::loadFromTable(TuiTable* table, bool isRoot)
     {
         stateTable->set("path", table->objectsByStringKey["path"]);
     }
-    if(table->hasKey("path"))
-    {
-        stateTable->set("path", table->objectsByStringKey["path"]);
-    }
     if(table->hasKey("shaderUserData"))
     {
         stateTable->set("shaderUserData", table->objectsByStringKey["shaderUserData"]);
@@ -248,7 +237,7 @@ void MJImageView::tableKeyChanged(const std::string& key, TuiRef* value)
     }
     else if(key == "path")
     {
-        setImageTexture(cache->getTexture(stateTable->getString("path"), false, false, true));
+        setImageTexture(cache->getTexture(stateTable->getString("path"), rootTable, false, false, true));
     }
     else if(key == "crop")
     {

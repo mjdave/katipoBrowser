@@ -57,6 +57,7 @@ public:
     WindowInfo* windowInfo;
     
     TuiTable* stateTable = nullptr;
+    TuiTable* rootTable = nullptr;
     
     MJView* parentView;
     std::vector<MJView*> subviews;

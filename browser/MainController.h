@@ -23,7 +23,6 @@ class MJCache;
 class MJAudio;
 class Vulkan;
 class GCommandBuffer;
-class MaterialManager;
 class MJRenderTarget;
 class Camera;
 class MJDrawQuad;
@@ -51,7 +50,6 @@ public:
 
     MJView* mainMJView = nullptr;
     MJCache* cache;
-    MaterialManager* materialManager;
     WindowInfo* windowInfo;
 
     Vulkan* vulkan;

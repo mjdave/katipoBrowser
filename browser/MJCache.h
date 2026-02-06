@@ -14,16 +14,14 @@
 
 #include "MJImageTexture.h"
 #include "MJFont.h"
-#include "Model.h"
 
 #include "Vulkan.h"
 #include "GPipeline.h"
 
-#include "MaterialManager.h"
-
 class Database;
 class Camera;
 class MJDataTexture;
+class TuiTable;
 
 struct CachedModelViewBuffers {
 	MJVMABuffer vertexBuffer;
@@ -47,7 +45,6 @@ class MJCache {
     
     std::map<std::string, MJImageTexture*> textures;
     std::map<std::string, MJFont*> fonts;
-    std::map<std::string, Model*> models;
     
     int modelIndexCounter = 0;
 	std::map<std::string, std::map<int, GPipeline*>> pipelines;
@@ -67,19 +64,15 @@ class MJCache {
 	std::set <std::string> reversedFonts;
     
 public:
-    std::map<int, Model*> modelsByIndex;
-
     Vulkan* vulkan;
     Database* appDatabase;
 
-    MaterialManager* materialManager;
 	Camera* camera;
 	MJDataTexture* noiseTexture;
 
     
 public:
     MJCache(Vulkan* vulkan_,
-        MaterialManager* materialManager_, 
         Database* appDatabase_,
 		Camera* camera_,
 		MJDataTexture* noiseTexture_);
@@ -88,25 +81,15 @@ public:
 	void recordStarted(VkCommandBuffer commandBuffer_);
 	void recordEnded();
 
-	MJImageTexture* getTextureWithOptions(std::string name, MJImageTextureOptions options, std::string alphaChannel_ = "", bool disableCache = false);
+	MJImageTexture* getTextureWithOptions(std::string name, TuiTable* rootTable, MJImageTextureOptions options, std::string alphaChannel_ = "", bool disableCache = false);
 	MJImageTexture* getTextureAbsolutePathWithOptions(std::string name, MJImageTextureOptions options, std::string alphaChannel_ = "", bool disableCache = false);
-    MJImageTexture* getTexture(std::string name, bool repeat = false, bool loadFlipped = false, bool mipmap_ = false, bool disableCache = false);
+    MJImageTexture* getTexture(std::string name, TuiTable* rootTable, bool repeat = false, bool loadFlipped = false, bool mipmap_ = false, bool disableCache = false);
 	MJImageTexture* getTextureAbsolutePath(std::string path, bool repeat = false, bool loadFlipped = false, bool mipmap_ = false, bool disableCache = false);
     
-    MJFont* getFont(std::string name, int pointSize, double* resultScale, bool isModel);
-
-    Model* getModel(const std::string& modelPath);
-	void cacheModel(const std::string& modelPath);
-    
-    Model* modelForModelIndex(int modelIndex);
+    MJFont* getFont(std::string name, int pointSize, double* resultScale);
 
 	void setFontOffset(std::string name, dvec2 offset);
 	void setFontReversed(std::string name, bool reversed);
-
-	CachedModelViewBuffers getModelViewBuffers(GCommandBuffer* commandBuffer,
-		Model* model,
-		std::map<std::string, std::string>& materialRemaps, 
-                                               const std::string& defualtMaterial);
 
 	std::vector<MJVMABuffer> getCameraBuffer();
 

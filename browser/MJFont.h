@@ -1,10 +1,3 @@
-//
-//  BMFont.h
-//  World
-//
-//  Created by David Frampton on 3/08/15.
-//  Copyright (c) 2015 Majic Jungle. All rights reserved.
-//
 
 #ifndef __World__BMFont__
 #define __World__BMFont__
@@ -60,45 +53,9 @@ struct FontVert {
     }
 };
 
-struct ModelFontVert {
-	vec2 pos;
-	vec2 tex;
-	u8vec4 material;
 
-	static std::vector<VkVertexInputBindingDescription> getBindingDescriptions() {
-		VkVertexInputBindingDescription bindingDescription = {};
-		bindingDescription.binding = 0;
-		bindingDescription.stride = sizeof(ModelFontVert);
-		bindingDescription.inputRate = VK_VERTEX_INPUT_RATE_VERTEX;
-
-		return std::vector<VkVertexInputBindingDescription>(1, bindingDescription);
-	}
-
-	static std::vector<VkVertexInputAttributeDescription> getAttributeDescriptions() {
-		std::vector<VkVertexInputAttributeDescription> attributeDescriptions(3);
-
-		attributeDescriptions[0].binding = 0;
-		attributeDescriptions[0].location = 0;
-		attributeDescriptions[0].format = VK_FORMAT_R32G32_SFLOAT;
-		attributeDescriptions[0].offset = offsetof(ModelFontVert, pos);
-
-		attributeDescriptions[1].binding = 0;
-		attributeDescriptions[1].location = 1;
-		attributeDescriptions[1].format = VK_FORMAT_R32G32_SFLOAT;
-		attributeDescriptions[1].offset = offsetof(ModelFontVert, tex);
-
-		attributeDescriptions[2].binding = 0;
-		attributeDescriptions[2].location = 2;
-		attributeDescriptions[2].format = VK_FORMAT_R8G8B8A8_UINT;
-		attributeDescriptions[2].offset = offsetof(ModelFontVert, material);
-
-		return attributeDescriptions;
-	}
-};
-
-struct FontPrintResult { //huge hack but fuck C++ honestly. I aint making a subclass for this.
+struct FontPrintResult {
 	std::vector<FontVert> fontVerts;
-	std::vector<ModelFontVert> modelFontVerts;
 };
 
 
@@ -166,11 +123,10 @@ class MJFont {
 public:
     
     MJImageTexture* texture;
-	MJImageTexture* normalTexture;
     
     int lineHeight;
     
-    MJFont(Vulkan* vulkan, MJCache* cache, std::string fontName, bool isModel_ = false, dvec2 offset = dvec2(0.0,0.0), bool reversed_ = false);
+    MJFont(Vulkan* vulkan, MJCache* cache, std::string fontName, dvec2 offset = dvec2(0.0,0.0), bool reversed_ = false);
     ~MJFont();
     
 	FontPrintResult print(std::vector<AttributedText>& attributedText,
@@ -217,7 +173,6 @@ private:
     int kernCount;
     bool useKern;
 
-	bool isModel = false;
 	bool reversed = false;
     
     int getKerningPair(int first, int second);

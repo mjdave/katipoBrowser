@@ -25,16 +25,16 @@ siteContentBackground.update = function(dt)
     }
 }
 
-siteContent = siteContentBackground.addView(defaultSiteScene.mainView)
-siteContent.hidden = true
+defaultSiteContent = siteContentBackground.addView(defaultSiteScene.mainView)
+defaultSiteContent.hidden = true
 
-pageTitle = siteContent.getView("pageTitle")
-pageBody = siteContent.getView("pageBody")
+pageTitle = defaultSiteContent.getView("pageTitle")
+pageBody = defaultSiteContent.getView("pageBody")
 
 untrustedSiteCodePermissionFunction = function(functionName, args, hasPermissionCallback)
 {
-    print("Warning: host is using a protected tui function:", functionName, ", we need to check client settings or ask if this is OK")
-    hasPermissionCallback(true)
+    print("Warning: host is attempting to use protected tui function:\"", functionName, "\" with args:", args, "\nTODO: Katipo needs to check client settings or ask if this is OK, but for now it is not OK")
+    hasPermissionCallback(false)
 }
 
 getCallback = function(result, hostID)
@@ -43,7 +43,7 @@ getCallback = function(result, hostID)
     if(!result or result.status != "ok")
     {
         siteContentBackground.goalColor = vec4(0.2,0.0,0.0,0.6)
-        siteContent.hidden = false
+        defaultSiteContent.hidden = false
 
         pageTitle.text = result.status
         pageBody.text = result.message
@@ -51,7 +51,7 @@ getCallback = function(result, hostID)
     else if(result.pageTitle)
     {
         siteContentBackground.goalColor = vec4(0.0,0.0,0.2,0.4)
-        siteContent.hidden = false
+        defaultSiteContent.hidden = false
 
         pageTitle.text = result.pageTitle
 
@@ -67,10 +67,7 @@ getCallback = function(result, hostID)
     else if(result.siteData)
     {
         siteContentBackground.goalColor = vec4(0.0,0.2,0.2,0.4)
-        siteContent.hidden = false
-
-        pageTitle.text = "loading..."
-        pageBody.text = ""
+        defaultSiteContent.hidden = true
 
         siteSavePath = file.getSavePath("browserSites/" + hostID + "/")
         scriptsDirPath = siteSavePath + "scripts/"
@@ -107,11 +104,20 @@ getCallback = function(result, hostID)
 
             katipo.loadSite(siteSavePath, untrustedSiteCodePermissionFunction)
         }
+        else
+        {
+            print("warning: no site code found")
+            defaultSiteContent.hidden = false
+            pageTitle.text = "no site code found"
+            pageBody.text = ""
+        }
     }
     else
     {
         print("warning: unhandled result.")
-        siteContent.hidden = true
+        defaultSiteContent.hidden = false
+        pageTitle.text = "unhandled result"
+        pageBody.text = ""
     }
 }
 

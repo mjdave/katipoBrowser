@@ -1695,7 +1695,6 @@ void MJView::loadFromFile(std::string filePath, TuiTable* parentTable)
     }
 }
 
-
 void MJView::setRelativePosition(std::string alignmentX, std::string alignmentY)
 {
     if(!alignmentX.empty() || !alignmentY.empty())
@@ -1747,6 +1746,11 @@ void MJView::loadFromTable(TuiTable* table, bool isRoot)
 {
     //MJLog("MJView::loadFromTable:%s", table->getDebugString().c_str());
     
+    rootTable = table;
+    while(rootTable->parentTable && rootTable->parentTable != table)
+    {
+        rootTable = rootTable->parentTable;
+    }
     
     if(table->hasKey("layoutParentID"))
     {

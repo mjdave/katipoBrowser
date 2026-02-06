@@ -1,10 +1,3 @@
-//
-//  EventManager.cpp
-//  World
-//
-//  Created by David Frampton on 20/10/17.
-//  Copyright © 2017 Majic Jungle. All rights reserved.
-//
 
 #include "EventManager.h"
 #include "MJLog.h"
@@ -81,12 +74,6 @@ void EventManager::init(MainController* mainController_,
     textEntryActive = false;
     
     runLoopRunning = true;
-	Tui::writeToFile(Katipo::getSavePath("running.txt"), "true");
-	if(!Tui::fileExistsAtPath(Katipo::getSavePath("running.txt")))
-	{
-		SDL_ShowSimpleMessageBox(SDL_MESSAGEBOX_ERROR,"Failed to write to save files location", "You might be able to work around this by running the applications as an administrator, or by fixing issues with file permissions.",NULL);
-		exit(0);
-	}
     
     //sdlTimer = SDL_AddTimer(1, gameLoopTimer, this);
     timer = new Timer();
@@ -426,10 +413,9 @@ void EventManager::handleEvent(SDL_Event* event)
     case SDL_EVENT_QUIT:
         {
             needsToExit = true;
-            Tui::removeFile(Katipo::getSavePath("running.txt"));
             return;
-            break;
         }
+        break;
     case SDL_EVENT_WINDOW_FOCUS_LOST:
         mainController->appLostFocus();
         runLoopRunning = false;

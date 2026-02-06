@@ -1,10 +1,4 @@
-//
-//  MainController.cpp
-//  World
-//
-//  Created by David Frampton on 1/12/14.
-//  Copyright (c) 2014 Majic Jungle. All rights reserved.
-//
+
 
 #include "MainController.h"
 //#include "MJAtmosphere.h"
@@ -36,8 +30,6 @@
 
 #include "DatabaseEnvironment.h"
 #include "Database.h"
-
-#include "Model.h" //debug
 
 #include "MJRenderTarget.h"
 #include "Vulkan.h"
@@ -952,11 +944,6 @@ void MainController::applicationWillTerminate()
 void MainController::unload()
 {
     vkDeviceWaitIdle(vulkan->device);
-    if(materialManager)
-    {
-        delete materialManager;
-        materialManager = nullptr;
-    }
     
     if(cache)
     {
@@ -1026,12 +1013,9 @@ void MainController::load()
     MJLog("nested table:%s", parentTable->getDebugString().c_str());*/
     
    // exit(0);
-
-    
-	materialManager = new MaterialManager();
     
     
-    cache = new MJCache(vulkan, materialManager, appDatabase, camera, noiseTexture);
+    cache = new MJCache(vulkan, appDatabase, camera, noiseTexture);
     
     //eventManager->setUpLuaEnvironment();
 //    audio->setUpLuaEnvironment();
