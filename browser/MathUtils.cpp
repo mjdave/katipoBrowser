@@ -1,10 +1,3 @@
-//
-//  MathUtils.cpp
-//  World
-//
-//  Created by David Frampton on 16/12/14.
-//  Copyright (c) 2014 Majic Jungle. All rights reserved.
-//
 
 #include "MathUtils.h"
 

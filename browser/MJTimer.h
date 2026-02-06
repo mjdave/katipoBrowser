@@ -1,10 +1,3 @@
-//
-//  MJTimer.h
-//  Ambience
-//
-//  Created by David Frampton on 12/06/18.
-//Copyright © 2018 Majic Jungle. All rights reserved.
-//
 
 #ifndef MJTimer_h
 #define MJTimer_h

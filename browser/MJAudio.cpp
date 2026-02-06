@@ -1,10 +1,3 @@
-//
-//  MJAudio.cpp
-//  Ambience
-//
-//  Created by David Frampton on 8/06/18.
-//Copyright © 2018 Majic Jungle. All rights reserved.
-//
 
 #include "MJAudio.h"
 #include "MJSound2D.h"
@@ -18,7 +11,7 @@
 #include "MJAudioApple.h"
 #endif
 
-static const SDL_AudioSpec audioSpec = {SDL_AUDIO_S16, 2, 44100};
+//static const SDL_AudioSpec audioSpec = {SDL_AUDIO_S16, 2, 44100};
 
 MJAudio::MJAudio()
 {
@@ -326,56 +319,6 @@ void MJAudio::deleteSound(MJSound* sound)
 		}
 	}
 }
-/*
-void MJAudio::setUpLuaEnvironment()
-{
-    luabridge::getGlobalNamespace(luaEnvironment->state)
-    .beginClass<MJAudio>("MJAudio")
-    
-    .addProperty("overallVolume", &MJAudio::getOverallVolume, &MJAudio::setOverallVolume)
-    .addProperty("musicVolume", &MJAudio::getMusicVolume, &MJAudio::setMusicVolume)
-    .addProperty("soundVolume", &MJAudio::getSoundVolume, &MJAudio::setSoundVolume)
-    
-    .addFunction("loadSound2D", &MJAudio::loadSound2D)
-    .addFunction("loadSound3D", &MJAudio::loadSound3D)
-    .addFunction("loadSong", &MJAudio::loadSong)
-
-	.addFunction("getQueuedOrPlayingSong", &MJAudio::getQueuedOrPlayingSong)
-	.addFunction("fadeOutAnyCurrentSong", &MJAudio::fadeOutAnyCurrentSong)
-    .endClass()
-    
-    
-    .beginClass<MJSound>("MJSound")
-    .addFunction("setLooping", &MJSound::setLooping)
-    .addFunction("stop", &MJSound::stop)
-	.addFunction("setPaused", &MJSound::setPaused)
-	.addFunction("setPitch", &MJSound::setPitch)
-	.addFunction("setLowPassFilter", &MJSound::setLowPassFilter)
-	.addFunction("setVolume", &MJSound::setVolume)
-	.addFunction("setPriority", &MJSound::setPriority)
-
-		
-		
-		
-	.addProperty("completionCallback", &MJSound::getcompletionLuaFunction, &MJSound::setcompletionLuaFunction)
-    .endClass()
-    
-    .deriveClass<MJSound2D, MJSound>("MJSound2D")
-    .addFunction("play", &MJSound2D::play)
-    .endClass()
-    
-    .deriveClass<MJSound3D, MJSound>("MJSound3D")
-    .addFunction("play", &MJSound3D::play)
-	.addFunction("setPos", &MJSound3D::setPos)
-    .endClass()
-    
-    .deriveClass<MJSong, MJSound>("MJSong")
-    .addFunction("play", &MJSong::play)
-    .endClass();
-    
-    luaModule = luaEnvironment->loadLuaModule("mainThread/audio");
-    luaModule->callFunction("setBridge", this);
-}*/
 
 void MJAudio::appLostFocus()
 {
@@ -433,7 +376,6 @@ MJSound2D* MJAudio::loadSound2D(std::string name, bool loadInBackground)
     {
         return sounds2D[name];
     }
-	//std::string path = modManager->getModdedResourcePath(name);
     MJSound2D* sound = new MJSound2D(this, name, loadInBackground);
     sounds2D[name] = sound;
     return sound;
@@ -445,7 +387,6 @@ MJSound3D* MJAudio::loadSound3D(std::string name, bool loadInBackground)
     {
         return sounds3D[name];
     }
-	//std::string path = modManager->getModdedResourcePath(name);
     MJSound3D* sound = new MJSound3D(this, name, loadInBackground);
     sounds3D[name] = sound;
     return sound;
@@ -458,7 +399,6 @@ MJSong* MJAudio::loadSong(std::string name, bool loadInBackground)
     {
         return songs[name];
     }
-	//std::string path = modManager->getModdedResourcePath(name);
     MJSong* song = new MJSong(this, name, loadInBackground);
     songs[name] = song;
     return song;
@@ -550,28 +490,7 @@ void MJAudio::update()
 			hasQueuedSong = false;
 		}
 	}
-    /*FMOD_RESULT result;
-    
-    result = system->update();
-    ERRCHECK(result);*/
 }
-
-
-/*LuaRef MJAudio::getQueuedOrPlayingSong()
-{
-	LuaRef result(luaEnvironment->state);
-	for(auto const& iter : songs)
-	{
-		MJSong* song = iter.second;
-		if(song->playing() || song->paused() || (hasQueuedSong && song == queuedSong.song))
-		{
-			result = iter.first;
-			return result;
-		}
-	}
-	return result;
-}*/
-
 
 void MJAudio::fadeOutAnyCurrentSong()
 {
@@ -604,20 +523,12 @@ void MJAudio::updatePlayerPos(dvec3 playerPos_,
         {
             setOrigin(playerPos_);
         }
-        
-        /*FMOD_VECTOR posVec = tofmodVec(worldPosToLocal(playerPos_));
-        FMOD_VECTOR dirVec = tofmodVec(playerDirection_);
-        FMOD_VECTOR upVec = tofmodVec(playerUp);
-        
-        system->set3DListenerAttributes(0, &posVec, nullptr, &dirVec, &upVec);*/
     }
 }
 
 void MJAudio::setOrigin(dvec3 origin_)
 {
     origin = origin_;
-    //FMOD_VECTOR posVec = tofmodVec(worldPosToLocal(playerPos));
-    //system->set3DListenerAttributes(0, &posVec, nullptr, nullptr, nullptr);
     
     for(auto const& iter : sounds3D)
     {

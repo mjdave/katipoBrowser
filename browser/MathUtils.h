@@ -1,10 +1,3 @@
-//
-//  MathUtils.h
-//  World
-//
-//  Created by David Frampton on 16/12/14.
-//  Copyright (c) 2014 Majic Jungle. All rights reserved.
-//
 
 #ifndef __World__MathUtils__
 #define __World__MathUtils__
@@ -431,46 +424,6 @@ inline tquat<T, Q> animationSlerp(tquat<T, Q> const& x, tquat<T, Q> const& y, T 
 	}
 }
 
-
-/*inline void q_sort(std::vector<double>& numbers, int left, int right, std::vector<unsigned int>& orderedIndices) // sorts the array, as well as returning the sorted indices
-{
-    float pivot;
-    int l_hold, r_hold;
-    
-    l_hold = left;
-    r_hold = right;
-    pivot = numbers[left];
-    int pivotIndex = orderedIndices[left];
-    while (left < right)
-    {
-        while ((numbers[right] >= pivot) && (left < right))
-            right--;
-        if (left != right)
-        {
-            numbers[left] = numbers[right];
-            orderedIndices[left] = orderedIndices[right];
-            left++;
-        }
-        while ((numbers[left] <= pivot) && (left < right))
-            left++;
-        if (left != right)
-        {
-            numbers[right] = numbers[left];
-            orderedIndices[right] = orderedIndices[left];
-            right--;
-        }
-    }
-    numbers[left] = pivot;
-    orderedIndices[left] = pivotIndex;
-    pivot = (float)left;
-    left = l_hold;
-    right = r_hold;
-    if (left < pivot)
-        q_sort(numbers, left, (int)pivot-1, orderedIndices);
-    if (right > pivot)
-        q_sort(numbers, (int)pivot+1, right, orderedIndices);
-}*/
-
 inline void quickSort(std::vector<double>& numbers, std::vector<unsigned int>& orderedIndices, int low, int high)
 {
     int i = low;
@@ -693,28 +646,6 @@ inline bool intersectRayOOB(const dvec3& ray_origin,
 	return true;
 }
 
-/*
-function mjm.raySphereIntersectionDistance(rayOrigin, rayDir, sphereCenter, sphereRadiusSquered)
-local diff = sphereCenter - rayOrigin
-local t0 = diff.x * rayDir.x + diff.y * rayDir.y + diff.z * rayDir.z
-local dSquared = diff.x * diff.x + diff.y * diff.y + diff.z * diff.z - t0 * t0
-if dSquared > sphereRadiusSquered then
-return nil
-end
-local t1 = math.sqrt(sphereRadiusSquered - dSquared)
-local intersctionDistance = nil
-if t0 > t1 + epsilon then
-intersctionDistance = t0 - t1
-else
-intersctionDistance = t0 + t1
-end
-
-if intersctionDistance > epsilon then
-return intersctionDistance
-end
-
-return nil
-*/
 inline bool raySphereIntersectionDistance(const dvec3& rayOrigin, const dvec3& rayDir, const dvec3& sphereCenter, double sphereRadiusSquered, double* intersectionDistance)
 {
 	dvec3 diff = sphereCenter - rayOrigin;

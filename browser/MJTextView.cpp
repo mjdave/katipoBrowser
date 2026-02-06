@@ -1,10 +1,3 @@
-//
-//  MJTextView.cpp
-//  World
-//
-//  Created by David Frampton on 4/08/15.
-//  Copyright (c) 2015 Majic Jungle. All rights reserved.
-//
 
 #include "MJTextView.h"
 #include "TuiFileUtils.h"

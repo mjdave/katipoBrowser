@@ -1,11 +1,4 @@
-//
-//  MJSound.h
-//  Ambience
-//
-//  Created by David Frampton on 11/06/18.
-//Copyright © 2018 Majic Jungle. All rights reserved.
-//
-
+//todo this class is a stub
 #ifndef MJSound_h
 #define MJSound_h
 

@@ -182,7 +182,6 @@ void KatipoBrowser::init()
     
     //rootTable->setVec2("screenSize", dvec2(MainController::getInstance()->windowInfo->screenWidth, MainController::getInstance()->windowInfo->screenHeight));
     
-    
     EventManager::getInstance()->bindTui(rootTable);
     MJAudio::getInstance()->bindTui(rootTable);
     
@@ -190,7 +189,7 @@ void KatipoBrowser::init()
     rootTable->set("katipo", katipoTable);
     katipoTable->release();
     
-    //katipo.runUntrustedSiteCode(scriptsDirPath + "/code.tui", untrustedSiteCodePermissionFunction, siteSavePath)
+    //katipo.loadSite(siteSavePath, untrustedSiteCodePermissionFunction)
     katipoTable->setFunction("loadSite", [this](TuiTable* args, TuiRef* existingResult, TuiDebugInfo* callingDebugInfo) -> TuiRef* {
         if(currentSiteRootTable)
         {

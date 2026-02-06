@@ -1,10 +1,3 @@
-//
-//  WindowInfo.h
-//  Ambience
-//
-//  Created by David Frampton on 26/07/18.
-//Copyright © 2018 Majic Jungle. All rights reserved.
-//
 
 #ifndef WindowInfo_h
 #define WindowInfo_h

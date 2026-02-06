@@ -1,10 +1,3 @@
-//
-//  MJAudio.cpp
-//  Ambience
-//
-//  Created by David Frampton on 8/06/18.
-//Copyright © 2018 Majic Jungle. All rights reserved.
-//
 
 #include "MJAudioAppleDelegate.h"
 #import <AVFoundation/AVFoundation.h>

@@ -28,8 +28,6 @@ public:
     TuiTable* currentSiteScriptState = nullptr;
     
     uint32_t updateTimerID;
-    
-   // std::map<int, std::vector<TuiCallback>> keyCallbackFunctionArraysByKeyCodes;
 
 public:
     

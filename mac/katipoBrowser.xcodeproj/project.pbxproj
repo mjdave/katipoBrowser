@@ -9,7 +9,6 @@
 /* Begin PBXBuildFile section */
 		5B1384B12E3A08F900AEF9AD /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5B1384B02E3A08F900AEF9AD /* AVFoundation.framework */; };
 		5B1AD7912E6069B6005D15BD /* CoreMedia.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5B1AD7902E6069B6005D15BD /* CoreMedia.framework */; };
-		5B49FD272F2C2019007C1980 /* KatipoBrowser.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5B49FD262F2C2019007C1980 /* KatipoBrowser.cpp */; };
 		5B49FD2A2F2C21BB007C1980 /* SDL3.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5B49FD282F2C21BB007C1980 /* SDL3.framework */; };
 		5B49FD2B2F2C21BB007C1980 /* SDL3_mixer.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5B49FD292F2C21BB007C1980 /* SDL3_mixer.framework */; };
 		5B49FD2D2F2C21CA007C1980 /* MoltenVK.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5B49FD2C2F2C21CA007C1980 /* MoltenVK.xcframework */; };
@@ -89,6 +88,13 @@
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
+		5B04013F2F366CE700097555 /* Exceptions for "katipoBrowser" folder in "Katipo Browser" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				Info.plist,
+			);
+			target = 5BFDBD002CC78B1E00247D8D /* Katipo Browser */;
+		};
 		5B49FDFE2F2C6CB1007C1980 /* Exceptions for "core" folder in "Katipo Browser" target */ = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
@@ -101,6 +107,9 @@
 /* Begin PBXFileSystemSynchronizedRootGroup section */
 		5B2E9B162DE302DF00B8DF1E /* katipoBrowser */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				5B04013F2F366CE700097555 /* Exceptions for "katipoBrowser" folder in "Katipo Browser" target */,
+			);
 			path = katipoBrowser;
 			sourceTree = "<group>";
 		};
@@ -291,7 +300,6 @@
 				5BF1037E2F3004410012FC48 /* host.c in Sources */,
 				5BF1037F2F3004410012FC48 /* packet.c in Sources */,
 				5BF103802F3004410012FC48 /* peer.c in Sources */,
-				5B49FD272F2C2019007C1980 /* KatipoBrowser.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -449,7 +457,6 @@
 				);
 				LIBRARY_SEARCH_PATHS = (
 					"\"$(SRCROOT)/../ThirdParty\"",
-					"\"$(SRCROOT)/../../../VulkanSDK/1.3.261.1/MoltenVK/MoltenVK.xcframework/macos-arm64_x86_64\"",
 					"\"$(SRCROOT)/../katipo/thirdParty/libsodium/macos/lib\"",
 				);
 				MARKETING_VERSION = 1.0;
@@ -509,7 +516,6 @@
 				);
 				LIBRARY_SEARCH_PATHS = (
 					"\"$(SRCROOT)/../ThirdParty\"",
-					"\"$(SRCROOT)/../../../VulkanSDK/1.3.261.1/MoltenVK/MoltenVK.xcframework/macos-arm64_x86_64\"",
 					"\"$(SRCROOT)/../katipo/thirdParty/libsodium/macos/lib\"",
 				);
 				MARKETING_VERSION = 1.0;

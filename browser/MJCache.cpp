@@ -1,10 +1,3 @@
-//
-//  MJCache.cpp
-//  World
-//
-//  Created by David Frampton on 4/08/15.
-//  Copyright (c) 2015 Majic Jungle. All rights reserved.
-//
 
 #include "MJCache.h"
 #include "TuiScript.h"
@@ -17,13 +10,11 @@
 
 MJCache::MJCache(Vulkan* vulkan_,
     Database* appDatabase_,
-	Camera* camera_,
-	MJDataTexture* noiseTexture_)
+	Camera* camera_)
 {
     vulkan = vulkan_;
     appDatabase = appDatabase_;
 	camera = camera_;
-	noiseTexture = noiseTexture_;
 
 	//debugTimer = new Timer();
 
@@ -60,37 +51,6 @@ MJCache::~MJCache()
     {
         vulkan->destroyDescriptorPool(imageDrawQuadDescriptorSetsI.second.descriptorPool);
     }
-
-	for(auto const& modelViewBufferI : modelViewBuffers)
-	{
-		if(modelViewBufferI.second.vertCount > 0)
-		{
-			MJVMABuffer vertBuffer = modelViewBufferI.second.vertexBuffer;
-			vulkan->destroySingleBuffer(vertBuffer);
-			
-		}
-		if(modelViewBufferI.second.edgeDecalCount > 0)
-		{
-			MJVMABuffer edgeDecalBuffer = modelViewBufferI.second.edgeDecalBuffer;
-			vulkan->destroySingleBuffer(edgeDecalBuffer);
-
-		}
-	}
-	for(auto const& modelViewBufferI : gameObjectViewBuffers)
-	{
-		if(modelViewBufferI.second.vertCount > 0)
-		{
-			MJVMABuffer vertBuffer = modelViewBufferI.second.vertexBuffer;
-			vulkan->destroySingleBuffer(vertBuffer);
-
-		}
-		if(modelViewBufferI.second.edgeDecalCount > 0)
-		{
-			MJVMABuffer edgeDecalBuffer = modelViewBufferI.second.edgeDecalBuffer;
-			vulkan->destroySingleBuffer(edgeDecalBuffer);
-
-		}
-	}
 }
 
 void MJCache::loadUnloadedTextures()

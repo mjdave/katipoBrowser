@@ -1,10 +1,4 @@
-//
-//  MJView.hpp
-//  World
-//
-//  Created by David Frampton on 5/10/17.
-//  Copyright © 2017 Majic Jungle. All rights reserved.
-//
+
 
 #ifndef MJView_hpp
 #define MJView_hpp

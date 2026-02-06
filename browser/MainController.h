@@ -60,7 +60,7 @@ public:
     MainController();
     ~MainController();
     
-    void init(std::string windowTitle = "Katipo Browser", std::string organizationName = "majicjungle", std::string appTitle = "katipoBrowser");
+    void init(std::string windowTitle = "Katipo Browser", std::string organizationName = "katipo", std::string appTitle = "katipoBrowser");
     
     void applicationWillTerminate();
 
@@ -109,8 +109,6 @@ public:
 protected:
 	SDL_Window * displayWindow;
     //MJAudio* audio;
-
-	MJDataTexture* noiseTexture;
     
     DatabaseEnvironment* appDatabaseEnvironment;
     Database* appDatabase;
@@ -142,7 +140,6 @@ protected:
     bool animating;
 
     Timer* renderTimer;
-	Timer* debugTimer;
     
 private:
 

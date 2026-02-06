@@ -1,10 +1,3 @@
-//
-//  DrawMesh.h
-//  World
-//
-//  Created by David Frampton on 1/09/15.
-//  Copyright (c) 2015 Majic Jungle. All rights reserved.
-//
 
 #ifndef __World__MJ_DRAWABLE__
 #define __World__MJ_DRAWABLE__

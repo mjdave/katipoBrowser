@@ -1,11 +1,4 @@
-//
-//  MJAudio.h
-//  Ambience
-//
-//  Created by David Frampton on 8/06/18.
-//Copyright © 2018 Majic Jungle. All rights reserved.
-//
-
+//Todo the audio system is very much a WIP
 #ifndef MJAudio_h
 #define MJAudio_h
 

@@ -1,10 +1,4 @@
-//
-//  Database.h
-//  Ambience
-//
-//  Created by David Frampton on 31/10/17.
-//Copyright © 2017 Majic Jungle. All rights reserved.
-//
+
 #ifdef _MSC_VER
 #define _WINSOCKAPI_    // stops windows.h including winsock.h
 #define NOMINMAX

@@ -1,10 +1,3 @@
-//
-//  MJSong.cpp
-//  Ambience
-//
-//  Created by David Frampton on 8/06/18.
-//Copyright © 2018 Majic Jungle. All rights reserved.
-//
 
 #include "MJSound.h"
 #include "MJAudio.h"

@@ -1,10 +1,3 @@
-//
-//  Database.cpp
-//  Ambience
-//
-//  Created by David Frampton on 31/10/17.
-//Copyright © 2017 Majic Jungle. All rights reserved.
-//
 
 #include "VulkanMemoryThread.h"
 

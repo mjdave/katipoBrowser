@@ -1,10 +1,3 @@
-//
-//  MJCache.h
-//  World
-//
-//  Created by David Frampton on 4/08/15.
-//  Copyright (c) 2015 Majic Jungle. All rights reserved.
-//
 
 #ifndef __World__MJCache__
 #define __World__MJCache__
@@ -22,13 +15,6 @@ class Database;
 class Camera;
 class MJDataTexture;
 class TuiTable;
-
-struct CachedModelViewBuffers {
-	MJVMABuffer vertexBuffer;
-	int vertCount = 0;
-	MJVMABuffer edgeDecalBuffer;
-	int edgeDecalCount = 0;
-};
 
 struct DrawQuadDescriptorSets {
     VkDescriptorPool descriptorPool;
@@ -49,9 +35,6 @@ class MJCache {
     int modelIndexCounter = 0;
 	std::map<std::string, std::map<int, GPipeline*>> pipelines;
 
-	std::map<std::string, CachedModelViewBuffers> modelViewBuffers;
-	std::map<std::string, CachedModelViewBuffers> gameObjectViewBuffers;
-
     std::map<MJImageTexture*, DrawQuadDescriptorSets> imageDrawQuadDescriptorSets;
 
     std::set<std::string> availableFontFileNames;
@@ -68,14 +51,12 @@ public:
     Database* appDatabase;
 
 	Camera* camera;
-	MJDataTexture* noiseTexture;
 
     
 public:
     MJCache(Vulkan* vulkan_,
         Database* appDatabase_,
-		Camera* camera_,
-		MJDataTexture* noiseTexture_);
+		Camera* camera_);
     ~MJCache();
 
 	void recordStarted(VkCommandBuffer commandBuffer_);

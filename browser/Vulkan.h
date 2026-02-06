@@ -8,11 +8,6 @@
 #include <windows.h>
 #endif
 
-
-/*#ifdef __APPLE__
-#include <MoltenVK/mvk_vulkan.h>
-#endif*/
-
 #include "SDL.h"
 #if IS_SERVER
 struct Vulkan {};

@@ -1,10 +1,3 @@
-//
-//  MJSound.h
-//  Ambience
-//
-//  Created by David Frampton on 8/06/18.
-//Copyright © 2018 Majic Jungle. All rights reserved.
-//
 
 #ifndef MJSound2D_h
 #define MJSound2D_h
