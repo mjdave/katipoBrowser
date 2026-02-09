@@ -20,8 +20,14 @@
 #include "MJView.h"
 
 
-void doGet(ClientNetInterface* netInterface, const std::string& remoteURL, const std::string& hostName, TuiTable* args)
+void KatipoBrowser::doGet(const std::string& trackerKey,
+                          const std::string& hostID,
+                          const std::string& remoteURL,
+                          const std::string& hostName,
+                          TuiTable* args)
 {
+    ClientNetInterface* netInterface = netInterfaces[trackerKey];
+    
     TuiFunction* mainGetCallbackFunction = nullptr;
     if(!args->arrayObjects.empty() && args->arrayObjects[args->arrayObjects.size() - 1]->type() == Tui_ref_type_FUNCTION)
     {
@@ -67,7 +73,9 @@ void doGet(ClientNetInterface* netInterface, const std::string& remoteURL, const
         }
         else
         {
-            mainGetCallbackFunction->call("mainGetCallbackFunction", TUI_NIL);
+            TuiRef* statusResult = new TuiTable("{status='error',message='remote error'}");
+            mainGetCallbackFunction->call("mainGetCallbackFunction", statusResult);
+            statusResult->release();
         }
         
         mainGetCallbackFunction->release();
@@ -77,7 +85,7 @@ void doGet(ClientNetInterface* netInterface, const std::string& remoteURL, const
     remoteFuncCallArgs->push(callHostFunctionCallbackFunction);
     callHostFunctionCallbackFunction->release();
     
-    TuiFunction* getSiteKeyCallbackFunction = new TuiFunction([mainGetCallbackFunction, remoteFuncCallArgs, netInterface](TuiTable* incomingCallbackResponseData, TuiRef* existingResult, TuiDebugInfo* callingDebugInfo) -> TuiRef* {
+    TuiFunction* getSiteKeyCallbackFunction = new TuiFunction([this, trackerKey, hostName, mainGetCallbackFunction, remoteFuncCallArgs, netInterface](TuiTable* incomingCallbackResponseData, TuiRef* existingResult, TuiDebugInfo* callingDebugInfo) -> TuiRef* {
         
         if(incomingCallbackResponseData && !incomingCallbackResponseData->arrayObjects.empty())
         {
@@ -92,7 +100,13 @@ void doGet(ClientNetInterface* netInterface, const std::string& remoteURL, const
                 TuiRef* hostPublicKeyRef = ((TuiTable*)result)->get("publicKey");
                 if(hostPublicKeyRef && hostPublicKeyRef->type() == Tui_ref_type_STRING)
                 {
-                    netInterface->callRemoteHostFunction(((TuiString*)hostPublicKeyRef)->value, remoteFuncCallArgs);
+                    std::string hostSiteKey = TuiSHA1::sha1(trackerKey + hostName).substr(0,6);
+                    
+                    netInterface->callRemoteHostFunction(hostSiteKey, ((TuiString*)hostPublicKeyRef)->value, remoteFuncCallArgs);
+                    
+                    SiteConnectionInfo& siteConnectionInfo = siteConnectionInfosByHostID[hostSiteKey];
+                    siteConnectionInfo.trackerKey = trackerKey;
+                    siteConnectionInfo.hostName = hostName;
                 }
                 else
                 {
@@ -132,6 +146,34 @@ void doGet(ClientNetInterface* netInterface, const std::string& remoteURL, const
     remoteHostKeyFuncCallArgs->release();
 }
 
+TuiTable* addKatipoTable(TuiTable* rootTableToAddTo)
+{
+    TuiTable* katipoTableResult = new TuiTable(rootTableToAddTo);
+    rootTableToAddTo->set("katipo", katipoTableResult);
+    katipoTableResult->release();
+    
+    katipoTableResult->setFunction("addUpdateFunction", [](TuiTable* args, TuiRef* existingResult, TuiDebugInfo* callingDebugInfo) -> TuiRef* {
+        if(args->arrayObjects.size() > 0 && args->arrayObjects[0]->type() == Tui_ref_type_FUNCTION)
+        {
+            TuiRef* arg = args->arrayObjects[0];
+            MJTimer::getInstance()->addUpdateTimer([arg, callingDebugInfo](uint32_t timerID, float dt) {
+                TuiTable* callbackArgs = new TuiTable(nullptr);
+                
+                TuiNumber* dtNum = new TuiNumber(dt);
+                callbackArgs->push(dtNum);
+                dtNum->release();
+                
+                ((TuiFunction*)arg)->call(callbackArgs, nullptr, callingDebugInfo);
+                
+                callbackArgs->release();
+            });
+        }
+        return TUI_NIL;
+    });
+    
+    return katipoTableResult;
+}
+
 void KatipoBrowser::init()
 {
     MainController::getInstance()->init("Katipo Browser");
@@ -161,44 +203,18 @@ void KatipoBrowser::init()
         return new TuiString(Katipo::getResourcePath());
     });
     
-    rootTable->setFunction("updateTimer", [](TuiTable* args, TuiRef* existingResult, TuiDebugInfo* callingDebugInfo) -> TuiRef* {
-        if(args->arrayObjects.size() > 0 && args->arrayObjects[0]->type() == Tui_ref_type_FUNCTION)
-        {
-            TuiRef* arg = args->arrayObjects[0];
-            MJTimer::getInstance()->addUpdateTimer([arg, callingDebugInfo](uint32_t timerID, float dt) {
-                TuiTable* callbackArgs = new TuiTable(nullptr);
-                
-                TuiNumber* dtNum = new TuiNumber(dt);
-                callbackArgs->push(dtNum);
-                dtNum->release();
-                
-                ((TuiFunction*)arg)->call(callbackArgs, nullptr, callingDebugInfo);
-                
-                callbackArgs->release();
-            });
-        }
-        return TUI_NIL;
-    });
-    
     //rootTable->setVec2("screenSize", dvec2(MainController::getInstance()->windowInfo->screenWidth, MainController::getInstance()->windowInfo->screenHeight));
     
     EventManager::getInstance()->bindTui(rootTable);
     MJAudio::getInstance()->bindTui(rootTable);
-    
-    katipoTable = new TuiTable(rootTable);
-    rootTable->set("katipo", katipoTable);
-    katipoTable->release();
+    katipoTable = addKatipoTable(rootTable);
     
     //katipo.loadSite(siteSavePath, untrustedSiteCodePermissionFunction)
-    katipoTable->setFunction("loadSite", [this](TuiTable* args, TuiRef* existingResult, TuiDebugInfo* callingDebugInfo) -> TuiRef* {
-        if(currentSiteRootTable)
+    katipoTable->setFunction("loadSite", [this](TuiTable* args, TuiRef* existingResult, TuiDebugInfo* callingDebugInfo) -> TuiRef* { //note added outside function above so for now sites can't load other sites
+        if(args->arrayObjects.size() >= 2)
         {
-            MJError("todo need to handle this currentSiteRootTable");
-            return TUI_NIL;
-        }
-        if(args->arrayObjects.size() >= 1)
-        {
-            std::string siteSavePath = args->arrayObjects[0]->getStringValue();
+            std::string hostID = args->arrayObjects[0]->getStringValue();
+            std::string siteSavePath = args->arrayObjects[1]->getStringValue();
             TuiFunction* permissionCallbackFunction = nullptr;
             if(args->arrayObjects.size() >= 2)
             {
@@ -208,18 +224,45 @@ void KatipoBrowser::init()
                     permissionCallbackFunction = (TuiFunction*)arg;
                 }
             }
-            currentSiteRootTable = Tui::initSafeRootTable(permissionCallbackFunction, siteSavePath);
             
-            currentSiteRootTable->getTable("file")->setFunction("getSavePath", [siteSavePath](TuiTable* args, TuiRef* existingResult, TuiDebugInfo* callingDebugInfo) -> TuiRef* {
+            SiteConnectionInfo& siteConnectionInfo = siteConnectionInfosByHostID[hostID];
+            siteConnectionInfo.rootTable = Tui::initSafeRootTable(permissionCallbackFunction, siteSavePath);
+            MJAudio::getInstance()->bindTui(siteConnectionInfo.rootTable);
+            addKatipoTable(siteConnectionInfo.rootTable);
+            
+            
+            //from within site code: katipo.get("example", sendData, function(result){ print("got result:", result)})
+            //NOTE get requests from within site code can only currently request from that same server
+            //todo for now we assume that, but we need to add another option to get in the same way as the base method
+            siteConnectionInfo.rootTable->getTable("katipo")->setFunction("get", [this, hostID](TuiTable* args, TuiRef* existingResult, TuiDebugInfo* callingDebugInfo) -> TuiRef* {
+                if(args->arrayObjects.size() >= 1)
+                {
+                    TuiRef* urlRef = args->arrayObjects[0];
+                    if(urlRef->type() == Tui_ref_type_STRING)
+                    {
+                        if(siteConnectionInfosByHostID.count(hostID) != 0)
+                        {
+                            SiteConnectionInfo& siteConnectionInfo = siteConnectionInfosByHostID[hostID];
+                            //todo use stuff in siteConnectionInfosByHostID
+                            std::string remoteURL = urlRef->getStringValue();
+                            doGet(siteConnectionInfo.trackerKey, hostID, remoteURL, siteConnectionInfo.hostName, args);
+                        }
+                        
+                    }
+                }
+                return TUI_NIL;
+            });
+            
+            siteConnectionInfo.rootTable->getTable("file")->setFunction("getSavePath", [siteSavePath](TuiTable* args, TuiRef* existingResult, TuiDebugInfo* callingDebugInfo) -> TuiRef* {
                 if(args->arrayObjects.size() > 0 && args->arrayObjects[0]->type() == Tui_ref_type_STRING)
                 {
                     const std::string& appendPath = args->arrayObjects[0]->getStringValue();
-                    return new TuiString(Katipo::getSavePath(siteSavePath + "/" + appendPath));
+                    return new TuiString(siteSavePath + "/" + appendPath);
                 }
-                return new TuiString(Katipo::getSavePath(siteSavePath + "/"));
+                return new TuiString(siteSavePath + "/");
             });
             
-            currentSiteRootTable->getTable("file")->setFunction("getResourcePath", [siteSavePath](TuiTable* args, TuiRef* existingResult, TuiDebugInfo* callingDebugInfo) -> TuiRef* {
+            siteConnectionInfo.rootTable->getTable("file")->setFunction("getResourcePath", [siteSavePath](TuiTable* args, TuiRef* existingResult, TuiDebugInfo* callingDebugInfo) -> TuiRef* {
                 if(args->arrayObjects.size() > 0 && args->arrayObjects[0]->type() == Tui_ref_type_STRING)
                 {
                     const std::string& appendPath = args->arrayObjects[0]->getStringValue();
@@ -231,28 +274,29 @@ void KatipoBrowser::init()
                     
                     return new TuiString(Katipo::getResourcePath(appendPath)); //todo ensure within allowed dirs
                 }
-                return new TuiString(Katipo::getResourcePath(Katipo::getSavePath(siteSavePath + "/"))); //todo ensure within allowed dirs
+                return new TuiString(Katipo::getResourcePath(siteSavePath + "/")); //todo ensure within allowed dirs
             });
             
-            TuiTable* sceneTable = (TuiTable*)TuiRef::load(siteSavePath + "/scripts/scene.tui", currentSiteRootTable);
-            currentSiteRootTable->setTable("scene", sceneTable);
+            TuiTable* sceneTable = (TuiTable*)TuiRef::load(siteSavePath + "/scripts/scene.tui", siteConnectionInfo.rootTable);
+            siteConnectionInfo.rootTable->setTable("scene", sceneTable);
             sceneTable->release();
             
-            sceneTable->setFunction("getView", [this](TuiTable* args, TuiRef* existingResult, TuiDebugInfo* callingDebugInfo) -> TuiRef* {
+            sceneTable->setFunction("getView", [this, hostID](TuiTable* args, TuiRef* existingResult, TuiDebugInfo* callingDebugInfo) -> TuiRef* {
                 if(args->arrayObjects.size() >= 1)
                 {
                     TuiRef* viewNameRef = args->arrayObjects[0];
-                    if(viewNameRef->type() == Tui_ref_type_STRING)
+                    if(viewNameRef->type() == Tui_ref_type_STRING && siteConnectionInfosByHostID.count(hostID) != 0)
                     {
-                        MJView* subView = currentSiteMainView->getSubViewWithID(((TuiString*)viewNameRef)->value);
+                        SiteConnectionInfo& siteConnectionInfo = siteConnectionInfosByHostID[hostID];
+                        MJView* subView = siteConnectionInfo.mainView->getSubViewWithID(((TuiString*)viewNameRef)->value);
                         return subView->stateTable->retain();
                     }
                 }
                 return TUI_NIL;
             });
             
-            currentSiteMainView = MJView::loadUnknownViewFromTable(sceneTable->getTable("mainView"), MainController::getInstance()->mainMJView->getSubViewWithID("siteContent"), true);
-            currentSiteScriptState = (TuiTable*)TuiRef::runScriptFile(siteSavePath + "/scripts/code.tui", currentSiteRootTable);
+            siteConnectionInfo.mainView = MJView::loadUnknownViewFromTable(sceneTable->getTable("mainView"), MainController::getInstance()->mainMJView->getSubViewWithID("siteContent"), true);
+            siteConnectionInfo.scriptState = (TuiTable*)TuiRef::runScriptFile(siteSavePath + "/scripts/code.tui", siteConnectionInfo.rootTable);
         }
         return TUI_NIL;
     });
@@ -287,14 +331,14 @@ void KatipoBrowser::init()
                 ClientNetInterface* netInterface = nullptr;
                 if(netInterfaces.count(trackerKey) != 0)
                 {
-                    doGet(netInterfaces[trackerKey], remoteURL, hostName, args);
+                    doGet(trackerKey, "", remoteURL, hostName, args);
                 }
                 else
                 {
                     std::string publicKey = "";
                     std::string secretKey = "";
                     
-                    std::string clientKeyPath = Katipo::getSavePath("client_privateKey.tui"); //todo these should be saved in the database, not files
+                    std::string clientKeyPath = Katipo::getSavePath("client_privateKey.tuib");
                     
                     if(Tui::fileExistsAtPath(clientKeyPath))
                     {
@@ -330,12 +374,32 @@ void KatipoBrowser::init()
                     getArgs->retain();
                     TuiFunction* onConnect = new TuiFunction([this, trackerKey,remoteURL, hostName, getArgs](TuiTable* innerFuncArgs, TuiRef* existingResult, TuiDebugInfo* callingDebugInfo) -> TuiRef* {
                         //todo check for connection success
-                        doGet(netInterfaces[trackerKey], remoteURL, hostName, getArgs);
+                        doGet(trackerKey, "", remoteURL, hostName, getArgs);
                         getArgs->release();
                         return TUI_NIL;
                     });
                     
                     katipoTable->set("connected", onConnect);
+                    
+                    
+                    TuiFunction* onDisconnect = new TuiFunction([this](TuiTable* innerFuncArgs, TuiRef* existingResult, TuiDebugInfo* callingDebugInfo) -> TuiRef* {
+                        MJError("todo");
+                        /*if(currentSiteRootTable)
+                        {
+                            TuiTable* siteKatipoTable = currentSiteRootTable->getTable("katipo");
+                            if(siteKatipoTable->hasKey("disconnected"))
+                            {
+                                TuiRef* disconnectedFunc = siteKatipoTable->objectsByStringKey["disconnected"];
+                                if(disconnectedFunc->type() == Tui_ref_type_FUNCTION)
+                                {
+                                    ((TuiFunction*)disconnectedFunc)->call("onDisconnect");
+                                }
+                            }
+                        }*/
+                        return TUI_NIL;
+                    });
+                    
+                    katipoTable->set("disconnected", onDisconnect);
                     
                     onConnect->release();
                     

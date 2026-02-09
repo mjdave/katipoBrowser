@@ -14,6 +14,14 @@ class TuiFunction;
 class TuiTable;
 class ClientNetInterface;
 
+struct SiteConnectionInfo {
+    MJView* mainView = nullptr;
+    TuiTable* rootTable = nullptr;
+    TuiTable* scriptState = nullptr;
+    std::string trackerKey;
+    std::string hostName;
+};
+
 class KatipoBrowser {
 public:
     MJView* mainView;
@@ -23,9 +31,7 @@ public:
     
     std::map<std::string, ClientNetInterface*> netInterfaces;
     
-    MJView* currentSiteMainView = nullptr;
-    TuiTable* currentSiteRootTable = nullptr;
-    TuiTable* currentSiteScriptState = nullptr;
+    std::map<std::string, SiteConnectionInfo> siteConnectionInfosByHostID;
     
     uint32_t updateTimerID;
 
@@ -42,6 +48,11 @@ public:
     ~KatipoBrowser();
     
 private:
+    void doGet(const std::string& trackerKey,
+               const std::string& hostID,
+               const std::string& remoteURL,
+               const std::string& hostName,
+               TuiTable* args);
 
 private:
 

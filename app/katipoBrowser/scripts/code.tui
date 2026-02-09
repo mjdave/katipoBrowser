@@ -69,9 +69,10 @@ getCallback = function(result, hostID)
         siteContentBackground.goalColor = vec4(0.0,0.2,0.2,0.4)
         defaultSiteContent.hidden = true
 
-        siteSavePath = file.getSavePath("browserSites/" + hostID + "/")
+        siteSavePath = file.getSavePath("browserSites/" + string.subString(hostID, 0, 6) + "/")
         scriptsDirPath = siteSavePath + "scripts/"
         imagesDirPath = siteSavePath + "img/"
+        filesDirPath = siteSavePath + "files/"
         foundSiteCode = false
 
         if(result.siteData.scripts and table.count(result.siteData.scripts) > 0)
@@ -80,8 +81,7 @@ getCallback = function(result, hostID)
             for(scriptInfo in result.siteData.scripts)
             {
                 scriptPath = scriptsDirPath + scriptInfo.fileName
-                file.saveData(scriptPath, scriptInfo.data)
-                print("saved script:", scriptPath)
+                file.saveData(scriptPath, scriptInfo.data) #todo IMPORTANT check is sub path
 
                 if(scriptInfo.fileName == "code.tui") #we actually need scene.tui too
                 {
@@ -91,18 +91,41 @@ getCallback = function(result, hostID)
         }
         if(foundSiteCode)
         {
-            if(result.siteData.images)
+            print("saved ", table.count(result.siteData.scripts), " scripts")
+            if(result.siteData.images and table.count(result.siteData.images) > 0)
             {
                 file.mkdir(imagesDirPath)
                 for(imageInfo in result.siteData.images)
                 {
                     imagePath = imagesDirPath + imageInfo.fileName
-                    file.saveData(imagePath, imageInfo.data)
-                    print("saved image:", imagePath)
+                    file.saveData(imagePath, imageInfo.data) #todo IMPORTANT check is sub path
+                }
+                print("saved ", table.count(result.siteData.images), " images")
+            }
+
+            if(result.siteData.files and table.count(result.siteData.files) > 0)
+            {
+                print("files")
+                file.mkdir(filesDirPath)
+                for(fileInfo in result.siteData.files)
+                {
+                    filePath = filesDirPath + fileInfo.fileName #todo IMPORTANT check is sub path
+                    print("filepath:", filePath)
+                    if(type(fileInfo.data) == "string")
+                    {
+                        print("saved raw data:", filePath)
+                        file.saveData(filePath, fileInfo.data) #write the string data (can be binary) to disk directly
+                    }
+                    else
+                    {
+                        file.saveBinary(filePath, fileInfo.data) #save the tui object as a binary export
+                        print("saved tui object:", filePath)
+                    }
                 }
             }
 
-            katipo.loadSite(siteSavePath, untrustedSiteCodePermissionFunction)
+            print("loading site code")
+            katipo.loadSite(hostID, siteSavePath, untrustedSiteCodePermissionFunction)
         }
         else
         {
@@ -114,7 +137,7 @@ getCallback = function(result, hostID)
     }
     else
     {
-        print("warning: unhandled result.")
+        print("warning: unhandled result:", result)
         defaultSiteContent.hidden = false
         pageTitle.text = "unhandled result"
         pageBody.text = ""
