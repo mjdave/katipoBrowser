@@ -6,6 +6,7 @@
 #include "TuiScript.h"
 #include "KatipoUtilities.h"
 #include "MJTimer.h"
+#include "MJView.h"
 #include <thread>
 
 #define RUN_GAME_LOOP_CODE 1
@@ -30,6 +31,12 @@ static bool resizingEventWatcher(void* data, SDL_Event* event) {
             EventManager::getInstance()->isResizingWindow = true;
             EventManager::getInstance()->idle();
             EventManager::getInstance()->isResizingWindow = false;
+            
+            SDL_Rect rect;
+            SDL_GetWindowSafeArea(EventManager::getInstance()->window, &rect);
+            //MJLog("SDL_GetWindowSafeArea result in SDL_EVENT_WINDOW_RESIZED:(%d, %d, %d, %d)", rect.x, rect.y, rect.w, rect.h);
+            EventManager::getInstance()->windowSafeArea = dvec4(rect.x, rect.y, rect.w, rect.h);
+            MainController::getInstance()->mainMJView->recalculateSizesRecursively();
         }
             break;
         case SDL_EVENT_WINDOW_METAL_VIEW_RESIZED:
@@ -41,8 +48,9 @@ static bool resizingEventWatcher(void* data, SDL_Event* event) {
         {
             SDL_Rect rect;
             SDL_GetWindowSafeArea(EventManager::getInstance()->window, &rect);
-            MJLog("SDL_EVENT_WINDOW_SAFE_AREA_CHANGED setting windowSafeArea:(%d, %d, %d, %d)", rect.x, rect.y, rect.w, rect.h);
+            //MJLog("SDL_GetWindowSafeArea result in SDL_EVENT_WINDOW_SAFE_AREA_CHANGED:(%d, %d, %d, %d)", rect.x, rect.y, rect.w, rect.h);
             EventManager::getInstance()->windowSafeArea = dvec4(rect.x, rect.y, rect.w, rect.h);
+            MainController::getInstance()->mainMJView->recalculateSizesRecursively();
         }
             break;
     }
@@ -59,7 +67,7 @@ void EventManager::init(MainController* mainController_,
     
     SDL_Rect rect;
     SDL_GetWindowSafeArea(EventManager::getInstance()->window, &rect);
-    MJLog("init setting windowSafeArea:(%d, %d, %d, %d)", rect.x, rect.y, rect.w, rect.h);
+    //MJLog("init setting windowSafeArea:(%d, %d, %d, %d)", rect.x, rect.y, rect.w, rect.h);
     EventManager::getInstance()->windowSafeArea = dvec4(rect.x, rect.y, rect.w, rect.h);
     
     SDL_AddEventWatch(resizingEventWatcher, window);

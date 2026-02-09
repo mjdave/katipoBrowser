@@ -304,6 +304,9 @@ public:
     
     void doRelativeViewLayoutsForTablePostLoad();
     
+    
+    void recalculateSizesRecursively();
+    
 protected:
     virtual void initInternals();
     
