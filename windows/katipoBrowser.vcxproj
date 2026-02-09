@@ -49,19 +49,20 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;_SILENCE_CXX17_ITERATOR_BASE_CLASS_DEPRECATION_WARNING;_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(SolutionDir)..\browser;$(SolutionDir)..\katipo\core;$(SolutionDir)..\katipo\thirdParty\tui\source;$(SolutionDir)..\katipo\thirdParty\tui\thirdParty\glm\glm;$(SolutionDir)thirdPartyWindows\SDL3-3.4.0\include;$(SolutionDir)thirdPartyWindows\SDL3-3.4.0\include\SDL3;$(VULKAN_SDK)\Include;$(SolutionDir)..\thirdParty\VulkanMemoryAllocator-3.2.1\include;$(SolutionDir)..\thirdParty;$(SolutionDir)..\thirdParty\utfcpp-3.2.1\source;$(SolutionDir)..\katipo\thirdParty\liblmdb;$(SolutionDir)..\katipo\thirdParty\libsodium\windows\include;$(SolutionDir)..\thirdParty\rapidjson-1.1.0\include;$(SolutionDir)..\katipo\thirdParty\enet-1.3.18\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)thirdPartyWindows\SDL3_mixer-3.1.2\include\SDL3_mixer;$(SolutionDir)..\browser;$(SolutionDir)..\katipo\core;$(SolutionDir)..\katipo\thirdParty\tui\source;$(SolutionDir)..\katipo\thirdParty\tui\thirdParty\glm\glm;$(SolutionDir)thirdPartyWindows\SDL3-3.4.0\include;$(SolutionDir)thirdPartyWindows\SDL3-3.4.0\include\SDL3;$(VULKAN_SDK)\Include;$(SolutionDir)..\thirdParty\VulkanMemoryAllocator-3.2.1\include;$(SolutionDir)..\thirdParty;$(SolutionDir)..\thirdParty\utfcpp-3.2.1\source;$(SolutionDir)..\katipo\thirdParty\liblmdb;$(SolutionDir)..\katipo\thirdParty\libsodium\windows\include;$(SolutionDir)..\thirdParty\rapidjson-1.1.0\include;$(SolutionDir)..\katipo\thirdParty\enet-1.3.18\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <DisableSpecificWarnings>4244;4267;4305</DisableSpecificWarnings>
       <LanguageStandard>stdcpp17</LanguageStandard>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalLibraryDirectories>$(SolutionDir)thirdPartyWindows\SDL3-3.4.0\lib\x64;$(VULKAN_SDK)\Lib;$(SolutionDir)..\katipo\thirdParty\libsodium\windows\x64\Release\v143\static;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>ws2_32.lib;winmm.lib;sdl3.lib;vulkan-1.lib;libsodium.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>C:\Users\david\Documents\katipoBrowser\windows\thirdPartyWindows\SDL3_mixer-3.1.2\lib\x64;$(SolutionDir)thirdPartyWindows\SDL3-3.4.0\lib\x64;$(VULKAN_SDK)\Lib;$(SolutionDir)..\katipo\thirdParty\libsodium\windows\x64\Release\v143\static;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>ws2_32.lib;winmm.lib;sdl3.lib;vulkan-1.lib;libsodium.lib;SDL3_mixer.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <AdditionalOptions>/VERBOSE:LIB %(AdditionalOptions)</AdditionalOptions>
     </Link>
     <PostBuildEvent>
-      <Command>XCOPY "$(SolutionDir)thirdPartyWindows\SDL3-3.4.0\lib\x64\*.dll" "$(TargetDir)" /s /i /y &amp;
+      <Command>XCOPY "$(SolutionDir)thirdPartyWindows\SDL3_mixer-3.1.2\lib\x64\*.dll" "$(TargetDir)" /s /i /y &amp;
+XCOPY "$(SolutionDir)thirdPartyWindows\SDL3-3.4.0\lib\x64\*.dll" "$(TargetDir)" /s /i /y &amp;
 XCOPY "$(SolutionDir)..\app" "$(TargetDir)\app" /s /i /y</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
@@ -73,40 +74,39 @@ XCOPY "$(SolutionDir)..\app" "$(TargetDir)\app" /s /i /y</Command>
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>NDEBUG;_CONSOLE;_SILENCE_CXX17_ITERATOR_BASE_CLASS_DEPRECATION_WARNING;_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(SolutionDir)..\browser;$(SolutionDir)..\katipo\core;$(SolutionDir)..\katipo\thirdParty\tui\source;$(SolutionDir)..\katipo\thirdParty\tui\thirdParty\glm\glm;$(SolutionDir)thirdPartyWindows\SDL3-3.4.0\include;$(SolutionDir)thirdPartyWindows\SDL3-3.4.0\include\SDL3;$(VULKAN_SDK)\Include;$(SolutionDir)..\thirdParty\VulkanMemoryAllocator-3.2.1\include;$(SolutionDir)..\thirdParty;$(SolutionDir)..\thirdParty\utfcpp-3.2.1\source;$(SolutionDir)..\katipo\thirdParty\liblmdb;$(SolutionDir)..\katipo\thirdParty\libsodium\windows\include;$(SolutionDir)..\thirdParty\rapidjson-1.1.0\include;$(SolutionDir)..\katipo\thirdParty\enet-1.3.18\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)thirdPartyWindows\SDL3_mixer-3.1.2\include\SDL3_mixer;$(SolutionDir)..\browser;$(SolutionDir)..\katipo\core;$(SolutionDir)..\katipo\thirdParty\tui\source;$(SolutionDir)..\katipo\thirdParty\tui\thirdParty\glm\glm;$(SolutionDir)thirdPartyWindows\SDL3-3.4.0\include;$(SolutionDir)thirdPartyWindows\SDL3-3.4.0\include\SDL3;$(VULKAN_SDK)\Include;$(SolutionDir)..\thirdParty\VulkanMemoryAllocator-3.2.1\include;$(SolutionDir)..\thirdParty;$(SolutionDir)..\thirdParty\utfcpp-3.2.1\source;$(SolutionDir)..\katipo\thirdParty\liblmdb;$(SolutionDir)..\katipo\thirdParty\libsodium\windows\include;$(SolutionDir)..\thirdParty\rapidjson-1.1.0\include;$(SolutionDir)..\katipo\thirdParty\enet-1.3.18\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <DisableSpecificWarnings>4244;4267;4305</DisableSpecificWarnings>
       <LanguageStandard>stdcpp17</LanguageStandard>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalLibraryDirectories>$(SolutionDir)thirdPartyWindows\SDL3-3.4.0\lib\x64;$(VULKAN_SDK)\Lib;$(SolutionDir)..\katipo\thirdParty\libsodium\windows\x64\Release\v143\static;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>ws2_32.lib;winmm.lib;sdl3.lib;vulkan-1.lib;libsodium.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>C:\Users\david\Documents\katipoBrowser\windows\thirdPartyWindows\SDL3_mixer-3.1.2\lib\x64;$(SolutionDir)thirdPartyWindows\SDL3-3.4.0\lib\x64;$(VULKAN_SDK)\Lib;$(SolutionDir)..\katipo\thirdParty\libsodium\windows\x64\Release\v143\static;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>ws2_32.lib;winmm.lib;sdl3.lib;vulkan-1.lib;libsodium.lib;SDL3_mixer.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <AdditionalOptions>/VERBOSE:LIB %(AdditionalOptions)</AdditionalOptions>
     </Link>
     <PostBuildEvent>
-      <Command>XCOPY "$(SolutionDir)thirdPartyWindows\SDL3-3.4.0\lib\x64\*.dll" "$(TargetDir)" /s /i /y &amp;
+      <Command>XCOPY "$(SolutionDir)thirdPartyWindows\SDL3_mixer-3.1.2\lib\x64\*.dll" "$(TargetDir)" /s /i /y &amp;
+XCOPY "$(SolutionDir)thirdPartyWindows\SDL3-3.4.0\lib\x64\*.dll" "$(TargetDir)" /s /i /y &amp;
 XCOPY "$(SolutionDir)..\app" "$(TargetDir)\app" /s /i /y</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="..\browser\Camera.cpp" />
-    <ClCompile Include="..\browser\ClientModel.cpp" />
     <ClCompile Include="..\browser\EventManager.cpp" />
     <ClCompile Include="..\browser\GCommandBuffer.cpp" />
     <ClCompile Include="..\browser\GPipeline.cpp" />
     <ClCompile Include="..\browser\KatipoBrowser.cpp" />
     <ClCompile Include="..\browser\KatipoUtilities.cpp" />
     <ClCompile Include="..\browser\MainController.cpp" />
-    <ClCompile Include="..\browser\MaterialManager.cpp" />
     <ClCompile Include="..\browser\MathUtils.cpp" />
     <ClCompile Include="..\browser\MJAudio.cpp" />
+    <ClCompile Include="..\browser\MJAudioSDLMixer.cpp" />
     <ClCompile Include="..\browser\MJCache.cpp" />
     <ClCompile Include="..\browser\MJColorView.cpp" />
     <ClCompile Include="..\browser\MJDataTexture.cpp" />
     <ClCompile Include="..\browser\MJDrawable.cpp" />
     <ClCompile Include="..\browser\MJDrawQuad.cpp" />
-    <ClCompile Include="..\browser\MJFinalOutputQuad.cpp" />
     <ClCompile Include="..\browser\MJFont.cpp" />
     <ClCompile Include="..\browser\MJImageTexture.cpp" />
     <ClCompile Include="..\browser\MJImageView.cpp" />
@@ -128,7 +128,6 @@ XCOPY "$(SolutionDir)..\app" "$(TargetDir)\app" /s /i /y</Command>
     <ClCompile Include="..\browser\MJTextView.cpp" />
     <ClCompile Include="..\browser\MJTimer.cpp" />
     <ClCompile Include="..\browser\MJView.cpp" />
-    <ClCompile Include="..\browser\Model.cpp" />
     <ClCompile Include="..\browser\Noise3DFast.cpp" />
     <ClCompile Include="..\browser\Vulkan.cpp" />
     <ClCompile Include="..\browser\VulkanMemoryThread.cpp" />
@@ -170,8 +169,7 @@ XCOPY "$(SolutionDir)..\app" "$(TargetDir)\app" /s /i /y</Command>
     <ClInclude Include="..\browser\MaterialManager.h" />
     <ClInclude Include="..\browser\MathUtils.h" />
     <ClInclude Include="..\browser\MJAudio.h" />
-    <ClInclude Include="..\browser\MJAudioApple.h" />
-    <ClInclude Include="..\browser\MJAudioAppleDelegate.h" />
+    <ClInclude Include="..\browser\MJAudioSDLMixer.h" />
     <ClInclude Include="..\browser\MJCache.h" />
     <ClInclude Include="..\browser\MJColorView.h" />
     <ClInclude Include="..\browser\MJDataTexture.h" />

@@ -21,9 +21,6 @@
     <ClCompile Include="..\browser\Camera.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\browser\ClientModel.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="..\browser\EventManager.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -40,9 +37,6 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="..\browser\MainController.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\browser\MaterialManager.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="..\browser\MathUtils.cpp">
@@ -64,9 +58,6 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="..\browser\MJDrawQuad.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\browser\MJFinalOutputQuad.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="..\browser\MJFont.cpp">
@@ -130,9 +121,6 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="..\browser\MJView.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\browser\Model.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="..\browser\Noise3DFast.cpp">
@@ -216,226 +204,226 @@
     <ClCompile Include="..\katipo\thirdParty\liblmdb\mdb.c">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="..\browser\MJAudioSDLMixer.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\browser\Camera.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\browser\ClientModel.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\browser\EventManager.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\browser\GCommandBuffer.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\browser\GPipeline.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\browser\KatipoBrowser.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\browser\KatipoUtilities.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\browser\MainController.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\browser\MaterialManager.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\browser\MathUtils.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\browser\MJAudio.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\browser\MJAudioApple.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\browser\MJAudioAppleDelegate.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\browser\MJCache.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\browser\MJColorView.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\browser\MJDataTexture.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\browser\MJDrawable.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\browser\MJDrawQuad.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\browser\MJFinalOutputQuad.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\browser\MJFont.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\browser\MJImageTexture.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\browser\MJImageView.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\browser\MJRawImageTexture.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\browser\MJRawImageTexture3D.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\browser\MJRenderBuffer2.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\browser\MJRenderBufferIndexed2.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\browser\MJRenderTarget.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\browser\MJRenderTarget3D.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\browser\MJRenderTargetAccumulation.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\browser\MJRenderTargetShadow.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\browser\MJRenderTargetSSAO.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\browser\MJSong.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\browser\MJSound.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\browser\MJSound2D.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\browser\MJSound3D.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\browser\MJStaticRenderBuffer.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\browser\MJStaticRenderBuffer2.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\browser\MJTextView.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\browser\MJTimer.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\browser\MJVersion.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\browser\MJView.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\browser\Model.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\browser\Noise3DFast.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\browser\ObjectVert.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\browser\Vulkan.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\browser\VulkanMemoryThread.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\browser\WindowInfo.h">
-      <Filter>Header Files</Filter>
+      <Filter>Source Files</Filter>
     </ClInclude>
     <ClInclude Include="..\katipo\core\ClientHttpInterface.h">
-      <Filter>Header Files</Filter>
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\browser\ClientModel.h">
+      <Filter>Source Files</Filter>
     </ClInclude>
     <ClInclude Include="..\katipo\core\ClientNetInterface.h">
-      <Filter>Header Files</Filter>
+      <Filter>Source Files</Filter>
     </ClInclude>
     <ClInclude Include="..\katipo\core\Database.h">
-      <Filter>Header Files</Filter>
+      <Filter>Source Files</Filter>
     </ClInclude>
     <ClInclude Include="..\katipo\core\DatabaseEnvironment.h">
-      <Filter>Header Files</Filter>
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\browser\EventManager.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\browser\GCommandBuffer.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\browser\GPipeline.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\browser\KatipoBrowser.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\browser\KatipoUtilities.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\browser\MainController.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\browser\MaterialManager.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\browser\MathUtils.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\browser\MJAudio.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\browser\MJAudioSDLMixer.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\browser\MJCache.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\browser\MJColorView.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\browser\MJDataTexture.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\browser\MJDrawable.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\browser\MJDrawQuad.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\browser\MJFinalOutputQuad.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\browser\MJFont.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\browser\MJImageTexture.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\browser\MJImageView.h">
+      <Filter>Source Files</Filter>
     </ClInclude>
     <ClInclude Include="..\katipo\core\MJLog.h">
-      <Filter>Header Files</Filter>
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\browser\MJRawImageTexture.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\browser\MJRawImageTexture3D.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\browser\MJRenderBuffer2.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\browser\MJRenderBufferIndexed2.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\browser\MJRenderTarget.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\browser\MJRenderTarget3D.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\browser\MJRenderTargetAccumulation.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\browser\MJRenderTargetShadow.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\browser\MJRenderTargetSSAO.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\browser\MJSong.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\browser\MJSound.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\browser\MJSound2D.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\browser\MJSound3D.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\browser\MJStaticRenderBuffer.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\browser\MJStaticRenderBuffer2.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\browser\MJTextView.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\browser\MJTimer.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\browser\MJVersion.h">
+      <Filter>Source Files</Filter>
     </ClInclude>
     <ClInclude Include="..\katipo\core\MJVersion.h">
-      <Filter>Header Files</Filter>
+      <Filter>Source Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\katipo\core\NetConstants.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="..\browser\MJView.h">
+      <Filter>Source Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\katipo\core\NetServerClient.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\katipo\core\Server.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\katipo\core\ServerNetInterface.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\katipo\core\ThreadSafeQueue.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\katipo\core\Timer.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\katipo\thirdParty\tui\source\TuiBuiltInFunctions.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\katipo\thirdParty\tui\source\TuiFileUtils.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\katipo\thirdParty\tui\source\TuiFunction.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\katipo\thirdParty\tui\source\TuiLog.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\katipo\thirdParty\tui\source\TuiNumber.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\katipo\thirdParty\tui\source\TuiRef.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\katipo\thirdParty\tui\source\TuiScript.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\katipo\thirdParty\tui\source\TuiSha1.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\katipo\thirdParty\tui\source\TuiStatement.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\katipo\thirdParty\tui\source\TuiString.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\katipo\thirdParty\tui\source\TuiStringUtils.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\katipo\thirdParty\tui\source\TuiTable.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="..\browser\Model.h">
+      <Filter>Source Files</Filter>
     </ClInclude>
     <ClInclude Include="..\thirdParty\MurmurHash3.h">
-      <Filter>Header Files</Filter>
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\katipo\core\NetConstants.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\katipo\core\NetServerClient.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\browser\Noise3DFast.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\browser\ObjectVert.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\katipo\core\Server.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\katipo\core\ServerNetInterface.h">
+      <Filter>Source Files</Filter>
     </ClInclude>
     <ClInclude Include="..\thirdParty\stb_image.h">
-      <Filter>Header Files</Filter>
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\katipo\core\ThreadSafeQueue.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\katipo\core\Timer.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\katipo\thirdParty\tui\source\TuiBuiltInFunctions.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\katipo\thirdParty\tui\source\TuiFileUtils.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\katipo\thirdParty\tui\source\TuiFunction.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\katipo\thirdParty\tui\source\TuiLog.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\katipo\thirdParty\tui\source\TuiNumber.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\katipo\thirdParty\tui\source\TuiRef.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\katipo\thirdParty\tui\source\TuiScript.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\katipo\thirdParty\tui\source\TuiSha1.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\katipo\thirdParty\tui\source\TuiStatement.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\katipo\thirdParty\tui\source\TuiString.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\katipo\thirdParty\tui\source\TuiStringUtils.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\katipo\thirdParty\tui\source\TuiTable.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\browser\Vulkan.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\browser\VulkanMemoryThread.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\browser\WindowInfo.h">
+      <Filter>Source Files</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

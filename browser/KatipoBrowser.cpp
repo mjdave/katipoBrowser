@@ -64,7 +64,6 @@ void KatipoBrowser::doGet(const std::string& trackerKey,
     
     
     TuiFunction* callHostFunctionCallbackFunction = new TuiFunction([mainGetCallbackFunction](TuiTable* args, TuiRef* existingResult, TuiDebugInfo* callingDebugInfo) -> TuiRef* {
-        
         if(args && args->arrayObjects.size() >= 2)
         {
             TuiRef* result = args->arrayObjects[0];
@@ -85,7 +84,7 @@ void KatipoBrowser::doGet(const std::string& trackerKey,
     remoteFuncCallArgs->push(callHostFunctionCallbackFunction);
     callHostFunctionCallbackFunction->release();
     
-    TuiFunction* getSiteKeyCallbackFunction = new TuiFunction([this, trackerKey, hostName, mainGetCallbackFunction, remoteFuncCallArgs, netInterface](TuiTable* incomingCallbackResponseData, TuiRef* existingResult, TuiDebugInfo* callingDebugInfo) -> TuiRef* {
+    TuiFunction* getSiteKeyCallbackFunction = new TuiFunction([this, trackerKey, hostName, &mainGetCallbackFunction, remoteFuncCallArgs, netInterface](TuiTable* incomingCallbackResponseData, TuiRef* existingResult, TuiDebugInfo* callingDebugInfo) -> TuiRef* {
         
         if(incomingCallbackResponseData && !incomingCallbackResponseData->arrayObjects.empty())
         {
@@ -114,6 +113,7 @@ void KatipoBrowser::doGet(const std::string& trackerKey,
                     TuiRef* statusResult = new TuiTable("{status='error',message='missing public key'}");
                     mainGetCallbackFunction->call("mainGetCallbackFunction", statusResult);
                     mainGetCallbackFunction->release();
+                    mainGetCallbackFunction = nullptr;
                     statusResult->release();
                 }
                 
@@ -122,15 +122,17 @@ void KatipoBrowser::doGet(const std::string& trackerKey,
             {
                 mainGetCallbackFunction->call("mainGetCallbackFunction", result); //status not ok
                 mainGetCallbackFunction->release();
+                mainGetCallbackFunction = nullptr;
             }
         }
-        else
+        /*else //this causes a crash as we get another callback later... usually? all the time? Not sure yet
         {
             TuiRef* statusResult = new TuiTable("{status='error',message='no connection'}");
             mainGetCallbackFunction->call("mainGetCallbackFunction", statusResult);
             mainGetCallbackFunction->release();
+            mainGetCallbackFunction = nullptr;
             statusResult->release();
-        }
+        }*/
         
         return TUI_NIL;
     });

@@ -4,43 +4,17 @@
 #include "MJSound3D.h"
 #include "MJSong.h"
 #include "TuiScript.h"
-//#include "SDL_mixer.h"
 #include "KatipoUtilities.h"
 
 #ifdef __APPLE__
 #include "MJAudioApple.h"
+#else
+#include "MJAudioSDLMixer.h"
 #endif
 
-//static const SDL_AudioSpec audioSpec = {SDL_AUDIO_S16, 2, 44100};
 
 MJAudio::MJAudio()
 {
-   /* if (SDL_WasInit(SDL_INIT_AUDIO) == SDL_INIT_AUDIO) {
-      SDL_Log("SDL_Audio subsystem initialized");
-    } else if (!SDL_InitSubSystem(SDL_INIT_AUDIO)) {
-      SDL_Log("Could not initialize audio subsystem, %s", SDL_GetError());
-      return;
-    }
-    
-    
-    audioDeviceId =
-        SDL_OpenAudioDevice(SDL_AUDIO_DEVICE_DEFAULT_PLAYBACK, &audioSpec);
-    if (audioDeviceId == 0) {
-      SDL_Log("Could not open audio device default output %s", SDL_GetError());
-      return;
-    }
-    
-    MIX_Init();
-    
-    mixer = MIX_CreateMixerDevice(audioDeviceId, &audioSpec);
-    
-    SDL_Log("AudioPlayer ready");*/
-    
-    
-    //todo APPLE
-    
-    
-    
     overallVolume = 1.0;
     musicVolume = 1.0;
     soundVolume = 1.0;
@@ -80,18 +54,20 @@ void MJAudio::bindTui(TuiTable* rootTable)
     };*/
     
     audioTable->setFunction("stop", [this](TuiTable* args, TuiRef* existingResult, TuiDebugInfo* callingDebugInfo) -> TuiRef* {
-        //MIX_StopAllTracks(mixer, 1000);
 #ifdef __APPLE__
         MJAudioApple::getInstance()->stop();
+#else
+        MJAudioSDLMixer::getInstance()->stop();
 #endif
         return TUI_NIL;
     });
     
     
     audioTable->setFunction("play", [this](TuiTable* args, TuiRef* existingResult, TuiDebugInfo* callingDebugInfo) -> TuiRef* {
-        //MIX_StopAllTracks(mixer, 1000);
 #ifdef __APPLE__
         MJAudioApple::getInstance()->play(nullptr);
+#else
+        MJAudioSDLMixer::getInstance()->play(nullptr);
 #endif
         return TUI_NIL;
     });
@@ -101,6 +77,8 @@ void MJAudio::bindTui(TuiTable* rootTable)
         //MIX_StopAllTracks(mixer, 1000);
 #ifdef __APPLE__
         MJAudioApple::getInstance()->skipToNextTrack();
+#else
+        MJAudioSDLMixer::getInstance()->skipToNextTrack();
 #endif
         
         return TUI_NIL;
@@ -114,42 +92,9 @@ void MJAudio::bindTui(TuiTable* rootTable)
             {
 #ifdef __APPLE__
                 MJAudioApple::getInstance()->play((TuiTable*)arrayRef);
+#else
+                MJAudioSDLMixer::getInstance()->play((TuiTable*)arrayRef);
 #endif
-                /*MIX_Track* track = MIX_CreateTrack(mixer);
-                
-                int dataSize = ((TuiString*)dataRef)->value.size();
-                void* data = &(((TuiString*)dataRef)->value[0]);
-                
-                SDL_IOStream* stream = SDL_IOFromMem(data, dataSize);
-                MIX_Audio* audio = MIX_LoadAudio_IO(mixer, stream, false, false);
-                
-                if (!MIX_SetTrackAudio(track, audio)) {
-                  MJError("Could not set track io stream, %s", SDL_GetError());
-                }*/
-                
-               // if (!MIX_SetTrackIOStream(track, stream, false)) {
-                //  MJError("Could not set track io stream, %s", SDL_GetError());
-               // }
-                
-               // MIX_LoadAudio
-                
-               /* MIX_Audio* audio = MIX_LoadAudio(mixer, getSavePath("test.mp3").c_str(), false);
-                if(!audio)
-                {
-                    MJError("Could not MIX_LoadAudio, %s", SDL_GetError());
-                }
-                if (!MIX_SetTrackAudio(track, audio)) {
-                  MJError("Could not set track io stream, %s", SDL_GetError());
-                }
-                */
-                
-               /* if (!MIX_PlayTrack(track, 0)) {
-                    MJError("Could not play track, %s", SDL_GetError());
-                  }*/
-                
-                //todo MIX_DestroyTrack
-                
-                
                 MJLog("playing song");
             }
             else

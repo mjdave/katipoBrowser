@@ -14,7 +14,6 @@ class MJSound2D;
 class MJSound3D;
 class MJSong;
 class TuiTable;
-class MIX_Mixer;
 
 struct QueuedSong {
 	MJSong* song;
@@ -34,8 +33,6 @@ public: // members
     double soundVolume;
     
 protected: // members
-    SDL_AudioDeviceID audioDeviceId;
-    MIX_Mixer* mixer;
     
     std::map<std::string, MJSound2D*> sounds2D;
     std::map<std::string, MJSound3D*> sounds3D;
