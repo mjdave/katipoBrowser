@@ -15,18 +15,6 @@ MJCache::MJCache(Vulkan* vulkan_,
     vulkan = vulkan_;
     appDatabase = appDatabase_;
 	camera = camera_;
-
-	//debugTimer = new Timer();
-
-
-    std::string fontDirname = Katipo::getResourcePath("app/common/fonts/fontFiles");
-
-    std::vector<std::string> availableFontFileNamesVec = Tui::getDirectoryContents(fontDirname);
-    for(auto& name : availableFontFileNamesVec)
-    {
-		std::string nameWithoutExtension = Tui::removeExtensionForPath(name);
-		availableFontFileNames.insert(nameWithoutExtension);
-    }
 }
 
 MJCache::~MJCache()
@@ -143,139 +131,93 @@ MJImageTexture* MJCache::getTextureWithOptions(std::string name, TuiTable* rootT
 	return getTextureAbsolutePathWithOptions(getKatipoResourcePath(name, rootTable), options, absoluteAlphaPath, disableCache);
 }
 
-MJFont* MJCache::getFont(std::string name, int pointSize, double* resultScale)
+MJFont* MJCache::getOrLoadFontIfAvailableInternal(std::string name, int pointSize, TuiTable* rootTable)
 {
-    *resultScale = 1.0;
-
-	std::string combinedFontName = Tui::string_format("%s%d", name.c_str(), pointSize);
-
-	std::string key = combinedFontName;
-
-    if(fonts.count(key) > 0)
+    std::string combinedFontName = Tui::string_format("%s%d", name.c_str(), pointSize);
+    std::string fontFilepath = getKatipoResourcePath("fonts/" + combinedFontName + ".fnt", rootTable);
+    
+    if(fonts.count(fontFilepath) > 0)
     {
-        return fonts[key];
+        return fonts[fontFilepath];
     }
-
-	dvec2 offset = dvec2(0.0,0.0);
-	bool reversed = false;
-	if(fontOffsets.count(name) != 0)
-	{
-		offset = fontOffsets[name];
-	}
-	if(reversedFonts.count(name) != 0)
-	{
-		reversed = true;
-	}
-
-    if(availableFontFileNames.count(combinedFontName) != 0)
+    if(Tui::fileExistsAtPath(fontFilepath))
     {
-        MJFont* font = new MJFont(vulkan, this, combinedFontName, offset, reversed);
-        fonts[key] = font;
+        std::string imageFilepath = getKatipoResourcePath("fonts/" + combinedFontName + ".png", rootTable);
+        MJFont* font = new MJFont(vulkan, this, fontFilepath, imageFilepath);
+        fonts[fontFilepath] = font;
         return font;
     }
-
-    for(int i = pointSize + 1; i <= pointSize * 2; i++)
+    
+    fontFilepath = getKatipoResourcePath("app/common/fonts/" + combinedFontName + ".fnt", rootTable);
+    
+    if(fonts.count(fontFilepath) > 0)
     {
-        std::string combinedFontName = Tui::string_format("%s%d", name.c_str(), i);
-		std::string key = combinedFontName;
-        if(fonts.count(key) > 0)
-        {
-            *resultScale = ((double)pointSize) / i;
-            return fonts[key];
-        }
-
-        if(availableFontFileNames.count(combinedFontName) != 0)
-        {
-            MJFont* font = new MJFont(vulkan, this, combinedFontName, offset, reversed);
-            fonts[key] = font;
-            *resultScale = ((double)pointSize) / i;
-            MJLog("WARNING: using larger substitute font of size:%d for:%s at size:%d", i, name.c_str(), pointSize);
-            return font;
-        }
+        return fonts[fontFilepath];
     }
-
-    for(int i = pointSize - 1; i >= pointSize / 2; i--)
+    if(Tui::fileExistsAtPath(fontFilepath))
     {
-        std::string combinedFontName = Tui::string_format("%s%d", name.c_str(), i);
-		std::string key = combinedFontName;
-        if(fonts.count(key) > 0)
-        {
-            *resultScale = ((double)pointSize) / i;
-            return fonts[key];
-        }
-
-        if(availableFontFileNames.count(combinedFontName) != 0)
-        {
-            MJFont* font = new MJFont(vulkan, this, combinedFontName, offset, reversed);
-            fonts[key] = font;
-            *resultScale = ((double)pointSize) / i;
-            MJLog("WARNING: using smaller substitute font of size:%d for:%s at size:%d", i, name.c_str(), pointSize);
-            return font;
-        }
+        std::string imageFilepath = getKatipoResourcePath("app/common/fonts/" + combinedFontName + ".png", rootTable);
+        MJFont* font = new MJFont(vulkan, this, fontFilepath, imageFilepath);
+        fonts[fontFilepath] = font;
+        return font;
     }
-
-
-
-	for(int i = pointSize * 2; i <= 216; i++)
-	{
-		std::string combinedFontName = Tui::string_format("%s%d", name.c_str(), i);
-		std::string key = combinedFontName;
-		if(fonts.count(key) > 0)
-		{
-			*resultScale = ((double)pointSize) / i;
-			return fonts[key];
-		}
-
-		if(availableFontFileNames.count(combinedFontName) != 0)
-		{
-			MJFont* font = new MJFont(vulkan, this, combinedFontName, offset, reversed);
-			fonts[key] = font;
-			*resultScale = ((double)pointSize) / i;
-			MJLog("WARNING: using larger substitute font of size:%d for:%s at size:%d", i, name.c_str(), pointSize);
-			return font;
-		}
-	}
-
-	for(int i = pointSize / 2; i >= 8; i--)
-	{
-		std::string combinedFontName = Tui::string_format("%s%d", name.c_str(), i);
-		std::string key = combinedFontName;
-		if(fonts.count(key) > 0)
-		{
-			*resultScale = ((double)pointSize) / i;
-			return fonts[key];
-		}
-
-		if(availableFontFileNames.count(combinedFontName) != 0)
-		{
-			MJFont* font = new MJFont(vulkan, this, combinedFontName, offset, reversed);
-			fonts[key] = font;
-			*resultScale = ((double)pointSize) / i;
-			MJLog("WARNING: using smaller substitute font of size:%d for:%s at size:%d", i, name.c_str(), pointSize);
-			return font;
-		}
-	}
-
-    MJError("no suitable font found for:%s at size:%d", name.c_str(), pointSize);
+    
     return nullptr;
 }
 
-
-void MJCache::setFontOffset(std::string name, dvec2 offset)
+MJFont* MJCache::getFont(std::string name, int pointSize, TuiTable* rootTable, double* resultScale)
 {
-	fontOffsets[name] = offset;
-}
+    *resultScale = 1.0;
+    
+    MJFont* result = getOrLoadFontIfAvailableInternal(name, pointSize, rootTable);
+    if(result)
+    {
+        return result;
+    }
+    
+    
+    for(int i = pointSize + 1; i <= pointSize * 2; i++)
+    {
+        result = getOrLoadFontIfAvailableInternal(name, i, rootTable);
+        if(result)
+        {
+            *resultScale = ((double)pointSize) / i;;
+            return result;
+        }
+    }
+    
+    for(int i = pointSize - 1; i >= pointSize / 2; i--)
+    {
+        result = getOrLoadFontIfAvailableInternal(name, i, rootTable);
+        if(result)
+        {
+            *resultScale = ((double)pointSize) / i;;
+            return result;
+        }
+    }
+    
+    for(int i = pointSize * 2; i <= 256; i++)
+    {
+        result = getOrLoadFontIfAvailableInternal(name, i, rootTable);
+        if(result)
+        {
+            *resultScale = ((double)pointSize) / i;;
+            return result;
+        }
+    }
+    
+    for(int i = pointSize / 2; i >= 8; i--)
+    {
+        result = getOrLoadFontIfAvailableInternal(name, i, rootTable);
+        if(result)
+        {
+            *resultScale = ((double)pointSize) / i;;
+            return result;
+        }
+    }
 
-void MJCache::setFontReversed(std::string name, bool reversed)
-{
-	if(reversed)
-	{
-		reversedFonts.insert(name);
-	}
-	else
-	{
-		reversedFonts.erase(name);
-	}
+    MJError("no suitable font found for:%s at size:%d", name.c_str(), pointSize);
+    return nullptr;
 }
 
 GPipeline* MJCache::getPipeline(std::string name,

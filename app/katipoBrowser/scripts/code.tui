@@ -71,6 +71,7 @@ getCallback = function(result, hostID)
 
         siteSavePath = file.getSavePath("browserSites/" + string.subString(hostID, 0, 6) + "/")
         scriptsDirPath = siteSavePath + "scripts/"
+        fontsDirPath = siteSavePath + "fonts/"
         imagesDirPath = siteSavePath + "img/"
         filesDirPath = siteSavePath + "files/"
         foundSiteCode = false
@@ -101,6 +102,17 @@ getCallback = function(result, hostID)
                     file.saveData(imagePath, imageInfo.data) #todo IMPORTANT check is sub path
                 }
                 print("saved ", table.count(result.siteData.images), " images")
+            }
+
+            if(result.siteData.fonts and table.count(result.siteData.fonts) > 0)
+            {
+                file.mkdir(fontsDirPath)
+                for(fontInfo in result.siteData.fonts)
+                {
+                    fontPath = fontsDirPath + fontInfo.fileName
+                    file.saveData(fontPath, fontInfo.data) #todo IMPORTANT check is sub path
+                }
+                print("saved ", table.count(result.siteData.fonts), " fonts")
             }
 
             if(result.siteData.files and table.count(result.siteData.files) > 0)

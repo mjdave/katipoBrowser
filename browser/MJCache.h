@@ -37,14 +37,9 @@ class MJCache {
 
     std::map<MJImageTexture*, DrawQuadDescriptorSets> imageDrawQuadDescriptorSets;
 
-    std::set<std::string> availableFontFileNames;
-
 	std::set<MJImageTexture*> unloadedTextures;
 
 	VkCommandBuffer recordingCommandBuffer = nullptr;
-
-	std::map <std::string, dvec2> fontOffsets;
-	std::set <std::string> reversedFonts;
     
 public:
     Vulkan* vulkan;
@@ -67,10 +62,7 @@ public:
     MJImageTexture* getTexture(std::string name, TuiTable* rootTable, bool repeat = false, bool loadFlipped = false, bool mipmap_ = false, bool disableCache = false);
 	MJImageTexture* getTextureAbsolutePath(std::string path, bool repeat = false, bool loadFlipped = false, bool mipmap_ = false, bool disableCache = false);
     
-    MJFont* getFont(std::string name, int pointSize, double* resultScale);
-
-	void setFontOffset(std::string name, dvec2 offset);
-	void setFontReversed(std::string name, bool reversed);
+    MJFont* getFont(std::string name, int pointSize, TuiTable* rootTable, double* resultScale);
 
 	std::vector<MJVMABuffer> getCameraBuffer();
 
@@ -83,6 +75,7 @@ public:
     
 private:
 	void loadUnloadedTextures();
+    MJFont* getOrLoadFontIfAvailableInternal(std::string name, int pointSize, TuiTable* rootTable);
 
 };
 

@@ -288,7 +288,7 @@ void MJTextView::setFontNameAndSize(FontNameAndSize fontNameAndSize_)
     fontNameAndSize = fontNameAndSize_;
 
 	double scaleToUse = renderScale;
-    MJFont* newFont = cache->getFont(fontNameAndSize_.name, fontNameAndSize_.size * scaleToUse, &textRenderScale);
+    MJFont* newFont = cache->getFont(fontNameAndSize_.name, fontNameAndSize_.size * scaleToUse, rootTable, &textRenderScale);
 
     if(newFont != font)
     {

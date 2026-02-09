@@ -126,7 +126,7 @@ public:
     
     int lineHeight;
     
-    MJFont(Vulkan* vulkan, MJCache* cache, std::string fontName, dvec2 offset = dvec2(0.0,0.0), bool reversed_ = false);
+    MJFont(Vulkan* vulkan, MJCache* cache, std::string fontFilepath, std::string imageFilepath, dvec2 offset = dvec2(0.0,0.0), bool reversed_ = false);
     ~MJFont();
     
 	FontPrintResult print(std::vector<AttributedText>& attributedText,

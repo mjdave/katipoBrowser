@@ -9,25 +9,22 @@
 #include <sstream>
 #include "utf8.h"
 
-MJFont::MJFont(Vulkan* vulkan, MJCache* cache, std::string fontName, dvec2 offset, bool reversed_)
+MJFont::MJFont(Vulkan* vulkan, MJCache* cache, std::string fontFilepath, std::string imageFilepath, dvec2 offset, bool reversed_)
 {
     kernCount = 0;
     useKern = true;
 	reversed = reversed_;
     
-    std::string fontFilename = Katipo::getResourcePath("app/common/fonts/fontFiles/" + fontName + ".fnt"); //todo we need to look for fonts in sites too, use the root table's getResourcePath() function
-    std::string fontImageFilename = Katipo::getResourcePath("app/common/fonts/maps/" + fontName + ".png");
-    
-    std::ifstream stream((fontFilename).c_str());
+    std::ifstream stream((fontFilepath).c_str());
     if ( !stream.is_open() )
     {
-        MJLog("ERROR: Cannot find Font File %s", fontFilename.c_str());
+        MJLog("ERROR: Cannot find Font File %s", fontFilepath.c_str());
         return;
     }
     
     bool loadFlipped = true;
     bool repeat = false;
-    texture = cache->getTextureAbsolutePath(fontImageFilename, repeat, loadFlipped, false);
+    texture = cache->getTextureAbsolutePath(imageFilepath, repeat, loadFlipped, false);
     
     std::string line;
     std::string read, key, value;
