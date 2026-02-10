@@ -36,7 +36,7 @@ static bool resizingEventWatcher(void* data, SDL_Event* event) {
             SDL_GetWindowSafeArea(EventManager::getInstance()->window, &rect);
             //MJLog("SDL_GetWindowSafeArea result in SDL_EVENT_WINDOW_RESIZED:(%d, %d, %d, %d)", rect.x, rect.y, rect.w, rect.h);
             EventManager::getInstance()->windowSafeArea = dvec4(rect.x, rect.y, rect.w, rect.h);
-            MainController::getInstance()->mainMJView->recalculateSizesRecursively();
+            MainController::getInstance()->mainMJView->needsToUpdateSizeDueToWindowChange = true;
         }
             break;
         case SDL_EVENT_WINDOW_METAL_VIEW_RESIZED:
@@ -50,7 +50,7 @@ static bool resizingEventWatcher(void* data, SDL_Event* event) {
             SDL_GetWindowSafeArea(EventManager::getInstance()->window, &rect);
             //MJLog("SDL_GetWindowSafeArea result in SDL_EVENT_WINDOW_SAFE_AREA_CHANGED:(%d, %d, %d, %d)", rect.x, rect.y, rect.w, rect.h);
             EventManager::getInstance()->windowSafeArea = dvec4(rect.x, rect.y, rect.w, rect.h);
-            MainController::getInstance()->mainMJView->recalculateSizesRecursively();
+            MainController::getInstance()->mainMJView->needsToUpdateSizeDueToWindowChange = true;
         }
             break;
     }

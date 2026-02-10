@@ -22,6 +22,15 @@ mainView = {
                     alignmentY = "top"
                 }
                 {
+                    id = "bookmarks"
+                    type = "view"
+                    size = function(parentSize)
+                    {
+                        return vec2(parentSize.x, parentSize.y - urlTextEntryHeight)
+                    }
+                    alignmentY = "top"
+                }
+                {
                     id = "urlTextEntry"
                     type = "image"
                     path = "app/katipoBrowser/img/colorsBackground.png"
@@ -33,6 +42,47 @@ mainView = {
                     alignmentY = "bottom"
                 }
             }
+        }
+    }
+}
+
+
+bookmark = {
+    type = "view"
+    size = vec2(80,80)
+    subviews = {
+        {
+            id = "bookmarkMissingImage"
+            type = "color"
+            color = vec4(0.0,0.6,0.8,0.8) #todo set this randomly for each site, maybe get from siteInfo
+            alignmentY = "top"
+            size = vec2(50,50)
+
+            subviews = {
+                {
+                    id = "bookmarkMissingImageCharacter"
+                    type = "text"
+                    text = "?"
+                    font = "roboto"
+                    fontSize = 38
+                }
+            }
+        }
+        {
+            id = "bookmarkImage"
+            type = "image"
+            alignmentY = "top"
+            size = vec2(50,50)
+            hidden = true
+        }
+        {
+            id = "bookmarkTitle"
+            type = "text"
+            text = "Site Title"
+            font = "roboto"
+            fontSize = 16
+            alignmentY = "bottom"
+            size = vec2(100, 20)
         }
     }
 }

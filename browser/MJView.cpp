@@ -780,6 +780,12 @@ void MJView::preRender(GCommandBuffer* commandBuffer, MJRenderPass renderPass, i
         return;
     }
     
+    if(needsToUpdateSizeDueToWindowChange)
+    {
+        needsToUpdateSizeDueToWindowChange = false;
+        recalculateSizesRecursively();
+    }
+    
     if(needsAnimationTimerReset)
     {
         animationTimerOffset = -animationTimer_;
@@ -1982,6 +1988,7 @@ void MJView::tableKeyChanged(const std::string& key, TuiRef* value)
                 }
                 mouseDownFunction = (TuiFunction*)value;
                 mouseDownFunction->retain();
+                masksEvents = true;
             }
                 break;
             case Tui_ref_type_NIL:
@@ -2009,6 +2016,7 @@ void MJView::tableKeyChanged(const std::string& key, TuiRef* value)
                 }
                 mouseUpFunction = (TuiFunction*)value;
                 mouseUpFunction->retain();
+                masksEvents = true;
             }
                 break;
             case Tui_ref_type_NIL:
@@ -2036,6 +2044,7 @@ void MJView::tableKeyChanged(const std::string& key, TuiRef* value)
                 }
                 mouseDraggedFunction = (TuiFunction*)value;
                 mouseDraggedFunction->retain();
+                masksEvents = true;
             }
                 break;
             case Tui_ref_type_NIL:
@@ -2063,6 +2072,7 @@ void MJView::tableKeyChanged(const std::string& key, TuiRef* value)
                 }
                 mouseWheelFunction = (TuiFunction*)value;
                 mouseWheelFunction->retain();
+                masksEvents = true;
             }
                 break;
             case Tui_ref_type_NIL:
@@ -2090,6 +2100,7 @@ void MJView::tableKeyChanged(const std::string& key, TuiRef* value)
                 }
                 hoverStartFunction = (TuiFunction*)value;
                 hoverStartFunction->retain();
+                masksEvents = true;
             }
                 break;
             case Tui_ref_type_NIL:
@@ -2117,6 +2128,7 @@ void MJView::tableKeyChanged(const std::string& key, TuiRef* value)
                 }
                 hoverEndFunction = (TuiFunction*)value;
                 hoverEndFunction->retain();
+                masksEvents = true;
             }
                 break;
             case Tui_ref_type_NIL:
@@ -2144,6 +2156,7 @@ void MJView::tableKeyChanged(const std::string& key, TuiRef* value)
                 }
                 clickFunction = (TuiFunction*)value;
                 clickFunction->retain();
+                masksEvents = true;
             }
                 break;
             case Tui_ref_type_NIL:

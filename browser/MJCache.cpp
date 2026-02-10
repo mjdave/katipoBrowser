@@ -5,7 +5,6 @@
 #include "Camera.h"
 #include "GCommandBuffer.h"
 #include "KatipoUtilities.h"
-#include "ObjectVert.h"
 //#include "Timer.h"
 
 MJCache::MJCache(Vulkan* vulkan_,

@@ -1,8 +1,17 @@
 textEntry = require("app/common/textEntry.tui")
+button = require("app/common/button.tui")
 defaultSiteScene = require("app/katipoBrowser/scripts/defaultSiteScene.tui")
 
 print("katipoBrowser is running")
 
+bookmarksPath = file.getSavePath("bookmarks.tuib") #todo use database
+bookmarks = file.loadBinary(bookmarksPath)
+if(!bookmarks)
+{
+    bookmarks = {}
+}
+
+print("loaded bookmarks:", bookmarks)
 
 urlTextEntryContainer = scene.getView("urlTextEntry")
 urlTextEntry = textEntry.create(urlTextEntryContainer)
@@ -31,13 +40,16 @@ defaultSiteContent.hidden = true
 pageTitle = defaultSiteContent.getView("pageTitle")
 pageBody = defaultSiteContent.getView("pageBody")
 
+bookmarkLayout = scene.bookmark
+bookmarksBackground = scene.getView("bookmarks")
+
 untrustedSiteCodePermissionFunction = function(functionName, args, hasPermissionCallback)
 {
     print("Warning: host is attempting to use protected tui function:\"", functionName, "\" with args:", args, "\nTODO: Katipo needs to check client settings or ask if this is OK, but for now it is not OK")
     hasPermissionCallback(false)
 }
 
-getCallback = function(result, hostID)
+getCallback = function(result, hostID, url)
 {
     print("got result with status:", result.status, " message:", result.message, " hostID:", hostID)
     if(!result or result.status != "ok")
@@ -82,7 +94,10 @@ getCallback = function(result, hostID)
             for(scriptInfo in result.siteData.scripts)
             {
                 scriptPath = scriptsDirPath + scriptInfo.fileName
-                file.saveData(scriptPath, scriptInfo.data) #todo IMPORTANT check is sub path
+                if(file.isSubPath(scriptPath, siteSavePath))
+                {
+                    file.saveData(scriptPath, scriptInfo.data)
+                }
 
                 if(scriptInfo.fileName == "code.tui") #we actually need scene.tui too
                 {
@@ -99,7 +114,10 @@ getCallback = function(result, hostID)
                 for(imageInfo in result.siteData.images)
                 {
                     imagePath = imagesDirPath + imageInfo.fileName
-                    file.saveData(imagePath, imageInfo.data) #todo IMPORTANT check is sub path
+                    if(file.isSubPath(imagePath, siteSavePath))
+                    {
+                        file.saveData(imagePath, imageInfo.data)
+                    }
                 }
                 print("saved ", table.count(result.siteData.images), " images")
             }
@@ -110,7 +128,10 @@ getCallback = function(result, hostID)
                 for(fontInfo in result.siteData.fonts)
                 {
                     fontPath = fontsDirPath + fontInfo.fileName
-                    file.saveData(fontPath, fontInfo.data) #todo IMPORTANT check is sub path
+                    if(file.isSubPath(fontPath, siteSavePath))
+                    {
+                        file.saveData(fontPath, fontInfo.data)
+                    }
                 }
                 print("saved ", table.count(result.siteData.fonts), " fonts")
             }
@@ -121,23 +142,46 @@ getCallback = function(result, hostID)
                 file.mkdir(filesDirPath)
                 for(fileInfo in result.siteData.files)
                 {
-                    filePath = filesDirPath + fileInfo.fileName #todo IMPORTANT check is sub path
-                    print("filepath:", filePath)
-                    if(type(fileInfo.data) == "string")
+                    filePath = filesDirPath + fileInfo.fileName
+                    if(file.isSubPath(filePath, siteSavePath))
                     {
-                        print("saved raw data:", filePath)
-                        file.saveData(filePath, fileInfo.data) #write the string data (can be binary) to disk directly
-                    }
-                    else
-                    {
-                        file.saveBinary(filePath, fileInfo.data) #save the tui object as a binary export
-                        print("saved tui object:", filePath)
+                        #print("filepath:", filePath)
+                        if(type(fileInfo.data) == "string")
+                        {
+                            print("saved raw data:", filePath)
+                            file.saveData(filePath, fileInfo.data) #write the string data (can be binary) to disk directly
+                        }
+                        else
+                        {
+                            file.saveBinary(filePath, fileInfo.data) #save the tui object as a binary export
+                            print("saved tui object:", filePath)
+                        }
                     }
                 }
             }
 
             print("loading site code")
             katipo.loadSite(hostID, siteSavePath, untrustedSiteCodePermissionFunction)
+
+            #update bookmarks
+            for(i, existing in bookmarks)
+            {
+                if(existing.hostID == hostID)
+                {
+                    table.remove(bookmarks, i)
+                    break
+                }
+            }
+
+            bookmarkInfo = {
+                url = url
+                hostID = hostID
+                siteInfo = result.siteData.siteInfo
+                #siteImage = result.siteData.siteImage
+            }
+            table.insert(bookmarks, 0, bookmarkInfo)
+
+            file.saveBinary(bookmarksPath, bookmarks) #todo use database
         }
         else
         {
@@ -161,5 +205,42 @@ textEntry.setOnChangeCallback(urlTextEntry, function(textValue, confirmChanges){
     {
         siteContentBackground.goalColor = vec4(0.0,0.015,0.01,0.6)
         katipo.get(textValue, getCallback)
+        bookmarksBackground.hidden = true
     }
 })
+
+
+loadBookmarks = function()
+{
+
+    for(i,bookmarkInfo in bookmarks)
+    {
+        #todo some kind of scrolling saved spacial system like a Desktop, for now they will pile up on top of each other
+        bookmarkView = bookmarksBackground.addView(bookmarkLayout)
+        title = bookmarkInfo.siteInfo.title
+        bookmarkTitleView = bookmarkView.getView("bookmarkTitle")
+        bookmarkTitleView.text = title
+
+        if(bookmarkInfo.siteImage)
+        {
+            #todo
+        }
+        else
+        {
+            bookmarkMissingImage = bookmarkView.getView("bookmarkMissingImage")
+            #bookmarkMissingImage.color = vec4() #todo
+            bookmarkMissingImageCharacter = bookmarkView.getView("bookmarkMissingImageCharacter")
+            bookmarkMissingImageCharacter.text = string.subString(title, 0, 1)
+        }
+
+        bookmarkClick = function()
+        {
+            siteContentBackground.goalColor = vec4(0.0, 0.015, 0.01, 0.6)
+            katipo.get(bookmarkInfo.url, getCallback)
+            bookmarksBackground.hidden = true
+        }
+        button.create(bookmarkView, -0.1, bookmarkClick)
+    }
+}
+
+loadBookmarks()

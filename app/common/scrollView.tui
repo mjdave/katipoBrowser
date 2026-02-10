@@ -90,10 +90,6 @@ recreateDerivedData = function(scrollView)
 create = function(parentView)
 {
     scrollViewLayout = {
-        size = function(parentSize)
-        {
-            return parentSize
-        }
         type = "view"
     }
 

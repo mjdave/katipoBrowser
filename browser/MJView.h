@@ -96,6 +96,7 @@ public:
 
 	bool isWorldView = false;
 	bool mouseHoverDirty = false;
+    bool needsToUpdateSizeDueToWindowChange = false;
 
 	dvec2 mouseDownLocalPoint;
 	bool dragDistanceAboveClickOutsideThreshold;
@@ -305,7 +306,6 @@ public:
     void doRelativeViewLayoutsForTablePostLoad();
     
     
-    void recalculateSizesRecursively();
     
 protected:
     virtual void initInternals();
@@ -325,6 +325,7 @@ protected:
 
 	
 	void childHasUpdateFunctionChanged(bool childHasUpdateFunction);
+    void recalculateSizesRecursively();
 
     
 protected:
