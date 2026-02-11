@@ -42,6 +42,7 @@ mainView = {
 bookmark = {
     type = "view"
     size = vec2(80,80)
+    cellPadding = 10 #this is just arbitrary config added here for code.tui to use when laying out bookmarks
     subviews = {
         {
             id = "bookmarkMissingImage"

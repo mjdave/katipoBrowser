@@ -48,7 +48,9 @@ void KatipoBrowser::doGet(const std::string& trackerKey,
     TuiTable* remoteFuncCallArgs = new TuiTable(nullptr);
     
     TuiString* remoteURLStringForArg = new TuiString(remoteURL);
-    remoteFuncCallArgs->arrayObjects.push_back(remoteURLStringForArg);
+    remoteFuncCallArgs->arrayObjects.push_back(remoteURLStringForArg); //push_back, not retained, no need to release
+    
+    std::string fullURL = trackerKey + "/" + remoteURL;
     
     for(int i = 1; i < args->arrayObjects.size(); i++)
     {
@@ -63,19 +65,19 @@ void KatipoBrowser::doGet(const std::string& trackerKey,
     MJLog("fetching from remote hostName:%s", hostName.c_str());
     
     
-    TuiFunction* callHostFunctionCallbackFunction = new TuiFunction([mainGetCallbackFunction, remoteURL](TuiTable* args, TuiRef* existingResult, TuiDebugInfo* callingDebugInfo) -> TuiRef* {
+    TuiFunction* callHostFunctionCallbackFunction = new TuiFunction([mainGetCallbackFunction, fullURL](TuiTable* args, TuiRef* existingResult, TuiDebugInfo* callingDebugInfo) -> TuiRef* {
         if(args && args->arrayObjects.size() >= 2)
         {
             TuiRef* result = args->arrayObjects[0];
             TuiRef* publicKey = args->arrayObjects[1];
-            TuiString* remoteURLString = new TuiString(remoteURL);
+            TuiString* remoteURLString = new TuiString(fullURL);
             mainGetCallbackFunction->call("mainGetCallbackFunction", result, publicKey, remoteURLString);
             remoteURLString->release();
         }
         else
         {
             TuiRef* statusResult = new TuiTable("{status='error',message='remote error'}");
-            TuiString* remoteURLString = new TuiString(remoteURL);
+            TuiString* remoteURLString = new TuiString(fullURL);
             mainGetCallbackFunction->call("mainGetCallbackFunction", statusResult, TUI_NIL, remoteURLString);
             statusResult->release();
             remoteURLString->release();
@@ -88,7 +90,7 @@ void KatipoBrowser::doGet(const std::string& trackerKey,
     remoteFuncCallArgs->push(callHostFunctionCallbackFunction);
     callHostFunctionCallbackFunction->release();
     
-    TuiFunction* getSiteKeyCallbackFunction = new TuiFunction([this, trackerKey, hostName, mainGetCallbackFunction, remoteFuncCallArgs, netInterface, remoteURL](TuiTable* incomingCallbackResponseData, TuiRef* existingResult, TuiDebugInfo* callingDebugInfo) -> TuiRef* {
+    TuiFunction* getSiteKeyCallbackFunction = new TuiFunction([this, trackerKey, hostName, mainGetCallbackFunction, remoteFuncCallArgs, netInterface, fullURL](TuiTable* incomingCallbackResponseData, TuiRef* existingResult, TuiDebugInfo* callingDebugInfo) -> TuiRef* {
         
         if(incomingCallbackResponseData && !incomingCallbackResponseData->arrayObjects.empty())
         {
@@ -115,7 +117,7 @@ void KatipoBrowser::doGet(const std::string& trackerKey,
                 {
                     MJError("missing public key");
                     TuiRef* statusResult = new TuiTable("{status='error',message='missing public key'}");
-                    TuiString* remoteURLString = new TuiString(remoteURL);
+                    TuiString* remoteURLString = new TuiString(fullURL);
                     mainGetCallbackFunction->call("mainGetCallbackFunction", statusResult, TUI_NIL, remoteURLString);
                     mainGetCallbackFunction->release();
                     statusResult->release();
@@ -125,7 +127,7 @@ void KatipoBrowser::doGet(const std::string& trackerKey,
             }
             else
             {
-                TuiString* remoteURLString = new TuiString(remoteURL);
+                TuiString* remoteURLString = new TuiString(fullURL);
                 mainGetCallbackFunction->call("mainGetCallbackFunction", result, TUI_NIL, remoteURLString); //status not ok
                 mainGetCallbackFunction->release();
                 remoteURLString->release();

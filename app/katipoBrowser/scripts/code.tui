@@ -212,11 +212,29 @@ textEntry.setOnChangeCallback(urlTextEntry, function(textValue, confirmChanges){
 
 loadBookmarks = function()
 {
+    count = table.count(bookmarks)
+    columnCount = math.floor(count % 8) #todo base on screen width, re-layout on parent size change
+    rowCount = math.floor(count / 8) + 1
+
+    cellSize = bookmarkLayout.size.x
+    cellPadding = bookmarkLayout.cellPadding
+
+    getCellPos = function(index)
+    {
+        xIndex = math.floor(index % 8)
+        yIndex = math.floor(index / 8)
+
+        xOffset = -((columnCount - 1) * (cellSize + cellPadding) / 2)
+        yOffset = ((rowCount - 1) * (cellSize + cellPadding) / 2)
+
+        return vec3((cellSize + cellPadding) * xIndex + xOffset, (cellSize + cellPadding) * -yIndex + yOffset, 0.0)
+    }
 
     for(i,bookmarkInfo in bookmarks)
     {
         #todo some kind of scrolling saved spacial system like a Desktop, for now they will pile up on top of each other
         bookmarkView = bookmarksBackground.addView(bookmarkLayout)
+        bookmarkView.pos = getCellPos(i)
         title = bookmarkInfo.siteInfo.title
         bookmarkTitleView = bookmarkView.getView("bookmarkTitle")
         bookmarkTitleView.text = title
@@ -244,3 +262,4 @@ loadBookmarks = function()
 }
 
 loadBookmarks()
+textEntry.callClickFunction(urlTextEntry)
