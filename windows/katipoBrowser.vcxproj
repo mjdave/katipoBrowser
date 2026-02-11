@@ -56,7 +56,7 @@
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalLibraryDirectories>C:\Users\david\Documents\katipoBrowser\windows\thirdPartyWindows\SDL3_mixer-3.1.2\lib\x64;$(SolutionDir)thirdPartyWindows\SDL3-3.4.0\lib\x64;$(VULKAN_SDK)\Lib;$(SolutionDir)..\katipo\thirdParty\libsodium\windows\x64\Release\v143\static;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>$(SolutionDir)thirdPartyWindows\SDL3_mixer-3.1.2\lib\x64;$(SolutionDir)thirdPartyWindows\SDL3-3.4.0\lib\x64;$(VULKAN_SDK)\Lib;$(SolutionDir)..\katipo\thirdParty\libsodium\windows\x64\Release\v143\static;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <AdditionalDependencies>ws2_32.lib;winmm.lib;sdl3.lib;vulkan-1.lib;libsodium.lib;SDL3_mixer.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <AdditionalOptions>/VERBOSE:LIB %(AdditionalOptions)</AdditionalOptions>
     </Link>
@@ -81,7 +81,7 @@ XCOPY "$(SolutionDir)..\app" "$(TargetDir)\app" /s /i /y</Command>
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalLibraryDirectories>C:\Users\david\Documents\katipoBrowser\windows\thirdPartyWindows\SDL3_mixer-3.1.2\lib\x64;$(SolutionDir)thirdPartyWindows\SDL3-3.4.0\lib\x64;$(VULKAN_SDK)\Lib;$(SolutionDir)..\katipo\thirdParty\libsodium\windows\x64\Release\v143\static;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>$(SolutionDir)thirdPartyWindows\SDL3_mixer-3.1.2\lib\x64;$(SolutionDir)thirdPartyWindows\SDL3-3.4.0\lib\x64;$(VULKAN_SDK)\Lib;$(SolutionDir)..\katipo\thirdParty\libsodium\windows\x64\Release\v143\static;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <AdditionalDependencies>ws2_32.lib;winmm.lib;sdl3.lib;vulkan-1.lib;libsodium.lib;SDL3_mixer.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <AdditionalOptions>/VERBOSE:LIB %(AdditionalOptions)</AdditionalOptions>
     </Link>

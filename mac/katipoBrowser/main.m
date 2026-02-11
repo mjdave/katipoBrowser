@@ -1,9 +1,3 @@
-//
-//  main.m
-//  ambience
-//
-//  Created by David Frampton on 22/10/2024.
-//
 
 #import <Cocoa/Cocoa.h>
 

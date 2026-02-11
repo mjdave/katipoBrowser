@@ -1,10 +1,3 @@
-//
-//  EventManager.hpp
-//  World
-//
-//  Created by David Frampton on 20/10/17.
-//  Copyright © 2017 Majic Jungle. All rights reserved.
-//
 
 #ifndef EventManager_hpp
 #define EventManager_hpp
