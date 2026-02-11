@@ -15,19 +15,11 @@ mainView = {
                     id = "siteContent"
                     type = "color"
                     color = vec4(0.1,0.2,0.0,0.2)
-                    size = function(parentSize)
-                    {
-                        return vec2(parentSize.x, parentSize.y - urlTextEntryHeight)
-                    }
                     alignmentY = "top"
                 }
                 {
                     id = "bookmarks"
                     type = "view"
-                    size = function(parentSize)
-                    {
-                        return vec2(parentSize.x, parentSize.y - urlTextEntryHeight)
-                    }
                     alignmentY = "top"
                 }
                 {

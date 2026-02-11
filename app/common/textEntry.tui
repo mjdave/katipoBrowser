@@ -6,7 +6,6 @@ selectedColor = vec4(0.5,0.5,1.0,1.0)
 
 resize = function(textEntryView, size)
 {
-    print("resizing:", size)
     userData = textEntryView.textEntryViewData
     textEntryView.size = size
     backgroundView = userData.backgroundView
@@ -18,16 +17,25 @@ updateVisuals = function(userData)
     textEntryView = userData.view
     if(userData.textView)
     {
-        if(userData.text)
+        if(userData.textView.text != userData.text)
         {
-            userData.textView.text = userData.text
-        }
-        else
-        {
-            userData.textView.text = ""
+            if(userData.text)
+            {
+                userData.textView.text = userData.text
+            }
+            else
+            {
+                userData.textView.text = ""
+            }
+
+            userData.desiredBackgroundSize = userData.textView.size.x + 12
         }
 
-        desiredBackgroundSize = userData.textView.size.x + 12
+        desiredBackgroundSize = userData.desiredBackgroundSize
+        if(!desiredBackgroundSize)
+        {
+            desiredBackgroundSize = 0
+        }
         if(userData.promptTextView)
         {
             desiredBackgroundSize = desiredBackgroundSize + userData.promptTextView.size.x
@@ -44,6 +52,8 @@ updateVisuals = function(userData)
             newSize = vec2(newWidth, userData.backgroundView.size.y)
             resize(textEntryView, newSize)
         }
+
+        
 
         if(userData.disabled)
         {
@@ -272,7 +282,7 @@ create = function(parentView, sizeOrNilForParentSize, typeOrNilFor10x3, horizont
     }
     #backgroundView.update = updateCursorFunction
 
-    textEntryView.hoverStart = function()
+    backgroundView.hoverStart = function()
     {
         if(!userData.selected)
         {
@@ -285,7 +295,7 @@ create = function(parentView, sizeOrNilForParentSize, typeOrNilFor10x3, horizont
         }
     }
 
-    textEntryView.hoverEnd = function()
+    backgroundView.hoverEnd = function()
     {
         if(userData.selected)
         {
@@ -295,7 +305,7 @@ create = function(parentView, sizeOrNilForParentSize, typeOrNilFor10x3, horizont
         }
     }
 
-    textEntryView.mouseDown = function (buttonIndex)
+    backgroundView.mouseDown = function (buttonIndex)
     {
         if(buttonIndex == 0)
         {
@@ -311,7 +321,7 @@ create = function(parentView, sizeOrNilForParentSize, typeOrNilFor10x3, horizont
         }
     }
 
-    textEntryView.mouseUp = function (buttonIndex)
+    backgroundView.mouseUp = function (buttonIndex)
     {
         if(buttonIndex == 0)
         {
@@ -532,9 +542,9 @@ create = function(parentView, sizeOrNilForParentSize, typeOrNilFor10x3, horizont
     }
 
     userData.textViewClickFunction = textViewClickFunction
-    textEntryView.click = textViewClickFunction
+    backgroundView.click = textViewClickFunction
     
-    textEntryView.clickDownOutside = function()
+    backgroundView.clickDownOutside = function()
     {
         finishEditing(userData, false)
     }
