@@ -17,6 +17,7 @@ class ClientNetInterface;
 struct SiteConnectionInfo {
     MJView* mainView = nullptr;
     TuiTable* rootTable = nullptr;
+    TuiTable* katipoTable = nullptr;
     TuiTable* scriptState = nullptr;
     std::string trackerKey;
     std::string hostName;

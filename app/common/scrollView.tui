@@ -91,6 +91,11 @@ create = function(parentView)
 {
     scrollViewLayout = {
         type = "view"
+        size = function(parentSize)
+        {
+            print("in scrollview resize:", parentSize)
+            return parentSize
+        }
     }
 
     scrollView = parentView.addView(scrollViewLayout)

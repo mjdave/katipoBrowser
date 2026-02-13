@@ -3,6 +3,7 @@ button = require("app/common/button.tui")
 defaultSiteScene = require("app/katipoBrowser/scripts/defaultSiteScene.tui")
 
 print("katipoBrowser is running")
+currentSiteHostID = false #tui quirk, false instead of nil, as nil removes it
 
 bookmarksPath = file.getSavePath("bookmarks.tuib") #todo use database
 bookmarks = file.loadBinary(bookmarksPath)
@@ -49,16 +50,29 @@ untrustedSiteCodePermissionFunction = function(functionName, args, hasPermission
     hasPermissionCallback(false)
 }
 
+getSitePath = function(hostID)
+{
+    return file.getSavePath("browserSites/" + string.subString(hostID, 0, 6) + "/")
+}
+
 getCallback = function(result, hostID, url)
 {
     print("got result with status:", result.status, " message:", result.message, " hostID:", hostID)
     if(!result or result.status != "ok")
     {
-        siteContentBackground.goalColor = vec4(0.2,0.0,0.0,0.6)
-        defaultSiteContent.hidden = false
+        if(!currentSiteHostID)
+        {
+            siteContentBackground.goalColor = vec4(0.2,0.0,0.0,0.6)
+            defaultSiteContent.hidden = false
 
-        pageTitle.text = result.status
-        pageBody.text = result.message
+            pageTitle.text = result.status
+            pageBody.text = result.message
+        }
+    }
+    else if(result.unchanged)
+    {
+        print("no changes on the host, everything is just great here")
+        siteContentBackground.goalColor = vec4(0.0,0.0,0.2,0.4)
     }
     else if(result.pageTitle)
     {
@@ -78,10 +92,10 @@ getCallback = function(result, hostID, url)
     }
     else if(result.siteData)
     {
-        siteContentBackground.goalColor = vec4(0.0,0.2,0.2,0.4)
+        siteContentBackground.goalColor = vec4(0.0,0.0,0.2,0.4)
         defaultSiteContent.hidden = true
 
-        siteSavePath = file.getSavePath("browserSites/" + string.subString(hostID, 0, 6) + "/")
+        siteSavePath = getSitePath(hostID)
         scriptsDirPath = siteSavePath + "scripts/"
         fontsDirPath = siteSavePath + "fonts/"
         imagesDirPath = siteSavePath + "img/"
@@ -163,6 +177,8 @@ getCallback = function(result, hostID, url)
             print("loading site code")
             katipo.loadSite(hostID, siteSavePath, untrustedSiteCodePermissionFunction)
 
+            .currentSiteHostID = hostID
+
             #update bookmarks
             for(i, existing in bookmarks)
             {
@@ -173,10 +189,13 @@ getCallback = function(result, hostID, url)
                 }
             }
 
+            print("storing checksum:", result.siteData.checksum)
+
             bookmarkInfo = {
                 url = url
                 hostID = hostID
                 siteInfo = result.siteData.siteInfo
+                checksum = result.siteData.checksum
                 #siteImage = result.siteData.siteImage
             }
             table.insert(bookmarks, 0, bookmarkInfo)
@@ -254,7 +273,12 @@ loadBookmarks = function()
         bookmarkClick = function()
         {
             siteContentBackground.goalColor = vec4(0.0, 0.015, 0.01, 0.6)
-            katipo.get(bookmarkInfo.url, getCallback)
+
+            print("loading site code with checksum:", bookmarkInfo.checksum)
+            siteSavePath = getSitePath(bookmarkInfo.hostID)
+            katipo.loadSite(bookmarkInfo.hostID, siteSavePath, untrustedSiteCodePermissionFunction)
+
+            katipo.get(bookmarkInfo.url, bookmarkInfo.checksum, getCallback)
             bookmarksBackground.hidden = true
         }
         button.create(bookmarkView, -0.1, bookmarkClick)
