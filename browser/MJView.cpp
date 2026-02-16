@@ -329,9 +329,9 @@ void MJView::setSize(dvec2 size_) //WARNING! MJTextView completely overrides thi
 
 void MJView::recalculateSizesRecursively()
 {
-    if(parentSizeChangedFunction)
+    if(parentSizeChangedFunction && parentView)
     {
-        TuiRef* inRef = new TuiVec2(size);
+        TuiRef* inRef = new TuiVec2(parentView->size);
         TuiRef* sizeRef = parentSizeChangedFunction->call("parentSizeChangedFunction", inRef);
         stateTable->setVec2("size", ((TuiVec2*)sizeRef)->value);
         inRef->release();

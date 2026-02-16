@@ -26,25 +26,28 @@ void KatipoBrowser::doGet(const std::string& trackerKey,
                           const std::string& hostName,
                           TuiTable* args)
 {
-    ClientNetInterface* netInterface = netInterfaces[trackerKey];
     
     TuiFunction* mainGetCallbackFunction = nullptr;
     if(!args->arrayObjects.empty() && args->arrayObjects[args->arrayObjects.size() - 1]->type() == Tui_ref_type_FUNCTION)
     {
         mainGetCallbackFunction = ((TuiFunction*)args->arrayObjects[args->arrayObjects.size() - 1]);
-        
-        if(!netInterface->connected)
-        {
-            MJError("attempt to call get before first request has returned or while disconnected"); //todo need to cancel first request maybe?
-            TuiRef* statusResult = new TuiTable("{status='error',message='not connected'}");
-            mainGetCallbackFunction->call("mainGetCallbackFunction", statusResult);
-            statusResult->release();
-            return;
-        }
-        
         mainGetCallbackFunction->retain();
     }
     
+    if(netInterfaces.count(trackerKey) == 0 || !netInterfaces[trackerKey]->connected)
+    {
+        MJError("attempt to call get before first request has returned or while disconnected"); //todo need to cancel first request maybe?
+        if(mainGetCallbackFunction)
+        {
+            TuiRef* statusResult = new TuiTable("{status='error',message='not connected'}");
+            mainGetCallbackFunction->call("mainGetCallbackFunction", statusResult);
+            statusResult->release();
+            mainGetCallbackFunction->release();
+        }
+        return;
+    }
+    
+    ClientNetInterface* netInterface = netInterfaces[trackerKey];
     TuiTable* remoteFuncCallArgs = new TuiTable(nullptr);
     
     TuiString* remoteURLStringForArg = new TuiString(remoteURL);
