@@ -119,10 +119,6 @@ XCOPY "$(SolutionDir)..\app" "$(TargetDir)\app" /s /i /y</Command>
     <ClCompile Include="..\browser\MJRenderTargetAccumulation.cpp" />
     <ClCompile Include="..\browser\MJRenderTargetShadow.cpp" />
     <ClCompile Include="..\browser\MJRenderTargetSSAO.cpp" />
-    <ClCompile Include="..\browser\MJSong.cpp" />
-    <ClCompile Include="..\browser\MJSound.cpp" />
-    <ClCompile Include="..\browser\MJSound2D.cpp" />
-    <ClCompile Include="..\browser\MJSound3D.cpp" />
     <ClCompile Include="..\browser\MJStaticRenderBuffer.cpp" />
     <ClCompile Include="..\browser\MJStaticRenderBuffer2.cpp" />
     <ClCompile Include="..\browser\MJTextView.cpp" />
@@ -188,10 +184,6 @@ XCOPY "$(SolutionDir)..\app" "$(TargetDir)\app" /s /i /y</Command>
     <ClInclude Include="..\browser\MJRenderTargetAccumulation.h" />
     <ClInclude Include="..\browser\MJRenderTargetShadow.h" />
     <ClInclude Include="..\browser\MJRenderTargetSSAO.h" />
-    <ClInclude Include="..\browser\MJSong.h" />
-    <ClInclude Include="..\browser\MJSound.h" />
-    <ClInclude Include="..\browser\MJSound2D.h" />
-    <ClInclude Include="..\browser\MJSound3D.h" />
     <ClInclude Include="..\browser\MJStaticRenderBuffer.h" />
     <ClInclude Include="..\browser\MJStaticRenderBuffer2.h" />
     <ClInclude Include="..\browser\MJTextView.h" />
