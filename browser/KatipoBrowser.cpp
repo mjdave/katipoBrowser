@@ -358,6 +358,7 @@ void KatipoBrowser::init()
                         {
                             publicKey = saveData->getString("publicKey");
                             secretKey = saveData->getString("secretKey");
+                            saveData->release();
                         }
                     }
                     
