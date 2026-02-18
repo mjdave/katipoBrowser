@@ -253,7 +253,13 @@ void EventManager::update(float dt)
         rect.w = windowInfo->screenWidth;
         rect.h = 20;
         SDL_SetTextInputArea(window, &rect, NULL);
-        SDL_StartTextInput(window);
+        
+        SDL_PropertiesID props = SDL_CreateProperties();
+        SDL_SetBooleanProperty(props, SDL_PROP_TEXTINPUT_AUTOCORRECT_BOOLEAN, false);
+        SDL_SetNumberProperty(props, SDL_PROP_TEXTINPUT_CAPITALIZATION_NUMBER, SDL_CAPITALIZE_NONE);
+        SDL_StartTextInputWithProperties(window, props);
+        SDL_DestroyProperties(props);
+        
         textEntryActive = true;
     }
     if(needsToFinishTextEntry)
