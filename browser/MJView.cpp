@@ -1413,7 +1413,7 @@ bool MJView::mouseUp3D(dvec3 windowRayStart, dvec3 windowRayDirection, int butto
 				{
 					dvec2 localPoint = windowPointToLocal(windowRayStart, windowRayDirection);
                     TuiRef* localPointRef = new TuiVec2(localPoint / renderScale);
-                    clickFunction->call("rightClickFunction", localPointRef);
+                    rightClickFunction->call("rightClickFunction", localPointRef);
                     localPointRef->release();
 				}
 			}
@@ -1464,7 +1464,7 @@ bool MJView::mouseUp3D(dvec3 windowRayStart, dvec3 windowRayDirection, int butto
 				dvec2 localPoint = windowPointToLocal(windowRayStart, windowRayDirection);
                 TuiRef* buttonIndexRef = new TuiNumber(buttonIndex);
                 TuiRef* localPointRef = new TuiVec2(localPoint / renderScale);
-                mouseDownFunction->call("clickOutsideFunction", buttonIndexRef, localPointRef);
+                clickOutsideFunction->call("clickOutsideFunction", buttonIndexRef, localPointRef);
                 buttonIndexRef->release();
                 localPointRef->release();
 			}
@@ -2165,6 +2165,90 @@ void MJView::tableKeyChanged(const std::string& key, TuiRef* value)
                 {
                     clickFunction->release();
                     clickFunction = nullptr;
+                }
+            }
+                break;
+            default:
+                MJError("Expected function");
+                break;
+        }
+    }
+    else if(key == "rightClick")
+    {
+        switch (value->type()) {
+            case Tui_ref_type_FUNCTION:
+            {
+                if(rightClickFunction)
+                {
+                    rightClickFunction->release();
+                }
+                rightClickFunction = (TuiFunction*)value;
+                rightClickFunction->retain();
+                masksEvents = true;
+            }
+                break;
+            case Tui_ref_type_NIL:
+            {
+                if(rightClickFunction)
+                {
+                    rightClickFunction->release();
+                    rightClickFunction = nullptr;
+                }
+            }
+                break;
+            default:
+                MJError("Expected function");
+                break;
+        }
+    }
+    else if(key == "clickOutside")
+    {
+        switch (value->type()) {
+            case Tui_ref_type_FUNCTION:
+            {
+                if(clickOutsideFunction)
+                {
+                    clickOutsideFunction->release();
+                }
+                clickOutsideFunction = (TuiFunction*)value;
+                clickOutsideFunction->retain();
+                masksEvents = true;
+            }
+                break;
+            case Tui_ref_type_NIL:
+            {
+                if(clickOutsideFunction)
+                {
+                    clickOutsideFunction->release();
+                    clickOutsideFunction = nullptr;
+                }
+            }
+                break;
+            default:
+                MJError("Expected function");
+                break;
+        }
+    }
+    else if(key == "clickDownOutside")
+    {
+        switch (value->type()) {
+            case Tui_ref_type_FUNCTION:
+            {
+                if(clickDownOutsideFunction)
+                {
+                    clickDownOutsideFunction->release();
+                }
+                clickDownOutsideFunction = (TuiFunction*)value;
+                clickDownOutsideFunction->retain();
+                masksEvents = true;
+            }
+                break;
+            case Tui_ref_type_NIL:
+            {
+                if(clickDownOutsideFunction)
+                {
+                    clickDownOutsideFunction->release();
+                    clickDownOutsideFunction = nullptr;
                 }
             }
                 break;
