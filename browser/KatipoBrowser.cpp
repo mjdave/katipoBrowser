@@ -226,6 +226,7 @@ void KatipoBrowser::init()
                 
                 siteConnectionInfo.rootTable = Tui::initSafeRootTable(permissionCallbackFunction, siteSavePath);
                 MJAudio::getInstance()->bindTui(siteConnectionInfo.rootTable);
+                EventManager::getInstance()->bindTui(siteConnectionInfo.rootTable);
                 TuiTable* siteKatipoTable = addKatipoTable(siteConnectionInfo.rootTable);
                 siteConnectionInfo.katipoTable = siteKatipoTable;
                 

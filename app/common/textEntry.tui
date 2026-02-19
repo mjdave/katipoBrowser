@@ -344,7 +344,7 @@ create = function(parentView, sizeOrNilForParentSize, typeOrNilFor10x3, horizont
             }
             if(userData.editing)
             {
-                error("todo")
+                warn("todo, allow cursor position change with click")
                 /*if(userData.text)
                 {
                     textViewLoc = textEntryView:locationRelativeToView(mouseLoc, userData.textView)
@@ -549,11 +549,6 @@ create = function(parentView, sizeOrNilForParentSize, typeOrNilFor10x3, horizont
         finishEditing(userData, false)
     }
 
-    #
-
-    #textEntryView.update = uiCommon:createButtonUpdateFunction(userData, textEntryView)
-
-
     return textEntryView
 }
 
@@ -610,6 +605,7 @@ setText = function(userData, text_)
     elseif(type(textToUse) != "string")
     {
         #textToUse = mj:tostring(textToUse) todo
+        error("expected string, got ", type(textToUse), ": ", textToUse)
     }
 
     if(userData.maxChars and textToUse and string.length(textToUse) > userData.maxChars)
