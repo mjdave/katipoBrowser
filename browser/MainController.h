@@ -92,8 +92,6 @@ public:
 	bool mouseUp(dvec2 mousePos, int buttonIndex, int modKey);
 	bool mouseWheel(dvec2 mousePos, dvec2 scrollChange);
 
-	void selectScreenResolutionAndWindowMode(int screenResolutionIndex, int windowModeIndex);
-
 	void recreateDrawablesAndSaveSize();
     void mainWindowChangedSize();
     void mainWindowChangedPosition();
@@ -113,18 +111,7 @@ protected:
     DatabaseEnvironment* appDatabaseEnvironment;
     Database* appDatabase;
 
-	std::vector<ivec2> supportedResolutions;
-	ivec2 multiDisplayNativeResolution = ivec2(0,0);
-	ivec2 multiDisplayOrigin = ivec2(0,0);
-	ivec2 singleDisplayNativeResolution = ivec2(0,0);
-	ivec2 currentResolution;
-	ivec2 newResolution;
 	bool vsync;
-	int newWindowMode;
-	bool needsToUpdateResolution = false;
-
-	int windowMode = MJ_WINDOW_MODE_WINDOWED;
-	int resolutionType = MJ_WINDOW_RESOLUTION_STANDARD;
     
     bool multiSamplingEnabled;
 	double fovY;
@@ -143,8 +130,6 @@ protected:
     
 private:
 
-	void updateScreenResolution(ivec2 newResolution, int newWindowModeToUse);
-	void addResolution(ivec2 resolution);
     void save();
     void initializeDatabase();
 	void windowInfoChanged();

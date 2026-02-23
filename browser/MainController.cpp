@@ -41,179 +41,6 @@
 #define DEPTH_BUFFER_FAR 10000000.0
 
 
-void MainController::addResolution(ivec2 resolution)
-{
-	bool added = false;
-
-	for(int i = 0; i < supportedResolutions.size(); i++)
-	{
-		ivec2 currentRes = supportedResolutions[i];
-		if(currentRes.x > resolution.x)
-		{
-			supportedResolutions.insert(supportedResolutions.begin() + i, resolution);
-			added = true;
-			break;
-		}
-		else if(currentRes.x == resolution.x)
-		{
-			if(currentRes.y > resolution.y)
-			{
-				supportedResolutions.insert(supportedResolutions.begin() + i, resolution);
-				added = true;
-				break;
-			}
-			else if(currentRes.y == resolution.y)
-			{
-				return;
-			}
-		}
-	}
-
-	if(!added)
-	{
-		supportedResolutions.push_back(resolution);
-	}
-}
-
-void MainController::updateScreenResolution(ivec2 newResolutionToUse, int newWindowModeToUse)
-{
-	if(newResolutionToUse.x != currentResolution.x || newResolutionToUse.y != currentResolution.y)
-	{
-
-		windowInfo->screenWidth = newResolutionToUse.x;
-		windowInfo->screenHeight = newResolutionToUse.y;
-		windowInfo->halfScreenWidth = windowInfo->screenWidth / 2;
-		windowInfo->halfScreenHeight = windowInfo->screenHeight / 2;
-
-		vulkan->screenResolutionChanged(newResolutionToUse);
-		currentResolution = newResolutionToUse;
-	}
-
-	if(windowMode == MJ_WINDOW_MODE_FULLSCREEN || windowMode == MJ_WINDOW_MODE_BORDERLESS)
-	{
-		SDL_SetWindowFullscreen(displayWindow, 0);
-		if(resolutionType == MJ_WINDOW_RESOLUTION_MULTI_DISPLAY)
-		{
-			std::this_thread::sleep_for(std::chrono::milliseconds(4000));
-		}
-	}
-
-	windowMode = MJ_WINDOW_MODE_BORDERLESS;
-
-	if(resolutionType == MJ_WINDOW_RESOLUTION_NATIVE_DISPLAY)
-	{
-		windowMode = newWindowMode;
-
-		windowInfo->windowWidth = windowInfo->screenWidth;
-		windowInfo->windowHeight = windowInfo->screenHeight;
-	}
-	else if(resolutionType == MJ_WINDOW_RESOLUTION_MULTI_DISPLAY)
-	{
-		windowMode = MJ_WINDOW_MODE_FULLSCREEN;
-
-		windowInfo->windowWidth = windowInfo->screenWidth;
-		windowInfo->windowHeight = windowInfo->screenHeight;
-	}
-	else
-	{
-		windowMode = newWindowMode;
-
-		windowInfo->windowWidth = windowInfo->screenWidth;
-		windowInfo->windowHeight = windowInfo->screenHeight;
-
-		if(windowMode == MJ_WINDOW_MODE_BORDERLESS)
-		{	
-			windowInfo->windowWidth = singleDisplayNativeResolution.x;
-			windowInfo->windowHeight = singleDisplayNativeResolution.y;
-		}
-		else if(windowMode == MJ_WINDOW_MODE_FULLSCREEN)
-		{
-			bool found = false;
-			std::vector<ivec2> primaryDisplaySupportedResolutions;
-
-            SDL_DisplayID displayID = SDL_GetPrimaryDisplay();
-            int numDisplayModes = 0;
-            SDL_DisplayMode ** modes = SDL_GetFullscreenDisplayModes(displayID, &numDisplayModes);
-			for(int modeIndex = 0; modeIndex < numDisplayModes; modeIndex++)
-			{
-				SDL_DisplayMode* mode = modes[modeIndex];
-                primaryDisplaySupportedResolutions.push_back(ivec2(mode->w, mode->h));
-			}
-
-			for(ivec2& supported : primaryDisplaySupportedResolutions)
-			{
-				if(supported.x == windowInfo->screenWidth && supported.y == windowInfo->screenHeight)
-				{
-					found = true;
-					break;
-				}
-			}
-
-			if(found)
-			{
-				windowInfo->windowWidth = windowInfo->screenWidth;
-				windowInfo->windowHeight = windowInfo->screenHeight;
-			}
-			else
-			{
-				windowInfo->windowWidth = singleDisplayNativeResolution.x;
-				windowInfo->windowHeight = singleDisplayNativeResolution.y;
-			}
-		}
-
-		if(windowMode != MJ_WINDOW_MODE_FULLSCREEN)
-		{
-			if(multiDisplayNativeResolution.x != 0)
-			{
-				windowInfo->windowWidth = min(windowInfo->windowWidth, (float)multiDisplayNativeResolution.x);
-				windowInfo->windowHeight = min(windowInfo->windowHeight, (float)multiDisplayNativeResolution.y);
-			}
-			else
-			{
-				windowInfo->windowWidth = min(windowInfo->windowWidth, (float)singleDisplayNativeResolution.x);
-				windowInfo->windowHeight = min(windowInfo->windowHeight, (float)singleDisplayNativeResolution.y);
-			}
-		}
-
-		windowInfo->windowWidth = max(windowInfo->windowWidth, 100.0f);
-		windowInfo->windowHeight = max(windowInfo->windowHeight, 100.0f);
-	}
-
-
-	windowInfo->halfWindowWidth = windowInfo->windowWidth / 2;
-	windowInfo->halfWindowHeight = windowInfo->windowHeight / 2;
-
-	//windowMode = newWindowModeToUse;
-
-	SDL_SetWindowSize(displayWindow, windowInfo->windowWidth, windowInfo->windowHeight);
-
-	if(windowMode == MJ_WINDOW_MODE_BORDERLESS)
-	{
-		SDL_SetWindowBordered(displayWindow, false);
-		SDL_SetWindowPosition(displayWindow, 0, 0);
-		SDL_SetWindowFullscreen(displayWindow, true);
-	}
-	else if(windowMode == MJ_WINDOW_MODE_FULLSCREEN)
-	{
-		SDL_SetWindowBordered(displayWindow, false);
-		if(resolutionType == MJ_WINDOW_RESOLUTION_MULTI_DISPLAY)
-		{
-			SDL_SetWindowPosition(displayWindow, multiDisplayOrigin.x, multiDisplayOrigin.y);
-		}
-		else
-		{
-			SDL_SetWindowPosition(displayWindow, 0, 0);
-		}
-		SDL_SetWindowFullscreen(displayWindow, SDL_WINDOW_FULLSCREEN);
-	}
-	else
-	{
-		SDL_SetWindowBordered(displayWindow, true);
-		SDL_SetWindowPosition(displayWindow, SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED);
-	}
-}
-
-
 MainController::MainController()
 {
     
@@ -250,19 +77,14 @@ void MainController::init(std::string windowTitle, std::string organizationName,
 	initializeDatabase();
     
     int flags = SDL_WINDOW_RESIZABLE;
-    
-
-	addResolution(ivec2(2560,1440));
-	addResolution(ivec2(1920,1080));
-	addResolution(ivec2(1280,720));
-	addResolution(ivec2(720,480));
 	
     windowInfo = new WindowInfo();
 
+    SDL_DisplayID displayID = SDL_GetPrimaryDisplay();
+    const SDL_DisplayMode* mode = SDL_GetCurrentDisplayMode(displayID);
 
-	int screenWidth = 1920;
-    int screenHeight = 1080;
-	int windowModeToUse = MJ_WINDOW_MODE_FULLSCREEN;
+	int screenWidth = mode->w * 0.8;
+    int screenHeight = mode->h * 0.8;
 	fovY = DEFAULT_FOVY;
     
 #if TARGET_OS_IPHONE
@@ -275,27 +97,10 @@ void MainController::init(std::string windowTitle, std::string organizationName,
 #endif
 
 	vsync = true;
-
-    
-    resolutionType = MJ_WINDOW_RESOLUTION_STANDARD;
-    windowModeToUse = MJ_WINDOW_MODE_WINDOWED;
-    
-	currentResolution = ivec2(screenWidth, screenHeight);
-
     windowInfo->screenWidth = screenWidth;
     windowInfo->screenHeight = screenHeight;
 	windowInfo->halfScreenWidth = windowInfo->screenWidth / 2;
 	windowInfo->halfScreenHeight = windowInfo->screenHeight / 2;
-
-	windowMode = windowModeToUse;
-	if(windowMode == MJ_WINDOW_MODE_BORDERLESS)
-	{
-		flags = flags | SDL_WINDOW_BORDERLESS;
-	}
-	else if(windowMode == MJ_WINDOW_MODE_FULLSCREEN)
-	{
-		flags = flags | SDL_WINDOW_BORDERLESS;
-	}
 
     
     flags |= SDL_WINDOW_VULKAN | SDL_WINDOW_HIGH_PIXEL_DENSITY;
@@ -310,11 +115,6 @@ void MainController::init(std::string windowTitle, std::string organizationName,
 		SDL_ShowSimpleMessageBox(SDL_MESSAGEBOX_ERROR,"Failed to create game window",userMessage.c_str(),NULL);
 		exit(0);
     }
-
-	if(windowMode == MJ_WINDOW_MODE_FULLSCREEN)
-	{
-		SDL_SetWindowFullscreen(displayWindow, SDL_WINDOW_FULLSCREEN);
-	}
 
 
     int w,h;
@@ -451,13 +251,6 @@ void MainController::draw(double frameLerp)
         
     }
     FPSCount++;
-
-	if(needsToUpdateResolution)
-	{
-		needsToUpdateResolution = false;
-		updateScreenResolution(newResolution, newWindowMode);
-	}
-    
 
     bool recordStarted = vulkan->startRecord();
 
@@ -673,55 +466,6 @@ void MainController::appLostFocus()
 void MainController::appGainedFocus()
 {
     //audio->appGainedFocus();
-}
-
-void MainController::selectScreenResolutionAndWindowMode(int screenResolutionIndex, int windowModeIndex)
-{
-	MJLog("selectScreenResolutionAndWindowMode: screenResolutionIndex:%d windowModeIndex:%d", screenResolutionIndex, windowModeIndex);
-	int selectionOffset = 1;
-	newResolution = ivec2(0,0);
-	newWindowMode = windowMode;
-
-	resolutionType = MJ_WINDOW_RESOLUTION_STANDARD;
-
-
-	if(screenResolutionIndex == 1)
-	{
-		newResolution = singleDisplayNativeResolution;
-		resolutionType = MJ_WINDOW_RESOLUTION_NATIVE_DISPLAY;
-		newWindowMode = windowModeIndex;
-	}
-
-	else
-	{
-		if(multiDisplayNativeResolution.x != 0)
-		{
-			if(screenResolutionIndex == 1 + selectionOffset)
-			{
-				newResolution = multiDisplayNativeResolution;
-				resolutionType = MJ_WINDOW_RESOLUTION_MULTI_DISPLAY;
-				newWindowMode = MJ_WINDOW_MODE_FULLSCREEN;
-			}
-			selectionOffset++;
-		}
-
-		if(newResolution.x == 0)
-		{
-			int arrayIndex = (int)supportedResolutions.size() - screenResolutionIndex + selectionOffset;
-			if(arrayIndex >= 0 && arrayIndex < supportedResolutions.size())
-			{
-				newResolution = supportedResolutions[arrayIndex];
-				newWindowMode = windowModeIndex;
-			}
-		}
-	}
-
-	if(newResolution.x != 0)
-	{
-		MJLog("selectScreenResolutionAndWindowMode: setting:%d,%d resolutionType:%d", newResolution.x, newResolution.y, resolutionType);
-		
-		needsToUpdateResolution = true;
-	}
 }
 
 void MainController::setVsync(bool newValue)
