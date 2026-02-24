@@ -93,7 +93,7 @@ private:
     bool needsToStartTextEntry;
     bool needsToFinishTextEntry;
     
-    bool runLoopRunning;
+    bool appHasFocus = true;
 
 	double smoothedTimeStep;
 	double accumulatedTimeStepError = 0.0;

@@ -81,7 +81,7 @@ void EventManager::init(MainController* mainController_,
     needsToFinishTextEntry = false;
     textEntryActive = false;
     
-    runLoopRunning = true;
+    appHasFocus = true;
     
     //sdlTimer = SDL_AddTimer(1, gameLoopTimer, this);
     timer = new Timer();
@@ -215,14 +215,10 @@ void EventManager::doCPUWork()
 
 void EventManager::idle()
 {
-	if(!runLoopRunning)
-	{
-		std::this_thread::sleep_for(std::chrono::milliseconds(30));
-		checkEvents();
-        double dt = clamp(timer->getDt(), 0.0, 0.1);
-        MJTimer::getInstance()->update(dt);
-		return;
-	}
+    /*if(!appHasFocus) //this may or may not be desirable, saves power in the background
+    {
+        std::this_thread::sleep_for(std::chrono::milliseconds(50));
+    }*/
     mainController->draw(accumulator / MAIN_THREAD_FIXED_TIME_STEP);
     
 }
@@ -432,15 +428,15 @@ void EventManager::handleEvent(SDL_Event* event)
         break;
     case SDL_EVENT_WINDOW_FOCUS_LOST:
         mainController->appLostFocus();
-        runLoopRunning = false;
+        appHasFocus = false;
         break;
     case SDL_EVENT_WINDOW_FOCUS_GAINED:
         mainController->appGainedFocus();
-        runLoopRunning = true;
+        appHasFocus = true;
         break;
     case SDL_EVENT_WINDOW_MOVED:
         mainController->mainWindowChangedPosition();
-        runLoopRunning = true;
+        appHasFocus = true;
         break;
     //case SDL_EVENT_WINDOW_RESIZED: //handled above
         //mainController->mainWindowChangedSize();

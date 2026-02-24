@@ -343,7 +343,31 @@ void KatipoBrowser::init()
                 ClientNetInterface* netInterface = nullptr;
                 if(netInterfaces.count(trackerKey) != 0)
                 {
-                    doGet(trackerKey, "", remoteURL, hostName, args);
+                    if(netInterfaces[trackerKey]->connected)
+                    {
+                        doGet(trackerKey, "", remoteURL, hostName, args);
+                    }
+                    else if(!netInterfaces[trackerKey]->connectedOrConnecting())
+                    {
+                        TuiTable* getArgs = args;
+                        getArgs->retain();
+
+                        TuiFunction* onConnect = new TuiFunction([this, trackerKey, remoteURL, hostName, getArgs](TuiTable* innerFuncArgs, TuiRef* existingResult, TuiDebugInfo* callingDebugInfo) -> TuiRef* {
+                            //todo check for connection success
+                            doGet(trackerKey, "", remoteURL, hostName, getArgs);
+                            getArgs->release(); //if connection fails, this leaks currently
+                            return TUI_NIL;
+                        });
+
+                        katipoTable->set("connected", onConnect);
+                        onConnect->release();
+
+                        netInterfaces[trackerKey]->connect();
+                    }
+                    else
+                    {
+                        MJError("attempt to call get while connecting"); //todo we could queue it up instead
+                    }
                 }
                 else
                 {
@@ -385,18 +409,19 @@ void KatipoBrowser::init()
                     
                     TuiTable* getArgs = args;
                     getArgs->retain();
+
                     TuiFunction* onConnect = new TuiFunction([this, trackerKey,remoteURL, hostName, getArgs](TuiTable* innerFuncArgs, TuiRef* existingResult, TuiDebugInfo* callingDebugInfo) -> TuiRef* {
                         //todo check for connection success
                         doGet(trackerKey, "", remoteURL, hostName, getArgs);
-                        getArgs->release();
+                        getArgs->release(); //if connection fails, this leaks currently
                         return TUI_NIL;
                     });
                     
                     katipoTable->set("connected", onConnect);
+                    onConnect->release();
                     
                     
-                    TuiFunction* onDisconnect = new TuiFunction([this](TuiTable* innerFuncArgs, TuiRef* existingResult, TuiDebugInfo* callingDebugInfo) -> TuiRef* {
-                        MJError("todo");
+                    TuiFunction* onDisconnect = new TuiFunction([this, getArgs](TuiTable* innerFuncArgs, TuiRef* existingResult, TuiDebugInfo* callingDebugInfo) -> TuiRef* {
                         /*if(currentSiteRootTable)
                         {
                             TuiTable* siteKatipoTable = currentSiteRootTable->getTable("katipo");
@@ -414,7 +439,6 @@ void KatipoBrowser::init()
                     
                     katipoTable->set("disconnected", onDisconnect);
                     
-                    onConnect->release();
                     
                     netInterface = new ClientNetInterface(trackerURL,
                                                           trackerPort,
