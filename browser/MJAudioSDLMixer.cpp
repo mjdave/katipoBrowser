@@ -1,9 +1,15 @@
 
 #include "MJAudioSDLMixer.h"
 #include "TuiScript.h"
+#include "MJAudio.h"
 
 #include "SDL_mixer.h"
 static const SDL_AudioSpec audioSpec = {SDL_AUDIO_S16, 2, 44100};
+
+void trackFinished(void* userdata, MIX_Track* track)
+{
+    ((MJAudioSDLMixer*)userdata)->skipToNextTrack();
+}
 
 MJAudioSDLMixer::MJAudioSDLMixer()
 {
@@ -24,7 +30,6 @@ MJAudioSDLMixer::MJAudioSDLMixer()
     }
 
     MIX_Init();
-
     mixer = MIX_CreateMixerDevice(audioDeviceId, &audioSpec);
 
     SDL_Log("AudioPlayer ready");
@@ -33,10 +38,34 @@ MJAudioSDLMixer::MJAudioSDLMixer()
 
 MJAudioSDLMixer::~MJAudioSDLMixer()
 {
-
     if(playQueue)
     {
         playQueue->release();
+    }
+}
+
+void MJAudioSDLMixer::updateInfo()
+{
+    if(currentTrack && currentAudio)
+    {
+        SDL_PropertiesID properties = MIX_GetAudioProperties(currentAudio);
+        std::string titleString = SDL_GetStringProperty(properties, MIX_PROP_METADATA_TITLE_STRING, "");
+        std::string artistString = SDL_GetStringProperty(properties, MIX_PROP_METADATA_ARTIST_STRING, "");
+
+        double duration = 0.0;
+        int64_t frames = SDL_GetNumberProperty(properties, MIX_PROP_METADATA_DURATION_FRAMES_NUMBER, 0);
+
+        if(frames > 0)
+        {
+            duration = MIX_AudioFramesToMS(currentAudio, frames);
+            duration /= 1000;
+        }
+
+        MJAudio::getInstance()->updateCurrentlyPlayingInfo(titleString, artistString, duration, nullptr, 0);
+    }
+    else
+    {
+        MJAudio::getInstance()->updateCurrentlyPlayingInfo("", "", 0, nullptr, 0);
     }
 }
 
@@ -80,6 +109,7 @@ void MJAudioSDLMixer::play(TuiTable* urls)
     }
 
     currentTrack = MIX_CreateTrack(mixer);
+    MIX_SetTrackStoppedCallback(currentTrack, trackFinished, this);
     currentAudio = MIX_LoadAudio_IO(mixer, stream, false, false);
 
     if (!MIX_SetTrackAudio(currentTrack, currentAudio)) {
@@ -91,6 +121,8 @@ void MJAudioSDLMixer::play(TuiTable* urls)
         MJError("Could not play track, %s", SDL_GetError()); //todo cleanup
         return;
     }
+
+    updateInfo();
 }
 
 void MJAudioSDLMixer::stop()
@@ -109,7 +141,7 @@ void MJAudioSDLMixer::skipToNextTrack()
         currentTrack = nullptr;
     }
 
-    if(playQueue && !playQueue->arrayObjects.empty())
+    if(playQueue && playQueue->arrayObjects.size() > songIndex + 1)
     {
         songIndex = (songIndex + 1) % playQueue->arrayObjects.size();
 
@@ -133,16 +165,17 @@ void MJAudioSDLMixer::skipToNextTrack()
             return;
         }
     }
+
+    updateInfo();
 }
 
 void MJAudioSDLMixer::updatePausedState()
 {
-    //this function needs to update any OS level playback UI, eg. 'now playing' widgets/menues. on Apple this updates MPNowPlayingInfoCenter
-    MJError("MJAudioSDLMixer::updatePausedState not implemented");
+    MJWarn("MJAudioSDLMixer::updatePausedState not implemented");
 }
 
 void MJAudioSDLMixer::updateCurrentlyPlayingOSInfo(const std::string& titleString, const std::string& artistString, double trackDuration, double elapsedPlaybackTime, void* imageBytes, int imageLength)
 {
     //this function needs to update any OS level playback UI, eg. 'now playing' widgets/menues. on Apple this updates MPNowPlayingInfoCenter
-    MJError("MJAudioSDLMixer::updateCurrentlyPlayingOSInfo not implemented");
+    MJWarn("MJAudioSDLMixer::updateCurrentlyPlayingOSInfo not implemented");
 }

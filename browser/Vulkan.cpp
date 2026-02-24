@@ -805,7 +805,7 @@ void Vulkan::recreateSwapChain()
 	//MJLog("recreateSwapChain");
 	int width, height;
     SDL_GetWindowSizeInPixels(window, &width, &height);
-    MJLog("recreateSwapChain drawable size:(%d,%d)", width, height);
+    //MJLog("recreateSwapChain drawable size:(%d,%d)", width, height);
 	if(width < 40 || height < 40)
 	{
         MJError("Zero size window");

@@ -29,7 +29,8 @@ public: // members
     
     MJAudioSDLMixer();
     ~MJAudioSDLMixer();
-    
+
+    void updateInfo();
     
     void updatePausedState();
     
