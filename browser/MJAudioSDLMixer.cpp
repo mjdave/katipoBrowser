@@ -2,13 +2,21 @@
 #include "MJAudioSDLMixer.h"
 #include "TuiScript.h"
 #include "MJAudio.h"
+#include "MJTimer.h"
 
 #include "SDL_mixer.h"
 static const SDL_AudioSpec audioSpec = {SDL_AUDIO_S16, 2, 44100};
 
 void trackFinished(void* userdata, MIX_Track* track)
 {
-    ((MJAudioSDLMixer*)userdata)->skipToNextTrack();
+    ((MJAudioSDLMixer*)userdata)->trackFinshedCallback();
+}
+
+void MJAudioSDLMixer::trackFinshedCallback()
+{
+    MJTimer::getInstance()->addCallbackTimer(0.0,false,[this](uint32_t timerID, float dt) { //a simple way to delay this, as we can't actually skip the track from within the trackFinished callback
+        skipToNextTrack();
+    });
 }
 
 MJAudioSDLMixer::MJAudioSDLMixer()
