@@ -2,7 +2,7 @@ keys = require("app/common/keys.tui")
 
 standardColor = vec4(1.0,1.0,1.0,1.0)
 disabledColor = vec4(0.5,0.5,0.5,0.5)
-selectedColor = vec4(0.5,0.5,1.0,1.0)
+selectedColor = vec4(0.5,0.9,1.0,1.0)
 
 resize = function(textEntryView, size)
 {
@@ -27,33 +27,7 @@ updateVisuals = function(userData)
             {
                 userData.textView.text = ""
             }
-
-            userData.desiredBackgroundSize = userData.textView.size.x + 12
         }
-
-        desiredBackgroundSize = userData.desiredBackgroundSize
-        if(!desiredBackgroundSize)
-        {
-            desiredBackgroundSize = 0
-        }
-        if(userData.promptTextView)
-        {
-            desiredBackgroundSize = desiredBackgroundSize + userData.promptTextView.size.x
-        }
-
-        if(desiredBackgroundSize > userData.backgroundView.size.x)
-        {
-            newSize = vec2(desiredBackgroundSize, userData.backgroundView.size.y)
-            resize(textEntryView, newSize)
-        }
-        elseif(desiredBackgroundSize < userData.backgroundView.size.x)
-        {
-            newWidth = math.max(desiredBackgroundSize, userData.minWidth)
-            newSize = vec2(newWidth, userData.backgroundView.size.y)
-            resize(textEntryView, newSize)
-        }
-
-        
 
         if(userData.disabled)
         {
@@ -72,13 +46,6 @@ updateVisuals = function(userData)
         }
     }
 }
-
-#uiTextEntry.types = mj:enum {
-#    "standard_10x3",
-#    "wide",
-#    "multiLine",
-#    "chatInput",
-#}
 
 updateCursorPosition = function(userData)
 {
@@ -595,8 +562,14 @@ callClickFunction = function(textEntryView)
     textEntryView.textEntryViewData.textViewClickFunction()
 }
 
-setText = function(userData, text_)
+setText = function(userDataOrTextView, text_)
 {
+    userData = userDataOrTextView
+    if(userDataOrTextView.textEntryViewData)
+    {
+        userData = userDataOrTextView.textEntryViewData
+    }
+
     textToUse = text_
     if(!textToUse)
     {

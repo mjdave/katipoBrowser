@@ -16,8 +16,8 @@
 		5B49FE022F2C6D4E007C1980 /* SDL3_mixer.framework in Embed Libraries */ = {isa = PBXBuildFile; fileRef = 5B49FE012F2C6D4E007C1980 /* SDL3_mixer.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		5B49FE042F2C72C5007C1980 /* katipoBrowser.icon in Resources */ = {isa = PBXBuildFile; fileRef = 5B49FE032F2C72C5007C1980 /* katipoBrowser.icon */; };
 		5B49FE062F2C7EBC007C1980 /* app in Resources */ = {isa = PBXBuildFile; fileRef = 5B49FE052F2C7EBC007C1980 /* app */; };
-		5B4B70C22F469DE70014FD48 /* MoltenVK.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5B4B70C12F469DE70014FD48 /* MoltenVK.xcframework */; };
-		5B4B70C32F469DEC0014FD48 /* MoltenVK.xcframework in Embed Libraries */ = {isa = PBXBuildFile; fileRef = 5B4B70C12F469DE70014FD48 /* MoltenVK.xcframework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		5B63135F2F46F03200206946 /* libMoltenVK.dylib in Embed Libraries */ = {isa = PBXBuildFile; fileRef = 5B63135E2F46F03200206946 /* libMoltenVK.dylib */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
+		5B6313602F46F04200206946 /* libMoltenVK.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 5B63135E2F46F03200206946 /* libMoltenVK.dylib */; };
 		5BED52FC2E6014340028ED11 /* MediaPlayer.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5BED52FB2E6014340028ED11 /* MediaPlayer.framework */; };
 		5BF103792F3004410012FC48 /* protocol.c in Sources */ = {isa = PBXBuildFile; fileRef = 5BF103772F3004410012FC48 /* protocol.c */; };
 		5BF1037A2F3004410012FC48 /* unix.c in Sources */ = {isa = PBXBuildFile; fileRef = 5BF103782F3004410012FC48 /* unix.c */; };
@@ -39,9 +39,9 @@
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
-				5B4B70C32F469DEC0014FD48 /* MoltenVK.xcframework in Embed Libraries */,
 				5B49FE002F2C6D3A007C1980 /* SDL3.framework in Embed Libraries */,
 				5B49FE022F2C6D4E007C1980 /* SDL3_mixer.framework in Embed Libraries */,
+				5B63135F2F46F03200206946 /* libMoltenVK.dylib in Embed Libraries */,
 			);
 			name = "Embed Libraries";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -70,7 +70,7 @@
 		5B49FE012F2C6D4E007C1980 /* SDL3_mixer.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SDL3_mixer.framework; path = thirdPartyMac/SDL3_mixer.framework; sourceTree = "<group>"; };
 		5B49FE032F2C72C5007C1980 /* katipoBrowser.icon */ = {isa = PBXFileReference; lastKnownFileType = folder.iconcomposer.icon; name = katipoBrowser.icon; path = ../working/katipoBrowser.icon; sourceTree = SOURCE_ROOT; };
 		5B49FE052F2C7EBC007C1980 /* app */ = {isa = PBXFileReference; lastKnownFileType = folder; name = app; path = ../app; sourceTree = "<group>"; };
-		5B4B70C12F469DE70014FD48 /* MoltenVK.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; name = MoltenVK.xcframework; path = thirdPartyMac/MoltenVK/dynamic/MoltenVK.xcframework; sourceTree = "<group>"; };
+		5B63135E2F46F03200206946 /* libMoltenVK.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libMoltenVK.dylib; path = thirdPartyMac/MoltenVK/dynamic/dylib/macOS/libMoltenVK.dylib; sourceTree = "<group>"; };
 		5BED52FB2E6014340028ED11 /* MediaPlayer.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MediaPlayer.framework; path = System/Library/Frameworks/MediaPlayer.framework; sourceTree = SDKROOT; };
 		5BF103712F3004410012FC48 /* callbacks.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; name = callbacks.c; path = "../katipo/thirdParty/enet-1.3.18/callbacks.c"; sourceTree = SOURCE_ROOT; };
 		5BF103722F3004410012FC48 /* compress.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; name = compress.c; path = "../katipo/thirdParty/enet-1.3.18/compress.c"; sourceTree = SOURCE_ROOT; };
@@ -143,11 +143,11 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				5B4B70C22F469DE70014FD48 /* MoltenVK.xcframework in Frameworks */,
 				5B1AD7912E6069B6005D15BD /* CoreMedia.framework in Frameworks */,
 				5BED52FC2E6014340028ED11 /* MediaPlayer.framework in Frameworks */,
 				5B49FD2A2F2C21BB007C1980 /* SDL3.framework in Frameworks */,
 				5B49FDFD2F2C5A43007C1980 /* libsodium.a in Frameworks */,
+				5B6313602F46F04200206946 /* libMoltenVK.dylib in Frameworks */,
 				5B49FD2B2F2C21BB007C1980 /* SDL3_mixer.framework in Frameworks */,
 				5B1384B12E3A08F900AEF9AD /* AVFoundation.framework in Frameworks */,
 			);
@@ -164,7 +164,6 @@
 				5BED52FB2E6014340028ED11 /* MediaPlayer.framework */,
 				5B1384B02E3A08F900AEF9AD /* AVFoundation.framework */,
 				5B1384AD2E3A08B600AEF9AD /* AudioToolbox.framework */,
-				5B4B70C12F469DE70014FD48 /* MoltenVK.xcframework */,
 				5B49FD282F2C21BB007C1980 /* SDL3.framework */,
 				5B49FD292F2C21BB007C1980 /* SDL3_mixer.framework */,
 			);
@@ -174,6 +173,7 @@
 		5BFDBCF82CC78B1E00247D8D = {
 			isa = PBXGroup;
 			children = (
+				5B63135E2F46F03200206946 /* libMoltenVK.dylib */,
 				5B49FE052F2C7EBC007C1980 /* app */,
 				5B49FE012F2C6D4E007C1980 /* SDL3_mixer.framework */,
 				5B49FDFF2F2C6D3A007C1980 /* SDL3.framework */,
@@ -460,6 +460,7 @@
 				LIBRARY_SEARCH_PATHS = (
 					"\"$(SRCROOT)/../ThirdParty\"",
 					"\"$(SRCROOT)/../katipo/thirdParty/libsodium/macos/lib\"",
+					"$(PROJECT_DIR)/thirdPartyMac/MoltenVK/dynamic/dylib/macOS",
 				);
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.majicjungle.katipoBrowser;
@@ -519,6 +520,7 @@
 				LIBRARY_SEARCH_PATHS = (
 					"\"$(SRCROOT)/../ThirdParty\"",
 					"\"$(SRCROOT)/../katipo/thirdParty/libsodium/macos/lib\"",
+					"$(PROJECT_DIR)/thirdPartyMac/MoltenVK/dynamic/dylib/macOS",
 				);
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.majicjungle.katipoBrowser;

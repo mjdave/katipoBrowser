@@ -504,7 +504,7 @@
 				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = NO;
 				CLANG_ENABLE_OBJC_ARC = NO;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
+				CURRENT_PROJECT_VERSION = 2;
 				DEVELOPMENT_TEAM = 9Q78V5BF2N;
 				FRAMEWORK_SEARCH_PATHS = (
 					"\"$(SRCROOT)/../thirdPartyiOS\"",
@@ -525,12 +525,18 @@
 					"\"$(SRCROOT)/thirdPartyiOS/SDL3_mixer.framework/Headers\"",
 				);
 				INFOPLIST_FILE = katipoBrowser/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = "Katipo Browser";
+				INFOPLIST_KEY_ITSAppUsesNonExemptEncryption = NO;
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.utilities";
+				INFOPLIST_KEY_NSBluetoothAlwaysUsageDescription = "Playing audio over bluetooth";
+				INFOPLIST_KEY_NSCameraUsageDescription = "Taking photos to share over a katipo network";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UIRequiredDeviceCapabilities = metal;
-				INFOPLIST_KEY_UIStatusBarHidden = YES;
+				INFOPLIST_KEY_UIStatusBarHidden = NO;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				IPHONEOS_DEPLOYMENT_TARGET = 15.6;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -541,9 +547,10 @@
 					"\"$(SRCROOT)/../thirdPartyiOS/curl\"",
 					"\"$(SRCROOT)/../katipo/thirdParty/libsodium/ios/lib\"",
 				);
-				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.majicjungle.katipoBrowser;
+				MARKETING_VERSION = 0.1;
+				PRODUCT_BUNDLE_IDENTIFIER = com.katipobrowser;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = NO;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
@@ -557,7 +564,7 @@
 				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = NO;
 				CLANG_ENABLE_OBJC_ARC = NO;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
+				CURRENT_PROJECT_VERSION = 2;
 				DEVELOPMENT_TEAM = 9Q78V5BF2N;
 				FRAMEWORK_SEARCH_PATHS = (
 					"\"$(SRCROOT)/../thirdPartyiOS\"",
@@ -578,12 +585,18 @@
 					"\"$(SRCROOT)/thirdPartyiOS/SDL3_mixer.framework/Headers\"",
 				);
 				INFOPLIST_FILE = katipoBrowser/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = "Katipo Browser";
+				INFOPLIST_KEY_ITSAppUsesNonExemptEncryption = NO;
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.utilities";
+				INFOPLIST_KEY_NSBluetoothAlwaysUsageDescription = "Playing audio over bluetooth";
+				INFOPLIST_KEY_NSCameraUsageDescription = "Taking photos to share over a katipo network";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UIRequiredDeviceCapabilities = metal;
-				INFOPLIST_KEY_UIStatusBarHidden = YES;
+				INFOPLIST_KEY_UIStatusBarHidden = NO;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				IPHONEOS_DEPLOYMENT_TARGET = 15.6;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -594,9 +607,10 @@
 					"\"$(SRCROOT)/../thirdPartyiOS/curl\"",
 					"\"$(SRCROOT)/../katipo/thirdParty/libsodium/ios/lib\"",
 				);
-				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.majicjungle.katipoBrowser;
+				MARKETING_VERSION = 0.1;
+				PRODUCT_BUNDLE_IDENTIFIER = com.katipobrowser;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = NO;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};

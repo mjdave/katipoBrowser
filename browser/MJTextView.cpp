@@ -239,7 +239,8 @@ void MJTextView::setSizeInternal(dvec2 size_)
         {
             TuiRef* inRef = new TuiVec2(size);
             TuiRef* sizeRef = subView->parentSizeChangedFunction->call("parentSizeChangedFunction", inRef);
-            subView->stateTable->setVec2("size", ((TuiVec2*)sizeRef)->value);
+            //subView->stateTable->setVec2("size", ((TuiVec2*)sizeRef)->value);
+            subView->setSize(((TuiVec2*)sizeRef)->value);
             inRef->release();
             sizeRef->release();
         }
