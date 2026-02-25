@@ -153,6 +153,7 @@ void MJAudioSDLMixer::skipToNextTrack()
         }
 
         currentTrack = MIX_CreateTrack(mixer);
+        MIX_SetTrackStoppedCallback(currentTrack, trackFinished, this);
         currentAudio = MIX_LoadAudio_IO(mixer, stream, false, false);
 
         if(!MIX_SetTrackAudio(currentTrack, currentAudio)) {
