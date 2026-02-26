@@ -147,19 +147,38 @@ cursorChanged = function(userData, horizontalOffset, verticalOffset)
     }
 }
 
-create = function(parentView, sizeOrNilForParentSize, typeOrNilFor10x3, horizontalAlignmentOrNilForCentered, descriptionTextOrNil)
+create = function(parentView, options)
 {
-    horizontalAlignment = horizontalAlignmentOrNilForCentered
-    size = sizeOrNilForParentSize
-    if(!sizeOrNilForParentSize)
+    font = "roboto"
+    fontSize = 16
+    horizontalAlignment = nil #defaults to centered
+    size = parentView.size
+    backgroundColor = vec4(0.0,0.0,0.0,0.8)
+
+    if(options)
     {
-        size = parentView.size
+        if(options.font)
+        {
+            font = options.font
+        }
+        if(options.fontSize)
+        {
+            fontSize = options.fontSize
+        }
+        if(options.backgroundColor)
+        {
+            backgroundColor = options.backgroundColor
+        }
+        if(options.horizontalAlignment)
+        {
+            horizontalAlignment = options.horizontalAlignment
+        }
     }
     
     userData = {
         horizontalAlignment = horizontalAlignment
-        fontSize = 16
-        font = "roboto" //todo
+        fontSize = fontSize
+        font = font
         cursorTimer = 0.0
         cursorOffset = 0
         minWidth = size.x
@@ -173,8 +192,6 @@ create = function(parentView, sizeOrNilForParentSize, typeOrNilFor10x3, horizont
     textEntryView = parentView.addView(textEntryViewLayout)
     userData.view = textEntryView
     textEntryView.textEntryViewData = userData
-
-    backgroundColor = vec4(0.0,0.0,0.0,0.8)
     verticalAlignment = MJPositionCenter
 
 
@@ -206,7 +223,7 @@ create = function(parentView, sizeOrNilForParentSize, typeOrNilFor10x3, horizont
 
 
     cursorViewLayout = {
-        size = vec2(1,18)
+        size = vec2(1,fontSize + 2)
         type = "color"
         color = vec4(1.0,1.0,1.0,1.0)
         horizontalAlignment = "left"
@@ -311,7 +328,7 @@ create = function(parentView, sizeOrNilForParentSize, typeOrNilFor10x3, horizont
             }
             if(userData.editing)
             {
-                warn("todo, allow cursor position change with click")
+                print("todo, allow cursor position change with click")
                 /*if(userData.text)
                 {
                     textViewLoc = textEntryView:locationRelativeToView(mouseLoc, userData.textView)

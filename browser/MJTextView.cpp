@@ -159,6 +159,7 @@ void MJTextView::updateDimensions()
 		double textRenderScaleToUse = textRenderScale;
 		irect enclosingRect = font->calculateEnclosingRect(text, textAlignment, wrapWidth * scaleToUse, 1.0 / textRenderScaleToUse);
 		setSizeInternal((dvec2(enclosingRect.size) * fontGeometryScale) / scaleToUse);
+        stateTable->setVec2("size", ((dvec2(enclosingRect.size) * fontGeometryScale) / scaleToUse));
 
 		textRenderOffset = dvec2(-enclosingRect.origin.x, -enclosingRect.origin.y) * fontGeometryScale;
 
@@ -266,7 +267,7 @@ void MJTextView::addColoredText(std::string incomingString, dvec4 color)
 
 		textString = textString + incomingString;
         
-		//updateDimensions();
+		updateDimensions();
 
 		bufferNeedsUpdating = true;
 	}

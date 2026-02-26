@@ -52,7 +52,7 @@ untrustedSiteCodePermissionFunction = function(functionName, args, hasPermission
 
 getSitePath = function(hostID)
 {
-    return file.getSavePath("browserSites/" + string.subString(hostID, 0, 6) + "/")
+    return file.getSavePath("browserSites/" + hostID + "/")
 }
 
 getCallback = function(result, hostID, url)

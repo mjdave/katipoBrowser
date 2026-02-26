@@ -108,7 +108,7 @@ void KatipoBrowser::doGet(const std::string& trackerKey,
                 TuiRef* hostPublicKeyRef = ((TuiTable*)result)->get("publicKey");
                 if(hostPublicKeyRef && hostPublicKeyRef->type() == Tui_ref_type_STRING)
                 {
-                    std::string hostSiteKey = TuiSHA1::sha1(trackerKey + hostName).substr(0,6);
+                    std::string hostSiteKey = TuiSHA1::sha1(trackerKey + hostName).substr(0,6) + "_" + hostName;
                     
                     netInterface->callRemoteHostFunction(hostSiteKey, ((TuiString*)hostPublicKeyRef)->value, remoteFuncCallArgs);
                     
@@ -290,6 +290,11 @@ void KatipoBrowser::init()
                     {
                         SiteConnectionInfo& siteConnectionInfo = siteConnectionInfosByHostID[hostID];
                         MJView* subView = siteConnectionInfo.mainView->getSubViewWithID(((TuiString*)viewNameRef)->value);
+                        if(!subView)
+                        {
+                            TuiParseError(callingDebugInfo->fileName.c_str(), callingDebugInfo->lineNumber, "view not found:%s", ((TuiString*)viewNameRef)->value.c_str());
+                            return TUI_NIL;
+                        }
                         return subView->stateTable->retain();
                     }
                 }

@@ -1788,7 +1788,8 @@ void MJView::loadFromTable(TuiTable* table, bool isRoot)
             TuiRef* inSizeRef = new TuiVec2(parentView->size);
             
             TuiRef* sizeRef = parentSizeChangedFunction->call("parentSizeChangedFunction", inSizeRef);
-            //stateTable->setVec2("size", ((TuiVec2*)sizeRef)->value);
+            //stateTable->set("size", parentSizeChangedFunction);
+            stateTable->setVec2("size", ((TuiVec2*)sizeRef)->value); //hmm we can't do this, because it will replace the function
             
             setSize(((TuiVec2*)sizeRef)->value);
             
@@ -1898,10 +1899,6 @@ void MJView::tableKeyChanged(const std::string& key, TuiRef* value)
         switch (value->type()) {
             case Tui_ref_type_VEC2:
             {
-                if(parentSizeChangedFunction)
-                {
-                    MJError("ioops");
-                }
                 setSize(((TuiVec2*)value)->value);
             }
                 break;
@@ -1925,7 +1922,11 @@ void MJView::tableKeyChanged(const std::string& key, TuiRef* value)
                 
                 break;
             default:
-                MJError("Expected vec2 or function");
+                if(parentSizeChangedFunction)
+                {
+                    parentSizeChangedFunction->release();
+                    parentSizeChangedFunction = nullptr;
+                }
                 break;
         }
     }
