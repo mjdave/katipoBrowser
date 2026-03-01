@@ -124,7 +124,8 @@ void MJView::initInternals()
                 MJView* subView = getSubViewWithID(((TuiString*)viewNameRef)->value);
                 if(!subView)
                 {
-                    MJError("no subView named:%s", ((TuiString*)viewNameRef)->value.c_str());
+                    MJWarn("no subView named:%s", ((TuiString*)viewNameRef)->value.c_str());
+                    return TUI_NIL;
                 }
                 return subView->stateTable->retain();
             }
@@ -1823,12 +1824,12 @@ void MJView::loadFromTable(TuiTable* table, bool isRoot)
     
     if(table->hasKey("pos"))
     {
-        stateTable->set("pos", table->objectsByStringKey["pos"]);
+        stateTable->setVec3("pos", table->getVec3("pos"));
     }
     
     if(table->hasKey("hidden"))
     {
-        stateTable->set("hidden", table->objectsByStringKey["hidden"]);
+        stateTable->setBool("hidden", table->getBool("hidden"));
     }
     
     idString = table->getString("id");

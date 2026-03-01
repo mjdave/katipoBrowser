@@ -206,19 +206,19 @@ void MJImageView::loadFromTable(TuiTable* table, bool isRoot)
     }
     if(table->hasKey("shader"))
     {
-        stateTable->set("shader", table->objectsByStringKey["shader"]);
+        stateTable->setString("shader", table->getString("shader"));
     }
     if(table->hasKey("crop"))
     {
-        stateTable->set("crop", table->objectsByStringKey["crop"]);
+        stateTable->setBool("crop", table->getBool("crop"));
     }
     if(table->hasKey("path"))
     {
-        stateTable->set("path", table->objectsByStringKey["path"]);
+        stateTable->setString("path", table->getString("path"));
     }
     if(table->hasKey("shaderUserData"))
     {
-        stateTable->set("shaderUserData", table->objectsByStringKey["shaderUserData"]);
+        stateTable->setVec4("shaderUserData", table->getVec4("shaderUserData"));
     }
 }
 

@@ -93,7 +93,7 @@ create = function(parentView)
         type = "view"
         size = function(parentSize)
         {
-            print("in scrollview resize:", parentSize)
+            #print("in scrollview resize:", parentSize)
             return parentSize
         }
     }

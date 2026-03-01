@@ -1,56 +1,99 @@
 
 scrollView = require("app/common/scrollView.tui")
+button = require("app/common/button.tui")
 
 headerHeight = 40
-
-headerLayout = {
-    id = "fileBrowserHeader"
-    type = "color"
-    color = vec4(0.2,0.3,0.0,0.2)
-    size = function(parentSize)
-    {
-        return vec2(parentSize.x, headerHeight)
-    }
-    alignmentX = "left"
-    alignmentY = "top"
-    subviews = {
-        {
-            id = "fileBrowserHeaderBackButton"
-            type = "image"
-            path = "img/back.png"
-            shader = "drawQuadTexturedHueShift"
-            size = vec2(30,30)
-            pos = vec3(5,0,0)
-            alignmentX = "left"
-        }
-        {
-            id = "fileBrowserHeaderTitle"
-            type = "text"
-            text = "Directory Name......"
-            font = "blockheadsHue" #todo
-            additiveBlend = true
-            fontSize = 18 #todo
-        }
-    }
-}
+rowHeight = 40
+headerBackButtonSize = vec2(30,30)
 
 leftPaneLayout = {
     type = "view"
     alignmentX = "left"
-    alignmentY = "bottom"
     size = function(parentSize)
     {
-        return vec2(parentSize.x / 2, parentSize.y - headerHeight)
+        return vec2(parentSize.x / 2, parentSize.y)
+    }
+    subviews = {
+        {
+            id = "headerLeft"
+            type = "color"
+            color = vec4(0.2,0.3,0.0,0.2)
+            size = function(parentSize)
+            {
+                return vec2(parentSize.x, headerHeight)
+            }
+            alignmentY = "top"
+            subviews = {
+                {
+                    id = "headerBackButton"
+                    hidden = true
+                    type = "image"
+                    path = "img/back.png"
+                    shader = "drawQuadTexturedHueShift"
+                    size = headerBackButtonSize
+                    pos = vec3(10,0,0)
+                    alignmentX = "left"
+                }
+                {
+                    id = "headerTitleLeft"
+                    type = "text"
+                    text = "Directory"
+                    font = "blockheadsHue" #todo
+                    additiveBlend = true
+                    fontSize = 14 #todo
+                }
+            }
+        }
+        {
+            type = "view"
+            id = "scrollViewContent"
+            alignmentY = "bottom"
+            size = function(parentSize)
+            {
+                return vec2(parentSize.x, parentSize.y - headerHeight)
+            }
+        }
     }
 }
 
 rightPaneLayout = {
     type = "view"
     alignmentX = "right"
-    alignmentY = "bottom"
     size = function(parentSize)
     {
-        return vec2(parentSize.x / 2, parentSize.y - headerHeight)
+        return vec2(parentSize.x / 2, parentSize.y)
+    }
+
+    subviews = {
+        {
+            id = "headerRight"
+            type = "color"
+            color = vec4(0.0,0.2,0.3,0.2)
+            size = function(parentSize)
+            {
+                return vec2(parentSize.x, headerHeight)
+            }
+            alignmentY = "top"
+            subviews = {
+                {
+                    id = "headerTitleRight"
+                    type = "text"
+                    text = "File"
+                    font = "blockheadsHue" #todo
+                    additiveBlend = true
+                    fontSize = 14 #todo
+                }
+            }
+        }
+        {
+            type = "view"
+            id = "scrollViewContent"
+            alignmentY = "bottom"
+            size = function(parentSize)
+            {
+                return vec2(parentSize.x, parentSize.y - headerHeight)
+            }
+        }
     }
 }
 
@@ -60,7 +103,7 @@ fileItemLayout = {
     color = vec4(0.04,0.12,0.15,0.1)
     size = function(parentSize)
     {
-        return vec2(parentSize.x - 20.0,60)
+        return vec2(parentSize.x - 20.0,rowHeight)
     }
 
     subviews = {
@@ -71,41 +114,46 @@ fileItemLayout = {
             font = "blockheadsHue"
             alignmentX = "left"
             additiveBlend = true
-            pos = vec3(20,0,0)
-            fontSize = 18
+            pos = vec3(10,0,0)
+            fontSize = 14
         }
-        /*{
-            id = "dotDotDotButton"
-            type = "image"
-            path = "img/dotDotDot.png"
-            shader = "drawQuadTexturedHueShiftClip"
-            pos = vec3(-20,0, 0)
-            size = vec2(40,40)
+    }
+}
+
+
+
+dirItemLayout = {
+    id = "fileItemBackground"
+    type = "color"
+    color = vec4(0.04,0.12,0.15,0.1)
+    size = function(parentSize)
+    {
+        return vec2(parentSize.x - 20.0,rowHeight)
+    }
+
+    subviews = {
+        {
+            id = "fileItemTitle"
+            type = "text"
+            text = "Title"
+            font = "blockheadsHue"
+            fontSize = 14
+            alignmentX = "left"
+            additiveBlend = true
+            pos = vec3(10,0,0)
+        }
+        {
+            id = "dirMarker"
+            type = "text"
+            font = "blockheadsHue"
+            fontSize = 18
+            text = ">"
+            pos = vec3(-10,0, 0)
             alignmentX = "right"
-        }*/
+        }
     }
 }
 
-create = function(parentView)
-{
-    userData = {
-    }
-
-    fileBrowserViewLayout = {
-        type = "view"
-    }
-
-    fileBrowserView = parentView.addView(fileBrowserViewLayout)
-    userData.view = fileBrowserView
-    fileBrowserView.fileBrowserViewData = userData
-
-    headerView = fileBrowserView.addView(headerLayout)
-    userData.headerView = headerView
-
-    userData.fileBrowserHeaderTitle = fileBrowserView.getView("fileBrowserHeaderTitle")
-
-    return fileBrowserView
-}
 
 updateVisuals = function(userData)
 {
@@ -127,31 +175,162 @@ updateVisuals = function(userData)
             }
         }
     }
+
+    if(userData.rightItemViews)
+    {
+        for(i, itemView in userData.rightItemViews)
+        {
+            if(i == userData.rightSelectedIndex)
+            {
+                itemView.color = itemView.baseColor + vec4(0.1,0.4,0.4,0.2)
+            }
+            else if(i == userData.rightHoverIndex)
+            {
+                itemView.color = itemView.baseColor + vec4(0.2,0.2,0.0,0.2)
+            }
+            else
+            {
+                itemView.color = itemView.baseColor
+            }
+        }
+    }
 }
 
-setDirectoryTree = function(fileBrowserView, directoryTree) #todo we could also create directoryTree if given a path argument. directoryTreeOrPath, and add a createDirectoryTree function
+setDirectoryTree = function(fileBrowserView, directoryTree, isFromNavigation) #todo we could also create directoryTree if given a path argument. directoryTreeOrPath, and add a createDirectoryTree function
 {
     userData = fileBrowserView.fileBrowserViewData
+    userData.currentFile = directoryTree
+
+    if(onBrowserContentChange)
+    {
+        onBrowserContentChange()
+    }
 
     if(userData.leftPaneView)
     {
-        #todo remove
-        error("todo fileBrowser.setDirectoryTree")
+        fileBrowserView.removeView(userData.leftPaneView)
     }
-
-    userData.fileBrowserHeaderTitle.text = directoryTree.fileName
 
     leftPaneView = fileBrowserView.addView(leftPaneLayout)
     userData.leftPaneView = leftPaneView
 
-    leftPaneScrollView = scrollView.create(leftPaneView)
+    if(!isFromNavigation)
+    {
+        userData.currentDirectoryStack = {directoryTree}
+    }
+    else
+    {
+        userData.headerBackButton = leftPaneView.getView("headerBackButton")
 
-    rightPaneView = fileBrowserView.addView(rightPaneLayout)
-    userData.rightPaneView = rightPaneView
+        stackCount = table.count(userData.currentDirectoryStack)
+        if(stackCount > 1)
+        {
+            userData.headerBackButton.hidden = false
+            headerBackButtonClickFunction = function()
+            {
+                if(userData.currentDirectoryStack)
+                {
+                    stackCount = table.count(userData.currentDirectoryStack)
+                    if(stackCount > 1)
+                    {
+                        table.remove(userData.currentDirectoryStack, stackCount - 1)
+                        setDirectoryTree(fileBrowserView, userData.currentDirectoryStack[stackCount - 2], true)
+                    }
+                }
+            }
+            button.create(userData.headerBackButton, -0.1, headerBackButtonClickFunction)
+        }
+        else
+        {
+            userData.headerBackButton.hidden = true
+        }
+    }
 
-    rightPaneScrollView = scrollView.create(rightPaneView)
+    userData.headerTitleLeft = leftPaneView.getView("headerTitleLeft")
+    userData.headerTitleLeft.text = directoryTree.fileName
+
+    leftScrollViewContent = leftPaneView.getView("scrollViewContent")
+    leftPaneScrollView = scrollView.create(leftScrollViewContent)
 
     #print("directoryTree:", directoryTree)
+
+    updateRightPanel = function(subTree)
+    {
+        if(userData.rightPaneView)
+        {
+            fileBrowserView.removeView(userData.rightPaneView)
+            userData.rightPaneView = nil
+        }
+
+        userData.rightItemViews = {}
+
+        rightPaneView = fileBrowserView.addView(rightPaneLayout)
+        userData.rightPaneView = rightPaneView
+
+        userData.headerTitleRight = rightPaneView.getView("headerTitleRight")
+        userData.headerTitleRight.text = subTree.fileName
+
+        if(subTree.files)
+        {
+
+            rightScrollViewContent = rightPaneView.getView("scrollViewContent")
+            rightPaneScrollView = scrollView.create(rightScrollViewContent)
+
+            for(i,file in subTree.files)
+            {
+                itemLayout = dirItemLayout
+                if(file.localPath)
+                {
+                    itemLayout = fileItemLayout
+                }
+                itemView = rightPaneScrollView.addView(itemLayout)
+                itemView.fileInfo = file
+
+                titleTextView = itemView.getView("fileItemTitle")
+                titleTextView.text = file.fileName
+
+                if(i % 2 == 0)
+                {
+                    itemView.color = itemView.color * 0.5
+                    itemView.color.w = 0.1
+                }
+                
+                itemView.baseColor = itemView.color
+
+                itemView.hoverStart = function()
+                {
+                    userData.rightHoverIndex = i
+                    updateVisuals(userData)
+                }
+
+                itemView.hoverEnd = function()
+                {
+                    if(userData.rightHoverIndex == i)
+                    {
+                        userData.rightHoverIndex = nil
+                        updateVisuals(userData)
+                    }
+                }
+
+                itemView.click = function()
+                {
+                    if(file.files)
+                    {
+                        table.insert(userData.currentDirectoryStack, subTree)
+                        setDirectoryTree(fileBrowserView, subTree, true)
+                    }
+                }
+
+                scrollView.insertRow(rightPaneScrollView, itemView)
+                table.insert(userData.rightItemViews, itemView)
+
+                if(onBrowserItemCreate)
+                {
+                    onBrowserItemCreate(itemView)
+                }
+            }
+        }
+    }
 
     if(directoryTree.files)
     {
@@ -159,7 +338,13 @@ setDirectoryTree = function(fileBrowserView, directoryTree) #todo we could also 
         userData.leftItemViews = {}
         for(i,file in directoryTree.files)
         {
-            itemView = leftPaneScrollView.addView(fileItemLayout)
+            itemLayout = dirItemLayout
+            if(file.localPath)
+            {
+                itemLayout = fileItemLayout
+            }
+            itemView = leftPaneScrollView.addView(itemLayout)
+            itemView.fileInfo = file
             titleTextView = itemView.getView("fileItemTitle")
             titleTextView.text = file.fileName
 
@@ -187,18 +372,51 @@ setDirectoryTree = function(fileBrowserView, directoryTree) #todo we could also 
                 }
             }
 
-            itemView.click = function()
+            if(!file.localPath)
             {
-                userData.leftSelectedIndex = i
-                updateVisuals(userData)
+                itemView.click = function()
+                {
+                    userData.leftSelectedIndex = i
+                    updateRightPanel(file)
+                    updateVisuals(userData)
+
+                    if(onBrowserContentChange)
+                    {
+                        onBrowserContentChange()
+                    }
+                }
             }
 
             scrollView.insertRow(leftPaneScrollView, itemView)
             table.insert(userData.leftItemViews, itemView)
+
+            if(onBrowserItemCreate)
+            {
+                onBrowserItemCreate(itemView)
+            }
         }
+
+        updateRightPanel(directoryTree.files[0])
     }
 
 
     updateVisuals(userData)
 
+}
+
+
+create = function(parentView)
+{
+    userData = {
+    }
+
+    fileBrowserViewLayout = {
+        type = "view"
+    }
+
+    fileBrowserView = parentView.addView(fileBrowserViewLayout)
+    userData.view = fileBrowserView
+    fileBrowserView.fileBrowserViewData = userData
+
+    return fileBrowserView
 }

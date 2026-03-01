@@ -692,7 +692,7 @@ void MJTextView::loadFromTable(TuiTable* table, bool isRoot)
     
     if(table->hasKey("text"))
     {
-        stateTable->set("text", table->objectsByStringKey["text"]);
+        stateTable->setString("text", table->getString("text"));
     }
 }
 
