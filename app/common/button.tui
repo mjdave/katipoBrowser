@@ -19,6 +19,10 @@ updateVisuals = function(view)
 
 create = function(view, hueOffset, clickFunction)
 {
+    if(!view)
+    {
+        error("button.create passed nil view")
+    }
     userData = {
         hover = false,
         hueOffset = hueOffset,

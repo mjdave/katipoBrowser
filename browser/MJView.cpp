@@ -124,7 +124,7 @@ void MJView::initInternals()
                 MJView* subView = getSubViewWithID(((TuiString*)viewNameRef)->value);
                 if(!subView)
                 {
-                    MJWarn("no subView named:%s", ((TuiString*)viewNameRef)->value.c_str());
+                    //MJWarn("no subView named:%s", ((TuiString*)viewNameRef)->value.c_str());
                     return TUI_NIL;
                 }
                 return subView->stateTable->retain();

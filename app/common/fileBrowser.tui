@@ -326,7 +326,7 @@ setDirectoryTree = function(fileBrowserView, directoryTree, isFromNavigation) #t
 
                 if(onBrowserItemCreate)
                 {
-                    onBrowserItemCreate(itemView)
+                    onBrowserItemCreate(itemView, i)
                 }
             }
         }
@@ -392,7 +392,7 @@ setDirectoryTree = function(fileBrowserView, directoryTree, isFromNavigation) #t
 
             if(onBrowserItemCreate)
             {
-                onBrowserItemCreate(itemView)
+                onBrowserItemCreate(itemView, i)
             }
         }
 
