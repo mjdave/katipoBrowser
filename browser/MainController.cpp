@@ -88,12 +88,12 @@ void MainController::init(std::string windowTitle, std::string organizationName,
 	fovY = DEFAULT_FOVY;
     
 #if TARGET_OS_IPHONE
-    SDL_DisplayID displayID = SDL_GetPrimaryDisplay();
-    const SDL_DisplayMode* mode = SDL_GetCurrentDisplayMode(displayID);
-    singleDisplayNativeResolution = ivec2(mode->w, mode->h);
+    //SDL_DisplayID displayID = SDL_GetPrimaryDisplay();
+    //const SDL_DisplayMode* mode = SDL_GetCurrentDisplayMode(displayID);
+    //singleDisplayNativeResolution = ivec2(mode->w, mode->h);
     windowInfo->pixelDensity = mode->pixel_density;
-    screenWidth = singleDisplayNativeResolution.x;
-    screenHeight = singleDisplayNativeResolution.y;
+    //screenWidth = singleDisplayNativeResolution.x;
+    //screenHeight = singleDisplayNativeResolution.y;
 #endif
 
 	vsync = true;
