@@ -530,7 +530,7 @@ create = function(parentView, options)
     
     backgroundView.clickDownOutside = function()
     {
-        finishEditing(userData, false)
+        finishEditing(userData, true)
     }
 
     return textEntryView

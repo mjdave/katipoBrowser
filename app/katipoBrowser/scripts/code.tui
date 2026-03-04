@@ -159,6 +159,7 @@ getCallback = function(result, hostID, url)
                     filePath = filesDirPath + fileInfo.fileName
                     if(file.isSubPath(filePath, siteSavePath))
                     {
+                        file.createDirectoriesIfNeededForFilePath(filePath)
                         #print("filepath:", filePath)
                         if(type(fileInfo.data) == "string")
                         {
