@@ -1,6 +1,7 @@
 textEntry = require("app/common/textEntry.tui")
 button = require("app/common/button.tui")
 defaultSiteScene = require("app/katipoBrowser/scripts/defaultSiteScene.tui")
+scrollView = require("app/common/scrollView.tui")
 
 print("katipoBrowser is running")
 currentSiteHostID = false #tui quirk, false instead of nil, as nil removes it
@@ -60,7 +61,7 @@ getCallback = function(result, hostID, url)
     print("got result with status:", result.status, " message:", result.message, " hostID:", hostID)
     if(!result or result.status != "ok")
     {
-        if(!currentSiteHostID)
+        if(!currentSiteHostID) #todo this leaves an ugly error background when we may be offline, maybe just fade it out or something
         {
             siteContentBackground.goalColor = vec4(0.2,0.0,0.0,0.6)
             defaultSiteContent.hidden = false
@@ -73,6 +74,7 @@ getCallback = function(result, hostID, url)
     {
         print("no changes on the host, everything is just great here")
         siteContentBackground.goalColor = vec4(0.0,0.0,0.2,0.4)
+        katipo.gotSiteUnchanged(hostID)
     }
     else if(result.pageTitle)
     {
@@ -175,8 +177,8 @@ getCallback = function(result, hostID, url)
                 }
             }
 
-            print("loading site code")
-            katipo.loadSite(hostID, siteSavePath, untrustedSiteCodePermissionFunction)
+            print("loading freshly updated site code")
+            katipo.loadSite(hostID, siteSavePath, untrustedSiteCodePermissionFunction, false)
 
             .currentSiteHostID = hostID
 
@@ -197,6 +199,7 @@ getCallback = function(result, hostID, url)
                 hostID = hostID
                 siteInfo = result.siteData.siteInfo
                 checksum = result.siteData.checksum
+                color = vec4(math.random(), math.random(), math.random(), 1.0)
                 #siteImage = result.siteData.siteImage
             }
             table.insert(bookmarks, 0, bookmarkInfo)
@@ -232,32 +235,32 @@ textEntry.setOnChangeCallback(urlTextEntry, function(textValue, confirmChanges){
 
 loadBookmarks = function()
 {
-    count = table.count(bookmarks)
-    columnCount = math.floor(count % 8) #todo base on screen width, re-layout on parent size change
-    rowCount = math.floor(count / 8) + 1
-
-    cellSize = bookmarkLayout.size.x
-    cellPadding = bookmarkLayout.cellPadding
-
-    getCellPos = function(index)
+    if(table.count(bookmarks) == 0)
     {
-        xIndex = math.floor(index % 8)
-        yIndex = math.floor(index / 8)
-
-        xOffset = -((columnCount - 1) * (cellSize + cellPadding) / 2)
-        yOffset = ((rowCount - 1) * (cellSize + cellPadding) / 2)
-
-        return vec3((cellSize + cellPadding) * xIndex + xOffset, (cellSize + cellPadding) * -yIndex + yOffset, 0.0)
+        bookmarksBackground.hidden = true
+        return
     }
+
+    bookmarksBackground.hidden = false
+    bookmarksBackground.size = function(parentSize)
+    {
+        totalHeight = scene.bookMarkHeight * table.count(bookmarks)
+        height = math.min(totalHeight, parentSize.y - scene.urlTextEntryHeight)
+        return vec2(scene.bookmarksListWidth, height)
+    }
+
+    bookmarksScrollView = scrollView.create(bookmarksBackground)
 
     for(i,bookmarkInfo in bookmarks)
     {
-        #todo some kind of scrolling saved spacial system like a Desktop, for now they will pile up on top of each other
-        bookmarkView = bookmarksBackground.addView(bookmarkLayout)
-        bookmarkView.pos = getCellPos(i)
+        bookmarkView = bookmarksScrollView.addView(bookmarkLayout)
+        
         title = bookmarkInfo.siteInfo.title
         bookmarkTitleView = bookmarkView.getView("bookmarkTitle")
         bookmarkTitleView.text = title
+
+        bookmarkSubtitleView = bookmarkView.getView("bookmarkSubtitle")
+        bookmarkSubtitleView.text = bookmarkInfo.url
 
         if(bookmarkInfo.siteImage)
         {
@@ -266,7 +269,10 @@ loadBookmarks = function()
         else
         {
             bookmarkMissingImage = bookmarkView.getView("bookmarkMissingImage")
-            #bookmarkMissingImage.color = vec4() #todo
+            if(bookmarkInfo.color)
+            {
+                bookmarkMissingImage.color = bookmarkInfo.color
+            }
             bookmarkMissingImageCharacter = bookmarkView.getView("bookmarkMissingImageCharacter")
             bookmarkMissingImageCharacter.text = string.subString(title, 0, 1)
         }
@@ -275,14 +281,16 @@ loadBookmarks = function()
         {
             siteContentBackground.goalColor = vec4(0.0, 0.015, 0.01, 0.6)
 
-            print("loading site code with checksum:", bookmarkInfo.checksum)
+            print("loading cached dusty old site code with checksum:", bookmarkInfo.checksum)
             siteSavePath = getSitePath(bookmarkInfo.hostID)
-            katipo.loadSite(bookmarkInfo.hostID, siteSavePath, untrustedSiteCodePermissionFunction)
+            katipo.loadSite(bookmarkInfo.hostID, siteSavePath, untrustedSiteCodePermissionFunction, true)
 
             katipo.get(bookmarkInfo.url, bookmarkInfo.checksum, getCallback)
             bookmarksBackground.hidden = true
         }
-        button.create(bookmarkView, -0.1, bookmarkClick)
+        button.create(bookmarkView, -0.1 - 0.1 * i, bookmarkClick)
+
+        scrollView.insertRow(bookmarksScrollView, bookmarkView)
     }
 }
 

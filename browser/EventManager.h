@@ -44,9 +44,6 @@ public:
 
 	void doCPUWork();
     
-    void setMouseHidden(bool mouseHidden_);
-    bool getMouseHidden() const;
-    
     void warpMouse(dvec2 pos);
     
     void preventMouseWarpUntilAfterNextShow();
@@ -77,7 +74,6 @@ public:
     SDL_Window* window;
 
 	dvec2 mouseLoc;
-	dvec2 mouseHideLoc = dvec2(0.0,0.0);
     
     dvec4 windowSafeArea;
     
@@ -88,7 +84,6 @@ private:
     SDL_TimerID sdlTimer;
     Timer* timer;
     
-    bool mouseHidden;
     bool textEntryActive;
     bool needsToStartTextEntry;
     bool needsToFinishTextEntry;
@@ -106,7 +101,6 @@ private:
 
 	dvec2 mouseMovementAccumulation = dvec2(0.0);
 	bool mouseMoved = false;
-	bool needsToUpdateSDLMouseHidden = false;
 	bool needsToResetMousePosition = false;
     
     bool hasTextEntryListener = false;

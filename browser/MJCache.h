@@ -43,6 +43,7 @@ class MJCache {
     
 public:
     Vulkan* vulkan;
+    double pixelDensity = 1.0;
     Database* appDatabase;
 
 	Camera* camera;

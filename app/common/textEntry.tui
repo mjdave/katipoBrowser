@@ -249,7 +249,7 @@ create = function(parentView, options)
     userData.initialOffset = textViewLayout.pos
     userData.textView = textView
 
-    userData.cursorView.relativeView = textView
+    userData.cursorView.layoutParent = textView
 
     updateCursorFunction = function(dt)
     {

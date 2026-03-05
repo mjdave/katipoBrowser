@@ -205,12 +205,35 @@ void KatipoBrowser::init()
     MJAudio::getInstance()->bindTui(rootTable);
     katipoTable = addKatipoTable(rootTable);
     
+    //katipo.gotSiteUnchanged(hostID)
+    katipoTable->setFunction("gotSiteUnchanged", [this](TuiTable* args, TuiRef* existingResult, TuiDebugInfo* callingDebugInfo) -> TuiRef* {
+        if(args->arrayObjects.size() >= 1)
+        {
+            std::string hostID = args->arrayObjects[0]->getStringValue();
+            SiteConnectionInfo& siteConnectionInfo = siteConnectionInfosByHostID[hostID];
+            TuiFunction* onConnectFunc = siteConnectionInfo.katipoTable->getFunction("onConnect");
+            if(onConnectFunc)
+            {
+                onConnectFunc->call("site loaded onConnect", TUI_FALSE);
+            }
+        }
+        
+        return TUI_NIL;
+    });
+    
     //katipo.loadSite(siteSavePath, untrustedSiteCodePermissionFunction)
     katipoTable->setFunction("loadSite", [this](TuiTable* args, TuiRef* existingResult, TuiDebugInfo* callingDebugInfo) -> TuiRef* { //note added outside function above so for now sites can't load other sites
         if(args->arrayObjects.size() >= 2)
         {
             std::string hostID = args->arrayObjects[0]->getStringValue();
             std::string siteSavePath = args->arrayObjects[1]->getStringValue();
+            
+            //katipo.loadSite(bookmarkInfo.hostID, siteSavePath, untrustedSiteCodePermissionFunction, isDustyOldCacheLoad)
+            bool isDustyOldCacheLoad = false;
+            if(args->arrayObjects.size() >= 4)
+            {
+                isDustyOldCacheLoad = args->arrayObjects[3]->boolValue();
+            }
             SiteConnectionInfo& siteConnectionInfo = siteConnectionInfosByHostID[hostID];
             if(!siteConnectionInfo.rootTable)
             {
@@ -314,6 +337,16 @@ void KatipoBrowser::init()
             
             siteConnectionInfo.mainView = MJView::loadUnknownViewFromTable(sceneTable->getTable("mainView"), MainController::getInstance()->mainMJView->getSubViewWithID("siteContent"), true);
             siteConnectionInfo.scriptState = (TuiTable*)TuiRef::runScriptFile(siteSavePath + "/scripts/code.tui", siteConnectionInfo.rootTable);
+            
+            if(!isDustyOldCacheLoad)
+            {
+                TuiFunction* onConnectFunc = siteConnectionInfo.katipoTable->getFunction("onConnect");
+                if(onConnectFunc)
+                {
+                    //MJLog("calling site loaded onConnect");
+                    onConnectFunc->call("site loaded onConnect", TUI_TRUE);
+                }
+            }
         }
         return TUI_NIL;
     });

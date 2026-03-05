@@ -1,5 +1,8 @@
 urlTextEntryHeight = 40
 
+bookmarksListWidth = 500
+bookMarkHeight = 40
+
 mainView = {
     type = "image"
     path = "app/katipoBrowser/img/colorsBackground.png"
@@ -20,7 +23,12 @@ mainView = {
                 {
                     id = "bookmarks"
                     type = "view"
-                    alignmentY = "top"
+                    alignmentY = "above"
+                    layoutParentID = "urlTextEntry"
+                    size = function(parentSize)
+                    {
+                        return vec2(math.min(bookmarksListWidth, parentSize.x), parentSize.y - urlTextEntryHeight)
+                    }
                 }
                 {
                     id = "urlTextEntry"
@@ -38,18 +46,21 @@ mainView = {
     }
 }
 
+bookmarkIconPadding = 4
 
 bookmark = {
-    type = "view"
-    size = vec2(80,80)
-    cellPadding = 10 #this is just arbitrary config added here for code.tui to use when laying out bookmarks
+    type = "color"
+    color = vec4(0.04,0.12,0.15,0.3)
+    size = vec2(bookmarksListWidth, bookMarkHeight)
+
     subviews = {
         {
             id = "bookmarkMissingImage"
             type = "color"
             color = vec4(0.0,0.6,0.8,0.8) #todo set this randomly for each site, maybe get from siteInfo
-            alignmentY = "top"
-            size = vec2(50,50)
+            alignmentX = "left"
+            size = vec2(bookMarkHeight - bookmarkIconPadding,bookMarkHeight - bookmarkIconPadding)
+            pos = vec3(bookmarkIconPadding,0,0)
 
             subviews = {
                 {
@@ -57,15 +68,16 @@ bookmark = {
                     type = "text"
                     text = "?"
                     font = "roboto"
-                    fontSize = 38
+                    fontSize = 32
                 }
             }
         }
         {
             id = "bookmarkImage"
             type = "image"
-            alignmentY = "top"
-            size = vec2(50,50)
+            alignmentX = "left"
+            size = vec2(bookMarkHeight - bookmarkIconPadding,bookMarkHeight - bookmarkIconPadding)
+            pos = vec3(bookmarkIconPadding,0,0)
             hidden = true
         }
         {
@@ -74,8 +86,20 @@ bookmark = {
             text = "Site Title"
             font = "roboto"
             fontSize = 16
-            alignmentY = "bottom"
-            size = vec2(100, 20)
+            alignmentX = "outerRight"
+            layoutParentID = "bookmarkImage"
+            alignmentY = "top"
+            pos = vec3(bookmarkIconPadding * 2,0,0)
+        }
+        {
+            id = "bookmarkSubtitle"
+            type = "text"
+            text = "Site Subtitle"
+            font = "roboto"
+            fontSize = 14
+            alignmentX = "left"
+            alignmentY = "below"
+            layoutParentID = "bookmarkTitle"
         }
     }
 }

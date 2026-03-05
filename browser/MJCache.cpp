@@ -166,7 +166,9 @@ MJFont* MJCache::getOrLoadFontIfAvailableInternal(std::string name, int pointSiz
 
 MJFont* MJCache::getFont(std::string name, int pointSize, TuiTable* rootTable, double* resultScale)
 {
-    *resultScale = 1.0;
+    
+    pointSize *= pixelDensity;
+    *resultScale = 1.0 / pixelDensity;
     
     MJFont* result = getOrLoadFontIfAvailableInternal(name, pointSize, rootTable);
     if(result)
@@ -180,7 +182,7 @@ MJFont* MJCache::getFont(std::string name, int pointSize, TuiTable* rootTable, d
         result = getOrLoadFontIfAvailableInternal(name, i, rootTable);
         if(result)
         {
-            *resultScale = ((double)pointSize) / i;;
+            *resultScale = ((double)pointSize) / i / pixelDensity;
             return result;
         }
     }
@@ -190,7 +192,7 @@ MJFont* MJCache::getFont(std::string name, int pointSize, TuiTable* rootTable, d
         result = getOrLoadFontIfAvailableInternal(name, i, rootTable);
         if(result)
         {
-            *resultScale = ((double)pointSize) / i;;
+            *resultScale = ((double)pointSize) / i / pixelDensity;
             return result;
         }
     }
@@ -200,7 +202,7 @@ MJFont* MJCache::getFont(std::string name, int pointSize, TuiTable* rootTable, d
         result = getOrLoadFontIfAvailableInternal(name, i, rootTable);
         if(result)
         {
-            *resultScale = ((double)pointSize) / i;;
+            *resultScale = ((double)pointSize) / i / pixelDensity;
             return result;
         }
     }
@@ -210,7 +212,7 @@ MJFont* MJCache::getFont(std::string name, int pointSize, TuiTable* rootTable, d
         result = getOrLoadFontIfAvailableInternal(name, i, rootTable);
         if(result)
         {
-            *resultScale = ((double)pointSize) / i;;
+            *resultScale = ((double)pointSize) / i / pixelDensity;
             return result;
         }
     }

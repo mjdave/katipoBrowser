@@ -100,7 +100,7 @@ rightPaneLayout = {
 fileItemLayout = {
     id = "fileItemBackground"
     type = "color"
-    color = vec4(0.04,0.12,0.15,0.1)
+    color = vec4(0.04,0.12,0.15,0.3)
     size = function(parentSize)
     {
         return vec2(parentSize.x - 20.0,rowHeight)
@@ -125,7 +125,7 @@ fileItemLayout = {
 dirItemLayout = {
     id = "fileItemBackground"
     type = "color"
-    color = vec4(0.04,0.12,0.15,0.1)
+    color = vec4(0.04,0.12,0.15,0.3)
     size = function(parentSize)
     {
         return vec2(parentSize.x - 20.0,rowHeight)
@@ -314,7 +314,6 @@ setDirectoryTree = function(fileBrowserView, directoryTree, selectedIndex, isFro
                     if(i % 2 == 0)
                     {
                         itemView.color = itemView.color * 0.5
-                        itemView.color.w = 0.1
                     }
                     
                     itemView.baseColor = itemView.color
@@ -391,7 +390,6 @@ setDirectoryTree = function(fileBrowserView, directoryTree, selectedIndex, isFro
             if(i % 2 == 0)
             {
                 itemView.color = itemView.color * 0.5
-                itemView.color.w = 0.1
             }
             
             itemView.baseColor = itemView.color

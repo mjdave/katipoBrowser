@@ -21,8 +21,6 @@ EventManager::EventManager()
 
 
 static bool resizingEventWatcher(void* data, SDL_Event* event) {
-    
-    //MJLog("got type:%d", event->type);
     switch(event->type)
     {
         case SDL_EVENT_WINDOW_RESIZED:
@@ -74,8 +72,6 @@ void EventManager::init(MainController* mainController_,
     
 
 	smoothedTimeStep = MAIN_THREAD_FIXED_TIME_STEP;
-    
-    mouseHidden = false;
     
     needsToStartTextEntry = false;
     needsToFinishTextEntry = false;
@@ -181,10 +177,10 @@ void EventManager::doCPUWork()
 
 	while(accumulator >= MAIN_THREAD_FIXED_TIME_STEP)
 	{
-        if(!isResizingWindow)
+        /*if(!isResizingWindow) //now handled in sdl3 main
         {
             checkEvents();
-        }
+        }*/
 
 		if(mouseMoved)
 		{
@@ -215,10 +211,14 @@ void EventManager::doCPUWork()
 
 void EventManager::idle()
 {
-    /*if(!appHasFocus) //this may or may not be desirable, saves power in the background
+    
+    if(!appHasFocus)
     {
-        std::this_thread::sleep_for(std::chrono::milliseconds(50));
-    }*/
+        //std::this_thread::sleep_for(std::chrono::milliseconds(50)); //this may or may not be desirable, saves power in the background
+#if TARGET_OS_IPHONE
+        return; // we can't render in the background or we will get killed
+#endif
+    }
     mainController->draw(accumulator / MAIN_THREAD_FIXED_TIME_STEP);
     
 }
@@ -371,11 +371,7 @@ void EventManager::handleEvent(SDL_Event* event)
 
     case SDL_EVENT_MOUSE_BUTTON_DOWN:
         //MJLog("mnouseDownEvent")
-        if(!mouseHidden)
-        {
-            mouseLoc = convertSDLToMouseLoc(dvec2(event->motion.x, event->motion.y), windowInfo);
-           // MJLog("SDL_EVENT_MOUSE_BUTTON_DOWN (%.2f, %.2f)", mouseLoc.x, mouseLoc.y);
-        }
+        mouseLoc = convertSDLToMouseLoc(dvec2(event->motion.x, event->motion.y), windowInfo);
         if(event->button.button == SDL_BUTTON_LEFT)
         {
             mainController->mouseDown(convertSDLToMouseLoc(dvec2(event->motion.x, event->motion.y), windowInfo), 0, getModKey());
@@ -395,16 +391,11 @@ void EventManager::handleEvent(SDL_Event* event)
         break;
 
     case SDL_EVENT_MOUSE_MOTION:
-
-        if(!needsToUpdateSDLMouseHidden && !needsToResetMousePosition)
         {
+
             mouseMoved = true;
             mouseMovementAccumulation += dvec2(event->motion.xrel, event->motion.yrel);
-            if(!mouseHidden)
-            {
-                //MJLog("SDL_EVENT_MOUSE_MOTION (%.2f, %.2f)", mouseLoc.x, mouseLoc.y);
-                mouseLoc = convertSDLToMouseLoc(dvec2(event->motion.x, event->motion.y), windowInfo);
-            }
+            mouseLoc = convertSDLToMouseLoc(dvec2(event->motion.x, event->motion.y), windowInfo);
         }
 
         break;
@@ -457,46 +448,11 @@ void EventManager::checkEvents()
 	{
 		MJLog("checkEvents");
 	}*/
-
 	SDL_Event event;
 	while(SDL_PollEvent(&event))
     {
         handleEvent(&event);
     }
-    
-	if(needsToUpdateSDLMouseHidden)
-	{
-		needsToUpdateSDLMouseHidden = false;
-		//MJLog("setMouseHidden:%d", mouseHidden)
-
-		/*if(!mouseHidden)
-		{
-			SDL_WarpMouseInWindow(window, windowInfo->halfWindowWidth, windowInfo->halfWindowHeight);
-		}*/
-        if(mouseHidden)
-        {
-            //mouseLocOnLastHide = mouseLoc;
-           // MJLog("setting mouseHiddenPos:(%.2f, %.2f)", mouseLoc.x, mouseLoc.y)
-        }
-        SDL_SetWindowRelativeMouseMode(window, mouseHidden ? true : false);
-		if(!mouseHidden)
-		{
-            if(shouldPreventMouseWarpUntilAfterNextShow)
-            {
-                //mouseLoc = mouseLocOnLastHide;
-                dvec2 sdlMousePos = convertMouseLocToSDL(mouseLoc, windowInfo);
-                SDL_WarpMouseInWindow(window, sdlMousePos.x, sdlMousePos.y);
-                //MJLog("warping mouse back to original pos:(%.2f, %.2f)", mouseLoc.x, mouseLoc.y)
-            }
-            else
-            {
-                SDL_WarpMouseInWindow(window, windowInfo->halfWindowWidth, windowInfo->halfWindowHeight);
-                //MJLog("warping mouse to center")
-            }
-            shouldPreventMouseWarpUntilAfterNextShow = false;
-		}
-        
-	}
 
 #if LOG_DEBUG_TIMINGS
 	MJLog("checkEvents():%.2f", (debugTimer->getDt() * 1000.0));
@@ -510,17 +466,9 @@ void EventManager::preventMouseWarpUntilAfterNextShow()
 
 void EventManager::warpMouse(dvec2 mouseLoc)
 {
-    if(!mouseHidden)
-    {
-        if(needsToUpdateSDLMouseHidden)
-        {
-            needsToUpdateSDLMouseHidden = false;
-            SDL_SetWindowRelativeMouseMode(window, mouseHidden ? true : false);
-        }
-        //MJLog("warpMouse called externally pos:(%.2f, %.2f)", mouseLoc.x, mouseLoc.y)
-        dvec2 sdlMouseLoc = convertMouseLocToSDL(mouseLoc, windowInfo);
-        SDL_WarpMouseInWindow(window, sdlMouseLoc.x, sdlMouseLoc.y);
-    }
+    //MJLog("warpMouse called externally pos:(%.2f, %.2f)", mouseLoc.x, mouseLoc.y)
+    dvec2 sdlMouseLoc = convertMouseLocToSDL(mouseLoc, windowInfo);
+    SDL_WarpMouseInWindow(window, sdlMouseLoc.x, sdlMouseLoc.y);
 }
 
 dvec2 EventManager::getMouseScreenFractionNonClamped()
@@ -541,29 +489,6 @@ void EventManager::runEventLoop()
     exit(0);
 }
 
-void EventManager::setMouseHidden(bool mouseHidden_)
-{
-    if(mouseHidden_ != mouseHidden)
-    {
-        mouseHidden = mouseHidden_;
-		if(!mouseHidden)
-		{
-			//mouseLoc = dvec2(0.0,0.0);//mouseHideLoc; //commented out as it causes problems with dragging objects in build ui. If this is really desirable in other cases, needs to be passed as an option.
-            mouseLoc = mouseHideLoc;
-            //MJLog("setMouseHidden (%.2f, %.2f)", mouseLoc.x, mouseLoc.y);
-		}
-		else
-		{
-			mouseHideLoc = mouseLoc;
-		}
-        needsToUpdateSDLMouseHidden = true;
-    }
-}
-
-bool EventManager::getMouseHidden() const
-{
-    return mouseHidden;
-}
 
 void EventManager::startTextEntry()
 {

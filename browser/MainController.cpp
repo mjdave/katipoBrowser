@@ -91,10 +91,11 @@ void MainController::init(std::string windowTitle, std::string organizationName,
     //SDL_DisplayID displayID = SDL_GetPrimaryDisplay();
     //const SDL_DisplayMode* mode = SDL_GetCurrentDisplayMode(displayID);
     //singleDisplayNativeResolution = ivec2(mode->w, mode->h);
-    windowInfo->pixelDensity = mode->pixel_density;
     //screenWidth = singleDisplayNativeResolution.x;
     //screenHeight = singleDisplayNativeResolution.y;
 #endif
+    
+    windowInfo->pixelDensity = mode->pixel_density;
 
 	vsync = true;
     windowInfo->screenWidth = screenWidth;
@@ -144,7 +145,6 @@ void MainController::init(std::string windowTitle, std::string organizationName,
     
 
     EventManager::getInstance()->init(this, displayWindow, windowInfo);
-    EventManager::getInstance()->setMouseHidden(true);
 
     renderTimer = new Timer();
     
@@ -236,7 +236,6 @@ void MainController::update(float dt)
 
 void MainController::draw(double frameLerp)
 {
-
 #if LOG_DEBUG_TIMINGS
 	debugTimer->getDt();
 #endif
@@ -292,7 +291,7 @@ void MainController::draw(double frameLerp)
     vulkan->endRecord();
 	vulkan->submit();
 	
-    EventManager::getInstance()->doCPUWork(); //smooth but laggier input
+    EventManager::getInstance()->doCPUWork(); 
 
 }
 
@@ -349,6 +348,8 @@ void MainController::load()
 {
     cache = new MJCache(vulkan, appDatabase, camera);
     
+    cache->pixelDensity = windowInfo->pixelDensity;
+    
 	mainMJView = new MJView(windowInfo, cache);
 	mainMJView->setSize(vec2(windowInfo->screenWidth, windowInfo->screenHeight));
 	mainMJView->setRelativePosition(MJViewPosition(MJPositionCenter, MJPositionCenter));
@@ -356,17 +357,12 @@ void MainController::load()
 	windowInfoChanged();
     
     vulkan->logMainDeviceDetails();
-    EventManager::getInstance()->setMouseHidden(false);
 
 }
 
 dvec3 MainController::getPointerRayStartUISpace()
 {
-    if(!EventManager::getInstance()->getMouseHidden())
-    {
-        return dvec3(0.0,0.0,0.0);
-    }
-    return dvec3(0.0,0.0,100.0);
+    return dvec3(0.0,0.0,0.0);
 }
 
 uint64_t MainController::getVulkanDeviceVendorID() const
@@ -384,17 +380,13 @@ uint32_t MainController::getVulkanDriverVersion() const
 
 dvec3 MainController::getPointerRayDirectionUISpace()
 {
-	if(!EventManager::getInstance()->getMouseHidden())
-	{
-		dvec2 mouseLoc = EventManager::getInstance()->mouseLoc;
-		mouseLoc.x /= windowInfo->halfScreenWidth;
-		mouseLoc.y /= -windowInfo->halfScreenHeight;
-		dmat4 projInverse = inverse(windowInfo->projectionMatrix);
-		dvec4 rayProj = projInverse * dvec4(mouseLoc.x, mouseLoc.y, -100.0, 1.0);
+    dvec2 mouseLoc = EventManager::getInstance()->mouseLoc;
+    mouseLoc.x /= windowInfo->halfScreenWidth;
+    mouseLoc.y /= -windowInfo->halfScreenHeight;
+    dmat4 projInverse = inverse(windowInfo->projectionMatrix);
+    dvec4 rayProj = projInverse * dvec4(mouseLoc.x, mouseLoc.y, -100.0, 1.0);
 
-		return normalize(dvec3(rayProj));
-	}
-	return dvec3(0.0,0.0,-1.0);
+    return normalize(dvec3(rayProj));
 }
 
 bool MainController::mouseDown(dvec2 mousePos, int buttonIndex, int modKey)
