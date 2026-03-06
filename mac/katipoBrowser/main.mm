@@ -24,7 +24,7 @@ int main(int argc, const char * argv[]) {
 /* This function runs once at startup. */
 SDL_AppResult SDL_AppInit(void **appstate, int argc, char *argv[])
 {
-    SDL_SetAppMetadata("Katipo Browser", "1.0", "com.majicjungle.katipoBrowser");
+    SDL_SetAppMetadata("Katipo Browser", "1.0", "com.katipoBrowser");
     
     KatipoBrowser::getInstance()->init();
 

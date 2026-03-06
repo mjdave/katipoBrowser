@@ -1328,6 +1328,14 @@ bool Vulkan::startRecord()
 			return false;
 		}
 	}
+    
+    if(needsToRecreateSwapchain)
+    {
+        recreateSwapChain();
+        needsToRecreateSwapchain = false;
+        //return false;
+    }
+    
 	//debugTimer->getDt();
 #if LOG_VULKAN_TIMINGS
 	MJLog("startRecord:%.2f", (debugTimerA->getDt() * 1000.0));
@@ -1354,12 +1362,6 @@ bool Vulkan::startRecord()
 	//submitTransfers();
 
 
-	if(needsToRecreateSwapchain)
-	{
-		recreateSwapChain();
-        needsToRecreateSwapchain = false;
-		//return false;
-	}
 
 	debugTimerB->getDt();
     VkResult result = vkAcquireNextImageKHR(device, swapChain, (std::numeric_limits<uint64_t>::max)(), imageAvailableSemaphores[currentFrame], VK_NULL_HANDLE, &currentRecordingImageIndex);
@@ -1377,6 +1379,7 @@ bool Vulkan::startRecord()
     } else if (result != VK_SUCCESS && result != VK_SUBOPTIMAL_KHR) {
         VULKAN_ERROR("failed to acquire swap chain image!");
     }
+    
 
     primaryCommandBuffer->startRecord(currentRecordingImageIndex);
 
@@ -1417,6 +1420,10 @@ void Vulkan::endRecord()
 #endif
 	//MJLog("a:%d", (int)(debugTimer->getDt() * 1000.0));
 
+    if(needsToRecreateSwapchain)
+    {
+        return;
+    }
 
 	//double submitTime = debugTimer->getDt();
 	debugTimerC->getDt();

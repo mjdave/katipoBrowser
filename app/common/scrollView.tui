@@ -34,7 +34,7 @@ updatePositionsAndVisibilities = function(scrollView)
         }
         else
         {
-            if(rowInfo.yOffsetFromTop + userData.scrollYOffset >= scrollView.size.y)
+            if(rowInfo.yOffsetFromTop + userData.scrollYOffset >= userData.parentSize.y)
             {
                 rowInfo.rowView.hidden = true
             }
@@ -46,7 +46,7 @@ updatePositionsAndVisibilities = function(scrollView)
     }
     
     knobView = userData.knobView
-    size = scrollView.size
+    size = userData.parentSize
 
     fraction = -userData.scrollYOffset / userData.scrollYHeight
     knobY = size.y * fraction
@@ -60,7 +60,7 @@ recreateDerivedData = function(scrollView)
     for(i=0, i < table.count(userData.rowInfos), i++)
     {
         rowInfo = userData.rowInfos[i]
-        if(rowInfo.yOffsetFromTop + rowInfo.rowView.size.y > scrollView.size.y + 0.5)
+        if(rowInfo.yOffsetFromTop + rowInfo.rowView.size.y > userData.parentSize.size.y + 0.5)
         {
             userData.scrollYIndexMax = userData.scrollYIndexMax + 1
         }
@@ -91,15 +91,12 @@ create = function(parentView)
 {
     scrollViewLayout = {
         type = "view"
-        size = function(parentSize)
-        {
-            #print("in scrollview resize:", parentSize)
-            return parentSize
-        }
     }
 
     scrollView = parentView.addView(scrollViewLayout)
     scrollView.setClipChildren(true)
+
+
 
     userData = {
         rowInfos = {},
@@ -112,6 +109,13 @@ create = function(parentView)
         knobHover = false,
     }
     scrollView.scrollViewData = userData
+
+    scrollView.size = function(parentSize)
+    {
+        scrollView.scrollViewData.parentSize = parentSize
+        scrollView.scrollViewData.dirty = true
+        return parentSize
+    }
 
     baseItemLayout = {
         size = vec2(0,0)
@@ -199,7 +203,7 @@ create = function(parentView)
         {
             userData.isScrollBarMouseDown = true
 
-            desiredY = -(1.0 - (mouseLoc.y / scrollView.size.y)) * userData.scrollYHeight
+            desiredY = -(1.0 - (mouseLoc.y / userData.parentSize.y)) * userData.scrollYHeight
             offset = desiredY - userData.scrollYOffset
             userData.scrollVelocity = offset * 0.3
         }
@@ -211,7 +215,7 @@ create = function(parentView)
         {
             userData.scrollBarScrollInProgress = true
 
-            desiredY = -(1.0 - (mouseLoc.y / scrollView.size.y)) * userData.scrollYHeight
+            desiredY = -(1.0 - (mouseLoc.y / userData.parentSize.y)) * userData.scrollYHeight
             offset = desiredY - userData.scrollYOffset
             userData.scrollVelocity = offset * 0.3
         }

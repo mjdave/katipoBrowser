@@ -26,9 +26,9 @@ static bool resizingEventWatcher(void* data, SDL_Event* event) {
         case SDL_EVENT_WINDOW_RESIZED:
         {
             MainController::getInstance()->mainWindowChangedSize();
-            EventManager::getInstance()->isResizingWindow = true;
+            /*EventManager::getInstance()->isResizingWindow = true;
             EventManager::getInstance()->idle();
-            EventManager::getInstance()->isResizingWindow = false;
+            EventManager::getInstance()->isResizingWindow = false;*/
             
             SDL_Rect rect;
             SDL_GetWindowSafeArea(EventManager::getInstance()->window, &rect);
