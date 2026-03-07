@@ -214,10 +214,10 @@ void EventManager::idle()
     
     if(!appHasFocus)
     {
-        //std::this_thread::sleep_for(std::chrono::milliseconds(50)); //this may or may not be desirable, saves power in the background
 #if TARGET_OS_IPHONE
         return; // we can't render in the background or we will get killed
 #endif
+        std::this_thread::sleep_for(std::chrono::milliseconds(100)); //lets chill if we are backgrounded
     }
     mainController->draw(accumulator / MAIN_THREAD_FIXED_TIME_STEP);
     

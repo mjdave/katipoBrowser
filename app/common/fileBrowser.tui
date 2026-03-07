@@ -97,6 +97,26 @@ rightPaneLayout = {
     }
 }
 
+leftPanelVerticalLayout = {
+    type = "view"
+    alignmentY = "top"
+    size = function(parentSize)
+    {
+        return vec2(parentSize.x, parentSize.y / 2)
+    }
+    subviews = leftPaneLayout.subviews
+}
+
+rightPanelVerticalLayout = {
+    type = "view"
+    alignmentY = "bottom"
+    size = function(parentSize)
+    {
+        return vec2(parentSize.x, parentSize.y / 2)
+    }
+    subviews = rightPaneLayout.subviews
+}
+
 fileItemLayout = {
     id = "fileItemBackground"
     type = "color"
@@ -211,7 +231,14 @@ setDirectoryTree = function(fileBrowserView, directoryTree, selectedIndex, isFro
         fileBrowserView.removeView(userData.leftPaneView)
     }
 
-    leftPaneView = fileBrowserView.addView(leftPaneLayout)
+    leftLayoutToUse = leftPaneLayout
+    if(userData.size.y > userData.size.x)
+    {
+        print("using vertical layout")
+        leftLayoutToUse = leftPanelVerticalLayout
+    }
+
+    leftPaneView = fileBrowserView.addView(leftLayoutToUse)
     userData.leftPaneView = leftPaneView
 
     if(!isFromNavigation)
@@ -268,7 +295,13 @@ setDirectoryTree = function(fileBrowserView, directoryTree, selectedIndex, isFro
 
         userData.rightItemViews = {}
 
-        rightPaneView = fileBrowserView.addView(rightPaneLayout)
+        rightLayoutToUse = rightPaneLayout
+        if(userData.size.y > userData.size.x)
+        {
+            rightLayoutToUse = rightPanelVerticalLayout
+        }
+
+        rightPaneView = fileBrowserView.addView(rightLayoutToUse)
         userData.rightPaneView = rightPaneView
 
         userData.headerTitleRight = rightPaneView.getView("headerTitleRight")
@@ -459,6 +492,12 @@ create = function(parentView)
     fileBrowserView = parentView.addView(fileBrowserViewLayout)
     userData.view = fileBrowserView
     fileBrowserView.fileBrowserViewData = userData
+
+    fileBrowserView.size = function(parentSize)
+    {
+        userData.size = parentSize
+        return parentSize
+    }
 
     return fileBrowserView
 }
