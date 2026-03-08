@@ -5,9 +5,9 @@
 
 #ifdef __APPLE__
 #include "MJAudioApple.h"
-#else
-#include "MJAudioSDLMixer.h"
 #endif
+
+#include "MJAudioSDLMixer.h"
 
 
 MJAudio::MJAudio()
@@ -19,6 +19,23 @@ MJAudio::~MJAudio()
 {
 }
 
+static inline std::string getKatipoResourcePath(const std::string& inPath, TuiTable* rootTable) //todo this is copied from MJCache
+{
+    TuiRef* getResourcePathFunc = ((TuiTable*)rootTable->get("file"))->get("getResourcePath");
+    if(getResourcePathFunc)
+    {
+        TuiString* inPathRef = new TuiString(inPath);
+        TuiRef* pathResult = ((TuiFunction*)getResourcePathFunc)->call("getResourcePathFunc", inPathRef);
+        inPathRef->release();
+        if(pathResult)
+        {
+            std::string returnResult = pathResult->getStringValue();
+            pathResult->release();
+            return returnResult;
+        }
+    }
+    return Katipo::getResourcePath(inPath);
+}
 
 void MJAudio::bindTui(TuiTable* rootTable)
 {
@@ -41,12 +58,27 @@ void MJAudio::bindTui(TuiTable* rootTable)
     });
     
     
-    audioTable->setFunction("play", [this](TuiTable* args, TuiRef* existingResult, TuiDebugInfo* callingDebugInfo) -> TuiRef* {
+    audioTable->setFunction("playSongs", [this](TuiTable* args, TuiRef* existingResult, TuiDebugInfo* callingDebugInfo) -> TuiRef* {
 #ifdef __APPLE__
         MJAudioApple::getInstance()->play(nullptr);
 #else
-        MJAudioSDLMixer::getInstance()->play(nullptr);
+        MJAudioSDLMixer::getInstance()->playSongs(nullptr);
 #endif
+        return TUI_NIL;
+    });
+    
+    
+    
+    audioTable->setFunction("playSound", [this, rootTable](TuiTable* args, TuiRef* existingResult, TuiDebugInfo* callingDebugInfo) -> TuiRef* {
+        if(args->arrayObjects.size() >= 1 && args->arrayObjects[0]->type() == Tui_ref_type_STRING)
+        {
+            std::string path = getKatipoResourcePath(((TuiString*)args->arrayObjects[0])->value, rootTable);
+            MJAudioSDLMixer::getInstance()->playSound(path);
+        }
+        else
+        {
+            TuiParseError(callingDebugInfo->fileName.c_str(), callingDebugInfo->lineNumber, "Incorrect argument type");
+        }
         return TUI_NIL;
     });
     
@@ -70,7 +102,7 @@ void MJAudio::bindTui(TuiTable* rootTable)
 #ifdef __APPLE__
                 MJAudioApple::getInstance()->play((TuiTable*)arrayRef);
 #else
-                MJAudioSDLMixer::getInstance()->play((TuiTable*)arrayRef);
+                MJAudioSDLMixer::getInstance()->playSongs((TuiTable*)arrayRef);
 #endif
                 MJLog("playing song");
             }

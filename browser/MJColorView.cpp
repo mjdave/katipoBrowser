@@ -62,6 +62,16 @@ void MJColorView::createDrawables(MJRenderPass renderPass, int renderTargetCompa
 	}
 }
 
+
+void MJColorView::setShaderName(std::string shaderName_)
+{
+    if(shaderName != shaderName_)
+    {
+        shaderName = shaderName_;
+        destroyDrawables();
+    }
+}
+
 dvec4 MJColorView::getColor() const
 {
 	return color;
@@ -173,6 +183,10 @@ void MJColorView::loadFromTable(TuiTable* table, bool isRoot)
     {
         stateTable->setVec4("color", table->getVec4("color"));
     }
+    if(table->hasKey("shader"))
+    {
+        stateTable->setString("shader", table->getString("shader"));
+    }
 }
 
 
@@ -183,5 +197,9 @@ void MJColorView::tableKeyChanged(const std::string& key, TuiRef* value)
     if(key == "color")
     {
         setColor(stateTable->getVec4("color"));
+    }
+    else if(key == "shader")
+    {
+        setShaderName(stateTable->getString("shader"));
     }
 }

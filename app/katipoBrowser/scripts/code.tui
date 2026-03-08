@@ -101,6 +101,7 @@ getCallback = function(result, hostID, url)
         scriptsDirPath = siteSavePath + "scripts/"
         fontsDirPath = siteSavePath + "fonts/"
         imagesDirPath = siteSavePath + "img/"
+        soundsDirPath = siteSavePath + "sounds/"
         filesDirPath = siteSavePath + "files/"
         foundSiteCode = false
 
@@ -136,6 +137,20 @@ getCallback = function(result, hostID, url)
                     }
                 }
                 print("saved ", table.count(result.siteData.images), " images")
+            }
+
+            if(result.siteData.sounds and table.count(result.siteData.sounds) > 0)
+            {
+                file.mkdir(soundsDirPath)
+                for(imageInfo in result.siteData.sounds)
+                {
+                    imagePath = soundsDirPath + imageInfo.fileName
+                    if(file.isSubPath(imagePath, siteSavePath))
+                    {
+                        file.saveData(imagePath, imageInfo.data)
+                    }
+                }
+                print("saved ", table.count(result.siteData.sounds), " sounds")
             }
 
             if(result.siteData.fonts and table.count(result.siteData.fonts) > 0)

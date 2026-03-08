@@ -28,6 +28,7 @@ public:
     virtual std::string getDescription();
     
     virtual void setSize(dvec2 size_);
+    void setShaderName(std::string shaderName_);
 
 	dvec4 getColor() const;
 	void setColor(dvec4 color_);

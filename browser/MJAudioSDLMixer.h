@@ -5,11 +5,20 @@
 #include "MathUtils.h"
 #include "SDL.h"
 
+#include <map>
+#include <vector>
+#include <string>
+
 class TuiFunction;
 class TuiTable;
 struct MIX_Mixer;
 struct MIX_Track;
 struct MIX_Audio;
+
+struct MJSDLSound {
+    std::vector<MIX_Track*> tracks;
+    MIX_Audio* audio = nullptr;
+};
 
 class MJAudioSDLMixer {
 public: // members
@@ -18,6 +27,8 @@ public: // members
     MIX_Mixer* mixer;
     MIX_Track* currentTrack = nullptr;
     MIX_Audio* currentAudio = nullptr;
+    
+    std::map<std::string, MJSDLSound> sounds; //todo clean these up, maybe reference count or something
 
     TuiTable* playQueue = nullptr;
     uint32_t songIndex = 0;
@@ -34,7 +45,9 @@ public: // members
     
     void updatePausedState();
     
-    void play(TuiTable* urls);
+    void playSound(const std::string& soundURL); //for one shot sounds, play simulaneous over music
+    
+    void playSongs(TuiTable* urls); //for a queue of songs
     void skipToNextTrack();
     void stop();
 

@@ -1,3 +1,4 @@
+#include "hueShift.frag"
 
 layout(binding = 0) uniform UniformBufferObject {
   mat4 modelMatrix;
@@ -25,17 +26,6 @@ layout(location = 2) in vec2 greyScale;
 layout(location = 3) in vec4 outClipPos;
 
 layout(location = 0) out vec4 outColor;
-
-//https://gist.github.com/mairod/a75e7b44f68110e1576d77419d608786
-vec3 hueShift(vec3 color, float dhue) {
-	float s = sin(dhue);
-	float c = cos(dhue);
-	return (color * c) + (color * s) * mat3(
-		vec3(0.167444, 0.329213, -0.496657),
-		vec3(-0.327948, 0.035669, 0.292279),
-		vec3(1.250268, -1.047561, -0.202707)
-	) + dot(vec3(0.299, 0.587, 0.114), color) * (1.0 - c);
-}
 
 void main() {
     if(outClipPos.x > 1.0 || outClipPos.x < 0.0 || outClipPos.y > 1.0 || outClipPos.y < 0.0)

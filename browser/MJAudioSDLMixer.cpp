@@ -77,7 +77,52 @@ void MJAudioSDLMixer::updateInfo()
     }
 }
 
-void MJAudioSDLMixer::play(TuiTable* urls)
+void MJAudioSDLMixer::playSound(const std::string& soundURL)
+{
+    MJSDLSound& mjSound = sounds[soundURL];
+    
+    if(!mjSound.audio)
+    {
+        
+        mjSound.audio = MIX_LoadAudio(mixer, soundURL.c_str(), false);
+        if (!mjSound.audio) {
+            MJError("Could not load audio, %s", SDL_GetError()); //todo cleanup
+            return;
+        }
+    }
+    
+    bool foundTrack = false;
+    for(MIX_Track* track : mjSound.tracks)
+    {
+        if(!MIX_TrackPlaying(track))
+        {
+            MIX_PlayTrack(track, 0);
+            foundTrack = true;
+            break;
+        }
+    }
+    
+    if(!foundTrack)
+    {
+        MIX_Track* track = MIX_CreateTrack(mixer);
+        
+        if (!MIX_SetTrackAudio(track, mjSound.audio)) {
+            MJError("Could not set track io stream, %s", SDL_GetError()); //todo cleanup
+            return;
+        }
+        
+        if(!MIX_PlayTrack(track, 0)) {
+            MJError("Could not play track, %s", SDL_GetError()); //todo cleanup
+            return;
+        }
+        
+        mjSound.tracks.push_back(track);
+    }
+    
+    //cachedTracks[]
+}
+
+void MJAudioSDLMixer::playSongs(TuiTable* urls)
 {
     if(!urls || urls->arrayObjects.empty())
     {
@@ -100,7 +145,7 @@ void MJAudioSDLMixer::play(TuiTable* urls)
 
     if(currentTrack)
     {
-        MIX_StopAllTracks(mixer, 100);
+        MIX_StopTrack(currentTrack, 10);
         MIX_DestroyTrack(currentTrack);
         MIX_DestroyAudio(currentAudio);
         currentTrack = nullptr;
@@ -119,6 +164,7 @@ void MJAudioSDLMixer::play(TuiTable* urls)
     currentTrack = MIX_CreateTrack(mixer);
     MIX_SetTrackStoppedCallback(currentTrack, trackFinished, this);
     currentAudio = MIX_LoadAudio_IO(mixer, stream, false, false);
+    SDL_CloseIO(stream);
 
     if (!MIX_SetTrackAudio(currentTrack, currentAudio)) {
         MJError("Could not set track io stream, %s", SDL_GetError()); //todo cleanup
@@ -143,7 +189,7 @@ void MJAudioSDLMixer::skipToNextTrack()
 {
     if(currentTrack)
     {
-        MIX_StopAllTracks(mixer, 100);
+        MIX_StopTrack(currentTrack, 10);
         MIX_DestroyTrack(currentTrack);
         MIX_DestroyAudio(currentAudio);
         currentTrack = nullptr;
