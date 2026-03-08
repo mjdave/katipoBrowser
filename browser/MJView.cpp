@@ -1125,16 +1125,10 @@ bool MJView::mouseMoved3D(dvec3 windowRayStart, dvec3 windowRayDirection, bool o
 					hasLocalPoint = true;
 				}
                 
-                //mouseDraggedFunction(localPoint / renderScale);
-                TuiDebugInfo debugInfo;
-                debugInfo.fileName = "mouseDraggedFunction";
-                TuiTable* args = new TuiTable(nullptr);
-                
-                TuiVec2* localPointRef = new TuiVec2(localPoint / renderScale);
-                args->arrayObjects.push_back(localPointRef);
-                
-                mouseDraggedFunction->call(args, nullptr, &debugInfo);
-                
+                TuiRef* buttonIndexRef = new TuiNumber(i);
+                TuiRef* localPointRef = new TuiVec2(localPoint / renderScale);
+                mouseDraggedFunction->call("mouseDraggedFunction", buttonIndexRef, localPointRef);
+                buttonIndexRef->release();
                 localPointRef->release();
 			}
 		}
@@ -1198,27 +1192,11 @@ bool MJView::mouseDown3D(dvec3 windowRayStart, dvec3 windowRayDirection, bool ob
 		sendClickEventOnMouseUpInside[buttonIndex] = true;
 		if(mouseDownFunction)
 		{
-            //mouseDownFunction(buttonIndex, localPoint / renderScale);
-            
             TuiRef* buttonIndexRef = new TuiNumber(buttonIndex);
             TuiRef* localPointRef = new TuiVec2(localPoint / renderScale);
             mouseDownFunction->call("mouseDownFunction", buttonIndexRef, localPointRef);
             buttonIndexRef->release();
             localPointRef->release();
-            
-            /*TuiDebugInfo debugInfo;
-            debugInfo.fileName = "mouseDown3D";
-            TuiTable* args = new TuiTable(nullptr);
-            
-            TuiNumber* buttonIndexRef = new TuiNumber(buttonIndex);
-            args->arrayObjects.push_back(buttonIndexRef);
-            
-            TuiVec2* localPointRef = new TuiVec2(localPoint / renderScale);
-            args->arrayObjects.push_back(localPointRef);
-            
-            mouseDownFunction->call(args, nullptr, &debugInfo);
-            
-            localPointRef->release();*/
 		}
 
 		if(masksEvents)
@@ -1297,19 +1275,11 @@ bool MJView::mouseWheel3D(dvec3 windowRayStart, dvec3 windowRayDirection, dvec2 
 	{
 		if(mouseWheelFunction)
 		{
-            //mouseWheelFunction(localPoint / renderScale, scrollChange);
-            
-            TuiDebugInfo debugInfo;
-            debugInfo.fileName = "mouseWheel3D";
-            TuiTable* args = new TuiTable(nullptr);
-            
-            TuiVec2* localPointRef = new TuiVec2(localPoint / renderScale);
-            args->arrayObjects.push_back(localPointRef);
-            
-            TuiVec2* scrollChangeRef = new TuiVec2(scrollChange);
-            args->arrayObjects.push_back(scrollChangeRef);
-            
-            mouseWheelFunction->call(args, nullptr, &debugInfo);
+            TuiRef* localPointRef = new TuiVec2(localPoint / renderScale);
+            TuiRef* scrollChangeRef = new TuiVec2(localPoint / renderScale);
+            mouseWheelFunction->call("mouseWheel3D", localPointRef, scrollChangeRef);
+            scrollChangeRef->release();
+            localPointRef->release();
 		}
 
 		if(masksEvents)
@@ -1424,19 +1394,11 @@ bool MJView::mouseUp3D(dvec3 windowRayStart, dvec3 windowRayDirection, int butto
 		if(mouseUpFunction)
 		{
 			dvec2 localPoint = windowPointToLocal(windowRayStart, windowRayDirection);
-            //mouseUpFunction(buttonIndex, localPoint / renderScale);//mouseDownWasInside[buttonIndex]);
-            
-            TuiDebugInfo debugInfo;
-            debugInfo.fileName = "mouseUp3D";
-            TuiTable* args = new TuiTable(nullptr);
-            
             TuiNumber* buttonIndexRef = new TuiNumber(buttonIndex);
-            args->arrayObjects.push_back(buttonIndexRef);
-            
             TuiVec2* localPointRef = new TuiVec2(localPoint / renderScale);
-            args->arrayObjects.push_back(localPointRef);
-            
-            mouseUpFunction->call(args, nullptr, &debugInfo);
+            mouseUpFunction->call("mouseUpFunction", buttonIndexRef, localPointRef);
+            buttonIndexRef->release();
+            localPointRef->release();
 		}
 
 		if(!masksEvents)
@@ -1475,19 +1437,11 @@ bool MJView::mouseUp3D(dvec3 windowRayStart, dvec3 windowRayDirection, int butto
 		if(mouseUpFunction && containsPoint(windowRayStart, windowRayDirection))
 		{
 			dvec2 localPoint = windowPointToLocal(windowRayStart, windowRayDirection);
-            //mouseUpFunction(buttonIndex, localPoint / renderScale);//, mouseDownWasInside[buttonIndex]);
-            
-            TuiDebugInfo debugInfo;
-            debugInfo.fileName = "mouseUp3D";
-            TuiTable* args = new TuiTable(nullptr);
-            
-            TuiNumber* buttonIndexRef = new TuiNumber(buttonIndex);
-            args->arrayObjects.push_back(buttonIndexRef);
-            
-            TuiVec2* localPointRef = new TuiVec2(localPoint / renderScale);
-            args->arrayObjects.push_back(localPointRef);
-            
-            mouseUpFunction->call(args, nullptr, &debugInfo);
+            TuiRef* buttonIndexRef = new TuiNumber(buttonIndex);
+            TuiRef* localPointRef = new TuiVec2(localPoint / renderScale);
+            mouseUpFunction->call("mouseUpFunction", buttonIndexRef, localPointRef);
+            buttonIndexRef->release();
+            localPointRef->release();
 		}
 	}
 
