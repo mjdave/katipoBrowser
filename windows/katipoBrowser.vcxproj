@@ -223,6 +223,12 @@ XCOPY "$(SolutionDir)..\app" "$(TargetDir)\app" /s /i /y</Command>
     <ClInclude Include="..\thirdParty\MurmurHash3.h" />
     <ClInclude Include="..\thirdParty\stb_image.h" />
   </ItemGroup>
+    <ItemGroup>
+    <ResourceCompile Include="katipoBrowser.rc" />
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="katipoBrowser-iOS-256.ico" />
+  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>
