@@ -1276,7 +1276,8 @@ bool MJView::mouseWheel3D(dvec3 windowRayStart, dvec3 windowRayDirection, dvec2 
 		if(mouseWheelFunction)
 		{
             TuiRef* localPointRef = new TuiVec2(localPoint / renderScale);
-            TuiRef* scrollChangeRef = new TuiVec2(localPoint / renderScale);
+            TuiRef* scrollChangeRef = new TuiVec2(scrollChange);
+            
             mouseWheelFunction->call("mouseWheel3D", localPointRef, scrollChangeRef);
             scrollChangeRef->release();
             localPointRef->release();

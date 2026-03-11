@@ -45,7 +45,7 @@ public: // members
     
     void updatePausedState();
     
-    void playSound(const std::string& soundURL); //for one shot sounds, play simulaneous over music
+    void playSound(const std::string& soundURL, double volume = 1.0); //for one shot sounds, play simulaneous over music
     
     void playSongs(TuiTable* urls); //for a queue of songs
     void skipToNextTrack();

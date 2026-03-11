@@ -164,7 +164,7 @@ create = function(parentView)
         }
     }
     
-    mainViewMouseDragged = function(mouseLoc)
+    mainViewMouseDragged = function(buttonIndex, mouseLoc)
     {
         if(!userData.disabled and userData.scrollYIndexMax != 0 and !userData.isScrollBarMouseDown)
         {
@@ -209,7 +209,7 @@ create = function(parentView)
         }
     }
     
-    scrollerMouseDragged = function(mouseLoc)
+    scrollerMouseDragged = function(buttonIndex, mouseLoc)
     {
         if(!userData.disabled and userData.scrollYIndexMax != 0)
         {
@@ -246,10 +246,10 @@ create = function(parentView)
         scrollerMouseDown(buttonIndex, backgroundLoc)
     }
 
-    knobView.mouseDragged = function(mouseLoc) 
+    knobView.mouseDragged = function(buttonIndex, mouseLoc) 
     {
         backgroundLoc = knobView.locationRelativeToView(mouseLoc, scrollerBackgroundView)
-        scrollerMouseDragged(backgroundLoc)
+        scrollerMouseDragged(buttonIndex, backgroundLoc)
     }
 
     scrollView.mouseWheel = function(position, scrollChange)

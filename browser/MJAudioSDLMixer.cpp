@@ -77,7 +77,7 @@ void MJAudioSDLMixer::updateInfo()
     }
 }
 
-void MJAudioSDLMixer::playSound(const std::string& soundURL)
+void MJAudioSDLMixer::playSound(const std::string& soundURL, double volume)
 {
     MJSDLSound& mjSound = sounds[soundURL];
     
@@ -96,6 +96,7 @@ void MJAudioSDLMixer::playSound(const std::string& soundURL)
     {
         if(!MIX_TrackPlaying(track))
         {
+            MIX_SetTrackGain(track, volume);
             MIX_PlayTrack(track, 0);
             foundTrack = true;
             break;
@@ -110,6 +111,8 @@ void MJAudioSDLMixer::playSound(const std::string& soundURL)
             MJError("Could not set track io stream, %s", SDL_GetError()); //todo cleanup
             return;
         }
+        
+        MIX_SetTrackGain(track, volume);
         
         if(!MIX_PlayTrack(track, 0)) {
             MJError("Could not play track, %s", SDL_GetError()); //todo cleanup

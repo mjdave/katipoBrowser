@@ -183,9 +183,21 @@ void MJColorView::loadFromTable(TuiTable* table, bool isRoot)
     {
         stateTable->setVec4("color", table->getVec4("color"));
     }
+    
     if(table->hasKey("shader"))
     {
         stateTable->setString("shader", table->getString("shader"));
+    }
+    else if(table->hasKey("additiveBlend"))
+    {
+        if(table->getBool("additiveBlend"))
+        {
+            setShaderName("colorViewAdditiveBlend");
+        }
+        else
+        {
+            setShaderName("colorView");
+        }
     }
 }
 
@@ -201,5 +213,16 @@ void MJColorView::tableKeyChanged(const std::string& key, TuiRef* value)
     else if(key == "shader")
     {
         setShaderName(stateTable->getString("shader"));
+    }
+    else if(key == "additiveBlend" && !stateTable->hasKey("shader"))
+    {
+        if(stateTable->getBool("additiveBlend"))
+        {
+            setShaderName("colorViewAdditiveBlend");
+        }
+        else
+        {
+            setShaderName("colorView");
+        }
     }
 }

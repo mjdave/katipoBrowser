@@ -72,8 +72,13 @@ void MJAudio::bindTui(TuiTable* rootTable)
     audioTable->setFunction("playSound", [this, rootTable](TuiTable* args, TuiRef* existingResult, TuiDebugInfo* callingDebugInfo) -> TuiRef* {
         if(args->arrayObjects.size() >= 1 && args->arrayObjects[0]->type() == Tui_ref_type_STRING)
         {
+            double volume = 1.0;
+            if(args->arrayObjects.size() >= 2 && args->arrayObjects[1]->type() == Tui_ref_type_NUMBER)
+            {
+                volume = ((TuiNumber*)args->arrayObjects[1])->value;
+            }
             std::string path = getKatipoResourcePath(((TuiString*)args->arrayObjects[0])->value, rootTable);
-            MJAudioSDLMixer::getInstance()->playSound(path);
+            MJAudioSDLMixer::getInstance()->playSound(path, volume);
         }
         else
         {
