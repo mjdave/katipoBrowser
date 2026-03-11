@@ -58,12 +58,24 @@ getSitePath = function(hostID)
 
 getCallback = function(result, hostID, url)
 {
-    print("got result with status:", result.status, " message:", result.message, " hostID:", hostID)
-    if(!result or result.status != "ok")
+    print("got result with status:", result.status, " message:", result.message, " hostID:", hostID, " url:", url)
+    if(result.status != "ok")
     {
-        if(!currentSiteHostID) #todo this leaves an ugly error background when we may be offline, maybe just fade it out or something
+        loadedExisting = false
+        for(i, existing in bookmarks)
         {
-            siteContentBackground.goalColor = vec4(0.2,0.0,0.0,0.6)
+            if(existing.url == url)
+            {
+                siteContentBackground.goalColor = vec4(0.2,0.2,0.0,0.4) #yellow, we don't have a connection, loaded from cache
+                katipo.loadSite(existing.hostID, getSitePath(existing.hostID), untrustedSiteCodePermissionFunction, true)
+                loadedExisting = true
+                break
+            }
+        }
+
+        if(!loadedExisting)
+        {
+            siteContentBackground.goalColor = vec4(0.2,0.0,0.0,0.6) #red, we don't have a connection, no cache
             defaultSiteContent.hidden = false
 
             pageTitle.text = result.status
@@ -73,7 +85,8 @@ getCallback = function(result, hostID, url)
     else if(result.unchanged)
     {
         print("no changes on the host, everything is just great here")
-        siteContentBackground.goalColor = vec4(0.0,0.0,0.2,0.4)
+        siteContentBackground.goalColor = vec4(0.0,0.0,0.2,0.4) #blue, we have the most recent version
+        katipo.loadSite(hostID, getSitePath(hostID), untrustedSiteCodePermissionFunction, true)
         katipo.gotSiteUnchanged(hostID)
     }
     else if(result.pageTitle)
@@ -94,90 +107,37 @@ getCallback = function(result, hostID, url)
     }
     else if(result.siteData)
     {
-        siteContentBackground.goalColor = vec4(0.0,0.0,0.2,0.4)
+        siteContentBackground.goalColor = vec4(0.0,0.0,0.2,0.4) #blue, we have the most recent version
         defaultSiteContent.hidden = true
 
+        resourceDirs = {
+            "scripts"
+            "fonts"
+            "images"
+            "sounds"
+            "shaders"
+            "glsl"
+            "spv"
+            "files"
+        }
+
         siteSavePath = getSitePath(hostID)
-        scriptsDirPath = siteSavePath + "scripts/"
-        fontsDirPath = siteSavePath + "fonts/"
-        imagesDirPath = siteSavePath + "img/"
-        soundsDirPath = siteSavePath + "sounds/"
-        filesDirPath = siteSavePath + "files/"
         foundSiteCode = false
 
-        if(result.siteData.scripts and table.count(result.siteData.scripts) > 0)
+        foundFilenames = {}
+
+        for(resourceDirName in resourceDirs)
         {
-            file.mkdir(scriptsDirPath)
-            for(scriptInfo in result.siteData.scripts)
+            dirInfo = result.siteData[resourceDirName]
+            if(dirInfo and table.count(dirInfo) > 0)
             {
-                scriptPath = scriptsDirPath + scriptInfo.fileName
-                if(file.isSubPath(scriptPath, siteSavePath))
+                dirPath = siteSavePath + resourceDirName + "/"
+                file.mkdir(dirPath)
+                for(fileInfo in dirInfo)
                 {
-                    file.saveData(scriptPath, scriptInfo.data)
-                }
-
-                if(scriptInfo.fileName == "code.tui") #we actually need scene.tui too
-                {
-                    foundSiteCode = true
-                }
-            }
-        }
-        if(foundSiteCode)
-        {
-            print("saved ", table.count(result.siteData.scripts), " scripts")
-            if(result.siteData.images and table.count(result.siteData.images) > 0)
-            {
-                file.mkdir(imagesDirPath)
-                for(imageInfo in result.siteData.images)
-                {
-                    imagePath = imagesDirPath + imageInfo.fileName
-                    if(file.isSubPath(imagePath, siteSavePath))
-                    {
-                        file.saveData(imagePath, imageInfo.data)
-                    }
-                }
-                print("saved ", table.count(result.siteData.images), " images")
-            }
-
-            if(result.siteData.sounds and table.count(result.siteData.sounds) > 0)
-            {
-                file.mkdir(soundsDirPath)
-                for(imageInfo in result.siteData.sounds)
-                {
-                    imagePath = soundsDirPath + imageInfo.fileName
-                    if(file.isSubPath(imagePath, siteSavePath))
-                    {
-                        file.saveData(imagePath, imageInfo.data)
-                    }
-                }
-                print("saved ", table.count(result.siteData.sounds), " sounds")
-            }
-
-            if(result.siteData.fonts and table.count(result.siteData.fonts) > 0)
-            {
-                file.mkdir(fontsDirPath)
-                for(fontInfo in result.siteData.fonts)
-                {
-                    fontPath = fontsDirPath + fontInfo.fileName
-                    if(file.isSubPath(fontPath, siteSavePath))
-                    {
-                        file.saveData(fontPath, fontInfo.data)
-                    }
-                }
-                print("saved ", table.count(result.siteData.fonts), " fonts")
-            }
-
-            if(result.siteData.files and table.count(result.siteData.files) > 0)
-            {
-                print("files")
-                file.mkdir(filesDirPath)
-                for(fileInfo in result.siteData.files)
-                {
-                    filePath = filesDirPath + fileInfo.fileName
+                    filePath = dirPath + fileInfo.fileName
                     if(file.isSubPath(filePath, siteSavePath))
                     {
-                        file.createDirectoriesIfNeededForFilePath(filePath)
-                        #print("filepath:", filePath)
                         if(type(fileInfo.data) == "string")
                         {
                             print("saved raw data:", filePath)
@@ -189,9 +149,14 @@ getCallback = function(result, hostID, url)
                             print("saved tui object:", filePath)
                         }
                     }
+
+                    foundFilenames[fileInfo.fileName] = true
                 }
             }
+        }
 
+        if(foundFilenames["code.tui"])
+        {
             print("loading freshly updated site code")
             katipo.loadSite(hostID, siteSavePath, untrustedSiteCodePermissionFunction, false)
 
@@ -303,8 +268,8 @@ loadBookmarks = function()
             siteContentBackground.goalColor = vec4(0.0, 0.015, 0.01, 0.6)
 
             print("loading cached dusty old site code with checksum:", bookmarkInfo.checksum)
-            siteSavePath = getSitePath(bookmarkInfo.hostID)
-            katipo.loadSite(bookmarkInfo.hostID, siteSavePath, untrustedSiteCodePermissionFunction, true)
+            #siteSavePath = getSitePath(bookmarkInfo.hostID)
+            #katipo.loadSite(bookmarkInfo.hostID, siteSavePath, untrustedSiteCodePermissionFunction, true)
 
             katipo.get(bookmarkInfo.url, bookmarkInfo.checksum, getCallback)
             bookmarksBackground.hidden = true

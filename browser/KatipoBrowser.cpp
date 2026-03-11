@@ -34,13 +34,16 @@ void KatipoBrowser::doGet(const std::string& trackerKey,
         mainGetCallbackFunction->retain();
     }
     
+    std::string fullURL = trackerKey + "/" + remoteURL;
+    
     if(netInterfaces.count(trackerKey) == 0 || !netInterfaces[trackerKey]->connected)
     {
-        MJError("attempt to call get before first request has returned or while disconnected"); //todo need to cancel first request maybe?
         if(mainGetCallbackFunction)
         {
             TuiRef* statusResult = new TuiTable("{status='error',message='not connected'}");
-            mainGetCallbackFunction->call("mainGetCallbackFunction", statusResult);
+            TuiString* remoteURLString = new TuiString(fullURL);
+            mainGetCallbackFunction->call("mainGetCallbackFunction", statusResult, TUI_NIL, remoteURLString);
+            remoteURLString->release();
             statusResult->release();
             mainGetCallbackFunction->release();
         }
@@ -53,7 +56,6 @@ void KatipoBrowser::doGet(const std::string& trackerKey,
     TuiString* remoteURLStringForArg = new TuiString(remoteURL);
     remoteFuncCallArgs->arrayObjects.push_back(remoteURLStringForArg); //push_back, not retained, no need to release
     
-    std::string fullURL = trackerKey + "/" + remoteURL;
     
     for(int i = 1; i < args->arrayObjects.size(); i++)
     {
@@ -393,11 +395,12 @@ void KatipoBrowser::init()
                         TuiFunction* onConnect = new TuiFunction([this, trackerKey, remoteURL, hostName, getArgs](TuiTable* innerFuncArgs, TuiRef* existingResult, TuiDebugInfo* callingDebugInfo) -> TuiRef* {
                             //todo check for connection success
                             doGet(trackerKey, "", remoteURL, hostName, getArgs);
-                            getArgs->release(); //if connection fails, this leaks currently
+                            getArgs->release();
                             return TUI_NIL;
                         });
 
-                        katipoTable->set("connected", onConnect);
+                        katipoTable->set("onConnected", onConnect);
+                        katipoTable->set("onConnectionFailed", onConnect); //onConnect will call the main callback with an error if not connected
                         onConnect->release();
 
                         netInterfaces[trackerKey]->connect();
@@ -451,32 +454,13 @@ void KatipoBrowser::init()
                     TuiFunction* onConnect = new TuiFunction([this, trackerKey,remoteURL, hostName, getArgs](TuiTable* innerFuncArgs, TuiRef* existingResult, TuiDebugInfo* callingDebugInfo) -> TuiRef* {
                         //todo check for connection success
                         doGet(trackerKey, "", remoteURL, hostName, getArgs);
-                        getArgs->release(); //if connection fails, this leaks currently
+                        getArgs->release();
                         return TUI_NIL;
                     });
                     
-                    katipoTable->set("connected", onConnect);
+                    katipoTable->set("onConnected", onConnect);
+                    katipoTable->set("onConnectionFailed", onConnect); //onConnect will call the main callback with an error if not connected
                     onConnect->release();
-                    
-                    
-                    TuiFunction* onDisconnect = new TuiFunction([this, getArgs](TuiTable* innerFuncArgs, TuiRef* existingResult, TuiDebugInfo* callingDebugInfo) -> TuiRef* {
-                        /*if(currentSiteRootTable)
-                        {
-                            TuiTable* siteKatipoTable = currentSiteRootTable->getTable("katipo");
-                            if(siteKatipoTable->hasKey("disconnected"))
-                            {
-                                TuiRef* disconnectedFunc = siteKatipoTable->objectsByStringKey["disconnected"];
-                                if(disconnectedFunc->type() == Tui_ref_type_FUNCTION)
-                                {
-                                    ((TuiFunction*)disconnectedFunc)->call("onDisconnect");
-                                }
-                            }
-                        }*/
-                        return TUI_NIL;
-                    });
-                    
-                    katipoTable->set("disconnected", onDisconnect);
-                    
                     
                     netInterface = new ClientNetInterface(trackerURL,
                                                           trackerPort,

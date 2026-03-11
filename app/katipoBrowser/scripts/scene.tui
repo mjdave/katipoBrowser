@@ -5,7 +5,7 @@ bookMarkHeight = 40
 
 mainView = {
     type = "image"
-    path = "app/katipoBrowser/img/colorsBackground.png"
+    path = "app/katipoBrowser/images/colorsBackground.png"
     shader = "drawQuadTexturedHueShift"
     subviews = {
         {
@@ -33,7 +33,7 @@ mainView = {
                 {
                     id = "urlTextEntry"
                     type = "image"
-                    path = "app/katipoBrowser/img/colorsBackground.png"
+                    path = "app/katipoBrowser/images/colorsBackground.png"
                     shader = "drawQuadTexturedHueShift"
                     size = function(parentSize)
                     {

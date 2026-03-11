@@ -504,7 +504,7 @@
 				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = NO;
 				CLANG_ENABLE_OBJC_ARC = NO;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 2;
+				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = 9Q78V5BF2N;
 				FRAMEWORK_SEARCH_PATHS = (
 					"\"$(SRCROOT)/../thirdPartyiOS\"",
@@ -547,7 +547,7 @@
 					"\"$(SRCROOT)/../thirdPartyiOS/curl\"",
 					"\"$(SRCROOT)/../katipo/thirdParty/libsodium/ios/lib\"",
 				);
-				MARKETING_VERSION = 0.1;
+				MARKETING_VERSION = 0.1.2;
 				PRODUCT_BUNDLE_IDENTIFIER = com.katipobrowser;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = NO;
@@ -564,7 +564,7 @@
 				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = NO;
 				CLANG_ENABLE_OBJC_ARC = NO;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 2;
+				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = 9Q78V5BF2N;
 				FRAMEWORK_SEARCH_PATHS = (
 					"\"$(SRCROOT)/../thirdPartyiOS\"",
@@ -607,7 +607,7 @@
 					"\"$(SRCROOT)/../thirdPartyiOS/curl\"",
 					"\"$(SRCROOT)/../katipo/thirdParty/libsodium/ios/lib\"",
 				);
-				MARKETING_VERSION = 0.1;
+				MARKETING_VERSION = 0.1.2;
 				PRODUCT_BUNDLE_IDENTIFIER = com.katipobrowser;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = NO;
