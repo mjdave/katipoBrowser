@@ -13,7 +13,7 @@ if(!bookmarks)
     bookmarks = {}
 }
 
-print("loaded bookmarks:", bookmarks)
+#print("loaded bookmarks:", bookmarks)
 
 urlTextEntryContainer = scene.getView("urlTextEntry")
 urlTextEntry = textEntry.create(urlTextEntryContainer)
@@ -22,7 +22,6 @@ windowSafeBackground = scene.getView("windowSafeBackground")
 windowSafeBackground.size = function(parentSize)
 {
     windowSafeArea = eventManager.getWindowSafeArea()
-    #print("windowSafeBackground parentSize:", parentSize, " windowSafeArea:", windowSafeArea)
     windowSafeBackground.pos = vec3(windowSafeArea.x, -windowSafeArea.y, 0)
     return vec2(windowSafeArea.z, windowSafeArea.w)
 }
@@ -163,6 +162,7 @@ getCallback = function(result, hostID, url)
             .currentSiteHostID = hostID
 
             #update bookmarks
+
             for(i, existing in bookmarks)
             {
                 if(existing.hostID == hostID)
@@ -179,7 +179,8 @@ getCallback = function(result, hostID, url)
                 hostID = hostID
                 siteInfo = result.siteData.siteInfo
                 checksum = result.siteData.checksum
-                color = vec4(math.random(), math.random(), math.random(), 1.0)
+                # the hostID is a string, and math.random can take either a number or a string as a seed for the second argument
+                color = vec4(math.random(1.0, hostID + "1"), math.random(1.0, hostID + "2"), math.random(1.0, hostID + "3"), 1.0)
                 #siteImage = result.siteData.siteImage
             }
             table.insert(bookmarks, 0, bookmarkInfo)
@@ -222,18 +223,22 @@ loadBookmarks = function()
     }
 
     bookmarksBackground.hidden = false
+
     bookmarksBackground.size = function(parentSize)
     {
         totalHeight = scene.bookMarkHeight * table.count(bookmarks)
         height = math.min(totalHeight, parentSize.y - scene.urlTextEntryHeight)
-        return vec2(scene.bookmarksListWidth, height)
+        width = math.min(scene.bookmarksListWidth, parentSize.x)
+        return vec2(width, height)
     }
 
     bookmarksScrollView = scrollView.create(bookmarksBackground)
 
-    for(i,bookmarkInfo in bookmarks)
+    for(i = table.count(bookmarks) - 1, i>=0, i--)
     {
+        bookmarkInfo = bookmarks[i]
         bookmarkView = bookmarksScrollView.addView(bookmarkLayout)
+        #print("bookmarkView:", bookmarkView)
         
         title = bookmarkInfo.siteInfo.title
         bookmarkTitleView = bookmarkView.getView("bookmarkTitle")
@@ -274,7 +279,11 @@ loadBookmarks = function()
             katipo.get(bookmarkInfo.url, bookmarkInfo.checksum, getCallback)
             bookmarksBackground.hidden = true
         }
-        button.create(bookmarkView, -0.1 - 0.1 * i, bookmarkClick)
+
+        bookmarkButton = bookmarkView.getView("bookmarkButton")
+        bookmarkButton.click = bookmarkClick
+        bookmarkButton.hueOffset = -0.1 - 0.1 * i
+        #button.create(bookmarkButton, -0.1 - 0.1 * i, bookmarkClick)
 
         scrollView.insertRow(bookmarksScrollView, bookmarkView)
     }

@@ -27,9 +27,9 @@ leftPaneLayout = {
                 {
                     id = "headerBackButton"
                     hidden = true
-                    type = "image"
+                    type = "button"
+                    buttonType = "colorHueShift"
                     path = "images/back.png"
-                    shader = "drawQuadTexturedHueShift"
                     size = headerBackButtonSize
                     pos = vec3(10,0,0)
                     alignmentX = "left"
@@ -251,11 +251,11 @@ setDirectoryTree = function(fileBrowserView, directoryTree, selectedIndex, isFro
         }
     }
     
-    userData.headerBackButton = leftPaneView.getView("headerBackButton")
+    headerBackButton = leftPaneView.getView("headerBackButton")
     stackCount = table.count(userData.currentDirectoryStack)
     if(stackCount > 1)
     {
-        userData.headerBackButton.hidden = false
+        headerBackButton.hidden = false
         headerBackButtonClickFunction = function()
         {
             if(userData.currentDirectoryStack)
@@ -270,11 +270,12 @@ setDirectoryTree = function(fileBrowserView, directoryTree, selectedIndex, isFro
                 }
             }
         }
-        button.create(userData.headerBackButton, -0.1, headerBackButtonClickFunction)
+        headerBackButton.click = headerBackButtonClickFunction
+        headerBackButton.hueOffset = -0.1
     }
     else
     {
-        userData.headerBackButton.hidden = true
+        headerBackButton.hidden = true
     }
 
     userData.headerTitleLeft = leftPaneView.getView("headerTitleLeft")

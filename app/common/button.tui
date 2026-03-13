@@ -1,66 +1,177 @@
-
-updateVisuals = function(view)
+initHue = function(view, buttonViewLayoutIncoming)
 {
-    userData = view.buttonData
-    #print("view:", view)
-    if(userData.mouseDown)
+    view.hueOffset = buttonViewLayoutIncoming.hueOffset
+    if(!view.hueOffset)
     {
-        view.shaderUserData = vec4(userData.hueOffset + math.pi,0,0,0)
+        view.hueOffset = 0.0
     }
-    else if(userData.hover)
+
+    if(buttonViewLayoutIncoming.clip)
     {
-        view.shaderUserData = vec4(userData.hueOffset + 0.5 * math.pi,0,0,0)
-    }
-    else
-    {
-        view.shaderUserData = vec4(userData.hueOffset,0,0,0)
+        if(buttonViewLayoutIncoming.buttonType == "imageHueShift")
+        {
+            view.shader = "drawQuadTexturedHueShiftClip"
+        }
+        else
+        {
+            view.shader = "colorViewHueShiftClip"
+        }
     }
 }
 
-create = function(view, hueOffset, clickFunction)
+updateHueVisuals = function(view)
 {
-    if(!view)
+    if(view.mouseIsDown)
     {
-        error("button.create passed nil view")
+        view.shaderUserData = vec4(view.hueOffset + math.pi,0,0,0)
     }
-    userData = {
-        hover = false,
-        hueOffset = hueOffset,
-        clickFunction = clickFunction,
+    else if(view.isHover)
+    {
+        view.shaderUserData = vec4(view.hueOffset + 0.5 * math.pi,0,0,0)
     }
-    view.buttonData = userData
+    else
+    {
+        view.shaderUserData = vec4(view.hueOffset,0,0,0)
+    }
+}
+
+initColor = function(view, buttonViewLayoutIncoming)
+{
+    view.baseColor = buttonViewLayoutIncoming.color
+    if(!view.baseColor)
+    {
+        view.baseColor = vec4(0.0,0.0,0.0,0.0)
+    }
+
+    view.highlightColor = buttonViewLayoutIncoming.highlightColor
+    if(!view.highlightColor)
+    {
+        view.highlightColor = view.baseColor + vec4(0.0,0.2,0.4,0.4)
+    }
+
+    view.mouseDownColor = buttonViewLayoutIncoming.mouseDownColor
+    if(!view.mouseDownColor)
+    {
+        view.mouseDownColor = view.baseColor + vec4(0.5,0.5,0.5,0.5)
+    }
+
+    view.color = view.baseColor
+
+}
+
+updateColorVisuals = function(view)
+{
+    if(view.mouseIsDown)
+    {
+        view.color = view.mouseDownColor
+    }
+    else if(view.isHover)
+    {
+        view.color = view.highlightColor
+    }
+    else
+    {
+        view.color = view.baseColor
+    }
+}
+
+buttonTypes = {
+
+    color = {
+        viewLayout = {
+            type = "color"
+        }
+        initFunc = initColor
+        updateFunc = updateColorVisuals
+    }
+
+    colorHueShift = {
+        viewLayout = {
+            type = "color"
+            shader = "colorViewHueShift"
+        }
+        initFunc = initHue
+        updateFunc = updateHueVisuals
+    }
+
+    imageHueShift = {
+        viewLayout = {
+            type = "image"
+            shader = "drawQuadTexturedHueShift"
+        }
+        initFunc = initHue
+        updateFunc = updateHueVisuals
+    }
+}
+
+getViewLayout = function(buttonViewLayoutIncoming, buttonType)
+{
+    buttonViewLayout = {}
+    for(k,v in buttonViewLayoutIncoming)
+    {
+        buttonViewLayout[k] = v
+    }
+
+    #print("buttonType:", buttonType)
+
+    for(k,v in buttonType.viewLayout)
+    {
+        buttonViewLayout[k] = v
+    }
+    return buttonViewLayout
+}
+
+updateVisuals = function(view)
+{
+    if(view.buttonType.updateFunc)
+    {
+        view.buttonType.updateFunc(view)
+    }
+}
+
+create = function(parentView, buttonViewLayoutIncoming)
+{
+    buttonTypeKey = buttonViewLayoutIncoming.buttonType
+    if(!buttonTypeKey or !buttonTypes[buttonTypeKey])
+    {
+        error("attempt to create button with missing or invalid buttonType:", buttonTypeKey)
+    }
+    buttonType = buttonTypes[buttonTypeKey]
+    viewLayoutFinal = getViewLayout(buttonViewLayoutIncoming, buttonType)
+    view = parentView.addView(viewLayoutFinal)
+    view.buttonType = buttonType
+
+
+    if(buttonType.initFunc)
+    {
+        buttonType.initFunc(view, buttonViewLayoutIncoming)
+    }
 
     view.hoverStart = function()
     {
-        userData.hover = true
+        view.isHover = true
         updateVisuals(view)
     }
 
     view.hoverEnd = function()
     {
-        userData.hover = false
+        view.isHover = false
         updateVisuals(view)
     }
 
     view.mouseDown = function()
     {
-        userData.mouseDown = true
+        view.mouseIsDown = true
         updateVisuals(view)
     }
 
     view.mouseUp = function()
     {
-        userData.mouseDown = false
+        view.mouseIsDown = false
         updateVisuals(view)
     }
 
-    view.click = function()
-    {
-        if(userData.clickFunction)
-        {
-            userData.clickFunction()
-        }
-    }
-
     updateVisuals(view)
+
+    return view
 }

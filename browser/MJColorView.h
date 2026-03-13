@@ -35,7 +35,7 @@ public:
 
 	void setShader(std::string shaderName_);
     
-    virtual void loadFromTable(TuiTable* table, bool isRoot = false);
+    virtual void loadFromTable(TuiTable* table, bool needsToLayoutSubviews, TuiTable* rootTableOrNil = nullptr);
     virtual void tableKeyChanged(const std::string& key, TuiRef* value);
     
 protected:

@@ -103,7 +103,7 @@ public:
     
     std::string idString;
     
-    static MJView* loadUnknownViewFromTable(TuiTable* subViewTable, MJView* parentView, bool isRoot);
+    static MJView* loadUnknownViewFromTable(TuiTable* subViewTable, MJView* parentView, bool needsToLayoutSubviews, TuiTable* rootTableOrNil);
     /*
 
 	LuaRef getwasRemovedLuaFunction(lua_State* luaState) const GET_MJ_LUA_DEFINITION(wasRemovedLuaFunction)
@@ -298,7 +298,7 @@ public:
     void resetAnimationTimer();
     
     void loadFromFile(std::string filePath, TuiTable* parentTable);
-    virtual void loadFromTable(TuiTable* table, bool isRoot = false); //isRoot used to prevent doRelativeViewLayoutsForTablePostLoad from being called recursively
+    virtual void loadFromTable(TuiTable* table, bool needsToLayoutSubviews, TuiTable* rootTableOrNil = nullptr); //isRoot used to prevent doRelativeViewLayoutsForTablePostLoad from being called recursively
     
     virtual void tableKeyChanged(const std::string& key, TuiRef* value);
     

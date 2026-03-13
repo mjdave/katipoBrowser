@@ -14,35 +14,54 @@
 #include "MJTextView.h"
 #include "MJImageView.h"
 
-MJView* MJView::loadUnknownViewFromTable(TuiTable* subViewTable, MJView* parentView, bool isRoot) //static
+MJView* MJView::loadUnknownViewFromTable(TuiTable* subViewTable, MJView* parentView, bool needsToLayoutSubviews, TuiTable* rootTableOrNil) //static
 {
     const std::string& viewTypeString = subViewTable->getString("type");
     if(viewTypeString == "color")
     {
         MJColorView* subView = new MJColorView(parentView);
-        subView->loadFromTable(subViewTable, isRoot);
+        subView->loadFromTable(subViewTable, needsToLayoutSubviews, rootTableOrNil);
         return subView;
     }
     else if(viewTypeString == "text")
     {
         MJTextView* subView = new MJTextView(parentView);
-        subView->loadFromTable(subViewTable, isRoot);
+        subView->loadFromTable(subViewTable, needsToLayoutSubviews, rootTableOrNil);
         return subView;
     }
     else if(viewTypeString == "image")
     {
         MJImageView* subView = new MJImageView(parentView);
-        subView->loadFromTable(subViewTable, isRoot);
+        subView->loadFromTable(subViewTable, needsToLayoutSubviews, rootTableOrNil);
         return subView;
     }
     else if(viewTypeString == "view")
     {
         MJView* subView = new MJView(parentView);
-        subView->loadFromTable(subViewTable, isRoot);
+        subView->loadFromTable(subViewTable, needsToLayoutSubviews, rootTableOrNil);
         return subView;
     }
     else
     {
+        TuiTable* sceneTable = parentView->rootTable->getTable("scene");
+        if(sceneTable)
+        {
+            TuiTable* additionalViewTypes = sceneTable->getTable("viewTypes");
+            if(additionalViewTypes)
+            {
+                TuiTable* viewCode = additionalViewTypes->getTable(viewTypeString);
+                if(viewCode)
+                {
+                    TuiFunction* createFunction = viewCode->getFunction("create");
+                    if(createFunction)
+                    {
+                        TuiRef* result = createFunction->call("loadUnknownViewFromTable", parentView->stateTable, subViewTable);
+                        MJView* resultView = (MJView*)((TuiTable*)result)->getUserData("_view");
+                        return resultView;
+                    }
+                }
+            }
+        }
         MJError("Unknown or missing view type. Found:%s", viewTypeString.c_str());
     }
     return nullptr;
@@ -81,14 +100,14 @@ void MJView::initInternals()
     stateTable->setVec3("pos", baseOffset);
     stateTable->setVec2("size", size);
     
-    //todo this is probably a bit slow to do all the time like this. meta tables needed
+    //todo maybe this is a bit slow to do all the time like this. meta tables needed?
     stateTable->setFunction("addView", [this](TuiTable* args, TuiRef* existingResult, TuiDebugInfo* callingDebugInfo) -> TuiRef* {
         if(args->arrayObjects.size() >= 1)
         {
             TuiRef* viewTableRef = args->arrayObjects[0];
             if(viewTableRef->type() == Tui_ref_type_TABLE)
             {
-                MJView* result = MJView::loadUnknownViewFromTable((TuiTable*)viewTableRef, this, true);
+                MJView* result = MJView::loadUnknownViewFromTable((TuiTable*)viewTableRef, this, true, rootTable);
                 if(result)
                 {
                     return result->stateTable->retain();
@@ -188,6 +207,7 @@ MJView::MJView(WindowInfo* windowInfo_, MJCache* cache_)
 MJView::MJView(MJView* parentView_)
 {
     windowInfo = parentView_->windowInfo;
+    rootTable = parentView_->rootTable;
     cache = parentView_->cache;
     viewsByID = parentView_->viewsByID;
     initInternals();
@@ -1666,7 +1686,7 @@ void MJView::loadFromFile(std::string filePath, TuiTable* parentTable)
     TuiTable* table = (TuiTable*)TuiRef::load(filePath, parentTable);
     if(table)
     {
-        loadFromTable(table, true);
+        loadFromTable(table, true, parentTable);
         table->release();
     }
 }
@@ -1718,15 +1738,9 @@ void MJView::setRelativePosition(std::string alignmentX, std::string alignmentY)
     }
 }
 
-void MJView::loadFromTable(TuiTable* table, bool isRoot)
+void MJView::loadFromTable(TuiTable* table, bool needsToLayoutSubviews, TuiTable* rootTable_)
 {
-    //MJLog("MJView::loadFromTable:%s", table->getDebugString().c_str());
-    
-    rootTable = table;
-    while(rootTable->parentTable && rootTable->parentTable != table)
-    {
-        rootTable = rootTable->parentTable;
-    }
+    rootTable = rootTable_;
     
     if(table->hasKey("layoutParentID"))
     {
@@ -1803,12 +1817,12 @@ void MJView::loadFromTable(TuiTable* table, bool isRoot)
         {
             if(subViewRef->type() == Tui_ref_type_TABLE)
             {
-                MJView::loadUnknownViewFromTable((TuiTable*)subViewRef, this, false);
+                MJView::loadUnknownViewFromTable((TuiTable*)subViewRef, this, false, rootTable);
             }
         }
     }
     
-    if(isRoot)
+    if(needsToLayoutSubviews)
     {
         doRelativeViewLayoutsForTablePostLoad();
     }

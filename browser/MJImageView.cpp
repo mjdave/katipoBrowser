@@ -196,9 +196,9 @@ std::string MJImageView::getDescription()
 }
 
 
-void MJImageView::loadFromTable(TuiTable* table, bool isRoot)
+void MJImageView::loadFromTable(TuiTable* table, bool needsToLayoutSubviews, TuiTable* rootTableOrNil)
 {
-    MJView::loadFromTable(table, isRoot);
+    MJView::loadFromTable(table, needsToLayoutSubviews, rootTableOrNil);
     
     if(table->hasKey("color"))
     {

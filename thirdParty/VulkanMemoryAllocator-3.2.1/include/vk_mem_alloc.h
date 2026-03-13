@@ -15072,7 +15072,6 @@ VMA_CALL_PRE VkResult VMA_CALL_POST vmaCreateAllocator(
     VMA_ASSERT(pCreateInfo->vulkanApiVersion == 0 ||
         (VK_VERSION_MAJOR(pCreateInfo->vulkanApiVersion) == 1 && VK_VERSION_MINOR(pCreateInfo->vulkanApiVersion) <= 4));
     VMA_DEBUG_LOG("vmaCreateAllocator");
-    printf("dave a\n");
     *pAllocator = vma_new(pCreateInfo->pAllocationCallbacks, VmaAllocator_T)(pCreateInfo);
     VkResult result = (*pAllocator)->Init(pCreateInfo);
     if(result < 0)

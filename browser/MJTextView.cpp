@@ -654,9 +654,9 @@ int MJTextView::getCursorOffsetForVerticalCursorMovement(int currentCursorOffset
 }
 
 
-void MJTextView::loadFromTable(TuiTable* table, bool isRoot)
+void MJTextView::loadFromTable(TuiTable* table, bool needsToLayoutSubviews, TuiTable* rootTableOrNil)
 {
-    MJView::loadFromTable(table, isRoot);
+    MJView::loadFromTable(table, needsToLayoutSubviews, rootTableOrNil);
     
     
     

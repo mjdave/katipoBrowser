@@ -1,3 +1,8 @@
+viewTypes = { #can be added to at any time
+    button = require("app/common/button.tui")
+    #scrollView = require("app/common/scrollView.tui")
+}
+
 urlTextEntryHeight = 40
 
 bookmarksListWidth = 500
@@ -25,10 +30,6 @@ mainView = {
                     type = "view"
                     alignmentY = "above"
                     layoutParentID = "urlTextEntry"
-                    size = function(parentSize)
-                    {
-                        return vec2(math.min(bookmarksListWidth, parentSize.x), parentSize.y - urlTextEntryHeight)
-                    }
                 }
                 {
                     id = "urlTextEntry"
@@ -49,8 +50,9 @@ mainView = {
 bookmarkIconPadding = 4
 
 bookmark = {
+    id = "bookmarkBackground"
     type = "color"
-    color = vec4(0.0,0.05,0.1,0.3)
+    color = vec4(0.0,0.0,0.0,0.2)
     size = function(parentSize)
     {
         return vec2(parentSize.x, bookMarkHeight)
@@ -58,51 +60,60 @@ bookmark = {
 
     subviews = {
         {
-            id = "bookmarkMissingImage"
-            type = "color"
-            color = vec4(0.0,0.6,0.8,0.8) #todo set this randomly for each site, maybe get from siteInfo
-            alignmentX = "left"
-            size = vec2(bookMarkHeight - bookmarkIconPadding,bookMarkHeight - bookmarkIconPadding)
-            pos = vec3(bookmarkIconPadding,0,0)
-
+            id = "bookmarkButton"
+            type = "button"
+            buttonType = "color"
+            color = vec4(0.0,0.0,0.0,0.0)
+            highlightColor = vec4(0.0,0.0,0.0,0.0)
             subviews = {
                 {
-                    id = "bookmarkMissingImageCharacter"
+                    id = "bookmarkMissingImage"
+                    type = "color"
+                    color = vec4(1.0,0.0,0.0,1.0) #should be set elsewhere
+                    alignmentX = "left"
+                    size = vec2(bookMarkHeight - bookmarkIconPadding,bookMarkHeight - bookmarkIconPadding)
+                    pos = vec3(bookmarkIconPadding,0,0)
+
+                    subviews = {
+                        {
+                            id = "bookmarkMissingImageCharacter"
+                            type = "text"
+                            text = "?"
+                            font = "roboto"
+                            fontSize = 32
+                        }
+                    }
+                }
+                {
+                    id = "bookmarkImage"
+                    type = "image"
+                    alignmentX = "left"
+                    size = vec2(bookMarkHeight - bookmarkIconPadding,bookMarkHeight - bookmarkIconPadding)
+                    pos = vec3(bookmarkIconPadding,0,0)
+                    hidden = true
+                }
+                {
+                    id = "bookmarkTitle"
                     type = "text"
-                    text = "?"
+                    text = "Site Title"
                     font = "roboto"
-                    fontSize = 32
+                    fontSize = 16
+                    alignmentX = "outerRight"
+                    layoutParentID = "bookmarkImage"
+                    alignmentY = "top"
+                    pos = vec3(bookmarkIconPadding * 2,0,0)
+                }
+                {
+                    id = "bookmarkSubtitle"
+                    type = "text"
+                    text = "Site Subtitle"
+                    font = "roboto"
+                    fontSize = 14
+                    alignmentX = "left"
+                    alignmentY = "below"
+                    layoutParentID = "bookmarkTitle"
                 }
             }
-        }
-        {
-            id = "bookmarkImage"
-            type = "image"
-            alignmentX = "left"
-            size = vec2(bookMarkHeight - bookmarkIconPadding,bookMarkHeight - bookmarkIconPadding)
-            pos = vec3(bookmarkIconPadding,0,0)
-            hidden = true
-        }
-        {
-            id = "bookmarkTitle"
-            type = "text"
-            text = "Site Title"
-            font = "roboto"
-            fontSize = 16
-            alignmentX = "outerRight"
-            layoutParentID = "bookmarkImage"
-            alignmentY = "top"
-            pos = vec3(bookmarkIconPadding * 2,0,0)
-        }
-        {
-            id = "bookmarkSubtitle"
-            type = "text"
-            text = "Site Subtitle"
-            font = "roboto"
-            fontSize = 14
-            alignmentX = "left"
-            alignmentY = "below"
-            layoutParentID = "bookmarkTitle"
         }
     }
 }

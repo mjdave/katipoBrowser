@@ -337,7 +337,7 @@ void KatipoBrowser::init()
                 }
             }
             
-            siteConnectionInfo.mainView = MJView::loadUnknownViewFromTable(sceneTable->getTable("mainView"), MainController::getInstance()->mainMJView->getSubViewWithID("siteContent"), true);
+            siteConnectionInfo.mainView = MJView::loadUnknownViewFromTable(sceneTable->getTable("mainView"), MainController::getInstance()->mainMJView->getSubViewWithID("siteContent"), true, siteConnectionInfo.rootTable);
             siteConnectionInfo.scriptState = (TuiTable*)TuiRef::runScriptFile(siteSavePath + "/scripts/code.tui", siteConnectionInfo.rootTable);
             
             if(!isDustyOldCacheLoad)
@@ -496,7 +496,7 @@ void KatipoBrowser::init()
         return TUI_NIL;
     });
     
-    mainView = MJView::loadUnknownViewFromTable(sceneTable->getTable("mainView"), MainController::getInstance()->mainMJView, true);
+    mainView = MJView::loadUnknownViewFromTable(sceneTable->getTable("mainView"), MainController::getInstance()->mainMJView, true, rootTable);
     
     scriptState = (TuiTable*)TuiRef::runScriptFile(Katipo::getResourcePath("app/katipoBrowser/scripts/code.tui"), rootTable);
     
