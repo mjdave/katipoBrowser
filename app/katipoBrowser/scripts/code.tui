@@ -1,5 +1,4 @@
-textEntry = require("app/common/textEntry.tui")
-button = require("app/common/button.tui")
+
 defaultSiteScene = require("app/katipoBrowser/scripts/defaultSiteScene.tui")
 scrollView = require("app/common/scrollView.tui")
 
@@ -15,8 +14,7 @@ if(!bookmarks)
 
 #print("loaded bookmarks:", bookmarks)
 
-urlTextEntryContainer = scene.getView("urlTextEntry")
-urlTextEntry = textEntry.create(urlTextEntryContainer)
+urlTextEntry = scene.getView("urlTextEntry")
 
 windowSafeBackground = scene.getView("windowSafeBackground")
 windowSafeBackground.size = function(parentSize)
@@ -204,14 +202,14 @@ getCallback = function(result, hostID, url)
     }
 }
 
-textEntry.setOnChangeCallback(urlTextEntry, function(textValue, confirmChanges){
+urlTextEntry.onChange = function(textValue, confirmChanges){
     if(confirmChanges and string.length(textValue) > 0)
     {
         siteContentBackground.goalColor = vec4(0.0,0.015,0.01,0.6)
         katipo.get(textValue, getCallback)
         bookmarksBackground.hidden = true
     }
-})
+}
 
 
 loadBookmarks = function()
@@ -283,11 +281,10 @@ loadBookmarks = function()
         bookmarkButton = bookmarkView.getView("bookmarkButton")
         bookmarkButton.click = bookmarkClick
         bookmarkButton.hueOffset = -0.1 - 0.1 * i
-        #button.create(bookmarkButton, -0.1 - 0.1 * i, bookmarkClick)
 
         scrollView.insertRow(bookmarksScrollView, bookmarkView)
     }
 }
 
 loadBookmarks()
-textEntry.callClickFunction(urlTextEntry)
+urlTextEntry.textEntryClickFunction()

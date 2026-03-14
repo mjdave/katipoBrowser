@@ -1,6 +1,5 @@
 
 scrollView = require("app/common/scrollView.tui")
-button = require("app/common/button.tui")
 
 headerHeight = 40
 rowHeight = 40
@@ -28,7 +27,7 @@ leftPaneLayout = {
                     id = "headerBackButton"
                     hidden = true
                     type = "button"
-                    buttonType = "colorHueShift"
+                    buttonType = "imageHueShift"
                     path = "images/back.png"
                     size = headerBackButtonSize
                     pos = vec3(10,0,0)

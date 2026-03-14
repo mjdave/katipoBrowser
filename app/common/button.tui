@@ -1,14 +1,14 @@
-initHue = function(view, buttonViewLayoutIncoming)
+initHue = function(view, buttonViewLayout)
 {
-    view.hueOffset = buttonViewLayoutIncoming.hueOffset
+    view.hueOffset = buttonViewLayout.hueOffset
     if(!view.hueOffset)
     {
         view.hueOffset = 0.0
     }
 
-    if(buttonViewLayoutIncoming.clip)
+    if(buttonViewLayout.clip)
     {
-        if(buttonViewLayoutIncoming.buttonType == "imageHueShift")
+        if(buttonViewLayout.buttonType == "imageHueShift")
         {
             view.shader = "drawQuadTexturedHueShiftClip"
         }
@@ -35,21 +35,21 @@ updateHueVisuals = function(view)
     }
 }
 
-initColor = function(view, buttonViewLayoutIncoming)
+initColor = function(view, buttonViewLayout)
 {
-    view.baseColor = buttonViewLayoutIncoming.color
+    view.baseColor = buttonViewLayout.color
     if(!view.baseColor)
     {
         view.baseColor = vec4(0.0,0.0,0.0,0.0)
     }
 
-    view.highlightColor = buttonViewLayoutIncoming.highlightColor
+    view.highlightColor = buttonViewLayout.highlightColor
     if(!view.highlightColor)
     {
         view.highlightColor = view.baseColor + vec4(0.0,0.2,0.4,0.4)
     }
 
-    view.mouseDownColor = buttonViewLayoutIncoming.mouseDownColor
+    view.mouseDownColor = buttonViewLayout.mouseDownColor
     if(!view.mouseDownColor)
     {
         view.mouseDownColor = view.baseColor + vec4(0.5,0.5,0.5,0.5)
@@ -76,7 +76,6 @@ updateColorVisuals = function(view)
 }
 
 buttonTypes = {
-
     color = {
         viewLayout = {
             type = "color"
@@ -104,15 +103,13 @@ buttonTypes = {
     }
 }
 
-getViewLayout = function(buttonViewLayoutIncoming, buttonType)
+getViewLayout = function(viewLayout, buttonType)
 {
     buttonViewLayout = {}
-    for(k,v in buttonViewLayoutIncoming)
+    for(k,v in viewLayout)
     {
         buttonViewLayout[k] = v
     }
-
-    #print("buttonType:", buttonType)
 
     for(k,v in buttonType.viewLayout)
     {
@@ -129,22 +126,22 @@ updateVisuals = function(view)
     }
 }
 
-create = function(parentView, buttonViewLayoutIncoming)
+create = function(parentView, viewLayout)
 {
-    buttonTypeKey = buttonViewLayoutIncoming.buttonType
+    buttonTypeKey = viewLayout.buttonType
     if(!buttonTypeKey or !buttonTypes[buttonTypeKey])
     {
         error("attempt to create button with missing or invalid buttonType:", buttonTypeKey)
     }
     buttonType = buttonTypes[buttonTypeKey]
-    viewLayoutFinal = getViewLayout(buttonViewLayoutIncoming, buttonType)
+    viewLayoutFinal = getViewLayout(viewLayout, buttonType)
     view = parentView.addView(viewLayoutFinal)
     view.buttonType = buttonType
 
 
     if(buttonType.initFunc)
     {
-        buttonType.initFunc(view, buttonViewLayoutIncoming)
+        buttonType.initFunc(view, viewLayout)
     }
 
     view.hoverStart = function()

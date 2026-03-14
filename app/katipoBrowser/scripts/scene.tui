@@ -1,5 +1,6 @@
 viewTypes = { #can be added to at any time
     button = require("app/common/button.tui")
+    textEntry = require("app/common/textEntry.tui")
     #scrollView = require("app/common/scrollView.tui")
 }
 
@@ -33,9 +34,7 @@ mainView = {
                 }
                 {
                     id = "urlTextEntry"
-                    type = "image"
-                    path = "app/katipoBrowser/images/colorsBackground.png"
-                    shader = "drawQuadTexturedHueShift"
+                    type = "textEntry"
                     size = function(parentSize)
                     {
                         return vec2(parentSize.x, urlTextEntryHeight)

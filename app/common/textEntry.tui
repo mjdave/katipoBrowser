@@ -6,148 +6,158 @@ selectedColor = vec4(0.5,0.9,1.0,1.0)
 
 resize = function(textEntryView, size)
 {
-    userData = textEntryView.textEntryViewData
     textEntryView.size = size
-    backgroundView = userData.backgroundView
-    backgroundView.size = size
+    textEntryView.backgroundView.size = size
 }
 
-updateVisuals = function(userData)
+updateVisuals = function(textEntryView)
 {
-    textEntryView = userData.view
-    if(userData.textView)
+    if(textEntryView.textView)
     {
-        if(userData.textView.text != userData.text)
+        if(textEntryView.textView.text != textEntryView.text)
         {
-            if(userData.text)
+            if(textEntryView.text)
             {
-                userData.textView.text = userData.text
+                textEntryView.textView.text = textEntryView.text
             }
             else
             {
-                userData.textView.text = ""
+                textEntryView.textView.text = ""
             }
         }
 
-        if(userData.disabled)
+        if(textEntryView.disabled)
         {
-            userData.textView.color = disabledColor
+            textEntryView.textView.color = disabledColor
         }
         else
         {
-            if(userData.selected or userData.editing)
+            if(textEntryView.selected or textEntryView.editing)
             {
-                userData.textView.color = selectedColor
+                textEntryView.textView.color = selectedColor
             }
             else
             {
-                userData.textView.color = standardColor
+                textEntryView.textView.color = standardColor
             }
         }
     }
 }
 
-updateCursorPosition = function(userData)
+updateCursorPosition = function(textEntryView)
 {
-    rect = userData.textView.getRectForCharAtIndex(-1 + userData.cursorOffset)
+    rect = textEntryView.textView.getRectForCharAtIndex(-1 + textEntryView.cursorOffset)
     xOffset = rect.x + rect.z
-    if(!userData.horizontalAlignment or userData.horizontalAlignment == "center")
+    if(!textEntryView.horizontalAlignment or textEntryView.horizontalAlignment == "center")
     {
         xOffset /= 2
     }
     #todo handle right alignment
-    userData.cursorView.pos = vec3(xOffset + 1,rect.y + 1,0)
+    textEntryView.cursorView.pos = vec3(xOffset + 1,rect.y + 1,0)
 }
 
-updateText = function(userData, newText)
+updateText = function(textEntryView, newText)
 {
-    setText(userData, newText)
+    setText(textEntryView, newText)
 
-    if(userData.editing)
+    if(textEntryView.editing)
     {
-        userData.cursorView.hidden = false
-        userData.cursorTimer = 0.0
+        textEntryView.cursorView.hidden = false
+        textEntryView.cursorTimer = 0.0
 
-        updateCursorPosition(userData)
+        updateCursorPosition(textEntryView)
     }
     
-    if(userData.textEntryChangedContinuousFunction)
+    if(textEntryView.textEntryChangedContinuousFunction)
     {
-        userData.textEntryChangedContinuousFunction(userData.text)
+        textEntryView.textEntryChangedContinuousFunction(textEntryView.text)
     }
 }
 
-finishEditing = function(userData, confirmChanges)
+finishEditing = function(textEntryView, confirmChanges)
 {
-    if(userData.editing)
+    if(textEntryView.editing)
     {
-        userData.view.keyChanged = nil
-        userData.editing = false
-        userData.backgroundView.update = nil
-        userData.cursorView.hidden = true
-        updateVisuals(userData)
-        eventManager.removeTextEntryListener(userData.textEntryListenerID)
-        userData.textEntryListenerID = nil
+        textEntryView.keyChanged = nil
+        textEntryView.editing = false
+        textEntryView.backgroundView.update = nil
+        textEntryView.cursorView.hidden = true
+        updateVisuals(textEntryView)
+        eventManager.removeTextEntryListener(textEntryView.textEntryListenerID)
+        textEntryView.textEntryListenerID = nil
 
-        if((!userData.text) or string.length(userData.text) == 0)
+        if((!textEntryView.text) or string.length(textEntryView.text) == 0)
         {
-            if(userData.allowsEmpty)
+            if(textEntryView.allowsEmpty)
             {
-                userData.textEntryFinishedFunction("")
+                textEntryView.onChange("")
             }
             else
             {
-                updateText(userData, userData.editStartTextValue)
+                updateText(textEntryView, textEntryView.editStartTextValue)
             }
         }
         else
         {
-            if(userData.textEntryFinishedFunction)
+            if(textEntryView.onChange)
             {
-                userData.textEntryFinishedFunction(userData.text, confirmChanges)
+                textEntryView.onChange(textEntryView.text, confirmChanges)
             }
 
             if(!confirmChanges)
             {
-                updateText(userData, userData.editStartTextValue)
+                updateText(textEntryView, textEntryView.editStartTextValue)
             }
         }
     }
 }
 
-showCursorAndResetTimerIfEditingForCursorChanged = function(userData)
+showCursorAndResetTimerIfEditingForCursorChanged = function(textEntryView)
 {
-    if(userData.editing)
+    if(textEntryView.editing)
     {
-        userData.cursorView.hidden = false
-        userData.cursorTimer = 0.0
-        updateCursorPosition(userData)
+        textEntryView.cursorView.hidden = false
+        textEntryView.cursorTimer = 0.0
+        updateCursorPosition(textEntryView)
     }
 }
 
-cursorChanged = function(userData, horizontalOffset, verticalOffset)
+cursorChanged = function(textEntryView, horizontalOffset, verticalOffset)
 {
-    if(userData.text)
+    if(textEntryView.text)
     {
-        textLength = string.length(userData.text)
+        textLength = string.length(textEntryView.text)
         if(textLength > 0)
         {
             if(horizontalOffset)
             {
-                userData.cursorOffset = userData.cursorOffset + horizontalOffset
-                userData.textView.resetVerticalCursorMovementAnchors()
+                textEntryView.cursorOffset = textEntryView.cursorOffset + horizontalOffset
+                textEntryView.textView.resetVerticalCursorMovementAnchors()
             }
             elseif(verticalOffset)
             {
-                userData.cursorOffset = userData.textView.getCursorOffsetForVerticalCursorMovement(userData.cursorOffset, verticalOffset)
+                textEntryView.cursorOffset = textEntryView.textView.getCursorOffsetForVerticalCursorMovement(textEntryView.cursorOffset, verticalOffset)
             }
-            userData.cursorOffset = math.clamp(userData.cursorOffset, -textLength, 0)
-            showCursorAndResetTimerIfEditingForCursorChanged(userData)
+            textEntryView.cursorOffset = math.clamp(textEntryView.cursorOffset, -textLength, 0)
+            showCursorAndResetTimerIfEditingForCursorChanged(textEntryView)
         }
     }
 }
 
-create = function(parentView, options)
+getViewLayout = function(viewLayout)
+{
+    buttonViewLayout = {}
+    for(k,v in viewLayout)
+    {
+        buttonViewLayout[k] = v
+    }
+
+    buttonViewLayout.type = "view"
+    
+    return buttonViewLayout
+}
+
+create = function(parentView, viewLayout)
 {
     font = "roboto"
     fontSize = 16
@@ -155,43 +165,36 @@ create = function(parentView, options)
     size = parentView.size
     backgroundColor = vec4(0.0,0.0,0.0,0.8)
 
-    if(options)
+    if(viewLayout)
     {
-        if(options.font)
+        if(viewLayout.font)
         {
-            font = options.font
+            font = viewLayout.font
         }
-        if(options.fontSize)
+        if(viewLayout.fontSize)
         {
-            fontSize = options.fontSize
+            fontSize = viewLayout.fontSize
         }
-        if(options.backgroundColor)
+        if(viewLayout.backgroundColor)
         {
-            backgroundColor = options.backgroundColor
+            backgroundColor = viewLayout.backgroundColor
         }
-        if(options.horizontalAlignment)
+        if(viewLayout.horizontalAlignment)
         {
-            horizontalAlignment = options.horizontalAlignment
+            horizontalAlignment = viewLayout.horizontalAlignment
         }
-    }
-    
-    userData = {
-        horizontalAlignment = horizontalAlignment
-        fontSize = fontSize
-        font = font
-        cursorTimer = 0.0
-        cursorOffset = 0
-        minWidth = size.x
-        descriptionText = descriptionTextOrNil
     }
 
-    textEntryViewLayout = {
-        type = "view"
-    }
+    textEntryView = parentView.addView(getViewLayout(viewLayout))
 
-    textEntryView = parentView.addView(textEntryViewLayout)
-    userData.view = textEntryView
-    textEntryView.textEntryViewData = userData
+    textEntryView.horizontalAlignment = horizontalAlignment
+    textEntryView.fontSize = fontSize
+    textEntryView.font = font
+    textEntryView.cursorTimer = 0.0
+    textEntryView.cursorOffset = 0
+    textEntryView.minWidth = size.x
+    textEntryView.descriptionText = descriptionTextOrNil
+
     verticalAlignment = MJPositionCenter
 
 
@@ -202,16 +205,16 @@ create = function(parentView, options)
     {
         yOffset = -7
     }
-    if(userData.textOffset)
+    if(textEntryView.textOffset)
     {
-        yOffset = yOffset + userData.textOffset
+        yOffset = yOffset + textEntryView.textOffset
     }
     if(horizontalAlignment == "innerLeft")
     {
         xOffset = 4
     }
 
-    userData.verticalAlignment = verticalAlignment
+    textEntryView.verticalAlignment = verticalAlignment
 
     backgroundViewLayout = {
         type = "color"
@@ -219,7 +222,7 @@ create = function(parentView, options)
     }
 
     backgroundView = textEntryView.addView(backgroundViewLayout)
-    userData.backgroundView = backgroundView
+    textEntryView.backgroundView = backgroundView
 
 
     cursorViewLayout = {
@@ -233,33 +236,33 @@ create = function(parentView, options)
     
     cursorView = textEntryView.addView(cursorViewLayout)
     cursorView.hidden = true
-    userData.cursorView = cursorView
+    textEntryView.cursorView = cursorView
 
 
     textViewLayout = {
         type = "text"
-        font = userData.font
-        fontSize = userData.fontSize
+        font = textEntryView.font
+        fontSize = textEntryView.fontSize
         horizontalAlignment = horizontalAlignment
         verticalAlignment = verticalAlignment
         pos = vec3(xOffset,yOffset,0)
     }
 
     textView = textEntryView.addView(textViewLayout)
-    userData.initialOffset = textViewLayout.pos
-    userData.textView = textView
+    textEntryView.initialOffset = textViewLayout.pos
+    textEntryView.textView = textView
 
-    userData.cursorView.layoutParent = textView
+    textEntryView.cursorView.layoutParent = textView
 
     updateCursorFunction = function(dt)
     {
-        userData.cursorTimer = userData.cursorTimer + dt
-        if(userData.cursorTimer > 0.5)
+        textEntryView.cursorTimer = textEntryView.cursorTimer + dt
+        if(textEntryView.cursorTimer > 0.5)
         {
-            userData.cursorTimer = userData.cursorTimer - 0.5
-            if(userData.cursorTimer > 0.5)
+            textEntryView.cursorTimer = textEntryView.cursorTimer - 0.5
+            if(textEntryView.cursorTimer > 0.5)
             {
-                userData.cursorTimer = 0.0
+                textEntryView.cursorTimer = 0.0
             }
             cursorView.hidden = (!cursorView.hidden)
         }
@@ -268,24 +271,24 @@ create = function(parentView, options)
 
     backgroundView.hoverStart = function()
     {
-        if(!userData.selected)
+        if(!textEntryView.selected)
         {
-            if(!userData.disabled)
+            if(!textEntryView.disabled)
             {
-                userData.selected = true
+                textEntryView.selected = true
                 #audio:playUISound(uiCommon.hoverSoundFile)
-                updateVisuals(userData)
+                updateVisuals(textEntryView)
             }
         }
     }
 
     backgroundView.hoverEnd = function()
     {
-        if(userData.selected)
+        if(textEntryView.selected)
         {
-            userData.selected = false
-            userData.mouseDown = false
-            updateVisuals(userData)
+            textEntryView.selected = false
+            textEntryView.mouseIsDown = false
+            updateVisuals(textEntryView)
         }
     }
 
@@ -293,12 +296,12 @@ create = function(parentView, options)
     {
         if(buttonIndex == 0)
         {
-            if(!userData.mouseDown)
+            if(!textEntryView.mouseIsDown)
             {
-                if(!userData.disabled)
+                if(!textEntryView.disabled)
                 {
-                    userData.mouseDown = true
-                    updateVisuals(userData)
+                    textEntryView.mouseIsDown = true
+                    updateVisuals(textEntryView)
                     #audio:playUISound(uiCommon.clickDownSoundFile)
                 }
             }
@@ -309,55 +312,51 @@ create = function(parentView, options)
     {
         if(buttonIndex == 0)
         {
-            if(userData.mouseDown)
+            if(textEntryView.mouseDown)
             {
-                userData.mouseDown = false
-                updateVisuals(userData)
+                textEntryView.mouseIsDown = false
+                updateVisuals(textEntryView)
                 #audio:playUISound(uiCommon.clickReleaseSoundFile)
             }
         }
     }
 
-    textViewClickFunction = function(mouseLoc)
+    backgroundViewClickFunction = function(mouseLoc)
     {
-        if(!userData.disabled)
+        if(!textEntryView.disabled)
         {
-            if(userData.clickFunction)
-            {
-                userData.clickFunction()
-            }
-            if(userData.editing)
+            if(textEntryView.editing)
             {
                 print("todo, allow cursor position change with click")
-                /*if(userData.text)
+                /*if(textEntryView.text)
                 {
-                    textViewLoc = textEntryView:locationRelativeToView(mouseLoc, userData.textView)
+                    textViewLoc = textEntryView:locationRelativeToView(mouseLoc, textEntryView.textView)
 
-                    charIndex = userData.textView:getCharIndexForPos(textViewLoc)
-                    textLength = string.length(userData.text)
+                    charIndex = textEntryView.textView:getCharIndexForPos(textViewLoc)
+                    textLength = string.length(textEntryView.text)
                     if(textLength > 0)
                     {
                         charIndex = mjm.clamp(charIndex, 0, textLength)
-                        userData.cursorOffset = charIndex - textLength
-                        userData.cursorView.hidden = false
-                        userData.cursorTimer = 0.0
-                        updateCursorPosition(userData)
-                        textEntryView.textEntryViewData.textView.resetVerticalCursorMovementAnchors()
+                        textEntryView.cursorOffset = charIndex - textLength
+                        textEntryView.cursorView.hidden = false
+                        textEntryView.cursorTimer = 0.0
+                        updateCursorPosition(textEntryView)
+                        textEntryView.textView.resetVerticalCursorMovementAnchors()
                     }
                 }*/
                 #mj:log("mouseLoc:", mouseLoc - vec2(textView.pos.x, textView.pos.y), " charIndex:", charIndex)
             }
             else
             {
-                userData.editing = true
-                #textEntryView.textEntryViewData.textView:resetVerticalCursorMovementAnchors()
-                userData.editStartTextValue = userData.text
+                textEntryView.editing = true
+                #textEntryView.textView:resetVerticalCursorMovementAnchors()
+                textEntryView.editStartTextValue = textEntryView.text
                 cursorView.hidden = false
-                userData.cursorTimer = 0.0
-                userData.cursorOffset = 0
+                textEntryView.cursorTimer = 0.0
+                textEntryView.cursorOffset = 0
                 backgroundView.update = updateCursorFunction
-                updateVisuals(userData)
-                updateCursorPosition(userData)
+                updateVisuals(textEntryView)
+                updateCursorPosition(textEntryView)
                 
                 keyMap = {
                     [keys.keyCodes.key_return] = function(isDown, keyCode, modCode, isRepeat)
@@ -365,25 +364,25 @@ create = function(parentView, options)
                         if(isDown and (!isRepeat))
                         {
                             #print("modCode:", modCode)
-                            finishEditing(userData, true)
+                            finishEditing(textEntryView, true)
                         }
                     }
                     [keys.keyCodes.backspace] = function(isDown, keyCode, modCode, isRepeat)
                     {
                         if(isDown)
                         {
-                            if(userData.text and string.length(userData.text) > 0)
+                            if(textEntryView.text and string.length(textEntryView.text) > 0)
                             {
                                 newText = ""
-                                if(userData.cursorOffset and userData.cursorOffset != 0)
+                                if(textEntryView.cursorOffset and textEntryView.cursorOffset != 0)
                                 {
-                                    textLength = string.length(userData.text)
+                                    textLength = string.length(textEntryView.text)
                                     if(textLength > 0)
                                     {
-                                        removePos = math.max(textLength + userData.cursorOffset, 0)
+                                        removePos = math.max(textLength + textEntryView.cursorOffset, 0)
                                         if(removePos > 0)
                                         {
-                                            newText = string.subString(userData.text,0,removePos) + string.subString(userData.text, removePos + 1)
+                                            newText = string.subString(textEntryView.text,0,removePos) + string.subString(textEntryView.text, removePos + 1)
                                         }
                                         else
                                         {
@@ -397,9 +396,9 @@ create = function(parentView, options)
                                 }
                                 else
                                 {
-                                    newText = string.subString(userData.text, 0, string.length(userData.text) - 1)
+                                    newText = string.subString(textEntryView.text, 0, string.length(textEntryView.text) - 1)
                                 }
-                                updateText(userData, newText)
+                                updateText(textEntryView, newText)
                             }
                         }
                         return true
@@ -408,28 +407,28 @@ create = function(parentView, options)
                     {
                         if(isDown and (!isRepeat))
                         {
-                            finishEditing(userData, false)
+                            finishEditing(textEntryView, false)
                         }
                     }
                     [keys.keyCodes.left] = function(isDown, keyCode, modCode, isRepeat)
                     {
                         if(isDown)
                         {
-                            cursorChanged(userData, -1, nil)
+                            cursorChanged(textEntryView, -1, nil)
                         }
                     }
                     [keys.keyCodes.right] = function(isDown, keyCode, modCode, isRepeat)
                     {
                         if(isDown)
                         {
-                            cursorChanged(userData, 1, nil)
+                            cursorChanged(textEntryView, 1, nil)
                         }
                     }
                     #[keyMapping:getMappingIndex("textEntry", "newline")] = function(isDown, isRepeat)
                     #    if(isDown)
                     #    {
-                    #        newText = userData.text .. "\n"
-                    #        updateText(userData, newText)
+                    #        newText = textEntryView.text .. "\n"
+                    #        updateText(textEntryView, newText)
                     #    }
                     #    return true 
                     #end,
@@ -437,19 +436,19 @@ create = function(parentView, options)
                     [keyMapping:getMappingIndex("textEntry", "delete")] = function(isDown, isRepeat)
                         if(isDown)
                             {
-                            if(userData.text and string.length(userData.text) > 0)
+                            if(textEntryView.text and string.length(textEntryView.text) > 0)
                             {
                                 newText = ""
-                                if(userData.cursorOffset and userData.cursorOffset ~= 0)
+                                if(textEntryView.cursorOffset and textEntryView.cursorOffset ~= 0)
                                 {
-                                    textLength = string.length(userData.text)
+                                    textLength = string.length(textEntryView.text)
                                     if(textLength > 0)
                                     {
-                                        removeAfterPos = math.max(textLength + userData.cursorOffset, 0) + 1
+                                        removeAfterPos = math.max(textLength + textEntryView.cursorOffset, 0) + 1
                                         if(removeAfterPos > 0 and removeAfterPos < textLength)
                                         {
-                                            newText = userData.text:sub(1,removeAfterPos - 1) .. userData.text:sub(removeAfterPos + 1,-1)
-                                            userData.cursorOffset = userData.cursorOffset + 1
+                                            newText = textEntryView.text:sub(1,removeAfterPos - 1) .. textEntryView.text:sub(removeAfterPos + 1,-1)
+                                            textEntryView.cursorOffset = textEntryView.cursorOffset + 1
                                         }
                                         else
                                         {
@@ -463,10 +462,10 @@ create = function(parentView, options)
                                 }
                                 else
                                 {
-                                    newText = userData.text:sub(1, -2)
+                                    newText = textEntryView.text:sub(1, -2)
                                 }
 
-                                updateText(userData, newText)
+                                updateText(textEntryView, newText)
                             }
                         }
                         return true
@@ -474,12 +473,12 @@ create = function(parentView, options)
                     [keyMapping:getMappingIndex("game", "escape")] = function(isDown, isRepeat)
                         if(isDown and (!isRepeat))
                         {
-                            finishEditing(userData, false)
+                            finishEditing(textEntryView, false)
                         }
                         return true 
                     end,
-                   [keyMapping:getMappingIndex("textEntry", "prevCommand")] = function(isDown, isRepeat) if(isDown then cursorChanged(userData, nil, 1) end return true end,
-                    [keyMapping:getMappingIndex("textEntry", "nextCommand")] = function(isDown, isRepeat) if(isDown then cursorChanged(userData, nil, -1) end return true end,
+                   [keyMapping:getMappingIndex("textEntry", "prevCommand")] = function(isDown, isRepeat) if(isDown then cursorChanged(textEntryView, nil, 1) end return true end,
+                    [keyMapping:getMappingIndex("textEntry", "nextCommand")] = function(isDown, isRepeat) if(isDown then cursorChanged(textEntryView, nil, -1) end return true end,
                     */
                 }
 
@@ -501,92 +500,81 @@ create = function(parentView, options)
                 textEntry = function(text)
                 {
                     newText = text
-                    if(userData.text)
+                    if(textEntryView.text)
                     {
-                        if(userData.cursorOffset < 0)
+                        if(textEntryView.cursorOffset < 0)
                         {
-                            textLength = string.length(userData.text)
+                            textLength = string.length(textEntryView.text)
                             if(textLength > 0)
                             {
-                                insertAfterPos = math.max(textLength + userData.cursorOffset, 0)
-                                newText = stringInsert(userData.text, text, insertAfterPos)
+                                insertAfterPos = math.max(textLength + textEntryView.cursorOffset, 0)
+                                newText = stringInsert(textEntryView.text, text, insertAfterPos)
                             }
                         }
                         else
                         {
-                            newText = userData.text + text
+                            newText = textEntryView.text + text
                         }
                     }
-                    updateText(userData, newText)
+                    updateText(textEntryView, newText)
                 }
                 
-                userData.textEntryListenerID = eventManager.setTextEntryListener(textEntry, keyChanged)
+                textEntryView.textEntryListenerID = eventManager.setTextEntryListener(textEntry, keyChanged)
             }
         }
     }
 
-    userData.textViewClickFunction = textViewClickFunction
-    backgroundView.click = textViewClickFunction
+    backgroundView.click = backgroundViewClickFunction
+    textEntryView.textEntryClickFunction = backgroundViewClickFunction
+
+    textEntryView.setText = function(text){
+        setText(textEntryView, text)
+    }
+
     
     backgroundView.clickDownOutside = function()
     {
-        finishEditing(userData, true)
+        finishEditing(textEntryView, true)
     }
 
     return textEntryView
 }
 
-setOnChangeCallback = function(textEntryView, callbackFunc)
-{
-    textEntryView.textEntryViewData.textEntryFinishedFunction = callbackFunc
-}
-
 setAllowsEmpty = function(textEntryView, allowsEmpty)
 { #defaults to not allowing empty strings
-    textEntryView.textEntryViewData.allowsEmpty = allowsEmpty
+    textEntryView.allowsEmpty = allowsEmpty
 }
 
 setChangedContinuousCallback = function(textEntryView, callbackFunc)
 {
-    textEntryView.textEntryViewData.textEntryChangedContinuousFunction = callbackFunc
+    textEntryView.textEntryChangedContinuousFunction = callbackFunc
 }
 
 setSelected = function(textEntryView, selected)
 {
-    if(selected != textEntryView.textEntryViewData.selected)
+    if(selected != textEntryView.selected)
     {
-        textEntryView.textEntryViewData.selected = selected
-        updateVisuals(textEntryView.textEntryViewData)
+        textEntryView.selected = selected
+        updateVisuals(textEntryView)
     }
 }
 
 setDisabled = function(textEntryView, disabled)
 {
-    if(disabled != textEntryView.textEntryViewData.disabled)
+    if(disabled != textEntryView.disabled)
     {
-        textEntryView.textEntryViewData.disabled = disabled
-        updateVisuals(textEntryView.textEntryViewData)
+        textEntryView.disabled = disabled
+        updateVisuals(textEntryView)
     }
 }
 
 isEditing = function(textEntryView)
 {
-    return textEntryView.textEntryViewData.editing
+    return textEntryView.editing
 }
 
-callClickFunction = function(textEntryView)
+setText = function(textEntryView, text_)
 {
-    textEntryView.textEntryViewData.textViewClickFunction()
-}
-
-setText = function(userDataOrTextView, text_)
-{
-    userData = userDataOrTextView
-    if(userDataOrTextView.textEntryViewData)
-    {
-        userData = userDataOrTextView.textEntryViewData
-    }
-
     textToUse = text_
     if(!textToUse)
     {
@@ -598,70 +586,69 @@ setText = function(userDataOrTextView, text_)
         error("expected string, got ", type(textToUse), ": ", textToUse)
     }
 
-    if(userData.maxChars and textToUse and string.length(textToUse) > userData.maxChars)
+    if(textEntryView.maxChars and textToUse and string.length(textToUse) > textEntryView.maxChars)
     {
-        textToUse = string.subString(textToUse, 0, userData.maxChars)
+        textToUse = string.subString(textToUse, 0, textEntryView.maxChars)
     }
-    userData.text = textToUse
-    if(!userData.editing)
+    textEntryView.text = textToUse
+    if(!textEntryView.editing)
     {
-        userData.cursorOffset = 0
+        textEntryView.cursorOffset = 0
     }
     else
     {
         if(textToUse)
         {
-            if(userData.cursorOffset < -string.length(textToUse))
+            if(textEntryView.cursorOffset < -string.length(textToUse))
             {
-                userData.cursorOffset = -string.length(textToUse)
+                textEntryView.cursorOffset = -string.length(textToUse)
             }
         }
         else
         {
-            userData.cursorOffset = 0
+            textEntryView.cursorOffset = 0
         }
     }
     
-    updateVisuals(userData)
-    #userData.textView:resetVerticalCursorMovementAnchors() #todo
-    showCursorAndResetTimerIfEditingForCursorChanged(userData)
+    updateVisuals(textEntryView)
+    #textEntryView.textView:resetVerticalCursorMovementAnchors() #todo
+    showCursorAndResetTimerIfEditingForCursorChanged(textEntryView)
 }
 
-clearText = function(userData)
+clearText = function(textEntryView)
 {
-    setText(userData, "")
+    setText(textEntryView, "")
 }
 
 setMaxChars = function(textEntryView, maxChars)
 {
-    textEntryView.textEntryViewData.maxChars = maxChars
+    textEntryView.maxChars = maxChars
 }
 
 getText = function(textEntryView)
 {
-    return textEntryView.textEntryViewData.text
+    return textEntryView.text
 }
 
 setPromptText = function(textEntryView, promptText, promptColor)
 {
-    userData = textEntryView.textEntryViewData
-    if(textEntryView.textEntryViewData.promptTextView)
+    if(textEntryView.promptTextView)
     {
-        textEntryView.removeView(textEntryView.textEntryViewData.promptTextView)
+        textEntryView.removeView(textEntryView.promptTextView)
     }
 
     if(promptText and promptText != "")
     {
         /*promptTextView = TextView.new(textEntryView) #todo
-        promptTextView.font = Font(userData.fontName, userData.fontSize)
-        promptTextView.relativePosition = ViewPosition(userData.horizontalAlignment, userData.verticalAlignment)
-        promptTextView.pos = userData.initialOffset
+        promptTextView.font = Font(textEntryView.fontName, textEntryView.fontSize)
+        promptTextView.relativePosition = ViewPosition(textEntryView.horizontalAlignment, textEntryView.verticalAlignment)
+        promptTextView.pos = textEntryView.initialOffset
 
         promptTextView:addColoredText(promptText, promptColor)
     
-        textEntryView.textEntryViewData.promptTextView = promptTextView
+        textEntryView.promptTextView = promptTextView
 
-        userData.textView.pos = userData.initialOffset + vec3(promptTextView.size.x,0,0) #todo this only supports left alignment
+        textEntryView.textView.pos = textEntryView.initialOffset + vec3(promptTextView.size.x,0,0) #todo this only supports left alignment
         */
     }
 }
