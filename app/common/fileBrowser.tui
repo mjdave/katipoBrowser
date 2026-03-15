@@ -169,7 +169,7 @@ dirItemLayout = {
     }
 }
 
-updateItemColor = function(userData, itemView, selected, hover)
+updateItemColor = function(fileBrowserView, itemView, selected, hover)
 {
     if(selected)
     {
@@ -193,54 +193,53 @@ updateItemColor = function(userData, itemView, selected, hover)
     }
 }
 
-updateVisuals = function(userData)
+updateVisuals = function(fileBrowserView)
 {
-    if(userData.leftItemViews)
+    if(fileBrowserView.leftItemViews)
     {
-        for(i, itemView in userData.leftItemViews)
+        for(i, itemView in fileBrowserView.leftItemViews)
         {
-            updateItemColor(userData, itemView, i == userData.leftSelectedIndex, i == userData.leftHoverIndex)
+            updateItemColor(fileBrowserView, itemView, i == fileBrowserView.leftSelectedIndex, i == fileBrowserView.leftHoverIndex)
         }
     }
 
-    if(userData.rightItemViews)
+    if(fileBrowserView.rightItemViews)
     {
-        for(i, itemView in userData.rightItemViews)
+        for(i, itemView in fileBrowserView.rightItemViews)
         {
-            updateItemColor(userData, itemView, i == userData.rightSelectedIndex, i == userData.rightHoverIndex)
+            updateItemColor(fileBrowserView, itemView, i == fileBrowserView.rightSelectedIndex, i == fileBrowserView.rightHoverIndex)
         }
     }
 }
 
 setDirectoryTree = function(fileBrowserView, directoryTree, selectedIndex, isFromNavigation) #todo we could also create directoryTree if given a path argument. directoryTreeOrPath, and add a createDirectoryTree function
 {
-    userData = fileBrowserView.fileBrowserViewData
-    userData.currentFile = directoryTree
-    userData.leftSelectedIndex = selectedIndex
+    fileBrowserView.currentFile = directoryTree
+    fileBrowserView.leftSelectedIndex = selectedIndex
 
     if(onBrowserContentChange)
     {
         onBrowserContentChange()
     }
 
-    if(userData.leftPaneView)
+    if(fileBrowserView.leftPaneView)
     {
-        fileBrowserView.removeView(userData.leftPaneView)
+        fileBrowserView.removeView(fileBrowserView.leftPaneView)
     }
 
     leftLayoutToUse = leftPaneLayout
-    if(userData.size.y > userData.size.x)
+    if(fileBrowserView.parentSize.y > fileBrowserView.parentSize.x)
     {
         print("using vertical layout")
         leftLayoutToUse = leftPanelVerticalLayout
     }
 
     leftPaneView = fileBrowserView.addView(leftLayoutToUse)
-    userData.leftPaneView = leftPaneView
+    fileBrowserView.leftPaneView = leftPaneView
 
     if(!isFromNavigation)
     {
-        userData.currentDirectoryStack = {
+        fileBrowserView.currentDirectoryStack = {
             {
                 tree = directoryTree
                 selectedIndex = selectedIndex
@@ -249,20 +248,20 @@ setDirectoryTree = function(fileBrowserView, directoryTree, selectedIndex, isFro
     }
     
     headerBackButton = leftPaneView.getView("headerBackButton")
-    stackCount = table.count(userData.currentDirectoryStack)
+    stackCount = table.count(fileBrowserView.currentDirectoryStack)
     if(stackCount > 1)
     {
         headerBackButton.hidden = false
         headerBackButtonClickFunction = function()
         {
-            if(userData.currentDirectoryStack)
+            if(fileBrowserView.currentDirectoryStack)
             {
-                stackCount = table.count(userData.currentDirectoryStack)
+                stackCount = table.count(fileBrowserView.currentDirectoryStack)
                 if(stackCount > 1)
                 {
-                    prevStackInfo = userData.currentDirectoryStack[stackCount - 1]
-                    newStackInfo = userData.currentDirectoryStack[stackCount - 2]
-                    table.remove(userData.currentDirectoryStack, stackCount - 1)
+                    prevStackInfo = fileBrowserView.currentDirectoryStack[stackCount - 1]
+                    newStackInfo = fileBrowserView.currentDirectoryStack[stackCount - 2]
+                    table.remove(fileBrowserView.currentDirectoryStack, stackCount - 1)
                     setDirectoryTree(fileBrowserView, newStackInfo.tree, prevStackInfo.selectedIndex, true)
                 }
             }
@@ -275,8 +274,8 @@ setDirectoryTree = function(fileBrowserView, directoryTree, selectedIndex, isFro
         headerBackButton.hidden = true
     }
 
-    userData.headerTitleLeft = leftPaneView.getView("headerTitleLeft")
-    userData.headerTitleLeft.text = directoryTree.fileName
+    fileBrowserView.headerTitleLeft = leftPaneView.getView("headerTitleLeft")
+    fileBrowserView.headerTitleLeft.text = directoryTree.fileName
 
     leftPaneScrollView = leftPaneView.getView("scrollView")
 
@@ -284,31 +283,31 @@ setDirectoryTree = function(fileBrowserView, directoryTree, selectedIndex, isFro
 
     updateRightPanel = function(subTree)
     {
-        if(userData.rightPaneView)
+        if(fileBrowserView.rightPaneView)
         {
-            fileBrowserView.removeView(userData.rightPaneView)
-            userData.rightPaneView = nil
+            fileBrowserView.removeView(fileBrowserView.rightPaneView)
+            fileBrowserView.rightPaneView = nil
         }
 
-        userData.rightItemViews = {}
+        fileBrowserView.rightItemViews = {}
 
         rightLayoutToUse = rightPaneLayout
-        if(userData.size.y > userData.size.x)
+        if(fileBrowserView.parentSize.y > fileBrowserView.parentSize.x)
         {
             rightLayoutToUse = rightPanelVerticalLayout
         }
 
         rightPaneView = fileBrowserView.addView(rightLayoutToUse)
-        userData.rightPaneView = rightPaneView
+        fileBrowserView.rightPaneView = rightPaneView
 
-        userData.headerTitleRight = rightPaneView.getView("headerTitleRight")
+        fileBrowserView.headerTitleRight = rightPaneView.getView("headerTitleRight")
         if(!subTree)
         {
-            userData.headerTitleRight.text = ""
+            fileBrowserView.headerTitleRight.text = ""
         }
         else
         {
-            userData.headerTitleRight.text = subTree.fileName
+            fileBrowserView.headerTitleRight.text = subTree.fileName
 
             if(subTree.files)
             {
@@ -347,16 +346,16 @@ setDirectoryTree = function(fileBrowserView, directoryTree, selectedIndex, isFro
 
                     itemView.hoverStart = function()
                     {
-                        userData.rightHoverIndex = i
-                        updateVisuals(userData)
+                        fileBrowserView.rightHoverIndex = i
+                        updateVisuals(fileBrowserView)
                     }
 
                     itemView.hoverEnd = function()
                     {
-                        if(userData.rightHoverIndex == i)
+                        if(fileBrowserView.rightHoverIndex == i)
                         {
-                            userData.rightHoverIndex = nil
-                            updateVisuals(userData)
+                            fileBrowserView.rightHoverIndex = nil
+                            updateVisuals(fileBrowserView)
                         }
                     }
 
@@ -365,17 +364,17 @@ setDirectoryTree = function(fileBrowserView, directoryTree, selectedIndex, isFro
                         if(file.files)
                         {
                             tuiBug = { #definite tui bug here, couldn't pass this directly as function arg
-                                selectedIndex = userData.leftSelectedIndex
+                                selectedIndex = fileBrowserView.leftSelectedIndex
                                 tree = subTree
                             }
                             
-                            table.insert(userData.currentDirectoryStack, tuiBug)
+                            table.insert(fileBrowserView.currentDirectoryStack, tuiBug)
                             setDirectoryTree(fileBrowserView, subTree, i, true)
                         }
                     }
 
                     rightPaneScrollView.insertRow(itemView)
-                    table.insert(userData.rightItemViews, itemView)
+                    table.insert(fileBrowserView.rightItemViews, itemView)
 
                     if(onBrowserItemCreate)
                     {
@@ -388,7 +387,7 @@ setDirectoryTree = function(fileBrowserView, directoryTree, selectedIndex, isFro
 
     if(directoryTree.files)
     {
-        userData.leftItemViews = {}
+        fileBrowserView.leftItemViews = {}
         compareFunction = function(a,b)
         {
             return a.fileName < b.fileName
@@ -423,16 +422,16 @@ setDirectoryTree = function(fileBrowserView, directoryTree, selectedIndex, isFro
 
             itemView.hoverStart = function()
             {
-                userData.leftHoverIndex = i
-                updateVisuals(userData)
+                fileBrowserView.leftHoverIndex = i
+                updateVisuals(fileBrowserView)
             }
 
             itemView.hoverEnd = function()
             {
-                if(userData.leftHoverIndex == i)
+                if(fileBrowserView.leftHoverIndex == i)
                 {
-                    userData.leftHoverIndex = nil
-                    updateVisuals(userData)
+                    fileBrowserView.leftHoverIndex = nil
+                    updateVisuals(fileBrowserView)
                 }
             }
 
@@ -440,9 +439,9 @@ setDirectoryTree = function(fileBrowserView, directoryTree, selectedIndex, isFro
             {
                 itemView.click = function()
                 {
-                    userData.leftSelectedIndex = i
+                    fileBrowserView.leftSelectedIndex = i
                     updateRightPanel(file)
-                    updateVisuals(userData)
+                    updateVisuals(fileBrowserView)
 
                     if(onBrowserContentChange)
                     {
@@ -452,7 +451,7 @@ setDirectoryTree = function(fileBrowserView, directoryTree, selectedIndex, isFro
             }
 
             leftPaneScrollView.insertRow(itemView)
-            table.insert(userData.leftItemViews, itemView)
+            table.insert(fileBrowserView.leftItemViews, itemView)
 
             if(onBrowserItemCreate)
             {
@@ -460,9 +459,9 @@ setDirectoryTree = function(fileBrowserView, directoryTree, selectedIndex, isFro
             }
         }
 
-        if(userData.leftSelectedIndex != nil)
+        if(fileBrowserView.leftSelectedIndex != nil)
         {
-            updateRightPanel(sortedFiles[userData.leftSelectedIndex])
+            updateRightPanel(sortedFiles[fileBrowserView.leftSelectedIndex])
         }
         else
         {
@@ -471,27 +470,30 @@ setDirectoryTree = function(fileBrowserView, directoryTree, selectedIndex, isFro
     }
 
 
-    updateVisuals(userData)
+    updateVisuals(fileBrowserView)
 
 }
 
-
-create = function(parentView)
+getViewLayout = function(viewLayout)
 {
-    userData = {
+    fileBrowserViewLayout = {}
+    for(k,v in viewLayout)
+    {
+        fileBrowserViewLayout[k] = v
     }
 
-    fileBrowserViewLayout = {
-        type = "view"
-    }
+    fileBrowserViewLayout.type = "view"
+    
+    return fileBrowserViewLayout
+}
 
-    fileBrowserView = parentView.addView(fileBrowserViewLayout)
-    userData.view = fileBrowserView
-    fileBrowserView.fileBrowserViewData = userData
+create = function(parentView, viewLayout)
+{
+    fileBrowserView = parentView.addView(getViewLayout(viewLayout))
 
     fileBrowserView.size = function(parentSize)
     {
-        userData.size = parentSize
+        fileBrowserView.parentSize = parentSize
         return parentSize
     }
 

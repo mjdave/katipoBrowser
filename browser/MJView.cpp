@@ -1836,10 +1836,6 @@ void MJView::doRelativeViewLayoutsForTablePostLoad()
         {
             setRelativeView(viewsByID->at(relativeViewToLoadID));
         }
-        else
-        {
-            MJError("In doRelativeViewLayoutsForTablePostLoad unable to find relative view with id:%s", relativeViewToLoadID.c_str());
-        }
     }
     
     for(MJView* subView : subviews)

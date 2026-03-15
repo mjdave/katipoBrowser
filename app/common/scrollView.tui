@@ -111,11 +111,24 @@ create = function(parentView, viewLayout)
     scrollView.backgroundHover = false
     scrollView.knobHover = false
 
+    scrollView.layoutSizeFunction = viewLayout.size
+    if(type(scrollView.layoutSizeFunction) != "function")
+    {
+        scrollView.layoutSizeFunction = nil
+    }
+
     scrollView.size = function(parentSize)
     {
-        scrollView.parentSize = parentSize
+        if(scrollView.layoutSizeFunction)
+        {
+            scrollView.parentSize = scrollView.layoutSizeFunction(parentSize)
+        }
+        else
+        {
+            scrollView.parentSize = parentSize
+        }
         scrollView.dirty = true
-        return parentSize
+        return scrollView.parentSize
     }
 
     baseItemLayout = {
