@@ -315,12 +315,10 @@ void KatipoBrowser::init()
                     {
                         SiteConnectionInfo& siteConnectionInfo = siteConnectionInfosByHostID[hostID];
                         MJView* subView = siteConnectionInfo.mainView->getSubViewWithID(((TuiString*)viewNameRef)->value);
-                        if(!subView)
+                        if(subView)
                         {
-                            TuiParseError(callingDebugInfo->fileName.c_str(), callingDebugInfo->lineNumber, "view not found:%s", ((TuiString*)viewNameRef)->value.c_str());
-                            return TUI_NIL;
+                            return subView->stateTable->retain();
                         }
-                        return subView->stateTable->retain();
                     }
                 }
                 return TUI_NIL;
@@ -490,7 +488,10 @@ void KatipoBrowser::init()
             if(viewNameRef->type() == Tui_ref_type_STRING)
             {
                 MJView* subView = mainView->getSubViewWithID(((TuiString*)viewNameRef)->value);
-                return subView->stateTable->retain();
+                if(subView)
+                {
+                    return subView->stateTable->retain();
+                }
             }
         }
         return TUI_NIL;

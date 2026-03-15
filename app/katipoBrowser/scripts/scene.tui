@@ -1,7 +1,7 @@
 viewTypes = { #can be added to at any time
     button = require("app/common/button.tui")
     textEntry = require("app/common/textEntry.tui")
-    #scrollView = require("app/common/scrollView.tui")
+    scrollView = require("app/common/scrollView.tui")
 }
 
 urlTextEntryHeight = 40
@@ -27,8 +27,8 @@ mainView = {
                     alignmentY = "top"
                 }
                 {
-                    id = "bookmarks"
-                    type = "view"
+                    id = "bookmarksScrollView"
+                    type = "scrollView"
                     alignmentY = "above"
                     layoutParentID = "urlTextEntry"
                 }

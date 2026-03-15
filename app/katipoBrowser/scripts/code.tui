@@ -1,6 +1,5 @@
 
 defaultSiteScene = require("app/katipoBrowser/scripts/defaultSiteScene.tui")
-scrollView = require("app/common/scrollView.tui")
 
 print("katipoBrowser is running")
 currentSiteHostID = false #tui quirk, false instead of nil, as nil removes it
@@ -40,7 +39,7 @@ pageTitle = defaultSiteContent.getView("pageTitle")
 pageBody = defaultSiteContent.getView("pageBody")
 
 bookmarkLayout = scene.bookmark
-bookmarksBackground = scene.getView("bookmarks")
+bookmarksScrollView = scene.getView("bookmarksScrollView")
 
 untrustedSiteCodePermissionFunction = function(functionName, args, hasPermissionCallback)
 {
@@ -207,7 +206,7 @@ urlTextEntry.onChange = function(textValue, confirmChanges){
     {
         siteContentBackground.goalColor = vec4(0.0,0.015,0.01,0.6)
         katipo.get(textValue, getCallback)
-        bookmarksBackground.hidden = true
+        bookmarksScrollView.hidden = true
     }
 }
 
@@ -216,21 +215,19 @@ loadBookmarks = function()
 {
     if(table.count(bookmarks) == 0)
     {
-        bookmarksBackground.hidden = true
+        bookmarksScrollView.hidden = true
         return
     }
 
-    bookmarksBackground.hidden = false
+    bookmarksScrollView.hidden = false
 
-    bookmarksBackground.size = function(parentSize)
+    bookmarksScrollView.size = function(parentSize)
     {
         totalHeight = scene.bookMarkHeight * table.count(bookmarks)
         height = math.min(totalHeight, parentSize.y - scene.urlTextEntryHeight)
         width = math.min(scene.bookmarksListWidth, parentSize.x)
         return vec2(width, height)
     }
-
-    bookmarksScrollView = scrollView.create(bookmarksBackground)
 
     for(i = table.count(bookmarks) - 1, i>=0, i--)
     {
@@ -275,14 +272,14 @@ loadBookmarks = function()
             #katipo.loadSite(bookmarkInfo.hostID, siteSavePath, untrustedSiteCodePermissionFunction, true)
 
             katipo.get(bookmarkInfo.url, bookmarkInfo.checksum, getCallback)
-            bookmarksBackground.hidden = true
+            bookmarksScrollView.hidden = true
         }
 
         bookmarkButton = bookmarkView.getView("bookmarkButton")
         bookmarkButton.click = bookmarkClick
         bookmarkButton.hueOffset = -0.1 - 0.1 * i
 
-        scrollView.insertRow(bookmarksScrollView, bookmarkView)
+        bookmarksScrollView.insertRow(bookmarkView)
     }
 }
 

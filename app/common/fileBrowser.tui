@@ -1,6 +1,4 @@
 
-scrollView = require("app/common/scrollView.tui")
-
 headerHeight = 40
 rowHeight = 40
 headerBackButtonSize = vec2(30,30)
@@ -44,8 +42,8 @@ leftPaneLayout = {
             }
         }
         {
-            type = "view"
-            id = "scrollViewContent"
+            type = "scrollView"
+            id = "scrollView"
             alignmentY = "bottom"
             size = function(parentSize)
             {
@@ -85,8 +83,8 @@ rightPaneLayout = {
             }
         }
         {
-            type = "view"
-            id = "scrollViewContent"
+            type = "scrollView"
+            id = "scrollView"
             alignmentY = "bottom"
             size = function(parentSize)
             {
@@ -280,8 +278,7 @@ setDirectoryTree = function(fileBrowserView, directoryTree, selectedIndex, isFro
     userData.headerTitleLeft = leftPaneView.getView("headerTitleLeft")
     userData.headerTitleLeft.text = directoryTree.fileName
 
-    leftScrollViewContent = leftPaneView.getView("scrollViewContent")
-    leftPaneScrollView = scrollView.create(leftScrollViewContent)
+    leftPaneScrollView = leftPaneView.getView("scrollView")
 
     #print("directoryTree:", directoryTree)
 
@@ -326,8 +323,7 @@ setDirectoryTree = function(fileBrowserView, directoryTree, selectedIndex, isFro
                 }
                 table.sort(sortedFiles, compareFunction)
 
-                rightScrollViewContent = rightPaneView.getView("scrollViewContent")
-                rightPaneScrollView = scrollView.create(rightScrollViewContent)
+                rightPaneScrollView = rightPaneView.getView("scrollView")
 
                 for(i,file in sortedFiles)
                 {
@@ -378,7 +374,7 @@ setDirectoryTree = function(fileBrowserView, directoryTree, selectedIndex, isFro
                         }
                     }
 
-                    scrollView.insertRow(rightPaneScrollView, itemView)
+                    rightPaneScrollView.insertRow(itemView)
                     table.insert(userData.rightItemViews, itemView)
 
                     if(onBrowserItemCreate)
@@ -455,7 +451,7 @@ setDirectoryTree = function(fileBrowserView, directoryTree, selectedIndex, isFro
                 }
             }
 
-            scrollView.insertRow(leftPaneScrollView, itemView)
+            leftPaneScrollView.insertRow(itemView)
             table.insert(userData.leftItemViews, itemView)
 
             if(onBrowserItemCreate)
