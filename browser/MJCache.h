@@ -38,6 +38,8 @@ class MJCache {
     std::map<MJImageTexture*, DrawQuadDescriptorSets> imageDrawQuadDescriptorSets;
 
 	std::set<MJImageTexture*> unloadedTextures;
+    
+    std::set<std::string> missingFiles; //stores a cache of files it's already looked for that do not exist as an optimization
 
 	VkCommandBuffer recordingCommandBuffer = nullptr;
     

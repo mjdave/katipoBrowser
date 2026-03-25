@@ -267,7 +267,8 @@ void MainController::draw(double frameLerp)
 	cache->recordStarted(*(commandBuffer->getBuffer()));
 
 	//eventManager->doCPUWork(); more responsive but drops loads of frames
-	
+    
+    //MJLog("render");
     mainMJView->preRender(commandBuffer, vulkan->finalOutputRenderPass, 0, fpsDt, frameLerp, animationTimer);
 
     commandBuffer->startRenderPass();
@@ -286,12 +287,14 @@ void MainController::draw(double frameLerp)
         viewMatrix,
                    fpsDt, animationTimer);
     
+    //MJLog("update ubos");
     mainMJView->updateUBOs(1.0, dvec3(0.0), dvec3(0.0));
 	cache->recordEnded();
     vulkan->endRecord();
 	vulkan->submit();
 	
-    EventManager::getInstance()->doCPUWork(); 
+    EventManager::getInstance()->doCPUWork();
+    //MJLog("done");
 
 }
 

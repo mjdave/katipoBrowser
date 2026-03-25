@@ -31,7 +31,7 @@ MJTextView::MJTextView(MJView* parentView_)
     wrapWidth = 0;
     
     //todo this is probably a bit slow to do all the time like this. meta tables needed
-    stateTable->setFunction("getRectForCharAtIndex", [this](TuiTable* args, TuiRef* existingResult, TuiDebugInfo* callingDebugInfo) -> TuiRef* {
+    stateTable->setFunction("getRectForCharAtIndex", [this](TuiTable* args, TuiRef* existingResult, TuiFunctionCallData* incomingCallData, TuiDebugInfo* callingDebugInfo) -> TuiRef* {
         if(args->arrayObjects.size() >= 1)
         {
             TuiRef* indexRef = args->arrayObjects[0];
@@ -44,12 +44,12 @@ MJTextView::MJTextView(MJView* parentView_)
         return nullptr;
     });
     
-    stateTable->setFunction("resetVerticalCursorMovementAnchors", [this](TuiTable* args, TuiRef* existingResult, TuiDebugInfo* callingDebugInfo) -> TuiRef* {
+    stateTable->setFunction("resetVerticalCursorMovementAnchors", [this](TuiTable* args, TuiRef* existingResult, TuiFunctionCallData* incomingCallData, TuiDebugInfo* callingDebugInfo) -> TuiRef* {
         resetVerticalCursorMovementAnchors();
         return TUI_NIL;
     });
     
-    stateTable->setFunction("getCursorOffsetForVerticalCursorMovement", [this](TuiTable* args, TuiRef* existingResult, TuiDebugInfo* callingDebugInfo) -> TuiRef* {
+    stateTable->setFunction("getCursorOffsetForVerticalCursorMovement", [this](TuiTable* args, TuiRef* existingResult, TuiFunctionCallData* incomingCallData, TuiDebugInfo* callingDebugInfo) -> TuiRef* {
         if(args->arrayObjects.size() >= 2)
         {
             TuiRef* currentCursorOffsetRef = args->arrayObjects[0];
@@ -153,7 +153,7 @@ void MJTextView::createDrawables(MJRenderPass renderPass, int renderTargetCompat
 
 void MJTextView::updateDimensions()
 {
-	if(font && textString.size() > 0)
+	if(font)
 	{
 		double scaleToUse = renderScale;
 		double textRenderScaleToUse = textRenderScale;
@@ -162,9 +162,8 @@ void MJTextView::updateDimensions()
         stateTable->setVec2("size", ((dvec2(enclosingRect.size) * fontGeometryScale) / scaleToUse));
 
 		textRenderOffset = dvec2(-enclosingRect.origin.x, -enclosingRect.origin.y) * fontGeometryScale;
-
-		//bufferNeedsUpdating = true;
-	}
+        
+    }
 }
 
 void MJTextView::updateBuffer(GCommandBuffer* commandBuffer)
@@ -184,6 +183,8 @@ void MJTextView::updateBuffer(GCommandBuffer* commandBuffer)
 
     if(font && !text.empty())
     {
+        updateDimensions();
+        
         irect enclosingRect;
 		double scaleToUse = renderScale;
         nextVertices = font->print(text, textAlignment, wrapWidth * scaleToUse, &enclosingRect, 1.0 / textRenderScale).fontVerts;
@@ -207,13 +208,12 @@ void MJTextView::updateBuffer(GCommandBuffer* commandBuffer)
             vulkan->destroySingleBuffer(vertexBuffer);
         }
         hasRenderData = false;
-        setSizeInternal(dvec2(0.0,0.0));
     }
 }
 
 void MJTextView::setText(std::string text_)
 {
-    if(textString != text_ || text.size() > 1 || (text.size() == 1 && !glm::all(epsilonEqual(text[0].color, vec4(1,1,1,1), 0.01f))))
+    if(textString != text_)
     {
         textString = "";
         text.clear();
@@ -226,6 +226,7 @@ void MJTextView::setText(std::string text_)
 			textRenderOffset = dvec2(0.0,0.0);
 		}
 		bufferNeedsUpdating = true;
+        updateDimensions();
     }
 }
 
@@ -266,8 +267,6 @@ void MJTextView::addColoredText(std::string incomingString, dvec4 color)
 		text[textIndex].text = incomingString;
 
 		textString = textString + incomingString;
-        
-		updateDimensions();
 
 		bufferNeedsUpdating = true;
 	}
@@ -295,7 +294,7 @@ void MJTextView::setFontNameAndSize(FontNameAndSize fontNameAndSize_)
     if(newFont != font)
     {
         font = newFont;
-        updateDimensions();
+        //updateDimensions();
         bufferNeedsUpdating = true;
     }
 
@@ -340,6 +339,7 @@ void MJTextView::setWrapWidth(int wrapWidth_)
     {
         wrapWidth = wrapWidth_;
         bufferNeedsUpdating = true;
+        //updateDimensions();
     }
 }
 
@@ -523,7 +523,7 @@ void MJTextView::updateUBOs(float parentAlpha, dvec3 camPos, dvec3 viewPos)
 void MJTextView::setFontGeometryScale(double fontGeometryScale_)
 {
 	fontGeometryScale = fontGeometryScale_;
-	updateDimensions();
+	//updateDimensions();
 }
 
 double MJTextView::getFontGeometryScale() const

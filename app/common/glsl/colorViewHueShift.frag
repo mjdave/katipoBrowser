@@ -30,6 +30,6 @@ layout(location = 0) out vec4 data;
 
 void main(void)
 {
-    vec3 hueShiftResult = hueShift(outColor.rgb, camera.extraData.y * 0.2);
+    vec3 hueShiftResult = hueShift(outColor.rgb, camera.extraData.y * 0.2 + ubo.shaderUniformA.x);
     data = vec4(hueShiftResult, outColor.a);
 }

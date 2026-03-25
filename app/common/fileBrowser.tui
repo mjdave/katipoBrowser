@@ -6,7 +6,7 @@ headerBackButtonSize = vec2(30,30)
 leftPaneLayout = {
     type = "view"
     alignmentX = "left"
-    size = function(parentSize)
+    onParentSizeChanged = function(parentSize)
     {
         return vec2(parentSize.x / 2, parentSize.y)
     }
@@ -15,7 +15,7 @@ leftPaneLayout = {
             id = "headerLeft"
             type = "color"
             color = vec4(0.2,0.3,0.0,0.2)
-            size = function(parentSize)
+            onParentSizeChanged = function(parentSize)
             {
                 return vec2(parentSize.x, headerHeight)
             }
@@ -45,7 +45,7 @@ leftPaneLayout = {
             type = "scrollView"
             id = "scrollView"
             alignmentY = "bottom"
-            size = function(parentSize)
+            onParentSizeChanged = function(parentSize)
             {
                 return vec2(parentSize.x, parentSize.y - headerHeight)
             }
@@ -56,7 +56,7 @@ leftPaneLayout = {
 rightPaneLayout = {
     type = "view"
     alignmentX = "right"
-    size = function(parentSize)
+    onParentSizeChanged = function(parentSize)
     {
         return vec2(parentSize.x / 2, parentSize.y)
     }
@@ -66,7 +66,7 @@ rightPaneLayout = {
             id = "headerRight"
             type = "color"
             color = vec4(0.0,0.2,0.3,0.2)
-            size = function(parentSize)
+            onParentSizeChanged = function(parentSize)
             {
                 return vec2(parentSize.x, headerHeight)
             }
@@ -86,7 +86,7 @@ rightPaneLayout = {
             type = "scrollView"
             id = "scrollView"
             alignmentY = "bottom"
-            size = function(parentSize)
+            onParentSizeChanged = function(parentSize)
             {
                 return vec2(parentSize.x, parentSize.y - headerHeight)
             }
@@ -97,7 +97,7 @@ rightPaneLayout = {
 leftPanelVerticalLayout = {
     type = "view"
     alignmentY = "top"
-    size = function(parentSize)
+    onParentSizeChanged = function(parentSize)
     {
         return vec2(parentSize.x, parentSize.y / 2)
     }
@@ -107,7 +107,7 @@ leftPanelVerticalLayout = {
 rightPanelVerticalLayout = {
     type = "view"
     alignmentY = "bottom"
-    size = function(parentSize)
+    onParentSizeChanged = function(parentSize)
     {
         return vec2(parentSize.x, parentSize.y / 2)
     }
@@ -118,7 +118,7 @@ fileItemLayout = {
     id = "fileItemBackground"
     type = "color"
     color = vec4(0.0,0.05,0.1,0.3)
-    size = function(parentSize)
+    onParentSizeChanged = function(parentSize)
     {
         return vec2(parentSize.x - 20.0,rowHeight)
     }
@@ -141,7 +141,7 @@ dirItemLayout = {
     id = "fileItemBackground"
     type = "color"
     color = vec4(0.0,0.05,0.1,0.3)
-    size = function(parentSize)
+    onParentSizeChanged = function(parentSize)
     {
         return vec2(parentSize.x - 20.0,rowHeight)
     }
@@ -491,7 +491,7 @@ create = function(parentView, viewLayout)
 {
     fileBrowserView = parentView.addView(getViewLayout(viewLayout))
 
-    fileBrowserView.size = function(parentSize)
+    fileBrowserView.onParentSizeChanged = function(parentSize)
     {
         fileBrowserView.parentSize = parentSize
         return parentSize

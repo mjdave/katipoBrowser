@@ -73,7 +73,7 @@ void MJView::initInternals()
     hidden = false;
     
     origin = dvec2(0.0f, 0.0f);
-    size = dvec2(-100.0f,-100.0f);
+    size = dvec2(0.0f,0.0f);
     scale = 1.0;
     baseOffset = dvec3(0.0,0.0,0.0);
     additionalOffset = dvec3(0.0,0.0,0.0);
@@ -101,7 +101,7 @@ void MJView::initInternals()
     stateTable->setVec2("size", size);
     
     //todo maybe this is a bit slow to do all the time like this. meta tables needed?
-    stateTable->setFunction("addView", [this](TuiTable* args, TuiRef* existingResult, TuiDebugInfo* callingDebugInfo) -> TuiRef* {
+    stateTable->setFunction("addView", [this](TuiTable* args, TuiRef* existingResult, TuiFunctionCallData* incomingCallData, TuiDebugInfo* callingDebugInfo) -> TuiRef* {
         if(args->arrayObjects.size() >= 1)
         {
             TuiRef* viewTableRef = args->arrayObjects[0];
@@ -116,7 +116,7 @@ void MJView::initInternals()
         }
         return TUI_NIL;
     });
-    stateTable->setFunction("removeView", [this](TuiTable* args, TuiRef* existingResult, TuiDebugInfo* callingDebugInfo) -> TuiRef* {
+    stateTable->setFunction("removeView", [this](TuiTable* args, TuiRef* existingResult, TuiFunctionCallData* incomingCallData, TuiDebugInfo* callingDebugInfo) -> TuiRef* {
         if(args->arrayObjects.size() >= 1)
         {
             TuiRef* viewTableRef = args->arrayObjects[0];
@@ -134,7 +134,7 @@ void MJView::initInternals()
         return TUI_NIL;
     });
     
-    stateTable->setFunction("getView", [this](TuiTable* args, TuiRef* existingResult, TuiDebugInfo* callingDebugInfo) -> TuiRef* {
+    stateTable->setFunction("getView", [this](TuiTable* args, TuiRef* existingResult, TuiFunctionCallData* incomingCallData, TuiDebugInfo* callingDebugInfo) -> TuiRef* {
         if(args->arrayObjects.size() >= 1)
         {
             TuiRef* viewNameRef = args->arrayObjects[0];
@@ -152,7 +152,7 @@ void MJView::initInternals()
         return TUI_NIL;
     });
     
-    stateTable->setFunction("locationRelativeToView", [this](TuiTable* args, TuiRef* existingResult, TuiDebugInfo* callingDebugInfo) -> TuiRef* {
+    stateTable->setFunction("locationRelativeToView", [this](TuiTable* args, TuiRef* existingResult, TuiFunctionCallData* incomingCallData, TuiDebugInfo* callingDebugInfo) -> TuiRef* {
         if(args->arrayObjects.size() >= 2)
         {
             TuiRef* locationRef = args->arrayObjects[0];
@@ -174,7 +174,7 @@ void MJView::initInternals()
         return TUI_NIL;
     });
     
-    stateTable->setFunction("setClipChildren", [this](TuiTable* args, TuiRef* existingResult, TuiDebugInfo* callingDebugInfo) -> TuiRef* {
+    stateTable->setFunction("setClipChildren", [this](TuiTable* args, TuiRef* existingResult, TuiFunctionCallData* incomingCallData, TuiDebugInfo* callingDebugInfo) -> TuiRef* {
         if(args->arrayObjects.size() >= 1)
         {
             TuiRef* boolRef = args->arrayObjects[0];
@@ -234,6 +234,7 @@ MJView::~MJView()
     stateTable->release();
     
     if(updateFunction) {updateFunction->release();}
+    if(preRenderUpdateFunction) {preRenderUpdateFunction->release();}
 
     if(parentSizeChangedFunction) {parentSizeChangedFunction->release();}
 
@@ -746,7 +747,7 @@ void MJView::update(float dt)
         TuiNumber* agr1Ref = new TuiNumber(dt);
         args->arrayObjects.push_back(agr1Ref);
         
-        updateFunction->call(args, nullptr, &debugInfo);
+        updateFunction->call(args, nullptr, nullptr, &debugInfo);
         
         args->release();
         
@@ -761,28 +762,17 @@ void MJView::update(float dt)
 
 void MJView::childHasUpdateFunctionChanged(bool childHasUpdateFunction)
 {
-	bool newHasUpdateFunctionOrChildWithUpdateFunction = false;
-	if(childHasUpdateFunction)
+	bool newHasUpdateFunctionOrChildWithUpdateFunction = childHasUpdateFunction || updateFunction || preRenderUpdateFunction;
+	if(!newHasUpdateFunctionOrChildWithUpdateFunction)
 	{
-		newHasUpdateFunctionOrChildWithUpdateFunction = true;
-	}
-	else 
-	{
-		//if(updateLuaFunction)
-		{
-		//	newHasUpdateFunctionOrChildWithUpdateFunction = true;
-		}
-		//else
-		{
-			for(MJView* subview : subviews)
-			{
-				if(subview->hasUpdateFunctionOrChildWithUpdateFunction)
-				{
-					newHasUpdateFunctionOrChildWithUpdateFunction = true;
-					break;
-				}
-			}
-		}
+        for(MJView* subview : subviews)
+        {
+            if(subview->hasUpdateFunctionOrChildWithUpdateFunction)
+            {
+                newHasUpdateFunctionOrChildWithUpdateFunction = true;
+                break;
+            }
+        }
 	}
 
 	if(newHasUpdateFunctionOrChildWithUpdateFunction != hasUpdateFunctionOrChildWithUpdateFunction)
@@ -802,10 +792,20 @@ void MJView::preRender(GCommandBuffer* commandBuffer, MJRenderPass renderPass, i
         return;
     }
     
-    if(needsToUpdateSizeDueToWindowChange)
+    if(preRenderUpdateFunction)
     {
-        needsToUpdateSizeDueToWindowChange = false;
-        recalculateSizesRecursively();
+        TuiDebugInfo debugInfo;
+        debugInfo.fileName = "MJView::preRender->draw(dt, frameLerp)";
+        TuiTable* args = new TuiTable(nullptr);
+        
+        TuiNumber* agr1Ref = new TuiNumber(dt);
+        TuiNumber* agr2Ref = new TuiNumber(frameLerp);
+        args->arrayObjects.push_back(agr1Ref);
+        args->arrayObjects.push_back(agr2Ref);
+        
+        preRenderUpdateFunction->call(args, nullptr, nullptr, &debugInfo);
+        
+        args->release();
     }
     
     if(needsAnimationTimerReset)
@@ -843,6 +843,13 @@ void MJView::preRender(GCommandBuffer* commandBuffer, MJRenderPass renderPass, i
 	}
 
     cleanupRemovedSubviews();
+    
+    
+    if(needsToUpdateSizeDueToWindowChange)
+    {
+        needsToUpdateSizeDueToWindowChange = false;
+        recalculateSizesRecursively();
+    }
 }
 
 void MJView::render(GCommandBuffer* commandBuffer)
@@ -1749,7 +1756,11 @@ void MJView::loadFromTable(TuiTable* table, bool needsToLayoutSubviews, TuiTable
     
     if(table->hasKey("size"))
     {
-        TuiRef* ref = table->objectsByStringKey["size"];
+        stateTable->setVec2("size", table->getVec2("size"));
+    }
+    else if(table->hasKey("onParentSizeChanged"))
+    {
+        TuiRef* ref = table->objectsByStringKey["onParentSizeChanged"];
         if(ref->type() == Tui_ref_type_FUNCTION)
         {
             parentSizeChangedFunction = (TuiFunction*)ref;
@@ -1758,8 +1769,7 @@ void MJView::loadFromTable(TuiTable* table, bool needsToLayoutSubviews, TuiTable
             TuiRef* inSizeRef = new TuiVec2(parentView->size);
             
             TuiRef* sizeRef = parentSizeChangedFunction->call("parentSizeChangedFunction", inSizeRef);
-            //stateTable->set("size", parentSizeChangedFunction);
-            stateTable->setVec2("size", ((TuiVec2*)sizeRef)->value); //hmm we can't do this, because it will replace the function
+            stateTable->setVec2("size", ((TuiVec2*)sizeRef)->value);
             
             setSize(((TuiVec2*)sizeRef)->value);
             
@@ -1768,12 +1778,12 @@ void MJView::loadFromTable(TuiTable* table, bool needsToLayoutSubviews, TuiTable
         }
         else
         {
-            stateTable->setVec2("size", table->getVec2("size"));
+            MJError("Expected function");
         }
     }
     else
     {
-        parentSizeChangedFunction = new TuiFunction([this](TuiTable* args, TuiRef* existingResult, TuiDebugInfo* callingDebugInfo) -> TuiRef* {
+        parentSizeChangedFunction = new TuiFunction([this](TuiTable* args, TuiRef* existingResult, TuiFunctionCallData* incomingCallData, TuiDebugInfo* callingDebugInfo) -> TuiRef* {
             if(args && !args->arrayObjects.empty())
             {
                 return args->arrayObjects[0]->retain();
@@ -1794,6 +1804,11 @@ void MJView::loadFromTable(TuiTable* table, bool needsToLayoutSubviews, TuiTable
     if(table->hasKey("pos"))
     {
         stateTable->setVec3("pos", table->getVec3("pos"));
+    }
+    
+    if(table->hasKey("alpha"))
+    {
+        stateTable->setDouble("alpha", table->getDouble("alpha"));
     }
     
     if(table->hasKey("hidden"))
@@ -1856,7 +1871,7 @@ void MJView::tableKeyChanged(const std::string& key, TuiRef* value)
                 setBaseOffset(((TuiVec3*)value)->value);
                 break;
             default:
-                MJError("Expected vec2 or vec3");
+                MJError("pos expected vec2 or vec3");
                 break;
         }
     }
@@ -1868,6 +1883,14 @@ void MJView::tableKeyChanged(const std::string& key, TuiRef* value)
                 setSize(((TuiVec2*)value)->value);
             }
                 break;
+            default:
+                MJError("size expected vec2 or nil");
+                break;
+        }
+    }
+    else if(key == "onParentSizeChanged")
+    {
+        switch (value->type()) {
             case Tui_ref_type_FUNCTION:
             {
                 if(parentSizeChangedFunction)
@@ -1880,7 +1903,7 @@ void MJView::tableKeyChanged(const std::string& key, TuiRef* value)
                 
                 TuiRef* inSizeRef = new TuiVec2(parentView->size);
                 TuiRef* sizeRef = parentSizeChangedFunction->call("parentSizeChangedFunction", inSizeRef);
-                //stateTable->setVec2("size", ((TuiVec2*)sizeRef)->value);
+                stateTable->setVec2("size", ((TuiVec2*)sizeRef)->value);
                 setSize(((TuiVec2*)sizeRef)->value);
                 inSizeRef->release();
                 sizeRef->release();
@@ -1926,6 +1949,10 @@ void MJView::tableKeyChanged(const std::string& key, TuiRef* value)
     {
         setHidden(stateTable->getBool("hidden"));
     }
+    else if(key == "alpha")
+    {
+        setAlpha(stateTable->getDouble("alpha"));
+    }
     else if(key == "update")
     {
         switch (value->type()) {
@@ -1946,6 +1973,35 @@ void MJView::tableKeyChanged(const std::string& key, TuiRef* value)
                 {
                     updateFunction->release();
                     updateFunction = nullptr;
+                }
+                childHasUpdateFunctionChanged(false);
+            }
+                break;
+            default:
+                MJError("Expected function");
+                break;
+        }
+    }
+    else if(key == "draw")
+    {
+        switch (value->type()) {
+            case Tui_ref_type_FUNCTION:
+            {
+                if(preRenderUpdateFunction)
+                {
+                    preRenderUpdateFunction->release();
+                }
+                preRenderUpdateFunction = (TuiFunction*)value;
+                preRenderUpdateFunction->retain();
+                childHasUpdateFunctionChanged(true);
+            }
+                break;
+            case Tui_ref_type_NIL:
+            {
+                if(preRenderUpdateFunction)
+                {
+                    preRenderUpdateFunction->release();
+                    preRenderUpdateFunction = nullptr;
                 }
                 childHasUpdateFunctionChanged(false);
             }

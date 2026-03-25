@@ -579,6 +579,19 @@ irect MJFont::calculateEnclosingRect(std::vector<AttributedText>& attributedText
     int wrapWidth,
     float scale)
 {
+    
+    if(attributedText.empty())
+    {
+        irect enclosingRect;
+        float y = -lineHeight / scale;
+
+        enclosingRect.origin.x = 0;
+        enclosingRect.origin.y = y;
+        enclosingRect.size.x = 0;
+        enclosingRect.size.y = -y;
+
+        return enclosingRect;
+    }
 	std::vector<FontLine> lines = getLines(attributedText,  alignment, wrapWidth, scale);
 
     float minX = FLT_MAX;

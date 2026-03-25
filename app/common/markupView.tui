@@ -1,0 +1,193 @@
+
+topPadding = 20
+itemRowXPadding = 20
+lineHeight = 20
+
+topPaddingLayout = {
+    type = "view"
+    size = vec2(topPadding,topPadding)
+    alignmentX = "left"
+}
+
+createRowLayout = function(subView)
+{
+    rowLayout = {
+        type = "view" #row view, added to the scroll view
+        size = vec2(0,lineHeight) #this is overridden later, just needs to be set to something now to prevent the default expanding size to fit parent
+        subviews = {
+            {
+                type = "view" #child with the padded offset, as the rows are relative to each other, so would offset more each row
+                alignmentX = "left"
+                pos = vec3(itemRowXPadding, 0, 0)
+                subviews = {
+                    subView
+                }
+            }
+        }
+    }
+    return rowLayout
+}
+
+textLayout = {
+    id = "content"
+    type = "text"
+    font = "roboto"
+    fontSize = 16
+    alignmentX = "left"
+    size = vec2(0,lineHeight) #this is overridden later, just needs to be set to something now to prevent the default expanding size to fit parent
+}
+textRowLayout = createRowLayout(textLayout)
+
+headerTextLayout = {
+    id = "content"
+    type = "text"
+    font = "robotoBold"
+    fontSize = 26
+    alignmentX = "left"
+    size = vec2(0,lineHeight) #this is overridden later, just needs to be set to something now to prevent the default expanding size to fit parent
+}
+
+headerTextRowLayout = createRowLayout(headerTextLayout)
+
+getViewLayout = function(incomingLayout)
+{
+    #print("incomingLayout:", incomingLayout)
+    layout = {}
+    for(k,v in incomingLayout)
+    {
+        layout[k] = v
+    }
+
+    layout.type = "scrollView"
+    
+    return layout
+}
+
+loadMarkupCode = function(lineText) #assumes "(" is first char
+{
+
+}
+
+
+create = function(parentView, viewLayout)
+{
+    #print("viewLayout:", viewLayout)
+    layout = getViewLayout(viewLayout)
+    #print("viewLayout b:", layout)
+    markupScrollView = parentView.addView(layout)
+
+    doSetText = function(markupText)
+    {
+        markupScrollView.removeAllRows()
+        markupScrollView.currentText = markupText
+
+        topPaddingView = markupScrollView.addView(topPaddingLayout)
+
+        lineFunc = function(lineText)
+        {
+            itemLayout = textRowLayout
+            
+            onlyFoundSpace = true
+            skipLeadingSpace = false
+            foundMarkupCodeString = ""
+            foundText = ""
+            parenthesisStackCount = 0
+            
+
+            charFunc = function(charText, charIndex)
+            {
+                if(parenthesisStackCount > 0)
+                {
+                    if(charText == "(")
+                    {
+                        parenthesisStackCount++
+                    }
+                    else if(charText == ")")
+                    {
+                        parenthesisStackCount--
+                        if(parenthesisStackCount == 0)
+                        {
+                            print("found markup:", foundMarkupCodeString)
+                        }
+                    }
+                    .foundMarkupCodeString = foundMarkupCodeString + charText
+                }
+                else
+                {
+                    if(onlyFoundSpace)
+                    {
+                        if(charText == "(")
+                        {
+                            .parenthesisStackCount = 1
+                            .foundMarkupCodeString = ""
+                            .skipLeadingSpace = true
+                        }
+                        else if(charText == "#")
+                        {
+                            debug.break()
+                            .itemLayout = headerTextRowLayout
+                            .skipLeadingSpace = true
+                            #print("itemLayout b:", itemLayout)
+                        }
+                        else
+                        {
+                            if(charText != " ")
+                            {
+                                .onlyFoundSpace = false
+                                foundText += charText
+                            }
+                            else if(!skipLeadingSpace)
+                            {
+                                foundText += charText
+                            }
+
+                        }
+                    }
+                    else
+                    {
+                        foundText += charText
+                    }
+                }
+            }
+
+
+            string.eachChar(lineText, charFunc)
+
+            #print("itemLayout c:", itemLayout)
+
+            #firstChar = string.subString(lineText, 0, 1)
+            #if(firstChar == "(")
+            #{
+            #    result = loadMarkupCode(lineText)
+            #}
+
+            itemView = markupScrollView.addView(itemLayout)
+            textView = itemView.getView("content")
+            textView.wrapWidth = markupScrollView.parentSize.x - itemRowXPadding * 2 - 20
+            #print("markupScrollView.parentSize.x:", markupScrollView.parentSize.x, " wrap width:", markupScrollView.parentSize.x - itemRowXPadding * 2 - 20)
+            textView.text = foundText
+            itemView.size = vec2(markupScrollView.parentSize.x, math.max(textView.size.y, lineHeight))
+            #itemView.onParentSizeChanged = function(foo)
+            #{
+            #    return vec2(markupScrollView.parentSize.x, math.max(textView.size.y, lineHeight))
+            #}
+            
+        }
+
+        if(markupText)
+        {
+            string.eachLine(markupText, lineFunc)
+        }
+    }
+
+    markupScrollView.setText = doSetText
+
+    markupScrollView.onParentSizeChanged = function(parentSize) #override the scrollView one with our own
+    {
+        markupScrollView.parentSize = parentSize
+        doSetText(markupScrollView.currentText)
+        return parentSize
+    }
+
+    return markupScrollView
+}

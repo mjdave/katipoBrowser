@@ -120,6 +120,7 @@ public:
     //void setUpdateFunction(std::function<void(double)> updateFunction_);
     
     TuiFunction* updateFunction = nullptr;
+    TuiFunction* preRenderUpdateFunction = nullptr;
     
     std::function<bool(bool, int, int, bool)> keyChangedFunction;
     

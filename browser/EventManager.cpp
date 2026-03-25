@@ -217,7 +217,15 @@ void EventManager::idle()
 #if TARGET_OS_IPHONE
         return; // we can't render in the background or we will get killed
 #endif
-        std::this_thread::sleep_for(std::chrono::milliseconds(100)); //lets chill if we are backgrounded
+        backgroundedFrameSkipCount++;
+        if(backgroundedFrameSkipCount > 5)
+        {
+            backgroundedFrameSkipCount = 0;
+        }
+        else
+        {
+            return;
+        }
     }
     mainController->draw(accumulator / MAIN_THREAD_FIXED_TIME_STEP);
     
@@ -574,7 +582,7 @@ void EventManager::bindTui(TuiTable* rootTable)
     rootTable->setTable("eventManager", eventManagerTable);
     eventManagerTable->release();
     
-    eventManagerTable->setFunction("addKeyEventListener", [this](TuiTable* args, TuiRef* existingResult, TuiDebugInfo* callingDebugInfo) -> TuiRef* {
+    eventManagerTable->setFunction("addKeyEventListener", [this](TuiTable* args, TuiRef* existingResult, TuiFunctionCallData* incomingCallData, TuiDebugInfo* callingDebugInfo) -> TuiRef* {
         if(args->arrayObjects.size() >= 2)
         {
             TuiRef* keyCodeRef = args->arrayObjects[0];
@@ -598,7 +606,7 @@ void EventManager::bindTui(TuiTable* rootTable)
    // void setTextEntryListener(TuiFunction* textEntryListener_, TuiFunction* listenerKeyChangedFunc_);
    // void removeTextEntryListener();
     
-    eventManagerTable->setFunction("removeKeyEventListener", [this](TuiTable* args, TuiRef* existingResult, TuiDebugInfo* callingDebugInfo) -> TuiRef* {
+    eventManagerTable->setFunction("removeKeyEventListener", [this](TuiTable* args, TuiRef* existingResult, TuiFunctionCallData* incomingCallData, TuiDebugInfo* callingDebugInfo) -> TuiRef* {
         if(args->arrayObjects.size() >= 1)
         {
             TuiRef* idRef = args->arrayObjects[0];
@@ -615,7 +623,7 @@ void EventManager::bindTui(TuiTable* rootTable)
     });
     
     
-    eventManagerTable->setFunction("setTextEntryListener", [this](TuiTable* args, TuiRef* existingResult, TuiDebugInfo* callingDebugInfo) -> TuiRef* {
+    eventManagerTable->setFunction("setTextEntryListener", [this](TuiTable* args, TuiRef* existingResult, TuiFunctionCallData* incomingCallData, TuiDebugInfo* callingDebugInfo) -> TuiRef* {
         if(args->arrayObjects.size() >= 2)
         {
             TuiRef* textEntryListenerFuncRef = args->arrayObjects[0];
@@ -632,13 +640,13 @@ void EventManager::bindTui(TuiTable* rootTable)
         return TUI_NIL;
     });
     
-    eventManagerTable->setFunction("removeTextEntryListener", [this](TuiTable* args, TuiRef* existingResult, TuiDebugInfo* callingDebugInfo) -> TuiRef* {
+    eventManagerTable->setFunction("removeTextEntryListener", [this](TuiTable* args, TuiRef* existingResult, TuiFunctionCallData* incomingCallData, TuiDebugInfo* callingDebugInfo) -> TuiRef* {
         removeTextEntryListener();
         return TUI_NIL;
     });
     
     
-    eventManagerTable->setFunction("getWindowSafeArea", [this](TuiTable* args, TuiRef* existingResult, TuiDebugInfo* callingDebugInfo) -> TuiRef* {
+    eventManagerTable->setFunction("getWindowSafeArea", [this](TuiTable* args, TuiRef* existingResult, TuiFunctionCallData* incomingCallData, TuiDebugInfo* callingDebugInfo) -> TuiRef* {
         return new TuiVec4(windowSafeArea);
     });
     

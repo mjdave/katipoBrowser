@@ -2,6 +2,7 @@ viewTypes = { #can be added to at any time
     button = require("app/common/button.tui")
     textEntry = require("app/common/textEntry.tui")
     scrollView = require("app/common/scrollView.tui")
+    markup = require("app/common/markupView.tui")
 }
 
 urlTextEntryHeight = 40
@@ -24,7 +25,6 @@ mainView = {
                     id = "siteContent"
                     type = "color"
                     color = vec4(0.1,0.2,0.0,0.2)
-                    alignmentY = "top"
                 }
                 {
                     id = "bookmarksScrollView"
@@ -35,7 +35,7 @@ mainView = {
                 {
                     id = "urlTextEntry"
                     type = "textEntry"
-                    size = function(parentSize)
+                    onParentSizeChanged = function(parentSize)
                     {
                         return vec2(parentSize.x, urlTextEntryHeight)
                     }
@@ -52,7 +52,7 @@ bookmark = {
     id = "bookmarkBackground"
     type = "color"
     color = vec4(0.0,0.0,0.0,0.2)
-    size = function(parentSize)
+    onParentSizeChanged = function(parentSize)
     {
         return vec2(parentSize.x, bookMarkHeight)
     }

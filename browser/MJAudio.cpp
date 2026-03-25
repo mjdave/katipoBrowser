@@ -48,7 +48,7 @@ void MJAudio::bindTui(TuiTable* rootTable)
         audioTableKeyChanged(key, value);
     };
     
-    audioTable->setFunction("stop", [this](TuiTable* args, TuiRef* existingResult, TuiDebugInfo* callingDebugInfo) -> TuiRef* {
+    audioTable->setFunction("stop", [this](TuiTable* args, TuiRef* existingResult, TuiFunctionCallData* incomingCallData, TuiDebugInfo* callingDebugInfo) -> TuiRef* {
 #ifdef __APPLE__
         MJAudioApple::getInstance()->stop();
 #else
@@ -58,7 +58,7 @@ void MJAudio::bindTui(TuiTable* rootTable)
     });
     
     
-    audioTable->setFunction("playSongs", [this](TuiTable* args, TuiRef* existingResult, TuiDebugInfo* callingDebugInfo) -> TuiRef* {
+    audioTable->setFunction("playSongs", [this](TuiTable* args, TuiRef* existingResult, TuiFunctionCallData* incomingCallData, TuiDebugInfo* callingDebugInfo) -> TuiRef* {
 #ifdef __APPLE__
         MJAudioApple::getInstance()->play(nullptr);
 #else
@@ -69,7 +69,7 @@ void MJAudio::bindTui(TuiTable* rootTable)
     
     
     
-    audioTable->setFunction("playSound", [this, rootTable](TuiTable* args, TuiRef* existingResult, TuiDebugInfo* callingDebugInfo) -> TuiRef* {
+    audioTable->setFunction("playSound", [this, rootTable](TuiTable* args, TuiRef* existingResult, TuiFunctionCallData* incomingCallData, TuiDebugInfo* callingDebugInfo) -> TuiRef* {
         if(args->arrayObjects.size() >= 1 && args->arrayObjects[0]->type() == Tui_ref_type_STRING)
         {
             double volume = 1.0;
@@ -93,7 +93,7 @@ void MJAudio::bindTui(TuiTable* rootTable)
     });
     
     
-    audioTable->setFunction("next", [this](TuiTable* args, TuiRef* existingResult, TuiDebugInfo* callingDebugInfo) -> TuiRef* {
+    audioTable->setFunction("next", [this](TuiTable* args, TuiRef* existingResult, TuiFunctionCallData* incomingCallData, TuiDebugInfo* callingDebugInfo) -> TuiRef* {
 #ifdef __APPLE__
         MJAudioApple::getInstance()->skipToNextTrack();
 #else
@@ -103,7 +103,7 @@ void MJAudio::bindTui(TuiTable* rootTable)
         return TUI_NIL;
     });
     
-    audioTable->setFunction("queueSongs", [this](TuiTable* args, TuiRef* existingResult, TuiDebugInfo* callingDebugInfo) -> TuiRef* {
+    audioTable->setFunction("queueSongs", [this](TuiTable* args, TuiRef* existingResult, TuiFunctionCallData* incomingCallData, TuiDebugInfo* callingDebugInfo) -> TuiRef* {
         if(args->arrayObjects.size() >= 1)
         {
             TuiRef* arrayRef = args->arrayObjects[0];

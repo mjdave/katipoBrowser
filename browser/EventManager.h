@@ -93,6 +93,8 @@ private:
 	double smoothedTimeStep;
 	double accumulatedTimeStepError = 0.0;
     double accumulator = 0.0;
+    
+    int backgroundedFrameSkipCount = 0;
 
 	bool needsToExit = false;
     bool shouldPreventMouseWarpUntilAfterNextShow = false;

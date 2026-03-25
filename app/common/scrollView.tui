@@ -4,9 +4,10 @@ backgroundWidth = 20.0
 knobZOffset = 0
 
 
-updateYOffsets = function(scrollView, rowStartIndex)
+updateYOffsets = function(scrollView)
 {
-    for(i=rowStartIndex, i < table.count(scrollView.rowInfos), i++)
+    scrollView.scrollYIndexMax = 0
+    for(i=0, i < table.count(scrollView.rowInfos), i++)
     {
         rowInfo = scrollView.rowInfos[i]
         aboveRowInfo = scrollView.rowInfos[i - 1]
@@ -18,6 +19,20 @@ updateYOffsets = function(scrollView, rowStartIndex)
         {
             rowInfo.yOffsetFromTop = 0
         }
+
+        rowInfo.rowView.pos = vec3(0,-rowInfo.yOffsetFromTop,0)
+
+        if(rowInfo.yOffsetFromTop + rowInfo.rowView.size.y > scrollView.parentSize.size.y + 0.5)
+        {
+            scrollView.scrollYIndexMax = scrollView.scrollYIndexMax + 1
+        }
+    }
+
+    scrollView.scrollYHeight = 0
+    for(i=0, i < scrollView.scrollYIndexMax, i++)
+    {
+        rowInfo = scrollView.rowInfos[i]
+        scrollView.scrollYHeight = scrollView.scrollYHeight + rowInfo.rowView.size.y
     }
 }
 
@@ -53,21 +68,7 @@ updatePositionsAndVisibilities = function(scrollView)
 
 recreateDerivedData = function(scrollView)
 {
-    scrollView.scrollYIndexMax = 0
-    for(i=0, i < table.count(scrollView.rowInfos), i++)
-    {
-        rowInfo = scrollView.rowInfos[i]
-        if(rowInfo.yOffsetFromTop + rowInfo.rowView.size.y > scrollView.parentSize.size.y + 0.5)
-        {
-            scrollView.scrollYIndexMax = scrollView.scrollYIndexMax + 1
-        }
-    }
-    scrollView.scrollYHeight = 0
-    for(i=0, i < scrollView.scrollYIndexMax, i++)
-    {
-        rowInfo = scrollView.rowInfos[i]
-        scrollView.scrollYHeight = scrollView.scrollYHeight + rowInfo.rowView.size.y
-    }
+    updateYOffsets(scrollView)
 
     scrollerBackgroundView = scrollView.scrollerBackgroundView
     knobView = scrollView.knobView
@@ -80,7 +81,7 @@ recreateDerivedData = function(scrollView)
     {
         knobView.hidden = false
     }
-    updatePositionsAndVisibilities(scrollView)
+    #updatePositionsAndVisibilities(scrollView) #done every frame in draw
     scrollView.dirty = false
 }
 
@@ -103,7 +104,6 @@ create = function(parentView, viewLayout)
     scrollView.setClipChildren(true)
 
     scrollView.rowInfos = {}
-    scrollView.contentHeight = 0.0
     scrollView.scrollYIndexMax = 0
     scrollView.scrollYOffset = 0.0
     scrollView.scrollVelocity = 0
@@ -111,13 +111,13 @@ create = function(parentView, viewLayout)
     scrollView.backgroundHover = false
     scrollView.knobHover = false
 
-    scrollView.layoutSizeFunction = viewLayout.size
+    scrollView.layoutSizeFunction = viewLayout.onParentSizeChanged
     if(type(scrollView.layoutSizeFunction) != "function")
     {
         scrollView.layoutSizeFunction = nil
     }
 
-    scrollView.size = function(parentSize)
+    scrollView.onParentSizeChanged = function(parentSize)
     {
         if(scrollView.layoutSizeFunction)
         {
@@ -131,19 +131,16 @@ create = function(parentView, viewLayout)
         return scrollView.parentSize
     }
 
-    baseItemLayout = {
-        size = vec2(0,0)
-        alignmentX = "left"
-        alignmentY = "top"
+    baseViewLayout = {
         type = "view"
     }
     
-    baseItemView = scrollView.addView(baseItemLayout)
-    scrollView.baseItemView = baseItemView
+    baseView = scrollView.addView(baseViewLayout)
+    scrollView.baseView = baseView
 
     scrollerBackgroundLayout = {
         id = "scrollerBackground"
-        size = function(parentSize)
+        onParentSizeChanged = function(parentSize)
         {
             return vec2(backgroundWidth, parentSize.y)
         }
@@ -290,13 +287,6 @@ create = function(parentView, viewLayout)
                 if(!scrollView.disabled and scrollView.scrollYIndexMax != 0)
                 {
                     scrollView.hover = true
-                    #audio:playUISound(uiCommon.hoverSoundFile)
-                    #knobView:setModel(model:modelIndexForName("ui_slider_knob"), {
-                    #    [material.types.ui_standard.index] = material.types.ui_selected.index
-                    #})
-                    #scrollerBackgroundView:setModel(model:modelIndexForName("ui_slider_vertical_bg"), {
-                    #    [material.types.ui_standard.index] = material.types.ui_selected.index
-                    #})
                 }
             }
         }
@@ -363,7 +353,7 @@ create = function(parentView, viewLayout)
     }
 
     
-    scrollView.update = function(dt)
+    scrollView.draw = function(dt, frameFraction)
     {
         if(scrollView.dirty)
         {
@@ -389,15 +379,30 @@ create = function(parentView, viewLayout)
             }
         }
 
-        scrollView.baseItemView.pos = vec3(0, - scrollView.scrollYOffset,0)
-        updatePositionsAndVisibilities(scrollView)
+        scrollView.baseView.pos = vec3(0, - scrollView.scrollYOffset,0)
+        updatePositionsAndVisibilities(scrollView) #todo not every frame
     }
 
-    removeAllRows(scrollView)
+    removeAllRows(scrollView) #sets default values todo separate this
+
+    scrollView.addView = function(addViewLayout)
+    {
+        addViewLayout.alignmentX = "left"
+        addViewLayout.alignmentY = "top"
+        addedView = scrollView.baseView.addView(addViewLayout)
+        rowInfo = {
+            rowView = addedView
+        }
+
+        table.insert(scrollView.rowInfos, rowInfo)
+
+        scrollView.dirty = true
+
+        return addedView
+    }
     
     return scrollView
 }
-
 
 scrollerIsVisible = function(scrollView)
 {
@@ -431,50 +436,47 @@ scrollToVisible = function(scrollView, itemListIndex, viewToVerifyMatch)
 
 insertRow = function(scrollView, insertRowView, rowIndexOrNil)
 {
-    insertIndex = rowIndexOrNil
-    if((!insertIndex) or insertIndex > table.count(scrollView.rowInfos))
-    {
-        insertIndex = table.count(scrollView.rowInfos)
-    }
+    error("scrollView.insertRow is no longer required") #now the row is added via the call to add view
+    #todo we will still need a way to insert rows not on the end though?
 
-    addedRowHeight = insertRowView.size.y
-
-    oldRowInfoAtThisPos = scrollView.rowInfos[insertIndex]
-    aboveRowInfo = scrollView.rowInfos[insertIndex - 1]
-
-    insertRowView.alignmentX = "left"
-    #insertRowView.size.x = scrollView.size.x - backgroundWidth
-
-    if(aboveRowInfo)
-    {
-        insertRowView.layoutParent = aboveRowInfo.rowView
-        insertRowView.alignmentY = "below"
-    }
-    else
-    {
-        insertRowView.layoutParent = scrollView.baseItemView
-        insertRowView.alignmentY = "top"
-    }
-
-    if(oldRowInfoAtThisPos)
-    {
-        oldRowInfoAtThisPos.rowView.layoutParent = insertRowView
-    }
-
-    
-   # insertRowView.allowViewMovementUnderCursorToTriggerHoverStartEvents = true // todo maybe
-
-    rowInfo = {
-        rowView = insertRowView,
-    }
-
-    table.insert(scrollView.rowInfos, insertIndex, rowInfo)
-
-    scrollView.contentHeight = scrollView.contentHeight + addedRowHeight
-
-    updateYOffsets(scrollView, insertIndex)
-
-    scrollView.dirty = true
+    #insertIndex = rowIndexOrNil
+    #if((!insertIndex) or insertIndex > table.count(scrollView.rowInfos))
+    #{
+    #    insertIndex = table.count(scrollView.rowInfos)
+    #}
+#
+    #oldRowInfoAtThisPos = scrollView.rowInfos[insertIndex]
+    #aboveRowInfo = scrollView.rowInfos[insertIndex - 1]
+#
+    #insertRowView.alignmentX = "left"
+    ##insertRowView.size.x = scrollView.size.x - backgroundWidth
+#
+    #if(aboveRowInfo)
+    #{
+    #    insertRowView.layoutParent = aboveRowInfo.rowView
+    #    insertRowView.alignmentY = "below"
+    #}
+    #else
+    #{
+    #    insertRowView.layoutParent = scrollView.baseView
+    #    insertRowView.alignmentY = "top"
+    #}
+#
+    #if(oldRowInfoAtThisPos)
+    #{
+    #    oldRowInfoAtThisPos.rowView.layoutParent = insertRowView
+    #}
+#
+    #
+   ## insertRowView.allowViewMovementUnderCursorToTriggerHoverStartEvents = true // todo maybe
+#
+    #rowInfo = {
+    #    rowView = insertRowView,
+    #}
+#
+    #table.insert(scrollView.rowInfos, insertIndex, rowInfo)
+#
+    #scrollView.dirty = true
 
 }
 
@@ -483,50 +485,47 @@ removeAllRows = function(scrollView)
 {
     for(i=table.count(scrollView.rowInfos) - 1, i >= 0, i--)
     {
-        scrollView.removeView(scrollView.rowInfos[i].rowView)
+        scrollView.baseView.removeView(scrollView.rowInfos[i].rowView)
     }
     scrollView.rowInfos = {}
-    scrollView.contentHeight = 0.0
-
     scrollView.scrollYIndexMax = 0
     scrollView.dirty = true
-
 }
 
 removeRowAtIndex = function(scrollView, rowIndex)
 {
-    if(rowIndex and rowIndex > 0 and rowIndex <= table.count(scrollView.rowInfos))
-    {
-        scrollView.contentHeight = scrollView.contentHeight - scrollView.rowInfos[rowIndex].rowView.size.y
-        viewToRemove = scrollView.rowInfos[rowIndex].rowView
-
-        table.remove(scrollView.rowInfos, rowIndex)
-
-        newCurrentPositionRowInfo = scrollView.rowInfos[rowIndex]
-        if(newCurrentPositionRowInfo)
-        {
-            aboveRowInfo = scrollView.rowInfos[rowIndex - 1]
-
-            if(aboveRowInfo)
-            {
-                newCurrentPositionRowInfo.rowView.layoutParent = aboveRowInfo.rowView
-                newCurrentPositionRowInfo.rowView.relativePosition = ViewPosition(scrollView.contentHorizontalAlignment, MJPositionBelow)
-            }
-            else
-            {
-                newCurrentPositionRowInfo.rowView.layoutParent = scrollView.baseItemView
-                newCurrentPositionRowInfo.rowView.relativePosition = ViewPosition(scrollView.contentHorizontalAlignment, MJPositionTop)
-            }
-        }
-
-        scrollView.removeView(viewToRemove)
-        updateYOffsets(scrollView, rowIndex)
-        scrollView.dirty = true
-    }
+    error("todo")
+    #if(rowIndex and rowIndex > 0 and rowIndex <= table.count(scrollView.rowInfos))
+    #{
+    #    viewToRemove = scrollView.rowInfos[rowIndex].rowView
+#
+    #    table.remove(scrollView.rowInfos, rowIndex)
+#
+    #    newCurrentPositionRowInfo = scrollView.rowInfos[rowIndex]
+    #    if(newCurrentPositionRowInfo)
+    #    {
+    #        aboveRowInfo = scrollView.rowInfos[rowIndex - 1]
+#
+    #        if(aboveRowInfo)
+    #        {
+    #            newCurrentPositionRowInfo.rowView.layoutParent = aboveRowInfo.rowView
+    #            newCurrentPositionRowInfo.rowView.relativePosition = ViewPosition(scrollView.contentHorizontalAlignment, MJPositionBelow)
+    #        }
+    #        else
+    #        {
+    #            newCurrentPositionRowInfo.rowView.layoutParent = scrollView.baseView
+    #            newCurrentPositionRowInfo.rowView.relativePosition = ViewPosition(scrollView.contentHorizontalAlignment, MJPositionTop)
+    #        }
+    #    }
+#
+    #    scrollView.removeView(viewToRemove)
+    #    scrollView.dirty = true
+    #}
 }
 
 removeRow = function(scrollView, rowView)
 {
+    error("todo")
     for(rowIndex,rowInfo in scrollView.rowInfos) 
     {
         if(rowInfo.rowView == rowView)

@@ -21,6 +21,7 @@ struct SiteConnectionInfo {
     TuiTable* scriptState = nullptr;
     std::string trackerKey;
     std::string hostName;
+    std::map<std::string, bool> checkedResourceFiles;
 };
 
 class KatipoBrowser {
