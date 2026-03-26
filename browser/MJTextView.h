@@ -26,6 +26,7 @@ class MJTextView : public MJView {
     dvec2 textRenderOffset;
     
     int wrapWidth;
+    bool wrapClamp = false;
     double textRenderScale;
 	double fontGeometryScale = 1.0;
 

@@ -362,20 +362,40 @@ create = function(parentView, viewLayout)
 
         if(!scrollView.scrollInProgress)
         {
-            scrollView.scrollYOffset += scrollView.scrollVelocity
+            absScrollVelocity = math.abs(scrollView.scrollVelocity)
+            if(absScrollVelocity > 0.1)
+            {
+                scrollView.scrollYOffset += scrollView.scrollVelocity
 
-            scrollView.scrollVelocity = scrollView.scrollVelocity * (1.0 - math.min(dt * 16, 1))
-            
-            minScroll = -scrollView.scrollYHeight
-            maxScroll = 0
-            
-            if(scrollView.scrollYOffset < minScroll)
-            {
-                scrollView.scrollYOffset -= (scrollView.scrollYOffset - minScroll) * math.min(dt * 16, 1)
-            }
-            else if(scrollView.scrollYOffset > maxScroll)
-            {
-                scrollView.scrollYOffset -= (scrollView.scrollYOffset - maxScroll) * math.min(dt * 16, 1)
+                scrollView.scrollVelocity = scrollView.scrollVelocity * (1.0 - math.min(dt * 16, 1))
+                
+                minScroll = -scrollView.scrollYHeight
+                maxScroll = 0
+                
+                if(scrollView.scrollYOffset < minScroll)
+                {
+                    if(absScrollVelocity < 0.2)
+                    {
+                        scrollView.scrollYOffset = minScroll
+                        scrollView.scrollVelocity = 0
+                    }
+                    else
+                    {
+                        scrollView.scrollYOffset -= (scrollView.scrollYOffset - minScroll) * math.min(dt * 16, 1)
+                    }
+                }
+                else if(scrollView.scrollYOffset > maxScroll)
+                {
+                    if(absScrollVelocity < 0.2)
+                    {
+                        scrollView.scrollYOffset = maxScroll
+                        scrollView.scrollVelocity = 0
+                    }
+                    else
+                    {
+                        scrollView.scrollYOffset -= (scrollView.scrollYOffset - maxScroll) * math.min(dt * 16, 1)
+                    }
+                }
             }
         }
 
@@ -387,9 +407,9 @@ create = function(parentView, viewLayout)
 
     scrollView.addView = function(addViewLayout)
     {
-        addViewLayout.alignmentX = "left"
-        addViewLayout.alignmentY = "top"
         addedView = scrollView.baseView.addView(addViewLayout)
+        addedView.alignmentX = "left"
+        addedView.alignmentY = "top"
         rowInfo = {
             rowView = addedView
         }

@@ -133,12 +133,16 @@ public:
 		int alignment,
 		int wrapWidth,
 		irect* enclosingRect = nullptr,
-		float scale = 1.0f);
+		float scale = 1.0f,
+        bool clampToWrapWidth = false,
+        int* clampedWrapCharNextLineIndex = nullptr);
 
     irect calculateEnclosingRect(std::vector<AttributedText>& attributedText, 
         int alignment,
         int wrapWidth,
-        float scale = 1.0f);
+        float scale = 1.0f,
+                                 bool clampToWrapWidth = false,
+                                 int* clampedWrapCharNextLineIndex = nullptr);
 
 	irect calculateRectOfCharAtIndex(std::vector<AttributedText>& attributedText, 
 		int charIndex,
@@ -156,7 +160,9 @@ private:
 	std::vector<FontLine> getLines(std::vector<AttributedText>& attributedText, 
 		int alignment,
 		int wrapWidth,
-		float scale = 1.0f);
+		float scale = 1.0f,
+                                   bool clampToWrapWidth = false,
+                                   int* clampedWrapCharNextLineIndex = nullptr);
     
     
 private:

@@ -6,48 +6,47 @@ lineHeight = 20
 topPaddingLayout = {
     type = "view"
     size = vec2(topPadding,topPadding)
-    alignmentX = "left"
-}
-
-createRowLayout = function(subView)
-{
-    rowLayout = {
-        type = "view" #row view, added to the scroll view
-        size = vec2(0,lineHeight) #this is overridden later, just needs to be set to something now to prevent the default expanding size to fit parent
-        subviews = {
-            {
-                type = "view" #child with the padded offset, as the rows are relative to each other, so would offset more each row
-                alignmentX = "left"
-                pos = vec3(itemRowXPadding, 0, 0)
-                subviews = {
-                    subView
-                }
-            }
-        }
-    }
-    return rowLayout
 }
 
 textLayout = {
-    id = "content"
     type = "text"
     font = "roboto"
-    fontSize = 16
     alignmentX = "left"
-    size = vec2(0,lineHeight) #this is overridden later, just needs to be set to something now to prevent the default expanding size to fit parent
+    alignmentY = "bottom"
+    fontSize = 16
 }
-textRowLayout = createRowLayout(textLayout)
 
-headerTextLayout = {
-    id = "content"
+boldTextLayout = {
     type = "text"
     font = "robotoBold"
-    fontSize = 26
     alignmentX = "left"
-    size = vec2(0,lineHeight) #this is overridden later, just needs to be set to something now to prevent the default expanding size to fit parent
+    alignmentY = "bottom"
+    fontSize = 16
 }
 
-headerTextRowLayout = createRowLayout(headerTextLayout)
+monoTextLayout = {
+    type = "text"
+    font = "robotoMono"
+    alignmentX = "left"
+    alignmentY = "bottom"
+    fontSize = 16
+}
+
+italicTextLayout = {
+    type = "text"
+    font = "robotoItalic"
+    alignmentX = "left"
+    alignmentY = "bottom"
+    fontSize = 16
+}
+
+headerTextLayout = {
+    type = "text"
+    font = "robotoBold"
+    alignmentX = "left"
+    alignmentY = "bottom"
+    fontSize = 26
+}
 
 getViewLayout = function(incomingLayout)
 {
@@ -92,6 +91,70 @@ create = function(parentView, viewLayout)
             foundMarkupCodeString = ""
             foundText = ""
             parenthesisStackCount = 0
+            starCount = 0
+            backtickCount = 0
+            currentRowView = false
+
+            isHeader = false
+            italic = false
+            bold = false
+            monospace = false
+            
+
+            getRowView = function()
+            {
+                if(!currentRowView)
+                {
+                    rowLayout = {
+                        type = "view"
+                        size = vec2(itemRowXPadding,lineHeight)
+                    }
+                    .currentRowView = markupScrollView.addView(rowLayout)
+                }
+                return currentRowView
+            }
+
+            addItemView = function()
+            {
+                rowView = getRowView()
+                            print("addItemView monospace:", monospace, " bold:", bold, " italic:", italic)
+
+                layout = textLayout
+                if(isHeader)
+                {
+                    layout = headerTextLayout
+                }
+                else if(bold)
+                {
+                    layout = boldTextLayout
+                }
+                else if(italic)
+                {
+                    layout = italicTextLayout
+                }
+                else if(monospace)
+                {
+                    layout = monoTextLayout
+                }
+                
+                textView = rowView.addView(layout)
+                textView.wrapWidth = markupScrollView.parentSize.x - rowView.size.x - itemRowXPadding - 20
+                textView.wrapClamp = true
+                textView.text = foundText
+                textView.pos = vec3(rowView.size.x, 0, 0)
+
+                rowView.size = vec2(rowView.size.x + textView.size.x, 
+                                      math.max(textView.size.y, rowView.size.y))
+
+                addedTextLength = string.length(textView.text)
+                totalTextLength = string.length(foundText)
+                if(addedTextLength < totalTextLength)
+                {
+                    .currentRowView = false #finish current row
+                    .foundText = string.subString(foundText, addedTextLength)
+                    addItemView()
+                }
+            }
             
 
             charFunc = function(charText, charIndex)
@@ -114,7 +177,48 @@ create = function(parentView, viewLayout)
                 }
                 else
                 {
-                    if(onlyFoundSpace)
+                    if(charText == "*")
+                    {
+                        print("found *")
+                        if(italic or bold)
+                        {
+                            if(starCount > 0 or italic)
+                            {
+                                addItemView()
+                                .foundText = ""
+                                .italic = false
+                                .bold = false
+                                print("bold false, starCount 0")
+                                .starCount = 0
+                            }
+                            else
+                            {
+                                starCount++
+                                print("starCount++ b:", starCount)
+                            }
+                        }
+                        else
+                        {
+                            starCount++
+                            print("starCount++ a:", starCount)
+                        }
+                    }
+                    else if(charText == "`")
+                    {
+                        if(monospace)
+                        {
+                            print("add mono mono")
+                            addItemView()
+                            .foundText = ""
+                            .monospace = false
+                            .backtickCount = 0
+                        }
+                        else
+                        {
+                            backtickCount++
+                        }
+                    }
+                    else if(onlyFoundSpace)
                     {
                         if(charText == "(")
                         {
@@ -124,8 +228,7 @@ create = function(parentView, viewLayout)
                         }
                         else if(charText == "#")
                         {
-                            debug.break()
-                            .itemLayout = headerTextRowLayout
+                            .isHeader = true
                             .skipLeadingSpace = true
                             #print("itemLayout b:", itemLayout)
                         }
@@ -145,6 +248,40 @@ create = function(parentView, viewLayout)
                     }
                     else
                     {
+                        if(starCount > 0)
+                        {
+                            print("found char ", charText, ", starCount:", starCount)
+
+                            if(string.length(foundText) > 0)
+                            {
+                                addItemView()
+                                .foundText = ""
+                            }
+
+                            if(starCount > 1)
+                            {
+                                .bold = true
+                                print("bold true")
+                            }
+                            else
+                            {
+                                .italic = true
+                                print("italic true")
+                            }
+                            .starCount = 0
+                        }
+
+                        if(backtickCount > 0)
+                        {
+                            if(string.length(foundText) > 0)
+                            {
+                                addItemView()
+                                .foundText = ""
+                            }
+                            .monospace = true
+                            .backtickCount = 0
+                        }
+
                         foundText += charText
                     }
                 }
@@ -153,24 +290,9 @@ create = function(parentView, viewLayout)
 
             string.eachChar(lineText, charFunc)
 
-            #print("itemLayout c:", itemLayout)
-
-            #firstChar = string.subString(lineText, 0, 1)
-            #if(firstChar == "(")
-            #{
-            #    result = loadMarkupCode(lineText)
-            #}
-
-            itemView = markupScrollView.addView(itemLayout)
-            textView = itemView.getView("content")
-            textView.wrapWidth = markupScrollView.parentSize.x - itemRowXPadding * 2 - 20
-            #print("markupScrollView.parentSize.x:", markupScrollView.parentSize.x, " wrap width:", markupScrollView.parentSize.x - itemRowXPadding * 2 - 20)
-            textView.text = foundText
-            itemView.size = vec2(markupScrollView.parentSize.x, math.max(textView.size.y, lineHeight))
-            #itemView.onParentSizeChanged = function(foo)
-            #{
-            #    return vec2(markupScrollView.parentSize.x, math.max(textView.size.y, lineHeight))
-            #}
+            addItemView()
+            .currentRowView = false #finish current row
+            .isHeader = false
             
         }
 
