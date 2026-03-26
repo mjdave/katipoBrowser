@@ -345,13 +345,17 @@ void MJView::setSize(dvec2 size_) //WARNING! MJTextView completely overrides thi
                 inRef->release();
                 sizeRef->release();
             }
+            else if(subView->scaleToParentSize)
+            {
+                subView->setSize(size);
+            }
         }
 	}
 }
 
 void MJView::recalculateSizesRecursively()
 {
-    if(parentSizeChangedFunction && parentView)
+    /*if(parentSizeChangedFunction && parentView)
     {
         TuiRef* inRef = new TuiVec2(parentView->size);
         TuiRef* sizeRef = parentSizeChangedFunction->call("parentSizeChangedFunction", inRef);
@@ -360,12 +364,16 @@ void MJView::recalculateSizesRecursively()
         inRef->release();
         sizeRef->release();
     }
+    else if(scaleToParentSize)
+    {
+        subView->setSize(size);
+    }*/
     
     
-    for(MJView* subView : subviews)
+    /*for(MJView* subView : subviews)
     {
         subView->recalculateSizesRecursively();
-    }
+    }*/
 }
 
 
@@ -848,7 +856,7 @@ void MJView::preRender(GCommandBuffer* commandBuffer, MJRenderPass renderPass, i
     if(needsToUpdateSizeDueToWindowChange)
     {
         needsToUpdateSizeDueToWindowChange = false;
-        recalculateSizesRecursively();
+        //recalculateSizesRecursively(); //hmm commented out
     }
 }
 
@@ -1756,6 +1764,7 @@ void MJView::loadFromTable(TuiTable* table, bool needsToLayoutSubviews, TuiTable
     
     if(table->hasKey("size"))
     {
+        scaleToParentSize = false;
         stateTable->setVec2("size", table->getVec2("size"));
     }
     else if(table->hasKey("onParentSizeChanged"))
@@ -1783,22 +1792,8 @@ void MJView::loadFromTable(TuiTable* table, bool needsToLayoutSubviews, TuiTable
     }
     else
     {
-        parentSizeChangedFunction = new TuiFunction([this](TuiTable* args, TuiRef* existingResult, TuiFunctionCallData* incomingCallData, TuiDebugInfo* callingDebugInfo) -> TuiRef* {
-            if(args && !args->arrayObjects.empty())
-            {
-                return args->arrayObjects[0]->retain();
-            }
-            return TUI_NIL;
-        });
-        
-        TuiRef* inSizeRef = new TuiVec2(parentView->size);
-        
-        TuiRef* sizeRef = parentSizeChangedFunction->call("parentSizeChangedFunction", inSizeRef);
-        //stateTable->setVec2("size", ((TuiVec2*)sizeRef)->value);
-        setSize(((TuiVec2*)sizeRef)->value);
-        
-        inSizeRef->release();
-        sizeRef->release();
+        scaleToParentSize = true;
+        setSize(parentView->size);
     }
     
     if(table->hasKey("pos"))
@@ -1880,6 +1875,7 @@ void MJView::tableKeyChanged(const std::string& key, TuiRef* value)
         switch (value->type()) {
             case Tui_ref_type_VEC2:
             {
+                scaleToParentSize = false;
                 setSize(((TuiVec2*)value)->value);
             }
                 break;

@@ -94,6 +94,7 @@ create = function(parentView, viewLayout)
             starCount = 0
             backtickCount = 0
             currentRowView = false
+            preventWordSeparation = false
 
             isHeader = false
             italic = false
@@ -110,6 +111,7 @@ create = function(parentView, viewLayout)
                         size = vec2(itemRowXPadding,lineHeight)
                     }
                     .currentRowView = markupScrollView.addView(rowLayout)
+                    .preventWordSeparation = false
                 }
                 return currentRowView
             }
@@ -117,7 +119,7 @@ create = function(parentView, viewLayout)
             addItemView = function()
             {
                 rowView = getRowView()
-                            print("addItemView monospace:", monospace, " bold:", bold, " italic:", italic)
+                #print("addItemView:", foundText)
 
                 layout = textLayout
                 if(isHeader)
@@ -140,8 +142,11 @@ create = function(parentView, viewLayout)
                 textView = rowView.addView(layout)
                 textView.wrapWidth = markupScrollView.parentSize.x - rowView.size.x - itemRowXPadding - 20
                 textView.wrapClamp = true
+                textView.preventWordSeparation = preventWordSeparation
                 textView.text = foundText
                 textView.pos = vec3(rowView.size.x, 0, 0)
+
+                .preventWordSeparation = true #we allow word separation for the first item in the row only
 
                 rowView.size = vec2(rowView.size.x + textView.size.x, 
                                       math.max(textView.size.y, rowView.size.y))
@@ -151,7 +156,25 @@ create = function(parentView, viewLayout)
                 if(addedTextLength < totalTextLength)
                 {
                     .currentRowView = false #finish current row
-                    .foundText = string.subString(foundText, addedTextLength)
+                    remainingText = string.subString(foundText, addedTextLength)
+
+                    startIndex = 0
+                    string.eachChar(remainingText, function(charText, charIndex){
+                        if(charText != " ")
+                        {
+                            .startIndex = charIndex
+                            return true
+                        }
+                    })
+
+                    if(startIndex != 0)
+                    {
+                        .foundText = string.subString(remainingText, startIndex)
+                    }
+                    else
+                    {
+                        .foundText = remainingText
+                    }
                     addItemView()
                 }
             }
@@ -170,7 +193,7 @@ create = function(parentView, viewLayout)
                         parenthesisStackCount--
                         if(parenthesisStackCount == 0)
                         {
-                            print("found markup:", foundMarkupCodeString)
+                            #print("found markup:", foundMarkupCodeString)
                         }
                     }
                     .foundMarkupCodeString = foundMarkupCodeString + charText
@@ -179,7 +202,6 @@ create = function(parentView, viewLayout)
                 {
                     if(charText == "*")
                     {
-                        print("found *")
                         if(italic or bold)
                         {
                             if(starCount > 0 or italic)
@@ -188,26 +210,22 @@ create = function(parentView, viewLayout)
                                 .foundText = ""
                                 .italic = false
                                 .bold = false
-                                print("bold false, starCount 0")
                                 .starCount = 0
                             }
                             else
                             {
                                 starCount++
-                                print("starCount++ b:", starCount)
                             }
                         }
                         else
                         {
                             starCount++
-                            print("starCount++ a:", starCount)
                         }
                     }
                     else if(charText == "`")
                     {
                         if(monospace)
                         {
-                            print("add mono mono")
                             addItemView()
                             .foundText = ""
                             .monospace = false
@@ -230,7 +248,6 @@ create = function(parentView, viewLayout)
                         {
                             .isHeader = true
                             .skipLeadingSpace = true
-                            #print("itemLayout b:", itemLayout)
                         }
                         else
                         {
@@ -250,8 +267,6 @@ create = function(parentView, viewLayout)
                     {
                         if(starCount > 0)
                         {
-                            print("found char ", charText, ", starCount:", starCount)
-
                             if(string.length(foundText) > 0)
                             {
                                 addItemView()
@@ -261,12 +276,10 @@ create = function(parentView, viewLayout)
                             if(starCount > 1)
                             {
                                 .bold = true
-                                print("bold true")
                             }
                             else
                             {
                                 .italic = true
-                                print("italic true")
                             }
                             .starCount = 0
                         }

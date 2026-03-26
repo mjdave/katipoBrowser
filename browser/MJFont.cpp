@@ -206,7 +206,8 @@ FontPrintResult MJFont::print(std::vector<AttributedText>& attributedText,
 	irect* enclosingRect,
 	float scale,
       bool clampToWrapWidth,
-      int* clampedWrapCharNextLineIndex)
+      int* clampedWrapCharNextLineIndex,
+                              bool preventWordSeparation)
 {
 	FontPrintResult result;
     
@@ -281,7 +282,7 @@ FontPrintResult MJFont::print(std::vector<AttributedText>& attributedText,
                                 clamped = true;
                                 if(clampedWrapCharNextLineIndex)
                                 {
-                                    *clampedWrapCharNextLineIndex = charIndex + 1;
+                                    *clampedWrapCharNextLineIndex = charIndex;
                                 }
                                 break;
                             }
@@ -311,6 +312,15 @@ FontPrintResult MJFont::print(std::vector<AttributedText>& attributedText,
 							if(line->chars.size() <= 1)
 							{
 								wordIsTooLongForLine = true;
+                                if(preventWordSeparation)
+                                {
+                                    clamped = true;
+                                    if(clampedWrapCharNextLineIndex)
+                                    {
+                                        *clampedWrapCharNextLineIndex = charIndex;
+                                    }
+                                    break;
+                                }
 							}
 							else
 							{
@@ -458,7 +468,8 @@ std::vector<FontLine> MJFont::getLines(std::vector<AttributedText>& attributedTe
 	int wrapWidth,
 	float scale,
    bool clampToWrapWidth,
-   int* clampedWrapCharNextLineIndex)
+   int* clampedWrapCharNextLineIndex,
+   bool preventWordSeparation)
 {
 	std::vector<FontLine> lines;
 	FontLine line;
@@ -537,7 +548,7 @@ std::vector<FontLine> MJFont::getLines(std::vector<AttributedText>& attributedTe
                                 clamped = true;
                                 if(clampedWrapCharNextLineIndex)
                                 {
-                                    *clampedWrapCharNextLineIndex = charIndex + 1;
+                                    *clampedWrapCharNextLineIndex = charIndex;
                                 }
                                 break;
                             }
@@ -567,6 +578,15 @@ std::vector<FontLine> MJFont::getLines(std::vector<AttributedText>& attributedTe
 							if(line->chars.size() <= 1)
 							{
 								wordIsTooLongForLine = true;
+                                if(preventWordSeparation)
+                                {
+                                    clamped = true;
+                                    if(clampedWrapCharNextLineIndex)
+                                    {
+                                        *clampedWrapCharNextLineIndex = charIndex;
+                                    }
+                                    break;
+                                }
 							}
 							else
 							{
@@ -663,7 +683,8 @@ irect MJFont::calculateEnclosingRect(std::vector<AttributedText>& attributedText
     int wrapWidth,
     float scale,
      bool clampToWrapWidth,
-     int* clampedWrapCharNextLineIndex)
+     int* clampedWrapCharNextLineIndex,
+     bool preventWordSeparation)
 {
     
     if(attributedText.empty())
@@ -678,7 +699,7 @@ irect MJFont::calculateEnclosingRect(std::vector<AttributedText>& attributedText
 
         return enclosingRect;
     }
-	std::vector<FontLine> lines = getLines(attributedText,  alignment, wrapWidth, scale, clampToWrapWidth, clampedWrapCharNextLineIndex);
+	std::vector<FontLine> lines = getLines(attributedText,  alignment, wrapWidth, scale, clampToWrapWidth, clampedWrapCharNextLineIndex, preventWordSeparation);
 
     float minX = FLT_MAX;
     float maxWidth = 0.0f;

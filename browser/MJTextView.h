@@ -27,6 +27,7 @@ class MJTextView : public MJView {
     
     int wrapWidth;
     bool wrapClamp = false;
+    bool preventWordSeparation = false;
     double textRenderScale;
 	double fontGeometryScale = 1.0;
 

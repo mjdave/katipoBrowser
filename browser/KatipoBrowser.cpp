@@ -213,10 +213,10 @@ void KatipoBrowser::init()
         {
             std::string hostID = args->arrayObjects[0]->getStringValue();
             SiteConnectionInfo& siteConnectionInfo = siteConnectionInfosByHostID[hostID];
-            TuiFunction* onConnectFunc = siteConnectionInfo.katipoTable->getFunction("onConnect");
+            TuiFunction* onConnectFunc = siteConnectionInfo.katipoTable->getFunction("onConnected");
             if(onConnectFunc)
             {
-                onConnectFunc->call("site loaded onConnect", TUI_FALSE);
+                onConnectFunc->call("site loaded onConnected", TUI_FALSE);
             }
         }
         
@@ -394,11 +394,11 @@ void KatipoBrowser::init()
             
             if(!isDustyOldCacheLoad)
             {
-                TuiFunction* onConnectFunc = siteConnectionInfo.katipoTable->getFunction("onConnect");
+                TuiFunction* onConnectFunc = siteConnectionInfo.katipoTable->getFunction("onConnected");
                 if(onConnectFunc)
                 {
-                    //MJLog("calling site loaded onConnect");
-                    onConnectFunc->call("site loaded onConnect", TUI_TRUE);
+                    //MJLog("calling site loaded onConnected");
+                    onConnectFunc->call("site loaded onConnected", TUI_TRUE);
                 }
             }
         }

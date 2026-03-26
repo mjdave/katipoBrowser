@@ -345,6 +345,8 @@ protected:
     bool hidden;
 	double circleHitRadius2;
 	bool useCircleHitRadius = false;
+    
+    bool scaleToParentSize = true;
 
 	bool clipChildren = false;
 	MJView* clippingParent = nullptr;

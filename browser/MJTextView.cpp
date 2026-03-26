@@ -158,12 +158,19 @@ void MJTextView::updateDimensions()
 		double scaleToUse = renderScale;
 		double textRenderScaleToUse = textRenderScale;
         int wrapClampCharIndex = 0;
-		irect enclosingRect = font->calculateEnclosingRect(text, textAlignment, wrapWidth * scaleToUse, 1.0 / textRenderScaleToUse, wrapClamp, &wrapClampCharIndex);
+		irect enclosingRect = font->calculateEnclosingRect(text, textAlignment, wrapWidth * scaleToUse, 1.0 / textRenderScaleToUse, wrapClamp, &wrapClampCharIndex, preventWordSeparation);
 		setSizeInternal((dvec2(enclosingRect.size) * fontGeometryScale) / scaleToUse);
         stateTable->setVec2("size", ((dvec2(enclosingRect.size) * fontGeometryScale) / scaleToUse));
-        if(wrapClampCharIndex > 0)
+        if(wrapClampCharIndex > -1)
         {
-            ((TuiString*)stateTable->objectsByStringKey["text"])->value = textString.substr(0, wrapClampCharIndex);
+            if(wrapClampCharIndex == 0)
+            {
+                ((TuiString*)stateTable->objectsByStringKey["text"])->value = "";
+            }
+            else
+            {
+                ((TuiString*)stateTable->objectsByStringKey["text"])->value = textString.substr(0, wrapClampCharIndex);
+            }
         }
 
 		textRenderOffset = dvec2(-enclosingRect.origin.x, -enclosingRect.origin.y) * fontGeometryScale;
@@ -193,7 +200,7 @@ void MJTextView::updateBuffer(GCommandBuffer* commandBuffer)
         irect enclosingRect;
 		double scaleToUse = renderScale;
         
-        nextVertices = font->print(text, textAlignment, wrapWidth * scaleToUse, &enclosingRect, 1.0 / textRenderScale, wrapClamp).fontVerts;
+        nextVertices = font->print(text, textAlignment, wrapWidth * scaleToUse, &enclosingRect, 1.0 / textRenderScale, wrapClamp, nullptr, preventWordSeparation).fontVerts;
         
         
         setSizeInternal((dvec2(enclosingRect.size) * fontGeometryScale) / scaleToUse);
@@ -665,7 +672,7 @@ void MJTextView::loadFromTable(TuiTable* table, bool needsToLayoutSubviews, TuiT
 {
     MJView::loadFromTable(table, needsToLayoutSubviews, rootTableOrNil);
     
-    stateTable->set("onParentSizeChanged", TUI_NIL);//MJView sets this by default for views that don't have a size, but this is not desirable for a text view which stores a derived size
+    scaleToParentSize = false;
     
     if(table->hasKey("font"))
     {
@@ -700,6 +707,11 @@ void MJTextView::loadFromTable(TuiTable* table, bool needsToLayoutSubviews, TuiT
     if(table->hasKey("wrapClamp"))
     {
         stateTable->setBool("wrapClamp", table->getBool("wrapClamp"));
+    }
+    
+    if(table->hasKey("preventWordSeparation"))
+    {
+        stateTable->setBool("preventWordSeparation", table->getBool("preventWordSeparation"));
     }
     
     if(table->hasKey("text"))
@@ -761,4 +773,9 @@ void MJTextView::tableKeyChanged(const std::string& key, TuiRef* value)
     {
         wrapClamp = stateTable->getBool("wrapClamp");
     }
+    else if(key == "preventWordSeparation")
+    {
+        preventWordSeparation = stateTable->getBool("preventWordSeparation");
+    }
+    
 }
