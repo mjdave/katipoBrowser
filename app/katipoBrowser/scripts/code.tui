@@ -35,7 +35,6 @@ siteContentBackground.update = function(dt)
 defaultSiteContent = siteContentBackground.addView(defaultSiteScene.mainView)
 defaultSiteContent.hidden = true
 
-pageTitle = defaultSiteContent.getView("pageTitle")
 pageBody = defaultSiteContent.getView("pageBody")
 
 bookmarkLayout = scene.bookmark
@@ -73,9 +72,7 @@ getCallback = function(result, hostID, url)
         {
             siteContentBackground.goalColor = vec4(0.2,0.0,0.0,0.6) #red, we don't have a connection, no cache
             defaultSiteContent.hidden = false
-
-            pageTitle.text = result.status
-            pageBody.text = result.message
+            pageBody.setText("#" + result.status + "\n" + result.message)
         }
     }
     else if(result.unchanged)
@@ -90,15 +87,13 @@ getCallback = function(result, hostID, url)
         siteContentBackground.goalColor = vec4(0.0,0.0,0.2,0.4)
         defaultSiteContent.hidden = false
 
-        pageTitle.text = result.pageTitle
-
         if(result.pageBody)
         {
-            pageBody.text = result.pageBody
+            pageBody.setText("#" + result.pageTitle + "\n" + result.pageBody)
         }
         else
         {
-            pageBody.text = ""
+            pageBody.setText("#" + result.pageTitle)
         }
     }
     else if(result.siteData)
@@ -186,8 +181,7 @@ getCallback = function(result, hostID, url)
     {
         print("warning: unhandled result:", result)
         defaultSiteContent.hidden = false
-        pageTitle.text = "unhandled result"
-        pageBody.text = ""
+        pageBody.setText("#Unhandled Result")
     }
 }
 

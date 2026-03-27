@@ -8,18 +8,8 @@ mainView = {
     type = "view"
     subviews = {
         {
-            id = "pageTitle"
-            type = "text"
-            font = "roboto"
-            fontSize = 24
-            alignmentY = "above"
-            layoutParentID = "pageBody"
-        }
-        {
             id = "pageBody"
             type = "markup"
-            font = "roboto"
-            fontSize = 18
         }
     }
 }

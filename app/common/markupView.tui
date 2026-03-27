@@ -8,6 +8,13 @@ topPaddingLayout = {
     size = vec2(topPadding,topPadding)
 }
 
+font = "roboto"
+boldFont = "robotoBold"
+italicFont = "robotoItalic"
+monoFont = "robotoMono"
+fontSize = 16
+headerFontSize = 26
+
 textLayout = {
     type = "text"
     font = "roboto"
@@ -91,10 +98,14 @@ create = function(parentView, viewLayout)
             foundMarkupCodeString = ""
             foundText = ""
             parenthesisStackCount = 0
+            captureStackCount = 0
             starCount = 0
             backtickCount = 0
             currentRowView = false
             preventWordSeparation = false
+            captureClosedAwaitingParenthesis = false
+
+            currentCapture = false
 
             isHeader = false
             italic = false
@@ -116,40 +127,143 @@ create = function(parentView, viewLayout)
                 return currentRowView
             }
 
-            addItemView = function()
+            addItemView = function(style)
             {
                 rowView = getRowView()
-                #print("addItemView:", foundText)
+                print("addItemView:", foundText)
 
-                layout = textLayout
+                layout = {
+                    type = "text"
+                    font = font
+                    alignmentX = "left"
+                    alignmentY = "bottom"
+                    fontSize = fontSize
+                }
+
                 if(isHeader)
                 {
-                    layout = headerTextLayout
+                    layout.font = boldFont
+                    layout.fontSize = headerFontSize
                 }
-                else if(bold)
+
+                if(bold)
                 {
-                    layout = boldTextLayout
+                    layout.font = boldFont
                 }
                 else if(italic)
                 {
-                    layout = italicTextLayout
+                    layout.font = italicFont
                 }
-                else if(monospace)
+
+                if(monospace)
                 {
-                    layout = monoTextLayout
+                    layout.font = monoFont
                 }
+
+                usesBackgroundColorView = false
+
+                if(style)
+                {
+                    if(style.header)
+                    {
+                        layout.font = boldFont
+                        layout.fontSize = headerFontSize
+                    }
+
+                    if(style.bold)
+                    {
+                        layout.font = boldFont
+                    }
+                    else if(style.italic)
+                    {
+                        layout.font = italicFont
+                    }
+
+                    if(style.monospace)
+                    {
+                        layout.font = monoFont
+                    }
+
+                    if(style.font)
+                    {
+                        layout.font = style.font
+                    }
+
+                    if(style.fontSize)
+                    {
+                        layout.fontSize = style.fontSize
+                    }
+
+                    if(style.color)
+                    {
+                        layout.color = style.color
+                    }
+
+                    if(style.backgroundColor)
+                    {
+                        usesBackgroundColorView = true
+                        textViewLayout = layout
+                        textViewLayout.id = "textView"
+                        
+                        layout = {
+                            type = "color"
+                            color = style.backgroundColor
+                            alignmentX = "left"
+                            alignmentY = "bottom"
+                            subviews = {
+                                textViewLayout
+                            }
+                        }
+                        print("layout:", layout)
+                    }
+                }
+
+                /*
+                styleA = {
+    backgroundColor = vec4(0.0,0.5,0.0,0.5)
+}
+
+styleB = {
+    bold = true
+    color = vec4(1.0,0.0,0.0,1.0)
+}
+
+styleC = {
+    font = "blockheadsHue"
+    fontSize = 24
+}
+*/
                 
-                textView = rowView.addView(layout)
+                backgroundView = rowView.addView(layout)
+                textView = nil
+                if(usesBackgroundColorView)
+                {
+                    textView = backgroundView.getView("textView")
+                }
+                else
+                {
+                    textView = backgroundView
+                }
+
                 textView.wrapWidth = markupScrollView.parentSize.x - rowView.size.x - itemRowXPadding - 20
                 textView.wrapClamp = true
                 textView.preventWordSeparation = preventWordSeparation
                 textView.text = foundText
-                textView.pos = vec3(rowView.size.x, 0, 0)
 
                 .preventWordSeparation = true #we allow word separation for the first item in the row only
 
+                backgroundView.pos = vec3(rowView.size.x, 0, 0)
+
                 rowView.size = vec2(rowView.size.x + textView.size.x, 
                                       math.max(textView.size.y, rowView.size.y))
+
+
+                
+
+                if(usesBackgroundColorView)
+                {
+                    backgroundView.size = textView.size
+                }
 
                 addedTextLength = string.length(textView.text)
                 totalTextLength = string.length(foundText)
@@ -179,28 +293,141 @@ create = function(parentView, viewLayout)
                 }
             }
             
+            renderCapture = function(capture, parentStyle)
+            {
+                remainingText = foundText
+                style = {}
+                if(parentStyle)
+                {
+                    for(k,v in parentStyle)
+                    {
+                        style[k] = v
+                    }
+                }
+                loadedValue = load(capture.markupString, scene)
+                print("in renderCapture loadedValue:", loadedValue, " from string:", capture.markupString)
+                if(type(loadedValue) == "table")
+                {
+                    for(k,v in loadedValue)
+                    {
+                        style[k] = v
+                    }
+                }
+
+                for(item in capture.items)
+                {
+                    if(type(item) == "string")
+                    {
+                        .foundText = item
+                        addItemView(style)
+                    }
+                    else
+                    {
+                        renderCapture(item, style)
+                    }
+                }
+                .foundText = remainingText
+            }
 
             charFunc = function(charText, charIndex)
-            {
-                if(parenthesisStackCount > 0)
+            { 
+                if(captureClosedAwaitingParenthesis)
                 {
-                    if(charText == "(")
+                    if(charText != "(")
                     {
-                        parenthesisStackCount++
+                        print("error: expected '('")
+                        return true
                     }
-                    else if(charText == ")")
+                    .parenthesisStackCount = 1
+                    .foundMarkupCodeString = ""
+                    .captureClosedAwaitingParenthesis = false
+                }
+                else if(parenthesisStackCount > 0)
+                {
+                    if(charText == ")")
                     {
                         parenthesisStackCount--
                         if(parenthesisStackCount == 0)
                         {
-                            #print("found markup:", foundMarkupCodeString)
+                            print("found markup:", foundMarkupCodeString)
+                            if(currentCapture)
+                            {
+                                currentCapture.markupString = foundMarkupCodeString
+                                parentCapture = currentCapture.parentCapture
+                                currentCapture.parentCapture = nil
+
+                                if(currentCapture.currentText)
+                                {
+                                    table.insert(currentCapture.items, currentCapture.currentText)
+                                    currentCapture.currentText = nil
+                                }
+                                if(!parentCapture)
+                                {
+                                    renderCapture(currentCapture)
+                                }
+                                .currentCapture = parentCapture
+                            }
+                            else
+                            {
+                                print("todo set line style")
+                            }
                         }
                     }
-                    .foundMarkupCodeString = foundMarkupCodeString + charText
+                    else if(charText == "(")
+                    {
+                        parenthesisStackCount++
+                    }
+
+                    if(parenthesisStackCount != 0) 
+                    {
+                        .foundMarkupCodeString = foundMarkupCodeString + charText
+                    }
+                }
+                else if(charText == "[")
+                {
+                    prevCapture = currentCapture
+                    .currentCapture = {
+                        parentCapture = prevCapture
+                        items = {}
+                    }
+
+                    if(prevCapture)
+                    {
+                        if(prevCapture.currentText)
+                        {
+                            table.insert(prevCapture.items, prevCapture.currentText)
+                            prevCapture.currentText = nil
+                        }
+
+                        table.insert(prevCapture.items, currentCapture)
+                    }
+                    else
+                    {
+                        if(string.length(foundText) > 0)
+                        {
+                            addItemView()
+                            .foundText = ""
+                        }
+                    }
+                }
+                else if(charText == "]")
+                {
+                    .captureClosedAwaitingParenthesis = true
                 }
                 else
                 {
-                    if(charText == "*")
+                    if(currentCapture)
+                    {
+                        if(!currentCapture.currentText)
+                        {
+                            currentCapture.currentText = charText
+                        }
+                        else
+                        {
+                            currentCapture.currentText += charText
+                        }
+                    }
+                    else if(charText == "*")
                     {
                         if(italic or bold)
                         {
