@@ -13,12 +13,15 @@ class TuiRef;
 class TuiFunction;
 class TuiTable;
 class ClientNetInterface;
+class DatabaseEnvironment;
+class Database;
 
 struct SiteConnectionInfo {
     MJView* mainView = nullptr;
     TuiTable* rootTable = nullptr;
     TuiTable* katipoTable = nullptr;
     TuiTable* scriptState = nullptr;
+    TuiRef* publicData = nullptr;
     std::string trackerKey;
     std::string hostName;
     std::map<std::string, bool> checkedResourceFiles;
@@ -30,6 +33,9 @@ public:
     TuiTable* rootTable;
     TuiTable* scriptState;
     TuiTable* katipoTable;
+    
+    DatabaseEnvironment* appDatabaseEnvironment;
+    Database* appDatabase;
     
     std::map<std::string, ClientNetInterface*> netInterfaces;
     

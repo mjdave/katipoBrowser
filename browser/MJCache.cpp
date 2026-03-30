@@ -8,11 +8,9 @@
 //#include "Timer.h"
 
 MJCache::MJCache(Vulkan* vulkan_,
-    Database* appDatabase_,
 	Camera* camera_)
 {
     vulkan = vulkan_;
-    appDatabase = appDatabase_;
 	camera = camera_;
 }
 

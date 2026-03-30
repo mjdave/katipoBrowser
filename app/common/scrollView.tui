@@ -353,7 +353,7 @@ create = function(parentView, viewLayout)
     }
 
     
-    scrollView.draw = function(dt, frameFraction)
+    scrollView.update = function(dt, frameFraction)
     {
         if(scrollView.dirty)
         {

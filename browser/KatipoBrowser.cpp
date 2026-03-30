@@ -16,6 +16,8 @@
 #include "MJTimer.h"
 #include "MJAudio.h"
 #include "sodium.h"
+#include "DatabaseEnvironment.h"
+#include "Database.h"
 
 #include "MJView.h"
 
@@ -71,24 +73,27 @@ void KatipoBrowser::doGet(const std::string& trackerKey,
     
     
     TuiFunction* callHostFunctionCallbackFunction = new TuiFunction([mainGetCallbackFunction, fullURL](TuiTable* args, TuiRef* existingResult, TuiFunctionCallData* incomingCallData, TuiDebugInfo* callingDebugInfo) -> TuiRef* {
-        if(args && args->arrayObjects.size() >= 2)
+        if(mainGetCallbackFunction)
         {
-            TuiRef* result = args->arrayObjects[0];
-            TuiRef* publicKey = args->arrayObjects[1];
-            TuiString* remoteURLString = new TuiString(fullURL);
-            mainGetCallbackFunction->call("mainGetCallbackFunction", result, publicKey, remoteURLString);
-            remoteURLString->release();
+            if(args && args->arrayObjects.size() >= 2)
+            {
+                TuiRef* result = args->arrayObjects[0];
+                TuiRef* publicKey = args->arrayObjects[1];
+                TuiString* remoteURLString = new TuiString(fullURL);
+                mainGetCallbackFunction->call("mainGetCallbackFunction", result, publicKey, remoteURLString);
+                remoteURLString->release();
+            }
+            else
+            {
+                TuiRef* statusResult = new TuiTable("{status='error',message='remote error'}");
+                TuiString* remoteURLString = new TuiString(fullURL);
+                mainGetCallbackFunction->call("mainGetCallbackFunction", statusResult, TUI_NIL, remoteURLString);
+                statusResult->release();
+                remoteURLString->release();
+            }
+            
+            mainGetCallbackFunction->release();
         }
-        else
-        {
-            TuiRef* statusResult = new TuiTable("{status='error',message='remote error'}");
-            TuiString* remoteURLString = new TuiString(fullURL);
-            mainGetCallbackFunction->call("mainGetCallbackFunction", statusResult, TUI_NIL, remoteURLString);
-            statusResult->release();
-            remoteURLString->release();
-        }
-        
-        mainGetCallbackFunction->release();
         return TUI_NIL;
     });
     
@@ -203,6 +208,13 @@ void KatipoBrowser::init()
     
     //rootTable->setVec2("screenSize", dvec2(MainController::getInstance()->windowInfo->screenWidth, MainController::getInstance()->windowInfo->screenHeight));
     
+    
+    appDatabaseEnvironment = new DatabaseEnvironment(Katipo::getSavePath("database"),
+                                                     1,
+                                                     2);
+    appDatabase = new Database(appDatabaseEnvironment, "app");
+    appDatabase->bindTui("", rootTable);
+    
     EventManager::getInstance()->bindTui(rootTable);
     MJAudio::getInstance()->bindTui(rootTable);
     katipoTable = addKatipoTable(rootTable);
@@ -216,7 +228,7 @@ void KatipoBrowser::init()
             TuiFunction* onConnectFunc = siteConnectionInfo.katipoTable->getFunction("onConnected");
             if(onConnectFunc)
             {
-                onConnectFunc->call("site loaded onConnected", TUI_FALSE);
+                onConnectFunc->call("site loaded onConnected", TUI_FALSE, siteConnectionInfo.publicData);
             }
         }
         
@@ -224,25 +236,39 @@ void KatipoBrowser::init()
     });
     
     //katipo.loadSite(siteSavePath, untrustedSiteCodePermissionFunction)
-    katipoTable->setFunction("loadSite", [this](TuiTable* args, TuiRef* existingResult, TuiFunctionCallData* incomingCallData, TuiDebugInfo* callingDebugInfo) -> TuiRef* { //note added outside function above so for now sites can't load other sites
-        if(args->arrayObjects.size() >= 2)
+    katipoTable->setFunction("loadSite", [this](TuiTable* args,
+                                                TuiRef* existingResult,
+                                                TuiFunctionCallData* incomingCallData,
+                                                TuiDebugInfo* callingDebugInfo) -> TuiRef* { //note added outside function above so for now sites can't load other sites
+        if(args->arrayObjects.size() >= 3)
         {
             std::string hostID = args->arrayObjects[0]->getStringValue();
             std::string siteSavePath = args->arrayObjects[1]->getStringValue();
+            TuiRef* publicData = args->arrayObjects[2];
             
             //katipo.loadSite(bookmarkInfo.hostID, siteSavePath, untrustedSiteCodePermissionFunction, isDustyOldCacheLoad)
             bool isDustyOldCacheLoad = false;
-            if(args->arrayObjects.size() >= 4)
+            if(args->arrayObjects.size() >= 5)
             {
-                isDustyOldCacheLoad = args->arrayObjects[3]->boolValue();
+                isDustyOldCacheLoad = args->arrayObjects[4]->boolValue();
             }
             SiteConnectionInfo& siteConnectionInfo = siteConnectionInfosByHostID[hostID];
+            
+            if(siteConnectionInfo.publicData)
+            {
+                siteConnectionInfo.publicData->release();
+            }
+            if(publicData)
+            {
+                siteConnectionInfo.publicData = publicData->retain();
+            }
+            
             if(!siteConnectionInfo.rootTable)
             {
                 TuiFunction* permissionCallbackFunction = nullptr;
-                if(args->arrayObjects.size() >= 2)
+                if(args->arrayObjects.size() >= 4)
                 {
-                    TuiRef* arg = args->arrayObjects[1];
+                    TuiRef* arg = args->arrayObjects[3];
                     if(arg->type() == Tui_ref_type_FUNCTION)
                     {
                         permissionCallbackFunction = (TuiFunction*)arg;
@@ -255,6 +281,8 @@ void KatipoBrowser::init()
                 TuiTable* siteKatipoTable = addKatipoTable(siteConnectionInfo.rootTable);
                 siteConnectionInfo.katipoTable = siteKatipoTable;
                 
+                appDatabase->bindTui(siteConnectionInfo.hostName, siteConnectionInfo.rootTable);
+
                 
                 //from within site code: katipo.get("example", sendData, function(result){ print("got result:", result)})
                 //NOTE get requests from within site code can only currently request from that same server
@@ -398,7 +426,7 @@ void KatipoBrowser::init()
                 if(onConnectFunc)
                 {
                     //MJLog("calling site loaded onConnected");
-                    onConnectFunc->call("site loaded onConnected", TUI_TRUE);
+                    onConnectFunc->call("site loaded onConnected", TUI_TRUE, siteConnectionInfo.publicData);
                 }
             }
         }

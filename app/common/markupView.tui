@@ -204,10 +204,11 @@ create = function(parentView, viewLayout)
                         usesBackgroundColorView = true
                         textViewLayout = layout
                         textViewLayout.id = "textView"
+                        backgroundColor = style.backgroundColor #tui bug
                         
                         layout = {
                             type = "color"
-                            color = style.backgroundColor
+                            color = backgroundColor
                             alignmentX = "left"
                             alignmentY = "bottom"
                             subviews = {
@@ -217,22 +218,6 @@ create = function(parentView, viewLayout)
                         print("layout:", layout)
                     }
                 }
-
-                /*
-                styleA = {
-    backgroundColor = vec4(0.0,0.5,0.0,0.5)
-}
-
-styleB = {
-    bold = true
-    color = vec4(1.0,0.0,0.0,1.0)
-}
-
-styleC = {
-    font = "blockheadsHue"
-    fontSize = 24
-}
-*/
                 
                 backgroundView = rowView.addView(layout)
                 textView = nil
@@ -267,29 +252,34 @@ styleC = {
 
                 addedTextLength = string.length(textView.text)
                 totalTextLength = string.length(foundText)
+
                 if(addedTextLength < totalTextLength)
                 {
-                    .currentRowView = false #finish current row
-                    remainingText = string.subString(foundText, addedTextLength)
+                    if(addedTextLength != 0)
+                    {
+                        .currentRowView = false #finish current row
+                        remainingText = string.subString(foundText, addedTextLength)
 
-                    startIndex = 0
-                    string.eachChar(remainingText, function(charText, charIndex){
-                        if(charText != " ")
+                        startIndex = 0
+                        string.eachChar(remainingText, function(charText, charIndex){
+                            if(charText != " ")
+                            {
+                                .startIndex = charIndex
+                                return true
+                            }
+                        })
+
+                        if(startIndex != 0)
                         {
-                            .startIndex = charIndex
-                            return true
+                            .foundText = string.subString(remainingText, startIndex)
                         }
-                    })
-
-                    if(startIndex != 0)
-                    {
-                        .foundText = string.subString(remainingText, startIndex)
+                        else
+                        {
+                            .foundText = remainingText
+                        }
+                        addItemView()
                     }
-                    else
-                    {
-                        .foundText = remainingText
-                    }
-                    addItemView()
+                    .foundText = remainingText
                 }
             }
             
@@ -305,7 +295,7 @@ styleC = {
                     }
                 }
                 loadedValue = load(capture.markupString, scene)
-                print("in renderCapture loadedValue:", loadedValue, " from string:", capture.markupString)
+                #print("in renderCapture loadedValue:", loadedValue, " from string:", capture.markupString)
                 if(type(loadedValue) == "table")
                 {
                     for(k,v in loadedValue)

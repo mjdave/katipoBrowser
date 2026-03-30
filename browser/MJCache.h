@@ -53,7 +53,6 @@ public:
     
 public:
     MJCache(Vulkan* vulkan_,
-        Database* appDatabase_,
 		Camera* camera_);
     ~MJCache();
 

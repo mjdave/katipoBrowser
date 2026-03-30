@@ -21,8 +21,6 @@
 #include "MJTimer.h"
 
 
-#include "DatabaseEnvironment.h"
-#include "Database.h"
 
 #include "MJRenderTarget.h"
 #include "Vulkan.h"
@@ -72,9 +70,6 @@ void MainController::init(std::string windowTitle, std::string organizationName,
     }
 
 	MJLog("SDL version:%d.%d.%d", SDL_MAJOR_VERSION, SDL_MINOR_VERSION, SDL_MICRO_VERSION);
-    
-    
-	initializeDatabase();
     
     int flags = SDL_WINDOW_RESIZABLE;
 	
@@ -141,8 +136,6 @@ void MainController::init(std::string windowTitle, std::string organizationName,
 
 	camera = new Camera(vulkan);
     
-    //audio = new MJAudio(luaEnvironment, modManager);
-    
 
     EventManager::getInstance()->init(this, displayWindow, windowInfo);
 
@@ -151,21 +144,6 @@ void MainController::init(std::string windowTitle, std::string organizationName,
     load();
 
 }
-
-void MainController::save()
-{
-}
-
-
-// sapiens used to store a player id by itself in a player database. Now uses Steam ID.
-void MainController::initializeDatabase()
-{
-    appDatabaseEnvironment = new DatabaseEnvironment(Katipo::getSavePath("appdb"),
-                                                     1,
-                                                     2);
-    appDatabase = new Database(appDatabaseEnvironment, "app");
-}
-
 
 void MainController::windowInfoChanged()
 {
@@ -349,7 +327,7 @@ void MainController::unload()
 
 void MainController::load()
 {
-    cache = new MJCache(vulkan, appDatabase, camera);
+    cache = new MJCache(vulkan, camera);
     
     cache->pixelDensity = windowInfo->pixelDensity;
     

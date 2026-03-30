@@ -62,7 +62,7 @@ getCallback = function(result, hostID, url)
             if(existing.url == url)
             {
                 siteContentBackground.goalColor = vec4(0.2,0.2,0.0,0.4) #yellow, we don't have a connection, loaded from cache
-                katipo.loadSite(existing.hostID, getSitePath(existing.hostID), untrustedSiteCodePermissionFunction, true)
+                katipo.loadSite(existing.hostID, getSitePath(existing.hostID), nil, untrustedSiteCodePermissionFunction, true)
                 loadedExisting = true
                 break
             }
@@ -79,7 +79,13 @@ getCallback = function(result, hostID, url)
     {
         print("no changes on the host, everything is just great here")
         siteContentBackground.goalColor = vec4(0.0,0.0,0.2,0.4) #blue, we have the most recent version
-        katipo.loadSite(hostID, getSitePath(hostID), untrustedSiteCodePermissionFunction, true)
+
+
+        publicData = result.siteData.publicData
+
+        print("got publicData:", publicData)
+
+        katipo.loadSite(hostID, getSitePath(hostID), publicData, untrustedSiteCodePermissionFunction, true)
         katipo.gotSiteUnchanged(hostID)
     }
     else if(result.pageTitle)
@@ -146,8 +152,12 @@ getCallback = function(result, hostID, url)
             writeFiles(subFile, siteSavePath)
         }
 
+        publicData = result.siteData.publicData
+
+        print("got publicData:", publicData)
+
         print("loading freshly updated site code")
-        katipo.loadSite(hostID, siteSavePath, untrustedSiteCodePermissionFunction, false)
+        katipo.loadSite(hostID, siteSavePath, publicData, untrustedSiteCodePermissionFunction, false)
 
         .currentSiteHostID = hostID
 

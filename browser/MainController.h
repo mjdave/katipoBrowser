@@ -16,8 +16,6 @@ class MJImageTexture;
 class MJFont;
 class MJView;
 class MJTextView;
-class DatabaseEnvironment;
-class Database;
 class Timer;
 class MJCache;
 class MJAudio;
@@ -107,9 +105,6 @@ public:
 protected:
 	SDL_Window * displayWindow;
     //MJAudio* audio;
-    
-    DatabaseEnvironment* appDatabaseEnvironment;
-    Database* appDatabase;
 
 	bool vsync;
     
@@ -130,8 +125,6 @@ protected:
     
 private:
 
-    void save();
-    void initializeDatabase();
 	void windowInfoChanged();
     
     void load();

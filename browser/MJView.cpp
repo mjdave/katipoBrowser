@@ -1949,7 +1949,7 @@ void MJView::tableKeyChanged(const std::string& key, TuiRef* value)
     {
         setAlpha(stateTable->getDouble("alpha"));
     }
-    else if(key == "update")
+    else if(key == "fixedTimeUpdate")
     {
         switch (value->type()) {
             case Tui_ref_type_FUNCTION:
@@ -1978,7 +1978,7 @@ void MJView::tableKeyChanged(const std::string& key, TuiRef* value)
                 break;
         }
     }
-    else if(key == "draw")
+    else if(key == "update")
     {
         switch (value->type()) {
             case Tui_ref_type_FUNCTION:
