@@ -77,9 +77,7 @@ loadMarkupCode = function(lineText) #assumes "(" is first char
 
 create = function(parentView, viewLayout)
 {
-    #print("viewLayout:", viewLayout)
     layout = getViewLayout(viewLayout)
-    #print("viewLayout b:", layout)
     markupScrollView = parentView.addView(layout)
 
     doSetText = function(markupText)
@@ -130,7 +128,7 @@ create = function(parentView, viewLayout)
             addItemView = function(style)
             {
                 rowView = getRowView()
-                print("addItemView:", foundText)
+                #print("addItemView:", foundText)
 
                 layout = {
                     type = "text"
@@ -204,18 +202,16 @@ create = function(parentView, viewLayout)
                         usesBackgroundColorView = true
                         textViewLayout = layout
                         textViewLayout.id = "textView"
-                        backgroundColor = style.backgroundColor #tui bug
                         
                         layout = {
                             type = "color"
-                            color = backgroundColor
+                            color = style.backgroundColor
                             alignmentX = "left"
                             alignmentY = "bottom"
                             subviews = {
                                 textViewLayout
                             }
                         }
-                        print("layout:", layout)
                     }
                 }
                 
@@ -253,11 +249,13 @@ create = function(parentView, viewLayout)
                 addedTextLength = string.length(textView.text)
                 totalTextLength = string.length(foundText)
 
+                #print("addedTextLength:", addedTextLength, " totalTextLength:", totalTextLength)
+
                 if(addedTextLength < totalTextLength)
                 {
+                    .currentRowView = false #finish current row #bug, this is not sticking
                     if(addedTextLength != 0)
                     {
-                        .currentRowView = false #finish current row
                         remainingText = string.subString(foundText, addedTextLength)
 
                         startIndex = 0
@@ -277,9 +275,9 @@ create = function(parentView, viewLayout)
                         {
                             .foundText = remainingText
                         }
-                        addItemView()
                     }
-                    .foundText = remainingText
+                    
+                    addItemView(style)
                 }
             }
             
