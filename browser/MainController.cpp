@@ -63,6 +63,7 @@ void MainController::init(std::string windowTitle, std::string organizationName,
     //SDL_SetMainReady();
     int result = SDL_Init(SDL_INIT_VIDEO | SDL_INIT_EVENTS);
     SDL_SetHint(SDL_HINT_ENABLE_SCREEN_KEYBOARD, "1");
+    SDL_SetHint(SDL_HINT_MOUSE_FOCUS_CLICKTHROUGH, "1");
 	if(result < 0)
     {
         MJError("Failed to initialize SDL:%d", result);

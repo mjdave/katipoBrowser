@@ -106,8 +106,8 @@ private:
 	bool needsToResetMousePosition = false;
     
     bool hasTextEntryListener = false;
-    TuiFunction* textEntryListener;
-    TuiFunction* listenerKeyChangedFunc;
+    TuiFunction* textEntryListener = nullptr;
+    TuiFunction* listenerKeyChangedFunc = nullptr;
     
     int keyChangedListenerFunctionIndex = 0;
     std::map<int,TuiFunction*> anyKeyChangedListenerFunctions;

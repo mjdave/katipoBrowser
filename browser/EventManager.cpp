@@ -92,6 +92,26 @@ EventManager::~EventManager()
    // SDL_RemoveTimer(sdlTimer);
 
     delete timer;
+    
+    if(textEntryListener)
+    {
+        textEntryListener->release();
+    }
+    if(listenerKeyChangedFunc)
+    {
+        listenerKeyChangedFunc->release();
+    }
+    for(auto& kv : anyKeyChangedListenerFunctions)
+    {
+        kv.second->release();
+    }
+    for(auto& kv : keyChangedByKeyListenerFunctions)
+    {
+        for(auto& kvb : kv.second)
+        {
+            kvb.second->release();
+        }
+    }
 }
 
 int EventManager::getModKey()
@@ -536,8 +556,19 @@ void EventManager::setClipboardText(std::string text)
 void EventManager::setTextEntryListener(TuiFunction* textEntryListener_, TuiFunction* listenerKeyChangedFunc_)
 {
     //finishActiveEvents()
+    if(textEntryListener)
+    {
+        textEntryListener->release();
+    }
     textEntryListener = textEntryListener_;
+    textEntryListener->retain();
+    
+    if(listenerKeyChangedFunc)
+    {
+        listenerKeyChangedFunc->release();
+    }
     listenerKeyChangedFunc = listenerKeyChangedFunc_;
+    listenerKeyChangedFunc->retain();
     if(!hasTextEntryListener)
     {
         startTextEntry();
@@ -555,6 +586,7 @@ void EventManager::removeTextEntryListener()
 int EventManager::addAnyKeyChangedListener(TuiFunction* listenerKeyChangedFunc_)
 {
     int index = keyChangedListenerFunctionIndex++;
+    listenerKeyChangedFunc_->retain();
     anyKeyChangedListenerFunctions[index] = listenerKeyChangedFunc_;
     return index;
 }
@@ -562,6 +594,11 @@ int EventManager::addAnyKeyChangedListener(TuiFunction* listenerKeyChangedFunc_)
 int EventManager::addSpecificKeyChangedListener(int keyCode, TuiFunction* listenerKeyChangedFunc_)
 {
     int index = keyChangedListenerFunctionIndex++;
+    listenerKeyChangedFunc_->retain();
+    if(keyChangedByKeyListenerFunctions.count(keyCode) != 0 && keyChangedByKeyListenerFunctions[keyCode].count(index) != 0)
+    {
+        keyChangedByKeyListenerFunctions[keyCode][index]->release();
+    }
     keyChangedByKeyListenerFunctions[keyCode][index] = listenerKeyChangedFunc_;
     return index;
 }
@@ -571,7 +608,11 @@ void EventManager::removeKeyChangedListener(int index)
     anyKeyChangedListenerFunctions.erase(index);
     for(auto& keyCodeAndSet : keyChangedByKeyListenerFunctions)
     {
-        keyCodeAndSet.second.erase(index);
+        if(keyChangedByKeyListenerFunctions.count(index) != 0)
+        {
+            keyCodeAndSet.second[index]->release();
+            keyCodeAndSet.second.erase(index);
+        }
     }
 }
 

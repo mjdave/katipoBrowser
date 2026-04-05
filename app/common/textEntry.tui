@@ -144,6 +144,12 @@ cursorChanged = function(textEntryView, horizontalOffset, verticalOffset)
     }
 }
 
+
+stringInsert = function(str1, str2, pos)
+{
+    return string.subString(str1, 0, pos) + str2 + string.subString(str1, pos)
+}
+
 getViewLayout = function(viewLayout)
 {
     buttonViewLayout = {}
@@ -489,12 +495,6 @@ create = function(parentView, viewLayout)
                     {
                         func(isDown, keyCode, modCode, isRepeat)
                     }
-                }
-
-                stringInsert = function(str1, str2, pos)
-                {
-                    #return str1:sub(1,pos)..str2..str1:sub(pos+1)
-                    return string.subString(str1, 0, pos) + str2 + string.subString(str1, pos)
                 }
 
                 textEntry = function(text)

@@ -57,7 +57,7 @@ headerTextLayout = {
 
 getViewLayout = function(incomingLayout)
 {
-    #print("incomingLayout:", incomingLayout)
+    print("incomingLayout:", incomingLayout)
     layout = {}
     for(k,v in incomingLayout)
     {
@@ -74,459 +74,468 @@ loadMarkupCode = function(lineText) #assumes "(" is first char
 
 }
 
+getRowView = function(markupScrollView)
+{
+    if(!markupScrollView.currentRowView)
+    {
+        rowLayout = {
+            type = "view"
+            size = vec2(itemRowXPadding,lineHeight)
+        }
+        markupScrollView.currentRowView = markupScrollView.addView(rowLayout)
+        markupScrollView.preventWordSeparation = false
+    }
+    return markupScrollView.currentRowView
+}
+
+addItemView = function(markupScrollView, style)
+{
+    lineData = markupScrollView.lineData
+    rowView = getRowView(markupScrollView)
+    #print("addItemView:", lineData.foundText)
+
+    layout = table.clone(textLayout)
+
+    if(markupScrollView.isHeader)
+    {
+        layout.font = boldFont
+        layout.fontSize = headerFontSize
+    }
+
+    if(markupScrollView.bold)
+    {
+        layout.font = boldFont
+    }
+    else if(markupScrollView.italic)
+    {
+        layout.font = italicFont
+    }
+
+    if(markupScrollView.monospace)
+    {
+        layout.font = monoFont
+    }
+
+    usesBackgroundColorView = false
+
+    if(style)
+    {
+        if(style.link)
+        {
+            layout.color = vec4(0.5,0.8,1.0,1.0)
+            layout.font = boldFont
+            # add button view
+        }
+
+        if(style.header)
+        {
+            layout.font = boldFont
+            layout.fontSize = headerFontSize
+        }
+
+        if(style.bold)
+        {
+            layout.font = boldFont
+        }
+        else if(style.italic)
+        {
+            layout.font = italicFont
+        }
+
+        if(style.monospace)
+        {
+            layout.font = monoFont
+        }
+
+        if(style.font)
+        {
+            layout.font = style.font
+        }
+
+        if(style.fontSize)
+        {
+            layout.fontSize = style.fontSize
+        }
+
+        if(style.color)
+        {
+            layout.color = style.color
+        }
+
+        if(style.backgroundColor)
+        {
+            usesBackgroundColorView = true
+            textViewLayout = layout
+            textViewLayout.id = "textView"
+            
+            layout = {
+                type = "color"
+                color = style.backgroundColor
+                alignmentX = "left"
+                alignmentY = "bottom"
+                subviews = {
+                    textViewLayout
+                }
+            }
+        }
+    }
+
+    print("layout:", layout)
+    
+    backgroundView = rowView.addView(layout)
+    textView = nil
+    if(usesBackgroundColorView)
+    {
+        textView = backgroundView.getView("textView")
+    }
+    else
+    {
+        textView = backgroundView
+    }
+
+    textView.wrapWidth = markupScrollView.parentSize.x - rowView.size.x - itemRowXPadding - 20
+    textView.wrapClamp = true
+    textView.preventWordSeparation = markupScrollView.preventWordSeparation
+    textView.text = lineData.foundText
+
+    markupScrollView.preventWordSeparation = true #we allow word separation for the first item in the row only
+
+    backgroundView.pos = vec3(rowView.size.x, 0, 0)
+
+    rowView.size = vec2(rowView.size.x + textView.size.x, 
+                            math.max(textView.size.y, rowView.size.y))
+
+
+    
+
+    if(usesBackgroundColorView)
+    {
+        backgroundView.size = textView.size
+    }
+
+    addedTextLength = string.length(textView.text)
+    totalTextLength = string.length(lineData.foundText)
+
+    #print("addedTextLength:", addedTextLength, " totalTextLength:", totalTextLength)
+
+    if(addedTextLength < totalTextLength)
+    {
+        markupScrollView.currentRowView = nil #finish current row #bug, this is not sticking
+        if(addedTextLength != 0)
+        {
+            remainingText = string.subString(lineData.foundText, addedTextLength)
+
+            startIndex = 0
+            innerCharFunc = function(charText, charIndex){
+                if(charText != " ")
+                {
+                    .startIndex = charIndex
+                    return true
+                }
+            }
+
+            string.eachChar(remainingText, innerCharFunc)
+
+            if(startIndex != 0)
+            {
+                lineData.foundText = string.subString(remainingText, startIndex)
+            }
+            else
+            {
+                lineData.foundText = remainingText
+            }
+        }
+
+        addItemView(markupScrollView, style)
+    }
+}
+
+renderCapture = function(markupScrollView, capture, parentStyle)
+{
+    lineData = markupScrollView.lineData
+    remainingText = lineData.foundText
+    style = {}
+    if(parentStyle)
+    {
+        for(k,v in parentStyle)
+        {
+            style[k] = v
+        }
+    }
+    loadedValue = load(capture.markupString, scene)
+    #print("in renderCapture loadedValue:", loadedValue, " from string:", capture.markupString)
+    if(type(loadedValue) == "table")
+    {
+        for(k,v in loadedValue)
+        {
+            style[k] = v
+        }
+    }
+
+    for(item in capture.items)
+    {
+        if(type(item) == "string")
+        {
+            lineData.foundText = item
+            addItemView(markupScrollView, style)
+        }
+        else
+        {
+            renderCapture(markupScrollView, item, style)
+        }
+    }
+    lineData.foundText = remainingText
+}
+
+charFunc = function(markupScrollView, charText, charIndex)
+{ 
+    lineData = markupScrollView.lineData
+    if(lineData.captureClosedAwaitingParenthesis)
+    {
+        if(charText != "(")
+        {
+            print("error: expected '('")
+            return true
+        }
+        lineData.parenthesisStackCount = 1
+        lineData.foundMarkupCodeString = ""
+        lineData.captureClosedAwaitingParenthesis = false
+    }
+    else if(lineData.parenthesisStackCount > 0)
+    {
+        if(charText == ")")
+        {
+            lineData.parenthesisStackCount--
+            if(lineData.parenthesisStackCount == 0)
+            {
+                print("found markup:", lineData.foundMarkupCodeString)
+                currentCapture = lineData.currentCapture
+                if(currentCapture)
+                {
+                    currentCapture.markupString = lineData.foundMarkupCodeString
+                    parentCapture = currentCapture.parentCapture
+                    currentCapture.parentCapture = nil
+
+                    if(currentCapture.currentText)
+                    {
+                        table.insert(currentCapture.items, currentCapture.currentText)
+                        currentCapture.currentText = nil
+                    }
+                    if(!parentCapture)
+                    {
+                        renderCapture(markupScrollView, currentCapture)
+                    }
+                    lineData.currentCapture = parentCapture
+                }
+                else
+                {
+                    print("todo set line style")
+                }
+            }
+        }
+        else if(charText == "(")
+        {
+            lineData.parenthesisStackCount++
+        }
+
+        if(lineData.parenthesisStackCount != 0) 
+        {
+            lineData.foundMarkupCodeString += charText
+        }
+    }
+    else if(charText == "[")
+    {
+        prevCapture = lineData.currentCapture
+        lineData.currentCapture = {
+            parentCapture = prevCapture
+            items = {}
+        }
+
+        if(prevCapture)
+        {
+            if(prevCapture.currentText)
+            {
+                table.insert(prevCapture.items, prevCapture.currentText)
+                prevCapture.currentText = nil
+            }
+
+            table.insert(prevCapture.items, lineData.currentCapture)
+        }
+        else
+        {
+            if(string.length(lineData.foundText) > 0)
+            {
+                addItemView(markupScrollView, nil)
+                lineData.foundText = ""
+            }
+        }
+    }
+    else if(charText == "]")
+    {
+        lineData.captureClosedAwaitingParenthesis = true
+    }
+    else
+    {
+        if(lineData.currentCapture)
+        {
+            if(!lineData.currentCapture.currentText)
+            {
+                lineData.currentCapture.currentText = charText
+            }
+            else
+            {
+                lineData.currentCapture.currentText += charText
+            }
+        }
+        else if(charText == "*")
+        {
+            if(markupScrollView.italic or markupScrollView.bold)
+            {
+                if(lineData.starCount > 0 or markupScrollView.italic)
+                {
+                    addItemView(markupScrollView)
+                    lineData.foundText = ""
+                    markupScrollView.italic = nil
+                    markupScrollView.bold = nil
+                    lineData.starCount = 0
+                }
+                else
+                {
+                    lineData.starCount++
+                }
+            }
+            else
+            {
+                lineData.starCount++
+            }
+        }
+        else if(charText == "`")
+        {
+            if(markupScrollView.monospace)
+            {
+                addItemView(markupScrollView)
+                lineData.foundText = ""
+                markupScrollView.monospace = nil
+                lineData.backtickCount = 0
+            }
+            else
+            {
+                lineData.backtickCount++
+            }
+        }
+        else if(lineData.onlyFoundSpace)
+        {
+            if(charText == "(")
+            {
+                lineData.parenthesisStackCount = 1
+                lineData.foundMarkupCodeString = ""
+                lineData.skipLeadingSpace = true
+            }
+            else if(charText == "#")
+            {
+                markupScrollView.isHeader = true
+                lineData.skipLeadingSpace = true
+            }
+            else
+            {
+                if(charText != " ")
+                {
+                    lineData.onlyFoundSpace = false
+                    lineData.foundText += charText
+                }
+                else if(!lineData.skipLeadingSpace)
+                {
+                    lineData.foundText += charText
+                }
+
+            }
+        }
+        else
+        {
+            if(lineData.starCount > 0)
+            {
+                if(string.length(lineData.foundText) > 0)
+                {
+                    addItemView(markupScrollView)
+                    lineData.foundText = ""
+                }
+
+                if(lineData.starCount > 1)
+                {
+                    markupScrollView.bold = true
+                }
+                else
+                {
+                    markupScrollView.italic = true
+                }
+                lineData.starCount = 0
+            }
+
+            if(lineData.backtickCount > 0)
+            {
+                if(string.length(lineData.foundText) > 0)
+                {
+                    addItemView(markupScrollView)
+                    lineData.foundText = ""
+                }
+                markupScrollView.monospace = true
+                lineData.backtickCount = 0
+            }
+
+            lineData.foundText += charText
+        }
+    }
+}
+
+lineFunc = function(markupScrollView, lineText)
+{
+    lineData = {
+        onlyFoundSpace = true
+        foundMarkupCodeString = ""
+        foundText = ""
+        parenthesisStackCount = 0
+        starCount = 0
+        backtickCount = 0
+    }
+
+    markupScrollView.lineData = lineData
+
+    markupScrollView.isHeader = nil
+    markupScrollView.bold = nil
+    markupScrollView.italic = nil
+    markupScrollView.monospace = nil
+    
+    localCharFunc = function(charText, charIndex)
+    {
+        return charFunc(markupScrollView, charText, charIndex)
+    }
+
+    string.eachChar(lineText, localCharFunc)
+
+    addItemView(markupScrollView)
+    markupScrollView.currentRowView = nil #finish current row
+}
 
 create = function(parentView, viewLayout)
 {
     layout = getViewLayout(viewLayout)
     markupScrollView = parentView.addView(layout)
 
+    localLineFunc = function(line)
+    {
+        return lineFunc(markupScrollView, line)
+    }
+
     doSetText = function(markupText)
     {
         markupScrollView.removeAllRows()
         markupScrollView.currentText = markupText
 
-        topPaddingView = markupScrollView.addView(topPaddingLayout)
-
-        lineFunc = function(lineText)
-        {
-            itemLayout = textRowLayout
-            
-            onlyFoundSpace = true
-            skipLeadingSpace = false
-            foundMarkupCodeString = ""
-            foundText = ""
-            parenthesisStackCount = 0
-            captureStackCount = 0
-            starCount = 0
-            backtickCount = 0
-            currentRowView = false
-            preventWordSeparation = false
-            captureClosedAwaitingParenthesis = false
-
-            currentCapture = false
-
-            isHeader = false
-            italic = false
-            bold = false
-            monospace = false
-            
-
-            getRowView = function()
-            {
-                if(!currentRowView)
-                {
-                    rowLayout = {
-                        type = "view"
-                        size = vec2(itemRowXPadding,lineHeight)
-                    }
-                    .currentRowView = markupScrollView.addView(rowLayout)
-                    .preventWordSeparation = false
-                }
-                return currentRowView
-            }
-
-            addItemView = function(style)
-            {
-                rowView = getRowView()
-                #print("addItemView:", foundText)
-
-                layout = {
-                    type = "text"
-                    font = font
-                    alignmentX = "left"
-                    alignmentY = "bottom"
-                    fontSize = fontSize
-                }
-
-                if(isHeader)
-                {
-                    layout.font = boldFont
-                    layout.fontSize = headerFontSize
-                }
-
-                if(bold)
-                {
-                    layout.font = boldFont
-                }
-                else if(italic)
-                {
-                    layout.font = italicFont
-                }
-
-                if(monospace)
-                {
-                    layout.font = monoFont
-                }
-
-                usesBackgroundColorView = false
-
-                if(style)
-                {
-                    if(style.header)
-                    {
-                        layout.font = boldFont
-                        layout.fontSize = headerFontSize
-                    }
-
-                    if(style.bold)
-                    {
-                        layout.font = boldFont
-                    }
-                    else if(style.italic)
-                    {
-                        layout.font = italicFont
-                    }
-
-                    if(style.monospace)
-                    {
-                        layout.font = monoFont
-                    }
-
-                    if(style.font)
-                    {
-                        layout.font = style.font
-                    }
-
-                    if(style.fontSize)
-                    {
-                        layout.fontSize = style.fontSize
-                    }
-
-                    if(style.color)
-                    {
-                        layout.color = style.color
-                    }
-
-                    if(style.backgroundColor)
-                    {
-                        usesBackgroundColorView = true
-                        textViewLayout = layout
-                        textViewLayout.id = "textView"
-                        
-                        layout = {
-                            type = "color"
-                            color = style.backgroundColor
-                            alignmentX = "left"
-                            alignmentY = "bottom"
-                            subviews = {
-                                textViewLayout
-                            }
-                        }
-                    }
-                }
-                
-                backgroundView = rowView.addView(layout)
-                textView = nil
-                if(usesBackgroundColorView)
-                {
-                    textView = backgroundView.getView("textView")
-                }
-                else
-                {
-                    textView = backgroundView
-                }
-
-                textView.wrapWidth = markupScrollView.parentSize.x - rowView.size.x - itemRowXPadding - 20
-                textView.wrapClamp = true
-                textView.preventWordSeparation = preventWordSeparation
-                textView.text = foundText
-
-                .preventWordSeparation = true #we allow word separation for the first item in the row only
-
-                backgroundView.pos = vec3(rowView.size.x, 0, 0)
-
-                rowView.size = vec2(rowView.size.x + textView.size.x, 
-                                      math.max(textView.size.y, rowView.size.y))
-
-
-                
-
-                if(usesBackgroundColorView)
-                {
-                    backgroundView.size = textView.size
-                }
-
-                addedTextLength = string.length(textView.text)
-                totalTextLength = string.length(foundText)
-
-                #print("addedTextLength:", addedTextLength, " totalTextLength:", totalTextLength)
-
-                if(addedTextLength < totalTextLength)
-                {
-                    .currentRowView = false #finish current row #bug, this is not sticking
-                    if(addedTextLength != 0)
-                    {
-                        remainingText = string.subString(foundText, addedTextLength)
-
-                        startIndex = 0
-                        string.eachChar(remainingText, function(charText, charIndex){
-                            if(charText != " ")
-                            {
-                                .startIndex = charIndex
-                                return true
-                            }
-                        })
-
-                        if(startIndex != 0)
-                        {
-                            .foundText = string.subString(remainingText, startIndex)
-                        }
-                        else
-                        {
-                            .foundText = remainingText
-                        }
-                    }
-                    
-                    addItemView(style)
-                }
-            }
-            
-            renderCapture = function(capture, parentStyle)
-            {
-                remainingText = foundText
-                style = {}
-                if(parentStyle)
-                {
-                    for(k,v in parentStyle)
-                    {
-                        style[k] = v
-                    }
-                }
-                loadedValue = load(capture.markupString, scene)
-                #print("in renderCapture loadedValue:", loadedValue, " from string:", capture.markupString)
-                if(type(loadedValue) == "table")
-                {
-                    for(k,v in loadedValue)
-                    {
-                        style[k] = v
-                    }
-                }
-
-                for(item in capture.items)
-                {
-                    if(type(item) == "string")
-                    {
-                        .foundText = item
-                        addItemView(style)
-                    }
-                    else
-                    {
-                        renderCapture(item, style)
-                    }
-                }
-                .foundText = remainingText
-            }
-
-            charFunc = function(charText, charIndex)
-            { 
-                if(captureClosedAwaitingParenthesis)
-                {
-                    if(charText != "(")
-                    {
-                        print("error: expected '('")
-                        return true
-                    }
-                    .parenthesisStackCount = 1
-                    .foundMarkupCodeString = ""
-                    .captureClosedAwaitingParenthesis = false
-                }
-                else if(parenthesisStackCount > 0)
-                {
-                    if(charText == ")")
-                    {
-                        parenthesisStackCount--
-                        if(parenthesisStackCount == 0)
-                        {
-                            print("found markup:", foundMarkupCodeString)
-                            if(currentCapture)
-                            {
-                                currentCapture.markupString = foundMarkupCodeString
-                                parentCapture = currentCapture.parentCapture
-                                currentCapture.parentCapture = nil
-
-                                if(currentCapture.currentText)
-                                {
-                                    table.insert(currentCapture.items, currentCapture.currentText)
-                                    currentCapture.currentText = nil
-                                }
-                                if(!parentCapture)
-                                {
-                                    renderCapture(currentCapture)
-                                }
-                                .currentCapture = parentCapture
-                            }
-                            else
-                            {
-                                print("todo set line style")
-                            }
-                        }
-                    }
-                    else if(charText == "(")
-                    {
-                        parenthesisStackCount++
-                    }
-
-                    if(parenthesisStackCount != 0) 
-                    {
-                        .foundMarkupCodeString = foundMarkupCodeString + charText
-                    }
-                }
-                else if(charText == "[")
-                {
-                    prevCapture = currentCapture
-                    .currentCapture = {
-                        parentCapture = prevCapture
-                        items = {}
-                    }
-
-                    if(prevCapture)
-                    {
-                        if(prevCapture.currentText)
-                        {
-                            table.insert(prevCapture.items, prevCapture.currentText)
-                            prevCapture.currentText = nil
-                        }
-
-                        table.insert(prevCapture.items, currentCapture)
-                    }
-                    else
-                    {
-                        if(string.length(foundText) > 0)
-                        {
-                            addItemView()
-                            .foundText = ""
-                        }
-                    }
-                }
-                else if(charText == "]")
-                {
-                    .captureClosedAwaitingParenthesis = true
-                }
-                else
-                {
-                    if(currentCapture)
-                    {
-                        if(!currentCapture.currentText)
-                        {
-                            currentCapture.currentText = charText
-                        }
-                        else
-                        {
-                            currentCapture.currentText += charText
-                        }
-                    }
-                    else if(charText == "*")
-                    {
-                        if(italic or bold)
-                        {
-                            if(starCount > 0 or italic)
-                            {
-                                addItemView()
-                                .foundText = ""
-                                .italic = false
-                                .bold = false
-                                .starCount = 0
-                            }
-                            else
-                            {
-                                starCount++
-                            }
-                        }
-                        else
-                        {
-                            starCount++
-                        }
-                    }
-                    else if(charText == "`")
-                    {
-                        if(monospace)
-                        {
-                            addItemView()
-                            .foundText = ""
-                            .monospace = false
-                            .backtickCount = 0
-                        }
-                        else
-                        {
-                            backtickCount++
-                        }
-                    }
-                    else if(onlyFoundSpace)
-                    {
-                        if(charText == "(")
-                        {
-                            .parenthesisStackCount = 1
-                            .foundMarkupCodeString = ""
-                            .skipLeadingSpace = true
-                        }
-                        else if(charText == "#")
-                        {
-                            .isHeader = true
-                            .skipLeadingSpace = true
-                        }
-                        else
-                        {
-                            if(charText != " ")
-                            {
-                                .onlyFoundSpace = false
-                                foundText += charText
-                            }
-                            else if(!skipLeadingSpace)
-                            {
-                                foundText += charText
-                            }
-
-                        }
-                    }
-                    else
-                    {
-                        if(starCount > 0)
-                        {
-                            if(string.length(foundText) > 0)
-                            {
-                                addItemView()
-                                .foundText = ""
-                            }
-
-                            if(starCount > 1)
-                            {
-                                .bold = true
-                            }
-                            else
-                            {
-                                .italic = true
-                            }
-                            .starCount = 0
-                        }
-
-                        if(backtickCount > 0)
-                        {
-                            if(string.length(foundText) > 0)
-                            {
-                                addItemView()
-                                .foundText = ""
-                            }
-                            .monospace = true
-                            .backtickCount = 0
-                        }
-
-                        foundText += charText
-                    }
-                }
-            }
-
-
-            string.eachChar(lineText, charFunc)
-
-            addItemView()
-            .currentRowView = false #finish current row
-            .isHeader = false
-            
-        }
+        markupScrollView.addView(topPaddingLayout)
 
         if(markupText)
         {
-            string.eachLine(markupText, lineFunc)
+            string.eachLine(markupText, localLineFunc)
         }
     }
 
