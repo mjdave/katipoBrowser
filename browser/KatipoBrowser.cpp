@@ -235,7 +235,7 @@ void KatipoBrowser::init()
         return TUI_NIL;
     });
     
-    //katipo.loadSite(siteSavePath, untrustedSiteCodePermissionFunction)
+    //katipo.loadSite(siteSavePath, untrustedSiteCodePermissionFunction, publicDataOrNil)
     katipoTable->setFunction("loadSite", [this](TuiTable* args,
                                                 TuiRef* existingResult,
                                                 TuiFunctionCallData* incomingCallData,
@@ -245,6 +245,12 @@ void KatipoBrowser::init()
             std::string hostID = args->arrayObjects[0]->getStringValue();
             std::string siteSavePath = args->arrayObjects[1]->getStringValue();
             TuiRef* publicData = args->arrayObjects[2];
+            
+            if(currentSiteView)
+            {
+                currentSiteView->fadeOut();
+                currentSiteView = nullptr;
+            }
             
             //katipo.loadSite(bookmarkInfo.hostID, siteSavePath, untrustedSiteCodePermissionFunction, isDustyOldCacheLoad)
             bool isDustyOldCacheLoad = false;
@@ -300,6 +306,26 @@ void KatipoBrowser::init()
                                 std::string remoteURL = urlRef->getStringValue();
                                 doGet(siteConnectionInfo.trackerKey, hostID, remoteURL, siteConnectionInfo.hostName, args);
                             }
+                            
+                        }
+                    }
+                    return TUI_NIL;
+                });
+                
+                //this forwards the site's call to it's katipo.linkClicked(url) function on to the main katipoBrowser/code.tui linkClicked function
+                siteConnectionInfo.rootTable->getTable("katipo")->setFunction("linkClicked", [this, hostID](TuiTable* args, TuiRef* existingResult, TuiFunctionCallData* incomingCallData, TuiDebugInfo* callingDebugInfo) -> TuiRef* {
+                    if(args->arrayObjects.size() >= 1)
+                    {
+                        TuiRef* urlRef = args->arrayObjects[0];
+                        if(urlRef->type() == Tui_ref_type_STRING)
+                        {
+                            if(currentSiteView)
+                            {
+                                currentSiteView->fadeOut();
+                                currentSiteView = nullptr;
+                            }
+                            TuiFunction* mainLinkClickedFunction = katipoTable->getFunction("onLinkClick");
+                            mainLinkClickedFunction->call("onLinkClick", urlRef);
                             
                         }
                     }
@@ -387,7 +413,9 @@ void KatipoBrowser::init()
             }
             
             siteConnectionInfo.mainView = MJView::loadUnknownViewFromTable(sceneTable->getTable("mainView"), MainController::getInstance()->mainMJView->getSubViewWithID("siteContent"), true, siteConnectionInfo.rootTable);
-            
+            currentSiteView = siteConnectionInfo.mainView;
+            currentSiteView->alpha = 0.0;
+            currentSiteView->fadeIn();
             
             std::string siteMarkupPath = siteSavePath + "/index.tml";
             if(Tui::fileExistsAtPath(siteMarkupPath))
@@ -455,8 +483,16 @@ void KatipoBrowser::init()
                     {
                         trackerPort = portSplit[1];
                     }
-                    remoteURL = remoteURL.substr(split[0].length() + 1, -1);
-                    hostName = split[1];
+                    
+                    if(split.size() > 1)
+                    {
+                        remoteURL = remoteURL.substr(split[0].length() + 1, -1);
+                        hostName = split[1];
+                    }
+                    else
+                    {
+                        hostName = "";
+                    }
                 }
                 
                 std::string trackerKey = trackerURL + ":" + trackerPort;

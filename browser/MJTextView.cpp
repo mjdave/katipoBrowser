@@ -161,7 +161,7 @@ void MJTextView::updateDimensions()
 		irect enclosingRect = font->calculateEnclosingRect(text, textAlignment, wrapWidth * scaleToUse, 1.0 / textRenderScaleToUse, wrapClamp, &wrapClampCharIndex, preventWordSeparation);
 		setSizeInternal((dvec2(enclosingRect.size) * fontGeometryScale) / scaleToUse);
         stateTable->setVec2("size", ((dvec2(enclosingRect.size) * fontGeometryScale) / scaleToUse));
-        if(wrapClampCharIndex > -1)
+        if(wrapClampCharIndex > -1 && stateTable->objectsByStringKey.count("text") != 0)
         {
             if(wrapClampCharIndex == 0)
             {

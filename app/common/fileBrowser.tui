@@ -212,6 +212,11 @@ updateVisuals = function(fileBrowserView)
     }
 }
 
+compareFunction = function(a,b)
+{
+    return a.fileName < b.fileName
+}
+
 setDirectoryTree = function(fileBrowserView, directoryTree, selectedIndex, isFromNavigation) #todo we could also create directoryTree if given a path argument. directoryTreeOrPath, and add a createDirectoryTree function
 {
     fileBrowserView.currentFile = directoryTree
@@ -311,10 +316,6 @@ setDirectoryTree = function(fileBrowserView, directoryTree, selectedIndex, isFro
 
             if(subTree.files)
             {
-                compareFunction = function(a,b)
-                {
-                    return a.fileName < b.fileName
-                }
                 sortedFiles = {}
                 for(i,file in subTree.files)
                 {
@@ -373,7 +374,7 @@ setDirectoryTree = function(fileBrowserView, directoryTree, selectedIndex, isFro
                         }
                     }
 
-                    rightPaneScrollView.insertRow(itemView)
+                   # rightPaneScrollView.insertRow(itemView)
                     table.insert(fileBrowserView.rightItemViews, itemView)
 
                     if(onBrowserItemCreate)
@@ -388,10 +389,6 @@ setDirectoryTree = function(fileBrowserView, directoryTree, selectedIndex, isFro
     if(directoryTree.files)
     {
         fileBrowserView.leftItemViews = {}
-        compareFunction = function(a,b)
-        {
-            return a.fileName < b.fileName
-        }
 
         sortedFiles = {}
         for(i,file in directoryTree.files)
@@ -450,7 +447,7 @@ setDirectoryTree = function(fileBrowserView, directoryTree, selectedIndex, isFro
                 }
             }
 
-            leftPaneScrollView.insertRow(itemView)
+            #leftPaneScrollView.insertRow(itemView)
             table.insert(fileBrowserView.leftItemViews, itemView)
 
             if(onBrowserItemCreate)

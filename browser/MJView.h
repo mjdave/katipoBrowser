@@ -60,9 +60,13 @@ public:
     bool isTopLevel = false;
     std::string relativeViewToLoadID;
 
-    float alpha;
+    float alpha = 1.0;
     bool masksEvents = false;
 	MJRenderPass currentRenderPass;
+    
+    bool fadingIn = false;
+    bool fadingOut = false;
+    double fadeDuration = 0.0;
 
 	dmat4 combinedRenderMatrixWithoutAdditionalMatrix = dmat4(1.0);
 	dmat4 additionalMatrix = dmat4(1.0);
@@ -306,6 +310,25 @@ public:
     
     void doRelativeViewLayoutsForTablePostLoad();
     
+    void fadeIn(float duration = 0.25) {
+        fadeDuration = duration;
+        fadingIn = true;
+        setHidden(false);
+        if(alpha >= 0.999)
+        {
+            alpha = 0;
+        }
+        fadingOut = false;
+    }
+    
+    void fadeOut(float duration = 0.25) {
+        if(!hidden && alpha > 0.001)
+        {
+            fadeDuration = duration;
+            fadingIn = false;
+            fadingOut = true;
+        }
+    }
     
     
 protected:

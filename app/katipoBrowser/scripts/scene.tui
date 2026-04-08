@@ -31,6 +31,7 @@ mainView = {
                     type = "scrollView"
                     alignmentY = "above"
                     layoutParentID = "urlTextEntry"
+                    hidden = true
                 }
                 {
                     id = "urlTextEntry"

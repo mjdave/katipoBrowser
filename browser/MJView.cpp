@@ -99,10 +99,11 @@ void MJView::initInternals()
     
     stateTable->setVec3("pos", baseOffset);
     stateTable->setVec2("size", size);
+    stateTable->setDouble("alpha", alpha);
     
     //todo maybe this is a bit slow to do all the time like this. meta tables needed?
     stateTable->setFunction("addView", [this](TuiTable* args, TuiRef* existingResult, TuiFunctionCallData* incomingCallData, TuiDebugInfo* callingDebugInfo) -> TuiRef* {
-        if(args->arrayObjects.size() >= 1)
+        if(args && args->arrayObjects.size() >= 1)
         {
             TuiRef* viewTableRef = args->arrayObjects[0];
             if(viewTableRef->type() == Tui_ref_type_TABLE)
@@ -117,7 +118,7 @@ void MJView::initInternals()
         return TUI_NIL;
     });
     stateTable->setFunction("removeView", [this](TuiTable* args, TuiRef* existingResult, TuiFunctionCallData* incomingCallData, TuiDebugInfo* callingDebugInfo) -> TuiRef* {
-        if(args->arrayObjects.size() >= 1)
+        if(args && args->arrayObjects.size() >= 1)
         {
             TuiRef* viewTableRef = args->arrayObjects[0];
             if(viewTableRef->type() == Tui_ref_type_TABLE)
@@ -135,7 +136,7 @@ void MJView::initInternals()
     });
     
     stateTable->setFunction("getView", [this](TuiTable* args, TuiRef* existingResult, TuiFunctionCallData* incomingCallData, TuiDebugInfo* callingDebugInfo) -> TuiRef* {
-        if(args->arrayObjects.size() >= 1)
+        if(args && args->arrayObjects.size() >= 1)
         {
             TuiRef* viewNameRef = args->arrayObjects[0];
             if(viewNameRef->type() == Tui_ref_type_STRING)
@@ -153,7 +154,7 @@ void MJView::initInternals()
     });
     
     stateTable->setFunction("locationRelativeToView", [this](TuiTable* args, TuiRef* existingResult, TuiFunctionCallData* incomingCallData, TuiDebugInfo* callingDebugInfo) -> TuiRef* {
-        if(args->arrayObjects.size() >= 2)
+        if(args && args->arrayObjects.size() >= 2)
         {
             TuiRef* locationRef = args->arrayObjects[0];
             TuiRef* viewTableRef = args->arrayObjects[1];
@@ -175,7 +176,7 @@ void MJView::initInternals()
     });
     
     stateTable->setFunction("setClipChildren", [this](TuiTable* args, TuiRef* existingResult, TuiFunctionCallData* incomingCallData, TuiDebugInfo* callingDebugInfo) -> TuiRef* {
-        if(args->arrayObjects.size() >= 1)
+        if(args && args->arrayObjects.size() >= 1)
         {
             TuiRef* boolRef = args->arrayObjects[0];
             
@@ -191,6 +192,43 @@ void MJView::initInternals()
         return TUI_NIL;
     });
     
+    stateTable->setFunction("fadeIn", [this](TuiTable* args, TuiRef* existingResult, TuiFunctionCallData* incomingCallData, TuiDebugInfo* callingDebugInfo) -> TuiRef* {
+        double duration = 0.25;
+        if(args && args->arrayObjects.size() >= 1)
+        {
+            TuiRef* numberRef = args->arrayObjects[0];
+            
+            if(numberRef->type() == Tui_ref_type_NUMBER)
+            {
+                duration = (((TuiNumber*)numberRef)->value);
+            }
+            else
+            {
+                TuiParseError(callingDebugInfo->fileName.c_str(), callingDebugInfo->lineNumber, "expected number");
+            }
+        }
+        fadeIn(duration);
+        return TUI_NIL;
+    });
+    
+    stateTable->setFunction("fadeOut", [this](TuiTable* args, TuiRef* existingResult, TuiFunctionCallData* incomingCallData, TuiDebugInfo* callingDebugInfo) -> TuiRef* {
+        double duration = 0.25;
+        if(args && args->arrayObjects.size() >= 1)
+        {
+            TuiRef* numberRef = args->arrayObjects[0];
+            
+            if(numberRef->type() == Tui_ref_type_NUMBER)
+            {
+                duration = (((TuiNumber*)numberRef)->value);
+            }
+            else
+            {
+                TuiParseError(callingDebugInfo->fileName.c_str(), callingDebugInfo->lineNumber, "expected number");
+            }
+        }
+        fadeOut(duration);
+        return TUI_NIL;
+    });
     
 }
 
@@ -575,6 +613,11 @@ void MJView::setHidden(bool hidden_)
     {
         hidden = hidden_;
 		parentHiddenChanged(hidden_);
+        if(hidden && fadingOut)
+        {
+            stateTable->setDouble("alpha", 1.0);
+            fadingOut = false;
+        }
     }
 }
 
@@ -740,9 +783,33 @@ void MJView::orderFront(MJView* subView)
 
 void MJView::update(float dt)
 {
-    if(hidden || invalidated || !hasUpdateFunctionOrChildWithUpdateFunction)
+    if(hidden || invalidated || (!hasUpdateFunctionOrChildWithUpdateFunction && !fadingIn && !fadingOut))
     {
         return;
+    }
+    
+    if(fadingIn)
+    {
+        alpha += dt * (1.0 / fadeDuration);
+        if(alpha >= 1)
+        {
+            alpha = 1.0;
+            fadingIn = false;
+        }
+        stateTable->setDouble("alpha", alpha);
+    }
+    else if(fadingOut)
+    {
+        alpha -= dt * (1.0 / fadeDuration);
+        if(alpha <= 0)
+        {
+            alpha = 1.0;
+            fadingOut = false;
+            stateTable->setBool("hidden", true);
+            stateTable->setDouble("alpha", alpha);
+            return;
+        }
+        stateTable->setDouble("alpha", alpha);
     }
 
     if(updateFunction)

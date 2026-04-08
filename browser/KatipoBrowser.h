@@ -41,6 +41,8 @@ public:
     
     std::map<std::string, SiteConnectionInfo> siteConnectionInfosByHostID;
     
+    MJView* currentSiteView = nullptr;
+    
     uint32_t updateTimerID;
 
 public:

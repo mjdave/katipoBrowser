@@ -195,34 +195,18 @@ getCallback = function(result, hostID, url)
     }
 }
 
-urlTextEntry.onChange = function(textValue, confirmChanges){
-    if(confirmChanges and string.length(textValue) > 0)
-    {
-        siteContentBackground.goalColor = vec4(0.0,0.015,0.01,0.6)
-        katipo.get(textValue, getCallback)
-        bookmarksScrollView.hidden = true
-    }
-}
 
+bookmarksScrollView.onParentSizeChanged = function(parentSize)
+{
+    totalHeight = scene.bookMarkHeight * table.count(bookmarks)
+    height = math.min(totalHeight, parentSize.y - scene.urlTextEntryHeight)
+    width = math.min(scene.bookmarksListWidth, parentSize.x)
+    return vec2(width, height)
+}
 
 loadBookmarks = function()
 {
-    if(table.count(bookmarks) == 0)
-    {
-        bookmarksScrollView.hidden = true
-        return
-    }
-
-    bookmarksScrollView.hidden = false
-
-    bookmarksScrollView.onParentSizeChanged = function(parentSize)
-    {
-        totalHeight = scene.bookMarkHeight * table.count(bookmarks)
-        height = math.min(totalHeight, parentSize.y - scene.urlTextEntryHeight)
-        width = math.min(scene.bookmarksListWidth, parentSize.x)
-        return vec2(width, height)
-    }
-    
+    bookmarksScrollView.removeAllRows()
     for(i = table.count(bookmarks) - 1, i>=0, i--)
     {
         bookmarkInfo = bookmarks[i]
@@ -270,5 +254,33 @@ loadBookmarks = function()
     }
 }
 
-loadBookmarks()
+
+urlTextEntry.onChange = function(textValue, confirmChanges)
+{
+    if(confirmChanges and string.length(textValue) > 0)
+    {
+        siteContentBackground.goalColor = vec4(0.0,0.015,0.01,0.6)
+        katipo.get(textValue, getCallback)
+        bookmarksScrollView.hidden = true
+    }
+}
+
+urlTextEntry.onStartedEditing = function()
+{
+    print("onStartedEditing")
+    loadBookmarks()
+    bookmarksScrollView.hidden = false
+}
+
+urlTextEntry.onFinishedEditing = function()
+{
+    bookmarksScrollView.fadeOut()
+    print("fadeout")
+}
+
 urlTextEntry.textEntryClickFunction()
+
+katipo.onLinkClick = function(linkString)
+{
+    katipo.get(linkString, getCallback)
+}

@@ -19,6 +19,8 @@
 		5B5A481B2F308843004809C0 /* host.c in Sources */ = {isa = PBXBuildFile; fileRef = 5B5A480E2F308843004809C0 /* host.c */; };
 		5B5A481E2F308860004809C0 /* mdb.c in Sources */ = {isa = PBXBuildFile; fileRef = 5B5A481C2F308860004809C0 /* mdb.c */; };
 		5B5A481F2F308860004809C0 /* midl.c in Sources */ = {isa = PBXBuildFile; fileRef = 5B5A481D2F308860004809C0 /* midl.c */; };
+		5B747B4A2F84620300EB339D /* MoltenVK.xcframework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 5B747B492F84620300EB339D /* MoltenVK.xcframework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		5B747B4B2F84621300EB339D /* MoltenVK.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5B747B492F84620300EB339D /* MoltenVK.xcframework */; };
 		5B7843EE2F3130D2008D7F87 /* libsodium.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 5B7843ED2F3130D2008D7F87 /* libsodium.a */; };
 		5B7843F02F3131E5008D7F87 /* app in Resources */ = {isa = PBXBuildFile; fileRef = 5B7843EF2F3131E5008D7F87 /* app */; };
 		5B7843FB2F313EEC008D7F87 /* SDL3.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5B7843FA2F313E86008D7F87 /* SDL3.framework */; };
@@ -32,7 +34,6 @@
 		5BA346232E11365A004A7F87 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5BA346222E11365A004A7F87 /* QuartzCore.framework */; };
 		5BA7DF992E3ADB7D00A73AB2 /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5BA7DF932E3ADB7C00A73AB2 /* AVFoundation.framework */; };
 		5BED53032E6014BD0028ED11 /* MediaPlayer.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5BED52FD2E6014BD0028ED11 /* MediaPlayer.framework */; };
-		5BF359292F30817300B0427E /* MoltenVK.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5BF359282F30817300B0427E /* MoltenVK.xcframework */; };
 		5BF3592B2F30817C00B0427E /* SDL3_mixer.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5BF3592A2F30817B00B0427E /* SDL3_mixer.framework */; };
 		5BF3592C2F30818000B0427E /* SDL3_mixer.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 5BF3592A2F30817B00B0427E /* SDL3_mixer.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 /* End PBXBuildFile section */
@@ -56,6 +57,7 @@
 			files = (
 				5B7843FC2F313EF0008D7F87 /* SDL3.framework in Embed Frameworks */,
 				5BF3592C2F30818000B0427E /* SDL3_mixer.framework in Embed Frameworks */,
+				5B747B4A2F84620300EB339D /* MoltenVK.xcframework in Embed Frameworks */,
 			);
 			name = "Embed Frameworks";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -78,6 +80,7 @@
 		5B5A48132F308843004809C0 /* unix.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; name = unix.c; path = "../katipo/thirdParty/enet-1.3.18/unix.c"; sourceTree = SOURCE_ROOT; };
 		5B5A481C2F308860004809C0 /* mdb.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; name = mdb.c; path = ../katipo/thirdParty/liblmdb/mdb.c; sourceTree = SOURCE_ROOT; };
 		5B5A481D2F308860004809C0 /* midl.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; name = midl.c; path = ../katipo/thirdParty/liblmdb/midl.c; sourceTree = SOURCE_ROOT; };
+		5B747B492F84620300EB339D /* MoltenVK.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; name = MoltenVK.xcframework; path = thirdPartyiOS/MoltenVK/dynamic/MoltenVK.xcframework; sourceTree = "<group>"; };
 		5B7843ED2F3130D2008D7F87 /* libsodium.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libsodium.a; path = ../katipo/thirdParty/libsodium/ios/lib/libsodium.a; sourceTree = "<group>"; };
 		5B7843EF2F3131E5008D7F87 /* app */ = {isa = PBXFileReference; lastKnownFileType = folder; name = app; path = ../app; sourceTree = "<group>"; };
 		5B7843F12F313E86008D7F87 /* SDL.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = SDL.xcodeproj; path = "../thirdParty/SDL3-3.4.0/Xcode/SDL/SDL.xcodeproj"; sourceTree = SOURCE_ROOT; };
@@ -156,8 +159,8 @@
 				5BA3461F2E1135DA004A7F87 /* CoreGraphics.framework in Frameworks */,
 				5BA3461D2E1135CF004A7F87 /* UIKit.framework in Frameworks */,
 				5BA3461B2E1135AF004A7F87 /* IOSurface.framework in Frameworks */,
+				5B747B4B2F84621300EB339D /* MoltenVK.xcframework in Frameworks */,
 				5BA346192E11359C004A7F87 /* Metal.framework in Frameworks */,
-				5BF359292F30817300B0427E /* MoltenVK.xcframework in Frameworks */,
 				5BF3592B2F30817C00B0427E /* SDL3_mixer.framework in Frameworks */,
 				5B7843FB2F313EEC008D7F87 /* SDL3.framework in Frameworks */,
 				5B7843EE2F3130D2008D7F87 /* libsodium.a in Frameworks */,
@@ -171,6 +174,7 @@
 		5B4ABDA52E111EBE009220AE = {
 			isa = PBXGroup;
 			children = (
+				5B747B492F84620300EB339D /* MoltenVK.xcframework */,
 				5B7843EF2F3131E5008D7F87 /* app */,
 				5B4ABEBA2E1121D9009220AE /* Frameworks */,
 				5B4ABDAF2E111EBE009220AE /* Products */,
@@ -547,7 +551,7 @@
 					"\"$(SRCROOT)/../thirdPartyiOS/curl\"",
 					"\"$(SRCROOT)/../katipo/thirdParty/libsodium/ios/lib\"",
 				);
-				MARKETING_VERSION = 0.1.2;
+				MARKETING_VERSION = 0.2.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.katipobrowser;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = NO;
@@ -607,7 +611,7 @@
 					"\"$(SRCROOT)/../thirdPartyiOS/curl\"",
 					"\"$(SRCROOT)/../katipo/thirdParty/libsodium/ios/lib\"",
 				);
-				MARKETING_VERSION = 0.1.2;
+				MARKETING_VERSION = 0.2.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.katipobrowser;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = NO;

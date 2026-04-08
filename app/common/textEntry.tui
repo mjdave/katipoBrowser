@@ -109,6 +109,11 @@ finishEditing = function(textEntryView, confirmChanges)
                 updateText(textEntryView, textEntryView.editStartTextValue)
             }
         }
+
+        if(textEntryView.onFinishedEditing)
+        {
+            textEntryView.onFinishedEditing()
+        }
     }
 }
 
@@ -520,6 +525,11 @@ create = function(parentView, viewLayout)
                 }
                 
                 textEntryView.textEntryListenerID = eventManager.setTextEntryListener(textEntry, keyChanged)
+
+                if(textEntryView.onStartedEditing)
+                {
+                    textEntryView.onStartedEditing()
+                }
             }
         }
     }

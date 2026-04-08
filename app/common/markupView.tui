@@ -15,6 +15,9 @@ monoFont = "robotoMono"
 fontSize = 16
 headerFontSize = 26
 
+linkColor = vec4(0.5,0.8,1.0,1.0)
+onLinkClick = false
+
 textLayout = {
     type = "text"
     font = "roboto"
@@ -57,7 +60,7 @@ headerTextLayout = {
 
 getViewLayout = function(incomingLayout)
 {
-    print("incomingLayout:", incomingLayout)
+    #print("incomingLayout:", incomingLayout)
     layout = {}
     for(k,v in incomingLayout)
     {
@@ -69,9 +72,65 @@ getViewLayout = function(incomingLayout)
     return layout
 }
 
-loadMarkupCode = function(lineText) #assumes "(" is first char
+updateVisuals = function(view)
 {
+    if(view.mouseIsDown)
+    {
+        view.color = view.mouseDownColor
+    }
+    else if(view.isHover)
+    {
+        view.color = view.highlightColor
+    }
+    else
+    {
+        view.color = view.baseColor
+    }
+}
 
+createLinkButton = function(view, link)
+{
+    if(!view.baseColor)
+    {
+        if(!view.color)
+        {
+            view.color = linkColor
+        }
+        view.baseColor = view.color
+        view.highlightColor = view.baseColor + vec4(0.0,0.2,0.4,0.4)
+        view.mouseDownColor = view.baseColor + vec4(0.5,0.5,0.5,0.5)
+    }
+
+    view.click = function()
+    {
+        katipo.linkClicked(link)
+    }
+
+    view.hoverStart = function()
+    {
+        view.isHover = true
+        updateVisuals(view)
+    }
+
+    view.hoverEnd = function()
+    {
+        view.isHover = false
+        updateVisuals(view)
+    }
+
+    view.mouseDown = function()
+    {
+        view.mouseIsDown = true
+        updateVisuals(view)
+    }
+
+    view.mouseUp = function()
+    {
+        view.mouseIsDown = false
+        updateVisuals(view)
+    }
+
+    updateVisuals(view)
 }
 
 getRowView = function(markupScrollView)
@@ -117,12 +176,14 @@ addItemView = function(markupScrollView, style)
     }
 
     usesBackgroundColorView = false
+    link = false
 
     if(style)
     {
         if(style.link)
         {
-            layout.color = vec4(0.5,0.8,1.0,1.0)
+            link = style.link
+            layout.color = linkColor
             layout.font = boldFont
             # add button view
         }
@@ -180,7 +241,7 @@ addItemView = function(markupScrollView, style)
         }
     }
 
-    print("layout:", layout)
+    #print("layout:", layout)
     
     backgroundView = rowView.addView(layout)
     textView = nil
@@ -211,6 +272,11 @@ addItemView = function(markupScrollView, style)
     if(usesBackgroundColorView)
     {
         backgroundView.size = textView.size
+    }
+
+    if(link)
+    {
+        createLinkButton(backgroundView, link)
     }
 
     addedTextLength = string.length(textView.text)
@@ -308,7 +374,7 @@ charFunc = function(markupScrollView, charText, charIndex)
             lineData.parenthesisStackCount--
             if(lineData.parenthesisStackCount == 0)
             {
-                print("found markup:", lineData.foundMarkupCodeString)
+                #print("found markup:", lineData.foundMarkupCodeString)
                 currentCapture = lineData.currentCapture
                 if(currentCapture)
                 {
