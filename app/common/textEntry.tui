@@ -14,16 +14,13 @@ updateVisuals = function(textEntryView)
 {
     if(textEntryView.textView)
     {
-        if(textEntryView.textView.text != textEntryView.text)
+        if(textEntryView.text)
         {
-            if(textEntryView.text)
-            {
-                textEntryView.textView.text = textEntryView.text
-            }
-            else
-            {
-                textEntryView.textView.text = ""
-            }
+            textEntryView.textView.text = textEntryView.text
+        }
+        else
+        {
+            textEntryView.textView.text = ""
         }
 
         if(textEntryView.disabled)
@@ -372,10 +369,17 @@ create = function(parentView, viewLayout)
                 keyMap = {
                     [keys.keyCodes.key_return] = function(isDown, keyCode, modCode, isRepeat)
                     {
-                        if(isDown and (!isRepeat))
+                        if(isDown)
                         {
-                            #print("modCode:", modCode)
-                            finishEditing(textEntryView, true)
+                            if(modCode == keys.modifiers.shift)
+                            {
+                                newText = textEntryView.text + "\n"
+                                updateText(textEntryView, newText)
+                            }
+                            else if(!isRepeat)
+                            {
+                                finishEditing(textEntryView, true)
+                            }
                         }
                     }
                     [keys.keyCodes.backspace] = function(isDown, keyCode, modCode, isRepeat)
@@ -391,7 +395,7 @@ create = function(parentView, viewLayout)
                                     if(textLength > 0)
                                     {
                                         removePos = math.max(textLength + textEntryView.cursorOffset, 0)
-                                        if(removePos > 0)
+                                        if(removePos >= 0)
                                         {
                                             newText = string.subString(textEntryView.text,0,removePos) + string.subString(textEntryView.text, removePos + 1)
                                         }
@@ -443,22 +447,23 @@ create = function(parentView, viewLayout)
                     #    }
                     #    return true 
                     #end,
-                    /*[
-                    [keyMapping:getMappingIndex("textEntry", "delete")] = function(isDown, isRepeat)
+                    
+                    [keys.keyCodes.delete] = function(isDown, keyCode, modCode, isRepeat)
+                    {
                         if(isDown)
-                            {
+                        {
                             if(textEntryView.text and string.length(textEntryView.text) > 0)
                             {
                                 newText = ""
-                                if(textEntryView.cursorOffset and textEntryView.cursorOffset ~= 0)
+                                if(textEntryView.cursorOffset and textEntryView.cursorOffset != 0)
                                 {
                                     textLength = string.length(textEntryView.text)
                                     if(textLength > 0)
                                     {
-                                        removeAfterPos = math.max(textLength + textEntryView.cursorOffset, 0) + 1
-                                        if(removeAfterPos > 0 and removeAfterPos < textLength)
+                                        removePos = math.max(textLength + textEntryView.cursorOffset, 0)
+                                        if(removePos < textLength)
                                         {
-                                            newText = textEntryView.text:sub(1,removeAfterPos - 1) .. textEntryView.text:sub(removeAfterPos + 1,-1)
+                                            newText = string.subString(textEntryView.text, 0, removePos) + string.subString(textEntryView.text, removePos + 1)
                                             textEntryView.cursorOffset = textEntryView.cursorOffset + 1
                                         }
                                         else
@@ -471,26 +476,22 @@ create = function(parentView, viewLayout)
                                         return
                                     }
                                 }
-                                else
-                                {
-                                    newText = textEntryView.text:sub(1, -2)
-                                }
 
                                 updateText(textEntryView, newText)
                             }
                         }
-                        return true
-                    end,
-                    [keyMapping:getMappingIndex("game", "escape")] = function(isDown, isRepeat)
-                        if(isDown and (!isRepeat))
+                    }
+
+                    [keys.keyCodes.escape] = function(isDown, keyCode, modCode, isRepeat)
+                    {
+                        if(isDown and !isRepeat)
                         {
                             finishEditing(textEntryView, false)
                         }
-                        return true 
-                    end,
-                   [keyMapping:getMappingIndex("textEntry", "prevCommand")] = function(isDown, isRepeat) if(isDown then cursorChanged(textEntryView, nil, 1) end return true end,
-                    [keyMapping:getMappingIndex("textEntry", "nextCommand")] = function(isDown, isRepeat) if(isDown then cursorChanged(textEntryView, nil, -1) end return true end,
-                    */
+                    }
+                #todo [keyMapping:getMappingIndex("textEntry", "prevCommand")] = function(isDown, isRepeat) if(isDown then cursorChanged(textEntryView, nil, 1) end return true end,
+                #[keyMapping:getMappingIndex("textEntry", "nextCommand")] = function(isDown, isRepeat) if(isDown then cursorChanged(textEntryView, nil, -1) end return true end,
+                    
                 }
 
                 keyChanged = function(isDown, keyCode, modCode, isRepeat)
