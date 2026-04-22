@@ -55,7 +55,7 @@ void MJColorView::createDrawables(MJRenderPass renderPass, int renderTargetCompa
 			DrawQuadVertex::getAttributeDescriptions(),
 			renderTargetCompatibilityIndex);
 
-		drawable->addDynamicUBO(sizeof(vUBO), "v0", VK_SHADER_STAGE_VERTEX_BIT);
+		drawable->addDynamicUBO(sizeof(vUBO), "v0", VK_SHADER_STAGE_VERTEX_BIT | VK_SHADER_STAGE_FRAGMENT_BIT);
         drawable->addExternalDynamicUBO(cache->getCameraBuffer(), sizeof(CameraUBO), VK_SHADER_STAGE_VERTEX_BIT | VK_SHADER_STAGE_FRAGMENT_BIT);
 
 		drawable->finalize();

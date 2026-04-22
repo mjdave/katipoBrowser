@@ -63,7 +63,7 @@
     <PostBuildEvent>
       <Command>XCOPY "$(SolutionDir)thirdPartyWindows\SDL3_mixer-3.1.2\lib\x64\*.dll" "$(TargetDir)" /s /i /y &amp;
 XCOPY "$(SolutionDir)thirdPartyWindows\SDL3-3.4.0\lib\x64\*.dll" "$(TargetDir)" /s /i /y &amp;
-XCOPY "$(SolutionDir)..\app" "$(TargetDir)\app" /s /i /y</Command>
+XCOPY "$(SolutionDir)..\app" "$(TargetDir)app" /s /i /y</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -88,7 +88,7 @@ XCOPY "$(SolutionDir)..\app" "$(TargetDir)\app" /s /i /y</Command>
     <PostBuildEvent>
       <Command>XCOPY "$(SolutionDir)thirdPartyWindows\SDL3_mixer-3.1.2\lib\x64\*.dll" "$(TargetDir)" /s /i /y &amp;
 XCOPY "$(SolutionDir)thirdPartyWindows\SDL3-3.4.0\lib\x64\*.dll" "$(TargetDir)" /s /i /y &amp;
-XCOPY "$(SolutionDir)..\app" "$(TargetDir)\app" /s /i /y</Command>
+XCOPY "$(SolutionDir)..\app" "$(TargetDir)app" /s /i /y</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
@@ -223,7 +223,7 @@ XCOPY "$(SolutionDir)..\app" "$(TargetDir)\app" /s /i /y</Command>
     <ClInclude Include="..\thirdParty\MurmurHash3.h" />
     <ClInclude Include="..\thirdParty\stb_image.h" />
   </ItemGroup>
-    <ItemGroup>
+  <ItemGroup>
     <ResourceCompile Include="katipoBrowser.rc" />
   </ItemGroup>
   <ItemGroup>

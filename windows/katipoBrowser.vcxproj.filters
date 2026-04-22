@@ -96,18 +96,6 @@
     <ClCompile Include="..\browser\MJRenderTargetSSAO.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\browser\MJSong.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\browser\MJSound.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\browser\MJSound2D.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\browser\MJSound3D.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="..\browser\MJStaticRenderBuffer.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -314,18 +302,6 @@
     <ClInclude Include="..\browser\MJRenderTargetSSAO.h">
       <Filter>Source Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\browser\MJSong.h">
-      <Filter>Source Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\browser\MJSound.h">
-      <Filter>Source Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\browser\MJSound2D.h">
-      <Filter>Source Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\browser\MJSound3D.h">
-      <Filter>Source Files</Filter>
-    </ClInclude>
     <ClInclude Include="..\browser\MJStaticRenderBuffer.h">
       <Filter>Source Files</Filter>
     </ClInclude>
@@ -425,5 +401,15 @@
     <ClInclude Include="..\browser\WindowInfo.h">
       <Filter>Source Files</Filter>
     </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="katipoBrowser.rc">
+      <Filter>Resource Files</Filter>
+    </ResourceCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="katipoBrowser-iOS-256.ico">
+      <Filter>Resource Files</Filter>
+    </Image>
   </ItemGroup>
 </Project>

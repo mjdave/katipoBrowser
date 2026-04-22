@@ -11,8 +11,8 @@ class MJColorView : public MJView {
 public:
     
     dvec4 color;
-	dvec4 shaderUniformA;
-	dvec4 shaderUniformB;
+	dvec4 shaderUniformA = dvec4(0, 0, 0, 0);
+	dvec4 shaderUniformB = dvec4(0, 0, 0, 0);
 
 private:
 
