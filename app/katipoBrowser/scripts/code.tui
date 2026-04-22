@@ -1,8 +1,12 @@
 
+keys = require("app/common/keys.tui")
+
 defaultSiteScene = require("app/katipoBrowser/scripts/defaultSiteScene.tui")
 
 print("katipoBrowser is running")
 currentSiteHostID = false #tui quirk, false instead of nil, as nil removes it
+currentURLFullLink = ""
+currentURLSiteName = false
 
 bookmarksPath = file.getSavePath("bookmarks.tuib") #todo use database
 bookmarks = file.loadBinary(bookmarksPath)
@@ -39,6 +43,7 @@ pageBody = defaultSiteContent.getView("pageBody")
 
 bookmarkLayout = scene.bookmark
 bookmarksScrollView = scene.getView("bookmarksScrollView")
+bookmarksFullScreenBackground = scene.getView("bookmarksFullScreenBackground")
 
 untrustedSiteCodePermissionFunction = function(functionName, args, hasPermissionCallback)
 {
@@ -51,42 +56,35 @@ getSitePath = function(hostID)
     return file.getSavePath("browserSites/" + hostID + "/")
 }
 
+findBookmark = function(url)
+{
+    for(i, existing in bookmarks)
+    {
+        if(existing.url == url)
+        {
+            return existing
+        }
+    }
+    return nil
+}
+
 getCallback = function(result, hostID, url)
 {
     print("got result with status:", result.status, " message:", result.message, " hostID:", hostID, " url:", url)
     if(result.status != "ok")
     {
-        loadedExisting = false
-        for(i, existing in bookmarks)
+        existing = findBookmark(url)
+        if(existing)
         {
-            if(existing.url == url)
-            {
-                siteContentBackground.goalColor = vec4(0.2,0.2,0.0,0.4) #yellow, we don't have a connection, loaded from cache
-                katipo.loadSite(existing.hostID, getSitePath(existing.hostID), nil, untrustedSiteCodePermissionFunction, true)
-                loadedExisting = true
-                break
-            }
+            siteContentBackground.goalColor = vec4(0.2,0.2,0.0,0.4) #yellow, we don't have a connection, loaded from cache
+            katipo.loadSite(existing.hostID, getSitePath(existing.hostID), nil, untrustedSiteCodePermissionFunction, true)
         }
-
-        if(!loadedExisting)
+        else
         {
             siteContentBackground.goalColor = vec4(0.2,0.0,0.0,0.6) #red, we don't have a connection, no cache
             defaultSiteContent.hidden = false
             pageBody.setText("#" + result.status + "\n" + result.message)
         }
-    }
-    else if(result.unchanged)
-    {
-        print("no changes on the host, everything is just great here")
-        siteContentBackground.goalColor = vec4(0.0,0.0,0.2,0.4) #blue, we have the most recent version
-
-
-        publicData = result.siteData.publicData
-
-        print("got publicData:", publicData)
-
-        katipo.loadSite(hostID, getSitePath(hostID), publicData, untrustedSiteCodePermissionFunction, true)
-        katipo.gotSiteUnchanged(hostID)
     }
     else if(result.pageTitle)
     {
@@ -110,75 +108,74 @@ getCallback = function(result, hostID, url)
         siteSavePath = getSitePath(hostID)
         file.mkdir(siteSavePath)
 
-        #print("site data:", result)
+        checksums = false
+
+        for(i, existing in bookmarks)
+        {
+            if(existing.hostID == hostID)
+            {
+                .checksums = existing.checksums
+                table.remove(bookmarks, i)
+                break
+            }
+        }
+
+        if(!checksums)
+        {
+            checksums = {}
+        }
+
+        #print("found existing checksums:", checksums)
 
         files = result.siteData.files
 
-        writeFiles = function(fileInfo, writePath)
+        writeFile = function(fileInfo)
         {
-            if(fileInfo.files)
+            #print("fileInfo:", fileInfo)
+            filePath = siteSavePath + fileInfo.fileName
+            checksums[fileInfo.fileName] = fileInfo.checksum
+            if(file.isSubPath(filePath, siteSavePath))
             {
-                outPath = writePath + fileInfo.fileName + "/"
-                if(file.isSubPath(outPath, siteSavePath))
+                file.createDirectoriesIfNeededForFilePath(filePath)
+                if(type(fileInfo.data) == "string")
                 {
-                    file.mkdir(outPath)
-                    for(subFile in fileInfo.files)
-                    {
-                        writeFiles(subFile, outPath)
-                    }
+                    #print("saved raw data:", filePath)
+                    file.saveData(filePath, fileInfo.data) #write the string data (can be binary) to disk directly
                 }
-            }
-            else
-            {
-                filePath = writePath + fileInfo.fileName
-                if(file.isSubPath(filePath, siteSavePath))
+                else
                 {
-                    if(type(fileInfo.data) == "string")
-                    {
-                        print("saved raw data:", filePath)
-                        file.saveData(filePath, fileInfo.data) #write the string data (can be binary) to disk directly
-                    }
-                    else
-                    {
-                        file.saveBinary(filePath, fileInfo.data) #save the tui object as a binary export
-                        print("saved tui object:", filePath)
-                    }
+                    file.saveBinary(filePath, fileInfo.data) #save the tui object as a binary export
+                    #print("saved tui object:", filePath)
                 }
             }
         }
 
         for(subFile in files)
         {
-            writeFiles(subFile, siteSavePath)
+            writeFile(subFile)
         }
+
 
         publicData = result.siteData.publicData
 
-        print("got publicData:", publicData)
+        #print("got publicData:", publicData)
 
-        print("loading freshly updated site code")
+        #print("loading freshly updated site code")
         katipo.loadSite(hostID, siteSavePath, publicData, untrustedSiteCodePermissionFunction, false)
 
         .currentSiteHostID = hostID
 
         #update bookmarks
 
-        for(i, existing in bookmarks)
-        {
-            if(existing.hostID == hostID)
-            {
-                table.remove(bookmarks, i)
-                break
-            }
-        }
+        #print("updated checksums:", checksums)
 
-        print("storing checksum:", result.siteData.checksum)
+        #print("storing checksum:", result.siteData.checksum)
 
         bookmarkInfo = {
             url = url
             hostID = hostID
             siteInfo = result.siteData.siteInfo
-            checksum = result.siteData.checksum
+            checksums = checksums
             # the hostID is a string, and math.random can take either a number or a string as a seed for the second argument
             color = vec4(math.random(1.0, hostID + "1"), math.random(1.0, hostID + "2"), math.random(1.0, hostID + "3"), 1.0)
             #siteImage = result.siteData.siteImage
@@ -204,6 +201,16 @@ bookmarksScrollView.onParentSizeChanged = function(parentSize)
     return vec2(width, height)
 }
 
+getDisplayUrl = function(fullUrl)
+{
+    foundIndex = string.find(fullUrl, ":3471/")
+    if(foundIndex)
+    {
+        return string.subString(fullUrl, 0, foundIndex) + string.subString(fullUrl, foundIndex + 5)
+    }
+    return fullUrl
+}
+
 loadBookmarks = function()
 {
     bookmarksScrollView.removeAllRows()
@@ -217,12 +224,12 @@ loadBookmarks = function()
         bookmarkTitleView.text = title
 
         bookmarkSubtitleView = bookmarkView.getView("bookmarkSubtitle")
-        bookmarkSubtitleView.text = bookmarkInfo.url
-
+        displayUrl = getDisplayUrl(bookmarkInfo.url)
+        bookmarkSubtitleView.text = displayUrl
 
         if(i % 2 == 0)
         {
-            bookmarkView.color.w = 0.5
+            bookmarkView.color += vec4(0.1,0.15,0.12,0.0)
         }
 
         if(bookmarkInfo.siteImage)
@@ -243,9 +250,13 @@ loadBookmarks = function()
         bookmarkClick = function()
         {
             siteContentBackground.goalColor = vec4(0.0, 0.015, 0.01, 0.6)
+            .currentURLFullLink = getDisplayUrl(bookmarkInfo.url)
+            .currentURLSiteName = bookmarkInfo.siteInfo.title
+            urlTextEntry.setText(currentURLSiteName)
+            katipo.get(bookmarkInfo.url, bookmarkInfo.checksums, getCallback)
 
-            katipo.get(bookmarkInfo.url, bookmarkInfo.checksum, getCallback)
-            bookmarksScrollView.hidden = true
+            bookmarksScrollView.fadeOut()
+            bookmarksFullScreenBackground.fadeOut()
         }
 
         bookmarkButton = bookmarkView.getView("bookmarkButton")
@@ -254,33 +265,98 @@ loadBookmarks = function()
     }
 }
 
-
 urlTextEntry.onChange = function(textValue, confirmChanges)
 {
     if(confirmChanges and string.length(textValue) > 0)
     {
         siteContentBackground.goalColor = vec4(0.0,0.015,0.01,0.6)
-        katipo.get(textValue, getCallback)
-        bookmarksScrollView.hidden = true
+        existingBookmark = findBookmark(textValue)
+        checksums = nil
+        if(existingBookmark)
+        {
+            checksums = existingBookmark.checksums
+        }
+
+        katipo.get(textValue, checksums, getCallback)
+        .currentURLFullLink = textValue
+        .currentURLSiteName = false
+    }
+    else
+    {
+        urlTextEntry.revertToEditStartText()
     }
 }
 
 urlTextEntry.onStartedEditing = function()
 {
-    print("onStartedEditing")
     loadBookmarks()
-    bookmarksScrollView.hidden = false
+    urlTextEntry.setText(currentURLFullLink)
+    bookmarksScrollView.fadeIn()
+    bookmarksFullScreenBackground.fadeIn()
 }
 
 urlTextEntry.onFinishedEditing = function()
 {
     bookmarksScrollView.fadeOut()
-    print("fadeout")
-}
+    bookmarksFullScreenBackground.fadeOut()
 
-urlTextEntry.textEntryClickFunction()
+    if(currentURLSiteName)
+    {
+        urlTextEntry.setText(currentURLSiteName)
+    }
+}
 
 katipo.onLinkClick = function(linkString)
 {
-    katipo.get(linkString, getCallback)
+    .currentURLFullLink = linkString
+    .currentURLSiteName = false
+    urlTextEntry.setText(currentURLFullLink)
+    existingBookmark = findBookmark(linkString)
+    checksums = nil
+    if(existingBookmark)
+    {
+        checksums = existingBookmark.checksums
+    }
+    katipo.get(linkString, checksums, getCallback)
 }
+
+
+reloadKey = function(isDown, code, mod, isRepeat)
+{
+    if(isDown and !isRepeat and currentURLFullLink and (mod == keys.modifiers.ctrl or mod == keys.modifiers.cmd))
+    {
+        existingBookmark = findBookmark(currentURLFullLink)
+        checksums = nil
+        if(existingBookmark)
+        {
+            checksums = existingBookmark.checksums
+        }
+        katipo.get(currentURLFullLink, checksums, getCallback)
+    }
+}
+
+#a full list of keycodes can be found in the katipo browser resources, within the file app/common/keys.tui
+eventManager.addKeyEventListener(keys.keyCodes.r, reloadKey)
+
+loadInitialLink = function()
+{
+    siteContentBackground.goalColor = vec4(0.0, 0.015, 0.01, 0.6)
+    if(table.count(bookmarks) == 0)
+    {
+        url = "katipobrowser.com/katipo"
+        .currentURLFullLink = url
+        .currentURLSiteName = false
+        urlTextEntry.setText(currentURLFullLink)
+        katipo.get(url, getCallback)
+    }
+    else
+    {
+        bookmarkInfo = bookmarks[0]
+        .currentURLFullLink = bookmarkInfo.url
+        .currentURLSiteName = bookmarkInfo.siteInfo.title
+        urlTextEntry.setText(currentURLSiteName)
+        katipo.get(bookmarkInfo.url, bookmarkInfo.checksums, getCallback)
+    }
+}
+
+loadInitialLink()

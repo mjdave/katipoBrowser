@@ -18,6 +18,7 @@
 #include "sodium.h"
 #include "DatabaseEnvironment.h"
 #include "Database.h"
+#include "Scanner.h"
 
 #include "MJView.h"
 
@@ -179,15 +180,19 @@ TuiTable* addKatipoTable(TuiTable* rootTableToAddTo)
 
 void KatipoBrowser::init()
 {
-    MainController::getInstance()->init("Katipo Browser");
-    
-     if(sodium_init() < 0) //this is safe to call multiple times
-     {
-         MJError("Sodium initialization failed. Exiting.");
-         abort();
-     }
+    if(sodium_init() < 0) //this is safe to call multiple times
+    {
+        MJError("Sodium initialization failed. Exiting.");
+        abort();
+    }
     
     TuiTable* rootTable = Tui::getRootTable();
+    appDatabaseEnvironment = new DatabaseEnvironment(Katipo::getSavePath("database"),
+                                                     1,
+                                                     2);
+    appDatabase = new Database(appDatabaseEnvironment, "app");
+    appDatabase->bindTui("", rootTable);
+    
     
     rootTable->getTable("file")->setFunction("getSavePath", [rootTable](TuiTable* args, TuiRef* existingResult, TuiFunctionCallData* incomingCallData, TuiDebugInfo* callingDebugInfo) -> TuiRef* {
         if(args->arrayObjects.size() > 0 && args->arrayObjects[0]->type() == Tui_ref_type_STRING)
@@ -209,31 +214,28 @@ void KatipoBrowser::init()
     //rootTable->setVec2("screenSize", dvec2(MainController::getInstance()->windowInfo->screenWidth, MainController::getInstance()->windowInfo->screenHeight));
     
     
-    appDatabaseEnvironment = new DatabaseEnvironment(Katipo::getSavePath("database"),
-                                                     1,
-                                                     2);
-    appDatabase = new Database(appDatabaseEnvironment, "app");
-    appDatabase->bindTui("", rootTable);
+    MainController::getInstance()->init(rootTable, appDatabase, "Katipo Browser");
+    
     
     EventManager::getInstance()->bindTui(rootTable);
     MJAudio::getInstance()->bindTui(rootTable);
     katipoTable = addKatipoTable(rootTable);
     
     //katipo.gotSiteUnchanged(hostID)
-    katipoTable->setFunction("gotSiteUnchanged", [this](TuiTable* args, TuiRef* existingResult, TuiFunctionCallData* incomingCallData, TuiDebugInfo* callingDebugInfo) -> TuiRef* {
+    /*katipoTable->setFunction("gotSiteUnchanged", [this](TuiTable* args, TuiRef* existingResult, TuiFunctionCallData* incomingCallData, TuiDebugInfo* callingDebugInfo) -> TuiRef* {
         if(args->arrayObjects.size() >= 1)
         {
             std::string hostID = args->arrayObjects[0]->getStringValue();
             SiteConnectionInfo& siteConnectionInfo = siteConnectionInfosByHostID[hostID];
-            TuiFunction* onConnectFunc = siteConnectionInfo.katipoTable->getFunction("onConnected");
-            if(onConnectFunc)
+            TuiFunction* onSiteLoadFunc = siteConnectionInfo.katipoTable->getFunction("onSiteLoad");
+            if(onSiteLoadFunc)
             {
-                onConnectFunc->call("site loaded onConnected", TUI_FALSE, siteConnectionInfo.publicData);
+                onSiteLoadFunc->call("site loaded onSiteLoad", TUI_FALSE, siteConnectionInfo.publicData);
             }
         }
         
         return TUI_NIL;
-    });
+    });*/
     
     //katipo.loadSite(siteSavePath, untrustedSiteCodePermissionFunction, publicDataOrNil)
     katipoTable->setFunction("loadSite", [this](TuiTable* args,
@@ -263,6 +265,7 @@ void KatipoBrowser::init()
             if(siteConnectionInfo.publicData)
             {
                 siteConnectionInfo.publicData->release();
+                siteConnectionInfo.publicData = nullptr;
             }
             if(publicData)
             {
@@ -287,7 +290,7 @@ void KatipoBrowser::init()
                 TuiTable* siteKatipoTable = addKatipoTable(siteConnectionInfo.rootTable);
                 siteConnectionInfo.katipoTable = siteKatipoTable;
                 
-                appDatabase->bindTui(siteConnectionInfo.hostName, siteConnectionInfo.rootTable);
+                appDatabase->bindTui(hostID, siteConnectionInfo.rootTable);
 
                 
                 //from within site code: katipo.get("example", sendData, function(result){ print("got result:", result)})
@@ -369,6 +372,18 @@ void KatipoBrowser::init()
                 });
             }
             
+            if(!EventManager::getInstance()->currentHostID.empty() && hostID != EventManager::getInstance()->currentHostID)
+            {
+                SiteConnectionInfo& prevSiteInfo = siteConnectionInfosByHostID[EventManager::getInstance()->currentHostID];
+                TuiFunction* onBackgroundChange = prevSiteInfo.katipoTable->getFunction("onBackgroundChange");
+                if(onBackgroundChange)
+                {
+                    onBackgroundChange->call("onBackgroundChange", TUI_TRUE);
+                }
+            }
+            
+            EventManager::getInstance()->currentHostID = hostID;
+            EventManager::getInstance()->currentKatipoTable = siteConnectionInfo.katipoTable;
             
             std::string siteScenePath = siteSavePath + "/scripts/scene.tui";
             if(!Tui::fileExistsAtPath(siteScenePath))
@@ -448,15 +463,24 @@ void KatipoBrowser::init()
                 siteConnectionInfo.scriptState = (TuiTable*)TuiRef::runScriptFile(siteCodePath, siteConnectionInfo.rootTable);
             }
             
-            if(!isDustyOldCacheLoad)
-            {
-                TuiFunction* onConnectFunc = siteConnectionInfo.katipoTable->getFunction("onConnected");
-                if(onConnectFunc)
+            
+            //if(!isDustyOldCacheLoad)
+            //{
+                TuiFunction* onSiteLoadFunc = siteConnectionInfo.katipoTable->getFunction("onSiteLoad");
+                if(onSiteLoadFunc)
                 {
-                    //MJLog("calling site loaded onConnected");
-                    onConnectFunc->call("site loaded onConnected", TUI_TRUE, siteConnectionInfo.publicData);
+                    MJLog("calling site loaded onSiteLoad");
+                    onSiteLoadFunc->call("site loaded onSiteLoad", TUI_BOOL(!isDustyOldCacheLoad), siteConnectionInfo.publicData);
                 }
-            }
+            //}
+            /*else
+            {
+                TuiFunction* onConnectionFailedFunc = siteConnectionInfo.katipoTable->getFunction("onConnectionFailed");
+                if(onConnectionFailedFunc)
+                {
+                    onConnectionFailedFunc->call("site loaded onConnectionFailed");
+                }
+            }*/
         }
         return TUI_NIL;
     });
@@ -619,6 +643,8 @@ void KatipoBrowser::init()
     
     scriptState = (TuiTable*)TuiRef::runScriptFile(Katipo::getResourcePath("app/katipoBrowser/scripts/code.tui"), rootTable);
     
+    //scanner = new Scanner();
+    
     updateTimerID = MJTimer::getInstance()->addUpdateTimer([this](uint32_t timerID, float dt) {
         for(auto& idAndRequestInterface : netInterfaces)
         {
@@ -648,6 +674,8 @@ void KatipoBrowser::init()
                 }
             }
         }
+        
+        //scanner->update();
     });
     
 }

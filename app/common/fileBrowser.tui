@@ -35,9 +35,9 @@ leftPaneLayout = {
                     id = "headerTitleLeft"
                     type = "text"
                     text = "Directory"
-                    font = "blockheadsHue" #todo
+                    font = "roboto"
                     additiveBlend = true
-                    fontSize = 14 #todo
+                    fontSize = 14
                 }
             }
         }
@@ -76,9 +76,9 @@ rightPaneLayout = {
                     id = "headerTitleRight"
                     type = "text"
                     text = "File"
-                    font = "blockheadsHue" #todo
+                    font = "roboto"
                     additiveBlend = true
-                    fontSize = 14 #todo
+                    fontSize = 14
                 }
             }
         }
@@ -115,9 +115,8 @@ rightPanelVerticalLayout = {
 }
 
 fileItemLayout = {
-    id = "fileItemBackground"
-    type = "color"
-    color = vec4(0.0,0.05,0.1,0.3)
+    id = "fileItem"
+    type = "view"
     onParentSizeChanged = function(parentSize)
     {
         return vec2(parentSize.x - 20.0,rowHeight)
@@ -125,10 +124,17 @@ fileItemLayout = {
 
     subviews = {
         {
+            id = "fileItemBackground"
+            type = "button"
+            buttonType = "color"
+            additiveBlend = true
+            color = vec4(0.0,0.05,0.1,0.3)
+        }
+        {
             id = "fileItemTitle"
             type = "text"
             text = "Title"
-            font = "blockheadsHue"
+            font = "roboto"
             alignmentX = "left"
             additiveBlend = true
             pos = vec3(10,0,0)
@@ -138,9 +144,8 @@ fileItemLayout = {
 }
 
 dirItemLayout = {
-    id = "fileItemBackground"
-    type = "color"
-    color = vec4(0.0,0.05,0.1,0.3)
+    id = "dirItem"
+    type = "view"
     onParentSizeChanged = function(parentSize)
     {
         return vec2(parentSize.x - 20.0,rowHeight)
@@ -148,10 +153,17 @@ dirItemLayout = {
 
     subviews = {
         {
+            id = "fileItemBackground"
+            type = "button"
+            buttonType = "color"
+            additiveBlend = true
+            color = vec4(0.0,0.05,0.1,0.3)
+        }
+        {
             id = "fileItemTitle"
             type = "text"
             text = "Title"
-            font = "blockheadsHue"
+            font = "roboto"
             fontSize = 14
             alignmentX = "left"
             additiveBlend = true
@@ -160,7 +172,7 @@ dirItemLayout = {
         {
             id = "dirMarker"
             type = "text"
-            font = "blockheadsHue"
+            font = "roboto"
             fontSize = 18
             text = ">"
             pos = vec3(-10,0, 0)
@@ -169,48 +181,6 @@ dirItemLayout = {
     }
 }
 
-updateItemColor = function(fileBrowserView, itemView, selected, hover)
-{
-    if(selected)
-    {
-        itemView.color = itemView.baseColor + vec4(0.0,0.4,0.1,0.2)
-    }
-    else if(itemView.highlight)
-    {
-        itemView.color = itemView.baseColor + vec4(0.0,0.1,0.4,0.3)
-        if(hover)
-        {
-            itemView.color = itemView.color + vec4(0.0,0.1,0.4,0.1)
-        }
-    }
-    else if(hover)
-    {
-        itemView.color = itemView.baseColor + vec4(0.2,0.0,0.2,0.2)
-    }
-    else
-    {
-        itemView.color = itemView.baseColor
-    }
-}
-
-updateVisuals = function(fileBrowserView)
-{
-    if(fileBrowserView.leftItemViews)
-    {
-        for(i, itemView in fileBrowserView.leftItemViews)
-        {
-            updateItemColor(fileBrowserView, itemView, i == fileBrowserView.leftSelectedIndex, i == fileBrowserView.leftHoverIndex)
-        }
-    }
-
-    if(fileBrowserView.rightItemViews)
-    {
-        for(i, itemView in fileBrowserView.rightItemViews)
-        {
-            updateItemColor(fileBrowserView, itemView, i == fileBrowserView.rightSelectedIndex, i == fileBrowserView.rightHoverIndex)
-        }
-    }
-}
 
 compareFunction = function(a,b)
 {
@@ -338,29 +308,14 @@ setDirectoryTree = function(fileBrowserView, directoryTree, selectedIndex, isFro
                     titleTextView = itemView.getView("fileItemTitle")
                     titleTextView.text = file.fileName
 
+                    backgroundView = itemView.getView("fileItemBackground")
                     if(i % 2 == 0)
                     {
-                        itemView.color.w = 0.5
+                        backgroundView.color.w = 0.5
                     }
-                    
-                    itemView.baseColor = itemView.color
+                    backgroundView.baseColor = backgroundView.color
 
-                    itemView.hoverStart = function()
-                    {
-                        fileBrowserView.rightHoverIndex = i
-                        updateVisuals(fileBrowserView)
-                    }
-
-                    itemView.hoverEnd = function()
-                    {
-                        if(fileBrowserView.rightHoverIndex == i)
-                        {
-                            fileBrowserView.rightHoverIndex = nil
-                            updateVisuals(fileBrowserView)
-                        }
-                    }
-
-                    itemView.click = function() #right panel click
+                    backgroundView.click = function() #right panel click
                     {
                         if(file.files)
                         {
@@ -374,7 +329,6 @@ setDirectoryTree = function(fileBrowserView, directoryTree, selectedIndex, isFro
                         }
                     }
 
-                   # rightPaneScrollView.insertRow(itemView)
                     table.insert(fileBrowserView.rightItemViews, itemView)
 
                     if(onBrowserItemCreate)
@@ -409,41 +363,39 @@ setDirectoryTree = function(fileBrowserView, directoryTree, selectedIndex, isFro
             titleTextView = itemView.getView("fileItemTitle")
             titleTextView.text = file.fileName
 
-
+            backgroundView = itemView.getView("fileItemBackground")
             if(i % 2 == 0)
             {
-                itemView.color.w = 0.5
+                backgroundView.color.w = 0.5
             }
-            
-            itemView.baseColor = itemView.color
-
-            itemView.hoverStart = function()
-            {
-                fileBrowserView.leftHoverIndex = i
-                updateVisuals(fileBrowserView)
-            }
-
-            itemView.hoverEnd = function()
-            {
-                if(fileBrowserView.leftHoverIndex == i)
-                {
-                    fileBrowserView.leftHoverIndex = nil
-                    updateVisuals(fileBrowserView)
-                }
-            }
+            backgroundView.baseColor = backgroundView.color
 
             if(!file.localPath)
             {
-                itemView.click = function()
+                backgroundView.click = function() #left panel click
                 {
+                    if(fileBrowserView.leftSelectedIndex)
+                    {
+                        if(table.count(fileBrowserView.leftItemViews) > fileBrowserView.leftSelectedIndex)
+                        {
+                            previousItemView = fileBrowserView.leftItemViews[fileBrowserView.leftSelectedIndex]
+                            previousBackgroundView = previousItemView.getView("fileItemBackground")
+                            previousBackgroundView.setSelected(false)
+                        }
+                    }
+                    backgroundView.setSelected(true)
                     fileBrowserView.leftSelectedIndex = i
                     updateRightPanel(file)
-                    updateVisuals(fileBrowserView)
 
                     if(onBrowserContentChange)
                     {
                         onBrowserContentChange()
                     }
+                }
+
+                if(fileBrowserView.leftSelectedIndex == i)
+                {
+                    backgroundView.setSelected(true)
                 }
             }
 
@@ -465,9 +417,6 @@ setDirectoryTree = function(fileBrowserView, directoryTree, selectedIndex, isFro
             updateRightPanel()
         }
     }
-
-
-    updateVisuals(fileBrowserView)
 
 }
 

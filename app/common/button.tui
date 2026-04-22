@@ -6,6 +6,12 @@ initHue = function(view, buttonViewLayout)
         view.hueOffset = 0.0
     }
 
+    view.setHueOffset = function(hueOffset)
+    {
+        view.hueOffset = hueOffset
+        updateHueVisuals(view)
+    }
+
     if(buttonViewLayout.clip)
     {
         if(buttonViewLayout.buttonType == "imageHueShift")
@@ -46,13 +52,19 @@ initColor = function(view, buttonViewLayout)
     view.highlightColor = buttonViewLayout.highlightColor
     if(!view.highlightColor)
     {
-        view.highlightColor = view.baseColor + vec4(0.0,0.2,0.4,0.4)
+        view.highlightColor = view.baseColor + vec4(0.0,0.1,0.0,0.05)
     }
 
     view.mouseDownColor = buttonViewLayout.mouseDownColor
     if(!view.mouseDownColor)
     {
         view.mouseDownColor = view.baseColor + vec4(0.5,0.5,0.5,0.5)
+    }
+
+    view.selectedColor = buttonViewLayout.selectedColor
+    if(!view.selectedColor)
+    {
+        view.selectedColor = view.baseColor + vec4(0.2,0.0,0.5,0.5)
     }
 
     view.color = view.baseColor
@@ -65,13 +77,18 @@ updateColorVisuals = function(view)
     {
         view.color = view.mouseDownColor
     }
-    else if(view.isHover)
+    else if(view.selected)
     {
-        view.color = view.highlightColor
+        view.color = view.selectedColor
     }
     else
     {
         view.color = view.baseColor
+    }
+    
+    if(view.isHover)
+    {
+        view.color = view.color + view.highlightColor
     }
 }
 
@@ -137,6 +154,20 @@ create = function(parentView, viewLayout)
     viewLayoutFinal = getViewLayout(viewLayout, buttonType)
     view = parentView.addView(viewLayoutFinal)
     view.buttonType = buttonType
+
+    view.setSelected = function(newSelected)
+    {
+        if(newSelected != view.selected)
+        {
+            view.selected = newSelected
+            updateVisuals(view)
+        }
+    }
+
+    view.updateVisuals = function()
+    {
+        updateVisuals(view)
+    }
 
 
     if(buttonType.initFunc)

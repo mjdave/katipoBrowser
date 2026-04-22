@@ -26,6 +26,8 @@ class Camera;
 class MJDrawQuad;
 class MJDrawable;
 class MJDataTexture;
+class Database;
+class TuiTable;
 
 
 #define MJ_WINDOW_MODE_WINDOWED 1
@@ -52,13 +54,14 @@ public:
 
     Vulkan* vulkan;
 	Camera* camera;
+    Database* appDatabase = nullptr;
     
 public:
     
     MainController();
     ~MainController();
     
-    void init(std::string windowTitle = "Katipo Browser", std::string organizationName = "katipo", std::string appTitle = "katipoBrowser");
+    void init(TuiTable* rootTable, Database* appDatabase_, std::string windowTitle = "Katipo Browser", std::string organizationName = "katipo", std::string appTitle = "katipoBrowser");
     
     void applicationWillTerminate();
 
@@ -90,7 +93,7 @@ public:
 	bool mouseUp(dvec2 mousePos, int buttonIndex, int modKey);
 	bool mouseWheel(dvec2 mousePos, dvec2 scrollChange);
 
-	void recreateDrawablesAndSaveSize();
+	void updateWindowInfoSize();
     void mainWindowChangedSize();
     void mainWindowChangedPosition();
 	void setVsync(bool newValue);
@@ -126,6 +129,7 @@ protected:
 private:
 
 	void windowInfoChanged();
+    void saveWindowInfoToDatabase();
     
     void load();
     void unload();

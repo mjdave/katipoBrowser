@@ -534,6 +534,7 @@
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.utilities";
 				INFOPLIST_KEY_NSBluetoothAlwaysUsageDescription = "Playing audio over bluetooth";
 				INFOPLIST_KEY_NSCameraUsageDescription = "Taking photos to share over a katipo network";
+				INFOPLIST_KEY_NSLocalNetworkUsageDescription = "To connect to any locally hosted katipo sites";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UIRequiredDeviceCapabilities = metal;
@@ -551,7 +552,7 @@
 					"\"$(SRCROOT)/../thirdPartyiOS/curl\"",
 					"\"$(SRCROOT)/../katipo/thirdParty/libsodium/ios/lib\"",
 				);
-				MARKETING_VERSION = 0.2.0;
+				MARKETING_VERSION = 0.2.1;
 				PRODUCT_BUNDLE_IDENTIFIER = com.katipobrowser;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = NO;
@@ -594,6 +595,7 @@
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.utilities";
 				INFOPLIST_KEY_NSBluetoothAlwaysUsageDescription = "Playing audio over bluetooth";
 				INFOPLIST_KEY_NSCameraUsageDescription = "Taking photos to share over a katipo network";
+				INFOPLIST_KEY_NSLocalNetworkUsageDescription = "To connect to any locally hosted katipo sites";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UIRequiredDeviceCapabilities = metal;
@@ -611,7 +613,7 @@
 					"\"$(SRCROOT)/../thirdPartyiOS/curl\"",
 					"\"$(SRCROOT)/../katipo/thirdParty/libsodium/ios/lib\"",
 				);
-				MARKETING_VERSION = 0.2.0;
+				MARKETING_VERSION = 0.2.1;
 				PRODUCT_BUNDLE_IDENTIFIER = com.katipobrowser;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = NO;

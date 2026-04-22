@@ -78,6 +78,8 @@ public:
     dvec4 windowSafeArea;
     
     bool isResizingWindow = false;
+    std::string currentHostID = "";
+    TuiTable* currentKatipoTable = nullptr;
 
 private:
     
@@ -111,7 +113,7 @@ private:
     
     int keyChangedListenerFunctionIndex = 0;
     std::map<int,TuiFunction*> anyKeyChangedListenerFunctions;
-    std::map<int,std::map<int, TuiFunction*>> keyChangedByKeyListenerFunctions;
+    std::map<std::string, std::map<int,std::map<int, TuiFunction*> > > keyChangedByKeyListenerFunctions;
 
     
 private:

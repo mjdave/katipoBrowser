@@ -9,6 +9,7 @@
 #include "MathUtils.h"
 #include "WindowInfo.h"
 #include "Vulkan.h"
+#include "TuiScript.h"
 
 #define MAX_MOUSE_BUTTONS 2
 
@@ -313,7 +314,7 @@ public:
     void fadeIn(float duration = 0.25) {
         fadeDuration = duration;
         fadingIn = true;
-        setHidden(false);
+        stateTable->setBool("hidden", false);
         if(alpha >= 0.999)
         {
             alpha = 0;

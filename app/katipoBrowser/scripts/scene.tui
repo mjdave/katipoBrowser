@@ -27,6 +27,12 @@ mainView = {
                     color = vec4(0.1,0.2,0.0,0.2)
                 }
                 {
+                    id = "bookmarksFullScreenBackground"
+                    type = "color"
+                    color = vec4(0.05,0.12,0.2,0.85)
+                    hidden = true
+                }
+                {
                     id = "bookmarksScrollView"
                     type = "scrollView"
                     alignmentY = "above"
@@ -55,7 +61,7 @@ bookmark = {
     color = vec4(0.0,0.0,0.0,0.2)
     onParentSizeChanged = function(parentSize)
     {
-        return vec2(parentSize.x, bookMarkHeight)
+        return vec2(parentSize.x - viewTypes.scrollView.scrollBarWidth, bookMarkHeight)
     }
 
     subviews = {
@@ -97,7 +103,7 @@ bookmark = {
                     type = "text"
                     text = "Site Title"
                     font = "roboto"
-                    fontSize = 16
+                    fontSize = 18
                     alignmentX = "outerRight"
                     layoutParentID = "bookmarkImage"
                     alignmentY = "top"
@@ -108,7 +114,7 @@ bookmark = {
                     type = "text"
                     text = "Site Subtitle"
                     font = "roboto"
-                    fontSize = 14
+                    fontSize = 10
                     alignmentX = "left"
                     alignmentY = "below"
                     layoutParentID = "bookmarkTitle"

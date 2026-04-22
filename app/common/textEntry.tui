@@ -101,10 +101,10 @@ finishEditing = function(textEntryView, confirmChanges)
                 textEntryView.onChange(textEntryView.text, confirmChanges)
             }
 
-            if(!confirmChanges)
-            {
-                updateText(textEntryView, textEntryView.editStartTextValue)
-            }
+            #if(!confirmChanges) #this is not always desired, so for now, callers are responsible for reverting if they want it, by calling revertToEditStartText() in onChange
+            #{
+            #    updateText(textEntryView, textEntryView.editStartTextValue)
+            #}
         }
 
         if(textEntryView.onFinishedEditing)
@@ -538,14 +538,23 @@ create = function(parentView, viewLayout)
     backgroundView.click = backgroundViewClickFunction
     textEntryView.textEntryClickFunction = backgroundViewClickFunction
 
-    textEntryView.setText = function(text){
+    textEntryView.setText = function(text)
+    {
         setText(textEntryView, text)
+    }
+
+    textEntryView.revertToEditStartText = function()
+    {
+        if(textEntryView.editStartTextValue)
+        {
+            updateText(textEntryView, textEntryView.editStartTextValue)
+        }
     }
 
     
     backgroundView.clickDownOutside = function()
     {
-        finishEditing(textEntryView, true)
+        finishEditing(textEntryView, false)
     }
 
     return textEntryView

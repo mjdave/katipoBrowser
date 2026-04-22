@@ -827,7 +827,7 @@ void Vulkan::recreateSwapChain()
     createFramebuffers();
    // createCommandBuffers();
 
-	controller->recreateDrawablesAndSaveSize();
+	controller->updateWindowInfoSize();
 	hasValidSwapchain = true;
 }
 

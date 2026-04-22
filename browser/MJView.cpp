@@ -1868,6 +1868,12 @@ void MJView::loadFromTable(TuiTable* table, bool needsToLayoutSubviews, TuiTable
         stateTable->setVec3("pos", table->getVec3("pos"));
     }
     
+    
+    if(table->hasKey("masksEvents"))
+    {
+        stateTable->setBool("masksEvents", table->getBool("masksEvents"));
+    }
+    
     if(table->hasKey("alpha"))
     {
         stateTable->setDouble("alpha", table->getDouble("alpha"));
@@ -2016,6 +2022,10 @@ void MJView::tableKeyChanged(const std::string& key, TuiRef* value)
     {
         setAlpha(stateTable->getDouble("alpha"));
     }
+    else if(key == "masksEvents")
+    {
+        masksEvents = stateTable->getBool("masksEvents");
+    }
     else if(key == "fixedTimeUpdate")
     {
         switch (value->type()) {
@@ -2030,7 +2040,7 @@ void MJView::tableKeyChanged(const std::string& key, TuiRef* value)
                 childHasUpdateFunctionChanged(true);
             }
                 break;
-            case Tui_ref_type_NIL:
+            default:
             {
                 if(updateFunction)
                 {
@@ -2039,9 +2049,6 @@ void MJView::tableKeyChanged(const std::string& key, TuiRef* value)
                 }
                 childHasUpdateFunctionChanged(false);
             }
-                break;
-            default:
-                MJError("Expected function");
                 break;
         }
     }
@@ -2059,7 +2066,7 @@ void MJView::tableKeyChanged(const std::string& key, TuiRef* value)
                 childHasUpdateFunctionChanged(true);
             }
                 break;
-            case Tui_ref_type_NIL:
+            default:
             {
                 if(preRenderUpdateFunction)
                 {
@@ -2068,9 +2075,6 @@ void MJView::tableKeyChanged(const std::string& key, TuiRef* value)
                 }
                 childHasUpdateFunctionChanged(false);
             }
-                break;
-            default:
-                MJError("Expected function");
                 break;
         }
     }
@@ -2088,7 +2092,7 @@ void MJView::tableKeyChanged(const std::string& key, TuiRef* value)
                 masksEvents = true;
             }
                 break;
-            case Tui_ref_type_NIL:
+            default:
             {
                 if(mouseDownFunction)
                 {
@@ -2096,9 +2100,6 @@ void MJView::tableKeyChanged(const std::string& key, TuiRef* value)
                     mouseDownFunction = nullptr;
                 }
             }
-                break;
-            default:
-                MJError("Expected function");
                 break;
         }
     }
@@ -2116,7 +2117,7 @@ void MJView::tableKeyChanged(const std::string& key, TuiRef* value)
                 masksEvents = true;
             }
                 break;
-            case Tui_ref_type_NIL:
+            default:
             {
                 if(mouseUpFunction)
                 {
@@ -2124,9 +2125,6 @@ void MJView::tableKeyChanged(const std::string& key, TuiRef* value)
                     mouseUpFunction = nullptr;
                 }
             }
-                break;
-            default:
-                MJError("Expected function");
                 break;
         }
     }
@@ -2144,7 +2142,7 @@ void MJView::tableKeyChanged(const std::string& key, TuiRef* value)
                 masksEvents = true;
             }
                 break;
-            case Tui_ref_type_NIL:
+            default:
             {
                 if(mouseDraggedFunction)
                 {
@@ -2152,9 +2150,6 @@ void MJView::tableKeyChanged(const std::string& key, TuiRef* value)
                     mouseDraggedFunction = nullptr;
                 }
             }
-                break;
-            default:
-                MJError("Expected function");
                 break;
         }
     }
@@ -2172,7 +2167,7 @@ void MJView::tableKeyChanged(const std::string& key, TuiRef* value)
                 masksEvents = true;
             }
                 break;
-            case Tui_ref_type_NIL:
+            default:
             {
                 if(mouseWheelFunction)
                 {
@@ -2180,9 +2175,6 @@ void MJView::tableKeyChanged(const std::string& key, TuiRef* value)
                     mouseWheelFunction = nullptr;
                 }
             }
-                break;
-            default:
-                MJError("Expected function");
                 break;
         }
     }
@@ -2200,7 +2192,7 @@ void MJView::tableKeyChanged(const std::string& key, TuiRef* value)
                 masksEvents = true;
             }
                 break;
-            case Tui_ref_type_NIL:
+            default:
             {
                 if(hoverStartFunction)
                 {
@@ -2208,9 +2200,6 @@ void MJView::tableKeyChanged(const std::string& key, TuiRef* value)
                     hoverStartFunction = nullptr;
                 }
             }
-                break;
-            default:
-                MJError("Expected function");
                 break;
         }
     }
@@ -2228,7 +2217,7 @@ void MJView::tableKeyChanged(const std::string& key, TuiRef* value)
                 masksEvents = true;
             }
                 break;
-            case Tui_ref_type_NIL:
+            default:
             {
                 if(hoverEndFunction)
                 {
@@ -2236,9 +2225,6 @@ void MJView::tableKeyChanged(const std::string& key, TuiRef* value)
                     hoverEndFunction = nullptr;
                 }
             }
-                break;
-            default:
-                MJError("Expected function");
                 break;
         }
     }
@@ -2256,7 +2242,7 @@ void MJView::tableKeyChanged(const std::string& key, TuiRef* value)
                 masksEvents = true;
             }
                 break;
-            case Tui_ref_type_NIL:
+            default:
             {
                 if(clickFunction)
                 {
@@ -2264,9 +2250,6 @@ void MJView::tableKeyChanged(const std::string& key, TuiRef* value)
                     clickFunction = nullptr;
                 }
             }
-                break;
-            default:
-                MJError("Expected function");
                 break;
         }
     }
@@ -2284,7 +2267,7 @@ void MJView::tableKeyChanged(const std::string& key, TuiRef* value)
                 masksEvents = true;
             }
                 break;
-            case Tui_ref_type_NIL:
+            default:
             {
                 if(rightClickFunction)
                 {
@@ -2292,9 +2275,6 @@ void MJView::tableKeyChanged(const std::string& key, TuiRef* value)
                     rightClickFunction = nullptr;
                 }
             }
-                break;
-            default:
-                MJError("Expected function");
                 break;
         }
     }
@@ -2312,7 +2292,7 @@ void MJView::tableKeyChanged(const std::string& key, TuiRef* value)
                 masksEvents = true;
             }
                 break;
-            case Tui_ref_type_NIL:
+            default:
             {
                 if(clickOutsideFunction)
                 {
@@ -2320,9 +2300,6 @@ void MJView::tableKeyChanged(const std::string& key, TuiRef* value)
                     clickOutsideFunction = nullptr;
                 }
             }
-                break;
-            default:
-                MJError("Expected function");
                 break;
         }
     }
@@ -2340,7 +2317,7 @@ void MJView::tableKeyChanged(const std::string& key, TuiRef* value)
                 masksEvents = true;
             }
                 break;
-            case Tui_ref_type_NIL:
+            default:
             {
                 if(clickDownOutsideFunction)
                 {
@@ -2348,9 +2325,6 @@ void MJView::tableKeyChanged(const std::string& key, TuiRef* value)
                     clickDownOutsideFunction = nullptr;
                 }
             }
-                break;
-            default:
-                MJError("Expected function");
                 break;
         }
     }

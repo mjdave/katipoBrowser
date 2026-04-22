@@ -109,7 +109,10 @@ EventManager::~EventManager()
     {
         for(auto& kvb : kv.second)
         {
-            kvb.second->release();
+            for(auto& kvc : kvb.second)
+            {
+                kvc.second->release();
+            }
         }
     }
 }
@@ -339,9 +342,9 @@ void EventManager::handleEvent(SDL_Event* event)
             modRef->release();
         }
         
-        if(keyChangedByKeyListenerFunctions.count(event->key.key) != 0)
+        if(keyChangedByKeyListenerFunctions.count(currentHostID) != 0 && keyChangedByKeyListenerFunctions[currentHostID].count(event->key.key) != 0)
         {
-            for(auto& indexAndFunc : keyChangedByKeyListenerFunctions[event->key.key])
+            for(auto& indexAndFunc : keyChangedByKeyListenerFunctions[currentHostID][event->key.key])
             {
                 TuiRef* keyRef = new TuiNumber(event->key.key);
                 TuiRef* modRef = new TuiNumber(getModKey());
@@ -446,12 +449,32 @@ void EventManager::handleEvent(SDL_Event* event)
         }
         break;
     case SDL_EVENT_WINDOW_FOCUS_LOST:
-        mainController->appLostFocus();
-        appHasFocus = false;
+        {
+            mainController->appLostFocus();
+            appHasFocus = false;
+            if(currentKatipoTable)
+            {
+                TuiFunction* onBackgroundChange = currentKatipoTable->getFunction("onBackgroundChange");
+                if(onBackgroundChange)
+                {
+                    onBackgroundChange->call("onBackgroundChange", TUI_TRUE);
+                }
+            }
+        }
         break;
     case SDL_EVENT_WINDOW_FOCUS_GAINED:
-        mainController->appGainedFocus();
-        appHasFocus = true;
+        {
+            mainController->appGainedFocus();
+            appHasFocus = true;
+            if(currentKatipoTable)
+            {
+                TuiFunction* onBackgroundChange = currentKatipoTable->getFunction("onBackgroundChange");
+                if(onBackgroundChange)
+                {
+                    onBackgroundChange->call("onBackgroundChange", TUI_FALSE);
+                }
+            }
+        }
         break;
     case SDL_EVENT_WINDOW_MOVED:
         mainController->mainWindowChangedPosition();
@@ -595,23 +618,22 @@ int EventManager::addSpecificKeyChangedListener(int keyCode, TuiFunction* listen
 {
     int index = keyChangedListenerFunctionIndex++;
     listenerKeyChangedFunc_->retain();
-    if(keyChangedByKeyListenerFunctions.count(keyCode) != 0 && keyChangedByKeyListenerFunctions[keyCode].count(index) != 0)
-    {
-        keyChangedByKeyListenerFunctions[keyCode][index]->release();
-    }
-    keyChangedByKeyListenerFunctions[keyCode][index] = listenerKeyChangedFunc_;
+    keyChangedByKeyListenerFunctions[currentHostID][keyCode][index] = listenerKeyChangedFunc_;
     return index;
 }
 
 void EventManager::removeKeyChangedListener(int index)
 {
     anyKeyChangedListenerFunctions.erase(index);
-    for(auto& keyCodeAndSet : keyChangedByKeyListenerFunctions)
+    for(auto& hostIDAndStuff : keyChangedByKeyListenerFunctions)
     {
-        if(keyChangedByKeyListenerFunctions.count(index) != 0)
+        for(auto& keyCodeAndSet : hostIDAndStuff.second)
         {
-            keyCodeAndSet.second[index]->release();
-            keyCodeAndSet.second.erase(index);
+            if(keyCodeAndSet.second.count(index) != 0)
+            {
+                keyCodeAndSet.second[index]->release();
+                keyCodeAndSet.second.erase(index);
+            }
         }
     }
 }

@@ -19,8 +19,8 @@
 #include "Timer.h"
 #include "MJDrawable.h"
 #include "MJTimer.h"
-
-
+#include "TuiScript.h"
+#include "Database.h"
 
 #include "MJRenderTarget.h"
 #include "Vulkan.h"
@@ -46,8 +46,10 @@ MainController::MainController()
 
 
 //todo there is a bunch of unused stuff in here related to full screen switching etc and isn't supported. Fullscreen support will be needed, but not worth sorting out yet
-void MainController::init(std::string windowTitle, std::string organizationName, std::string appTitle)
+void MainController::init(TuiTable* rootTable, Database* appDatabase_, std::string windowTitle, std::string organizationName, std::string appTitle)
 {
+    appDatabase = appDatabase_;
+    
 	char *basePathCString = SDL_GetPrefPath(organizationName.c_str(), appTitle.c_str());
 	if(!basePathCString)
 	{
@@ -83,6 +85,25 @@ void MainController::init(std::string windowTitle, std::string organizationName,
     int screenHeight = mode->h * 0.8;
 	fovY = DEFAULT_FOVY;
     
+    bool setInitialScreenPos = false;
+    int initialScreenX = 0;
+    int initialScreenY = 0;
+    
+    
+    if(appDatabase->hasKey("window"))
+    {
+        TuiTable* windowInfo = (TuiTable*)TuiRef::loadBinaryString(appDatabase->dataForKey("window"));
+        if(windowInfo)
+        {
+            screenWidth = windowInfo->getDouble("w");
+            screenHeight = windowInfo->getDouble("h");
+            
+            initialScreenX = windowInfo->getDouble("x");
+            initialScreenY = windowInfo->getDouble("y");
+            setInitialScreenPos = true;
+        }
+    }
+    
 #if TARGET_OS_IPHONE
     //SDL_DisplayID displayID = SDL_GetPrimaryDisplay();
     //const SDL_DisplayMode* mode = SDL_GetCurrentDisplayMode(displayID);
@@ -113,6 +134,10 @@ void MainController::init(std::string windowTitle, std::string organizationName,
 		exit(0);
     }
 
+    if(setInitialScreenPos)
+    {
+        SDL_SetWindowPosition(displayWindow, initialScreenX, initialScreenY);
+    }
 
     int w,h;
     SDL_GetWindowSize(displayWindow, &w, &h);
@@ -177,7 +202,7 @@ void MainController::windowInfoChanged()
 
 }
 
-void MainController::recreateDrawablesAndSaveSize()
+void MainController::updateWindowInfoSize()
 {
     int w,h;
     SDL_GetWindowSize(displayWindow, &w, &h);
@@ -192,14 +217,32 @@ void MainController::recreateDrawablesAndSaveSize()
     windowInfoChanged();
 }
 
+void MainController::saveWindowInfoToDatabase()
+{
+    if(appDatabase)
+    {
+        int finalWindowsPosX,finalWindowsPosY;
+        SDL_GetWindowPosition(displayWindow, &finalWindowsPosX, &finalWindowsPosY);
+        int w,h;
+        SDL_GetWindowSize(displayWindow, &w, &h);
+        TuiTable* windowTable = new TuiTable();
+        windowTable->setDouble("x", finalWindowsPosX);
+        windowTable->setDouble("y", finalWindowsPosY);
+        windowTable->setDouble("w", w);
+        windowTable->setDouble("h", h);
+        appDatabase->setDataForKey(windowTable->serializeBinary(), "window");
+    }
+}
+
 void MainController::mainWindowChangedSize()
 {
     vulkan->windowSizeChanged();
+    saveWindowInfoToDatabase();
 }
 
 void MainController::mainWindowChangedPosition()
 {
-    
+    saveWindowInfoToDatabase();
 }
 
 void MainController::update(float dt)

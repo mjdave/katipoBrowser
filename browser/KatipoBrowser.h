@@ -15,6 +15,7 @@ class TuiTable;
 class ClientNetInterface;
 class DatabaseEnvironment;
 class Database;
+class Scanner;
 
 struct SiteConnectionInfo {
     MJView* mainView = nullptr;
@@ -36,6 +37,8 @@ public:
     
     DatabaseEnvironment* appDatabaseEnvironment;
     Database* appDatabase;
+    
+    Scanner* scanner = nullptr;
     
     std::map<std::string, ClientNetInterface*> netInterfaces;
     
