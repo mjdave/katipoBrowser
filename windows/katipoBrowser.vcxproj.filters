@@ -314,9 +314,6 @@
     <ClInclude Include="..\browser\MJTimer.h">
       <Filter>Source Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\browser\MJVersion.h">
-      <Filter>Source Files</Filter>
-    </ClInclude>
     <ClInclude Include="..\katipo\core\MJVersion.h">
       <Filter>Source Files</Filter>
     </ClInclude>

@@ -188,7 +188,6 @@ XCOPY "$(SolutionDir)..\app" "$(TargetDir)app" /s /i /y</Command>
     <ClInclude Include="..\browser\MJStaticRenderBuffer2.h" />
     <ClInclude Include="..\browser\MJTextView.h" />
     <ClInclude Include="..\browser\MJTimer.h" />
-    <ClInclude Include="..\browser\MJVersion.h" />
     <ClInclude Include="..\browser\MJView.h" />
     <ClInclude Include="..\browser\Model.h" />
     <ClInclude Include="..\browser\Noise3DFast.h" />
