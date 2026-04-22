@@ -552,7 +552,7 @@
 					"\"$(SRCROOT)/../thirdPartyiOS/curl\"",
 					"\"$(SRCROOT)/../katipo/thirdParty/libsodium/ios/lib\"",
 				);
-				MARKETING_VERSION = 0.2.1;
+				MARKETING_VERSION = 0.2.2;
 				PRODUCT_BUNDLE_IDENTIFIER = com.katipobrowser;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = NO;
@@ -613,7 +613,7 @@
 					"\"$(SRCROOT)/../thirdPartyiOS/curl\"",
 					"\"$(SRCROOT)/../katipo/thirdParty/libsodium/ios/lib\"",
 				);
-				MARKETING_VERSION = 0.2.1;
+				MARKETING_VERSION = 0.2.2;
 				PRODUCT_BUNDLE_IDENTIFIER = com.katipobrowser;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = NO;
