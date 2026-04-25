@@ -43,7 +43,6 @@ pageBody = defaultSiteContent.getView("pageBody")
 
 bookmarkLayout = scene.bookmark
 bookmarksScrollView = scene.getView("bookmarksScrollView")
-bookmarksFullScreenBackground = scene.getView("bookmarksFullScreenBackground")
 
 untrustedSiteCodePermissionFunction = function(functionName, args, hasPermissionCallback)
 {
@@ -68,8 +67,23 @@ findBookmark = function(url)
     return nil
 }
 
+
+fadeSiteContent = function(fadeIn)
+{
+    if(fadeIn)
+    {
+        siteContentBackground.fadeIn()
+    }
+    else
+    {
+        siteContentBackground.fadeOut()
+    }
+    katipo.setPauseSiteContentForModalOverlay(!fadeIn)
+}
+
 getCallback = function(result, hostID, url)
 {
+    .getInProgress = false #warning this doesn't account for multiple requests returning in a row
     print("got result with status:", result.status, " message:", result.message, " hostID:", hostID, " url:", url)
     if(result.status != "ok")
     {
@@ -190,8 +204,30 @@ getCallback = function(result, hostID, url)
         defaultSiteContent.hidden = false
         pageBody.setText("#Unhandled Result")
     }
+
+    fadeSiteContent(true)
 }
 
+doGet = function(url, siteNameOrNil, checksumsOrNil)
+{
+    checksums = checksumsOrNil
+    if(!checksums)
+    {
+        existingBookmark = findBookmark(url)
+        if(existingBookmark)
+        {
+            checksums = existingBookmark.checksums
+        }
+    }
+
+    .currentURLFullLink = stripDefaultPortFromUrl(url)
+    .currentURLSiteName = siteNameOrNil
+    urlTextEntry.setText(currentURLSiteName)
+    .getInProgress = true
+    katipo.get(currentURLFullLink, checksums, getCallback)
+    fadeSiteContent(false)
+    bookmarksScrollView.fadeOut()
+}
 
 bookmarksScrollView.onParentSizeChanged = function(parentSize)
 {
@@ -201,7 +237,7 @@ bookmarksScrollView.onParentSizeChanged = function(parentSize)
     return vec2(width, height)
 }
 
-getDisplayUrl = function(fullUrl)
+stripDefaultPortFromUrl = function(fullUrl)
 {
     foundIndex = string.find(fullUrl, ":3471/")
     if(foundIndex)
@@ -224,7 +260,7 @@ loadBookmarks = function()
         bookmarkTitleView.text = title
 
         bookmarkSubtitleView = bookmarkView.getView("bookmarkSubtitle")
-        displayUrl = getDisplayUrl(bookmarkInfo.url)
+        displayUrl = stripDefaultPortFromUrl(bookmarkInfo.url)
         bookmarkSubtitleView.text = displayUrl
 
         if(i % 2 == 0)
@@ -250,13 +286,7 @@ loadBookmarks = function()
         bookmarkClick = function()
         {
             siteContentBackground.goalColor = vec4(0.0, 0.015, 0.01, 0.6)
-            .currentURLFullLink = getDisplayUrl(bookmarkInfo.url)
-            .currentURLSiteName = bookmarkInfo.siteInfo.title
-            urlTextEntry.setText(currentURLSiteName)
-            katipo.get(bookmarkInfo.url, bookmarkInfo.checksums, getCallback)
-
-            bookmarksScrollView.fadeOut()
-            bookmarksFullScreenBackground.fadeOut()
+            doGet(bookmarkInfo.url, bookmarkInfo.siteInfo.title, bookmarkInfo.checksums)
         }
 
         bookmarkButton = bookmarkView.getView("bookmarkButton")
@@ -265,59 +295,36 @@ loadBookmarks = function()
     }
 }
 
-urlTextEntry.onChange = function(textValue, confirmChanges)
-{
-    if(confirmChanges and string.length(textValue) > 0)
-    {
-        siteContentBackground.goalColor = vec4(0.0,0.015,0.01,0.6)
-        existingBookmark = findBookmark(textValue)
-        checksums = nil
-        if(existingBookmark)
-        {
-            checksums = existingBookmark.checksums
-        }
-
-        katipo.get(textValue, checksums, getCallback)
-        .currentURLFullLink = textValue
-        .currentURLSiteName = false
-    }
-    else
-    {
-        urlTextEntry.revertToEditStartText()
-    }
-}
-
 urlTextEntry.onStartedEditing = function()
 {
     loadBookmarks()
-    urlTextEntry.setText(currentURLFullLink)
+
     bookmarksScrollView.fadeIn()
-    bookmarksFullScreenBackground.fadeIn()
+
+    fadeSiteContent(false)
+
+    urlTextEntry.setText(currentURLFullLink)
 }
 
-urlTextEntry.onFinishedEditing = function()
+urlTextEntry.onFinishedEditing = function(textValue, changesMade)
 {
     bookmarksScrollView.fadeOut()
-    bookmarksFullScreenBackground.fadeOut()
 
-    if(currentURLSiteName)
+    if(changesMade)
     {
-        urlTextEntry.setText(currentURLSiteName)
+        siteContentBackground.goalColor = vec4(0.0,0.015,0.01,0.6)
+        doGet(textValue, nil, nil)
+    }
+    else if(!getInProgress)
+    {
+        fadeSiteContent(true)
     }
 }
 
 katipo.onLinkClick = function(linkString)
 {
-    .currentURLFullLink = linkString
-    .currentURLSiteName = false
+    doGet(linkString, nil, nil)
     urlTextEntry.setText(currentURLFullLink)
-    existingBookmark = findBookmark(linkString)
-    checksums = nil
-    if(existingBookmark)
-    {
-        checksums = existingBookmark.checksums
-    }
-    katipo.get(linkString, checksums, getCallback)
 }
 
 
@@ -325,13 +332,7 @@ reloadKey = function(isDown, code, mod, isRepeat)
 {
     if(isDown and !isRepeat and currentURLFullLink and (mod == keys.modifiers.ctrl or mod == keys.modifiers.cmd))
     {
-        existingBookmark = findBookmark(currentURLFullLink)
-        checksums = nil
-        if(existingBookmark)
-        {
-            checksums = existingBookmark.checksums
-        }
-        katipo.get(currentURLFullLink, checksums, getCallback)
+        doGet(currentURLFullLink, nil, nil)
     }
 }
 
@@ -343,19 +344,12 @@ loadInitialLink = function()
     siteContentBackground.goalColor = vec4(0.0, 0.015, 0.01, 0.6)
     if(table.count(bookmarks) == 0)
     {
-        url = "katipobrowser.com/katipo"
-        .currentURLFullLink = url
-        .currentURLSiteName = false
-        urlTextEntry.setText(currentURLFullLink)
-        katipo.get(url, getCallback)
+        doGet("katipobrowser.com/katipo")
     }
     else
     {
         bookmarkInfo = bookmarks[0]
-        .currentURLFullLink = bookmarkInfo.url
-        .currentURLSiteName = bookmarkInfo.siteInfo.title
-        urlTextEntry.setText(currentURLSiteName)
-        katipo.get(bookmarkInfo.url, bookmarkInfo.checksums, getCallback)
+        doGet(bookmarkInfo.url, bookmarkInfo.siteInfo.title, bookmarkInfo.checksums)
     }
 }
 

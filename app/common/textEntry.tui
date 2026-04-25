@@ -83,33 +83,46 @@ finishEditing = function(textEntryView, confirmChanges)
         eventManager.removeTextEntryListener(textEntryView.textEntryListenerID)
         textEntryView.textEntryListenerID = nil
 
+        if(!textEntryView.onFinishedEditing) #todo remove this, only for 0.3->0.2 backwards compatibility
+        {
+            textEntryView.onFinishedEditing = textEntryView.onChange
+        }
+
         if((!textEntryView.text) or string.length(textEntryView.text) == 0)
         {
             if(textEntryView.allowsEmpty)
             {
-                textEntryView.onChange("")
+                if(textEntryView.onFinishedEditing)
+                {
+                    textEntryView.onFinishedEditing("", confirmChanges)
+                }
             }
             else
             {
                 updateText(textEntryView, textEntryView.editStartTextValue)
+                if(textEntryView.onFinishedEditing)
+                {
+                    textEntryView.onFinishedEditing(textEntryView.editStartTextValue, false)
+                }
             }
         }
         else
         {
-            if(textEntryView.onChange)
+            if(!confirmChanges and textEntryView.requireEnterToConfirm) #requireEnterToConfirm means we should revert if !confirmChanges
             {
-                textEntryView.onChange(textEntryView.text, confirmChanges)
+                updateText(textEntryView, textEntryView.editStartTextValue)
+                if(textEntryView.onFinishedEditing)
+                {
+                    textEntryView.onFinishedEditing(textEntryView.text, false)
+                }
             }
-
-            #if(!confirmChanges) #this is not always desired, so for now, callers are responsible for reverting if they want it, by calling revertToEditStartText() in onChange
-            #{
-            #    updateText(textEntryView, textEntryView.editStartTextValue)
-            #}
-        }
-
-        if(textEntryView.onFinishedEditing)
-        {
-            textEntryView.onFinishedEditing()
+            else
+            {
+                if(textEntryView.onFinishedEditing)
+                {
+                    textEntryView.onFinishedEditing(textEntryView.text, confirmChanges)
+                }
+            }
         }
     }
 }

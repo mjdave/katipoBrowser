@@ -11,6 +11,7 @@ bookmarksListWidth = 500
 bookMarkHeight = 40
 
 mainView = {
+    id = "mainView"
     type = "image"
     path = "app/katipoBrowser/images/colorsBackground.png"
     shader = "drawQuadTexturedHueShift"
@@ -25,12 +26,6 @@ mainView = {
                     id = "siteContent"
                     type = "color"
                     color = vec4(0.1,0.2,0.0,0.2)
-                }
-                {
-                    id = "bookmarksFullScreenBackground"
-                    type = "color"
-                    color = vec4(0.05,0.12,0.2,0.85)
-                    hidden = true
                 }
                 {
                     id = "bookmarksScrollView"

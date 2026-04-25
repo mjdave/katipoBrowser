@@ -406,6 +406,10 @@ void KatipoBrowser::init()
                     if(viewNameRef->type() == Tui_ref_type_STRING && siteConnectionInfosByHostID.count(hostID) != 0)
                     {
                         SiteConnectionInfo& siteConnectionInfo = siteConnectionInfosByHostID[hostID];
+                        if(((TuiString*)viewNameRef)->value == siteConnectionInfo.mainView->idString)
+                        {
+                            return siteConnectionInfo.mainView->stateTable->retain();
+                        }
                         MJView* subView = siteConnectionInfo.mainView->getSubViewWithID(((TuiString*)viewNameRef)->value);
                         if(subView)
                         {
@@ -619,6 +623,31 @@ void KatipoBrowser::init()
         return TUI_NIL;
     });
     
+    //katipo.setPauseSiteContentForModalOverlay(pauseSite)
+    katipoTable->setFunction("setPauseSiteContentForModalOverlay", [this](TuiTable* args, TuiRef* existingResult, TuiFunctionCallData* incomingCallData, TuiDebugInfo* callingDebugInfo) -> TuiRef* {
+        if(args->arrayObjects.size() >= 1)
+        {
+            bool paused = args->arrayObjects[0]->boolValue();
+            for(auto& kv : siteConnectionInfosByHostID)
+            {
+                if(kv.second.katipoTable)
+                {
+                    if(kv.second.katipoTable->getBool("paused") != paused)
+                    {
+                        kv.second.katipoTable->set("paused", TUI_BOOL(paused));
+                        TuiFunction* setPausedFunction = kv.second.katipoTable->getFunction("setPaused");
+                        if(setPausedFunction)
+                        {
+                            setPausedFunction->call(incomingCallData,callingDebugInfo,TUI_BOOL(paused));
+                        }
+                    }
+                }
+            }
+            
+        }
+        return TUI_NIL;
+    });
+    
     TuiTable* sceneTable = (TuiTable*)TuiRef::load(Katipo::getResourcePath("app/katipoBrowser/scripts/scene.tui"), rootTable);
     rootTable->setTable("scene", sceneTable);
     sceneTable->release();
@@ -629,6 +658,10 @@ void KatipoBrowser::init()
             TuiRef* viewNameRef = args->arrayObjects[0];
             if(viewNameRef->type() == Tui_ref_type_STRING)
             {
+                if(((TuiString*)viewNameRef)->value == mainView->idString)
+                {
+                    return mainView->stateTable->retain();
+                }
                 MJView* subView = mainView->getSubViewWithID(((TuiString*)viewNameRef)->value);
                 if(subView)
                 {
