@@ -7,6 +7,7 @@ print("katipoBrowser is running")
 currentSiteHostID = false #tui quirk, false instead of nil, as nil removes it
 currentURLFullLink = ""
 currentURLSiteName = false
+getInProgress = false
 
 bookmarksPath = file.getSavePath("bookmarks.tuib") #todo use database
 bookmarks = file.loadBinary(bookmarksPath)
@@ -222,10 +223,10 @@ doGet = function(url, siteNameOrNil, checksumsOrNil)
 
     .currentURLFullLink = stripDefaultPortFromUrl(url)
     .currentURLSiteName = siteNameOrNil
-    urlTextEntry.setText(currentURLSiteName)
     .getInProgress = true
-    katipo.get(currentURLFullLink, checksums, getCallback)
     fadeSiteContent(false)
+    urlTextEntry.setText(currentURLSiteName)
+    katipo.get(currentURLFullLink, checksums, getCallback)
     bookmarksScrollView.fadeOut()
 }
 

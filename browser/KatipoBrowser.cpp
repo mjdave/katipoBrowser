@@ -250,7 +250,7 @@ void KatipoBrowser::init()
             
             if(currentSiteView)
             {
-                currentSiteView->fadeOut();
+                currentSiteView->stateTable->setBool("hidden", TUI_TRUE);
                 currentSiteView = nullptr;
             }
             
@@ -395,7 +395,7 @@ void KatipoBrowser::init()
                 }
             }
             
-            TuiTable* sceneTable = (TuiTable*)TuiRef::load(siteScenePath, siteConnectionInfo.rootTable);
+            TuiTable* sceneTable = (TuiTable*)TuiRef::runScriptFile(siteScenePath, siteConnectionInfo.rootTable);
             siteConnectionInfo.rootTable->setTable("scene", sceneTable);
             sceneTable->release();
             
@@ -648,7 +648,7 @@ void KatipoBrowser::init()
         return TUI_NIL;
     });
     
-    TuiTable* sceneTable = (TuiTable*)TuiRef::load(Katipo::getResourcePath("app/katipoBrowser/scripts/scene.tui"), rootTable);
+    TuiTable* sceneTable = (TuiTable*)TuiRef::runScriptFile(Katipo::getResourcePath("app/katipoBrowser/scripts/scene.tui"), rootTable);
     rootTable->setTable("scene", sceneTable);
     sceneTable->release();
     

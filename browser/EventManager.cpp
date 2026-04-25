@@ -657,7 +657,7 @@ void EventManager::bindTui(TuiTable* rootTable)
             }
             else
             {
-                TuiParseError(callingDebugInfo->fileName.c_str(), callingDebugInfo->lineNumber, "Incorrect types passed to function. expected number, function");
+                TuiParseError(callingDebugInfo, "Incorrect types passed to function. expected number, function");
             }
         }
         return TUI_NIL;
@@ -679,7 +679,7 @@ void EventManager::bindTui(TuiTable* rootTable)
             }
             else
             {
-                TuiParseError(callingDebugInfo->fileName.c_str(), callingDebugInfo->lineNumber, "Incorrect type");
+                TuiParseError(callingDebugInfo, "Incorrect type");
             }
         }
         return TUI_NIL;
@@ -697,7 +697,7 @@ void EventManager::bindTui(TuiTable* rootTable)
             }
             else
             {
-                TuiParseError(callingDebugInfo->fileName.c_str(), callingDebugInfo->lineNumber, "Incorrect type");
+                TuiParseError(callingDebugInfo, "Incorrect type");
             }
         }
         return TUI_NIL;

@@ -87,7 +87,7 @@ void MJAudio::bindTui(TuiTable* rootTable)
         }
         else
         {
-            TuiParseError(callingDebugInfo->fileName.c_str(), callingDebugInfo->lineNumber, "Incorrect argument type");
+            TuiParseError(callingDebugInfo, "Incorrect argument type");
         }
         return TUI_NIL;
     });
@@ -118,12 +118,12 @@ void MJAudio::bindTui(TuiTable* rootTable)
             }
             else
             {
-                TuiParseError(callingDebugInfo->fileName.c_str(), callingDebugInfo->lineNumber, "Incorrect argument type");
+                TuiParseError(callingDebugInfo, "Incorrect argument type");
             }
         }
         else
         {
-            TuiParseError(callingDebugInfo->fileName.c_str(), callingDebugInfo->lineNumber, "Missing args");
+            TuiParseError(callingDebugInfo, "Missing args");
         }
         return TUI_NIL;
     });

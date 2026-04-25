@@ -204,7 +204,7 @@ void MJView::initInternals()
             }
             else
             {
-                TuiParseError(callingDebugInfo->fileName.c_str(), callingDebugInfo->lineNumber, "expected number");
+                TuiParseError(callingDebugInfo, "expected number");
             }
         }
         fadeIn(duration);
@@ -223,7 +223,7 @@ void MJView::initInternals()
             }
             else
             {
-                TuiParseError(callingDebugInfo->fileName.c_str(), callingDebugInfo->lineNumber, "expected number");
+                TuiParseError(callingDebugInfo, "expected number");
             }
         }
         fadeOut(duration);
@@ -816,7 +816,7 @@ void MJView::update(float dt)
     {
         
         TuiDebugInfo debugInfo;
-        debugInfo.fileName = "MJView::update";
+        TuiDebugInfoPush(&debugInfo, "MJView::update(dt)", 1);
         TuiTable* args = new TuiTable(nullptr);
         
         TuiNumber* agr1Ref = new TuiNumber(dt);
@@ -870,7 +870,7 @@ void MJView::preRender(GCommandBuffer* commandBuffer, MJRenderPass renderPass, i
     if(preRenderUpdateFunction)
     {
         TuiDebugInfo debugInfo;
-        debugInfo.fileName = "MJView::preRender->draw(dt, frameLerp)";
+        TuiDebugInfoPush(&debugInfo, "MJView::preRender->draw(dt, frameLerp)", 1);
         TuiTable* args = new TuiTable(nullptr);
         
         TuiNumber* agr1Ref = new TuiNumber(dt);
@@ -1765,7 +1765,7 @@ void MJView::resetAnimationTimer()
 
 void MJView::loadFromFile(std::string filePath, TuiTable* parentTable)
 {
-    TuiTable* table = (TuiTable*)TuiRef::load(filePath, parentTable);
+    TuiTable* table = (TuiTable*)TuiRef::runScriptFile(filePath, parentTable);
     if(table)
     {
         loadFromTable(table, true, parentTable);

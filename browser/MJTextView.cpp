@@ -61,7 +61,7 @@ MJTextView::MJTextView(MJView* parentView_)
             }
             else
             {
-                TuiParseError(callingDebugInfo->fileName.c_str(), callingDebugInfo->lineNumber, "Incorrect argument type");
+                TuiParseError(callingDebugInfo, "Incorrect argument type");
             }
             
         }

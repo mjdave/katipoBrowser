@@ -565,7 +565,7 @@ create = function(parentView, viewLayout)
     }
 
     
-    backgroundView.clickDownOutside = function()
+    backgroundView.clickOutside = function()
     {
         finishEditing(textEntryView, false)
     }

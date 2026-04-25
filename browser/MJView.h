@@ -323,7 +323,7 @@ public:
     }
     
     void fadeOut(float duration = 0.25) {
-        if(!hidden && alpha > 0.001)
+        if(!hidden && (fadingIn || alpha > 0.001))
         {
             fadeDuration = duration;
             fadingIn = false;

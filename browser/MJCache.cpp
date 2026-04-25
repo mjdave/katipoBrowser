@@ -255,7 +255,7 @@ GPipeline* MJCache::getPipeline(std::string name,
     std::string shaderPath = Katipo::getResourcePath("app/common/shaders/" + name + ".tui"); //todo allow sites to supply shaders
     //MJLog("shaderPath:%s", shaderPath.c_str());
     
-    TuiTable* shaderTable = (TuiTable*)TuiRef::load(shaderPath, nullptr);
+    TuiTable* shaderTable = (TuiTable*)TuiRef::runScriptFile(shaderPath, nullptr);
     
     //std::string vertPathname = ((TuiString*)shaderTable->objectsByStringKey["vertPath"])->value;
     std::string vertPathname = shaderTable->getString("vertPath");
