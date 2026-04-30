@@ -1,12 +1,8 @@
 
-topPadding = 20
-itemRowXPadding = 20
-lineHeight = 20
+topPaddingDefault = 20
+leftPaddingDefault = 20 #we don't support bottom or right padding yet
+minLineHeight = 20
 
-topPaddingLayout = {
-    type = "view"
-    size = vec2(topPadding,topPadding)
-}
 
 font = "roboto"
 boldFont = "robotoBold"
@@ -67,7 +63,7 @@ getViewLayout = function(incomingLayout)
         layout[k] = v
     }
 
-    layout.type = "scrollView"
+    layout.type = "view"
     
     return layout
 }
@@ -139,7 +135,7 @@ getRowView = function(markupScrollView)
     {
         rowLayout = {
             type = "view"
-            size = vec2(itemRowXPadding,lineHeight)
+            size = vec2(markupScrollView.markupPadding.left,minLineHeight)
         }
         markupScrollView.currentRowView = markupScrollView.addView(rowLayout)
         markupScrollView.preventWordSeparation = false
@@ -254,7 +250,7 @@ addItemView = function(markupScrollView, style)
         textView = backgroundView
     }
 
-    textView.wrapWidth = markupScrollView.parentSize.x - rowView.size.x - itemRowXPadding - 20
+    textView.wrapWidth = markupScrollView.parentSize.x - rowView.size.x - markupScrollView.markupPadding.left - 20
     textView.wrapClamp = true
     textView.preventWordSeparation = markupScrollView.preventWordSeparation
     textView.text = lineData.foundText
@@ -585,7 +581,39 @@ lineFunc = function(markupScrollView, lineText)
 create = function(parentView, viewLayout)
 {
     layout = getViewLayout(viewLayout)
-    markupScrollView = parentView.addView(layout)
+    markupView = parentView.addView(layout)
+
+    scrollViewLayout = table.clone(viewLayout) #may not be desirable?
+    scrollViewLayout.type = "scrollView"
+
+    markupScrollView = markupView.addView(scrollViewLayout)
+    markupView.scrollView = markupScrollView
+    
+    cursorViewLayout = {
+        size = vec2(1,minLineHeight)
+        type = "color"
+        color = vec4(1.0,1.0,1.0,1.0)
+        horizontalAlignment = "left"
+        verticalAlignment = verticalAlignment
+        pos = vec3(2,1,0)
+    }
+    
+    cursorView = markupView.addView(cursorViewLayout)
+    cursorView.hidden = true
+    markupView.cursorView = cursorView
+
+    markupScrollView.markupPadding = {
+        top = topPaddingDefault
+        left = leftPaddingDefault
+    }
+    
+    if(viewLayout.markupPadding)
+    {
+        for(k,v in viewLayout.markupPadding)
+        {
+            markupScrollView.markupPadding[k] = v
+        }
+    }
 
     localLineFunc = function(line)
     {
@@ -597,22 +625,38 @@ create = function(parentView, viewLayout)
         markupScrollView.removeAllRows()
         markupScrollView.currentText = markupText
 
+
+        topPaddingLayout = {
+            type = "view"
+            size = vec2(markupScrollView.markupPadding.top,markupScrollView.markupPadding.top)
+        }
+
         markupScrollView.addView(topPaddingLayout)
 
         if(markupText)
         {
             string.eachLine(markupText, localLineFunc)
         }
-    }
 
-    markupScrollView.setText = doSetText
+        if(markupScrollView.variableHeight)
+        {
+            markupScrollView.layoutRows()
+            markupView.size = vec2(markupScrollView.size.x, math.max(markupScrollView.totalHeight, minLineHeight))
+            #markupView.size = markupScrollView.size
+        }
+    } 
 
-    markupScrollView.onParentSizeChanged = function(parentSize) #override the scrollView one with our own
+    markupView.setText = doSetText
+
+    markupView.onParentSizeChanged = function(parentSize) #override the scrollView one with our own
     {
+        markupScrollView.layoutRows()
         markupScrollView.parentSize = parentSize
+        markupView.size = parentSize
+        markupScrollView.size = parentSize
         doSetText(markupScrollView.currentText)
-        return parentSize
     }
 
-    return markupScrollView
+
+    return markupView
 }

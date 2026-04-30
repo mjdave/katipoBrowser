@@ -5,7 +5,7 @@ viewTypes = { #can be added to at any time
     markup = require("app/common/markupView.tui")
 }
 
-urlTextEntryHeight = 40
+urlTextEntryHeight = 30
 
 bookmarksListWidth = 500
 bookMarkHeight = 40
@@ -37,11 +37,24 @@ mainView = {
                 {
                     id = "urlTextEntry"
                     type = "textEntry"
+                    fontSize = 14
                     onParentSizeChanged = function(parentSize)
                     {
                         return vec2(parentSize.x, urlTextEntryHeight)
                     }
                     alignmentY = "bottom"
+                    pos = vec3(0,10,0)
+                }
+                {
+                    id = "refreshButton"
+                    type = "button"
+                    buttonType = "imageHueShift"
+                    path = "app/katipoBrowser/images/refresh.png"
+                    size = vec2(urlTextEntryHeight,urlTextEntryHeight)
+                    alignmentX = "outerRight"
+                    layoutParentID = "urlTextEntry"
+                    hidden = true
+                    pos = vec3(10,0,0)
                 }
             }
         }

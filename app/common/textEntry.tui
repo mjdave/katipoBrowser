@@ -4,39 +4,32 @@ standardColor = vec4(1.0,1.0,1.0,1.0)
 disabledColor = vec4(0.5,0.5,0.5,0.5)
 selectedColor = vec4(0.5,0.9,1.0,1.0)
 
-resize = function(textEntryView, size)
-{
-    textEntryView.size = size
-    textEntryView.backgroundView.size = size
-}
-
 updateVisuals = function(textEntryView)
 {
-    if(textEntryView.textView)
+    if(textEntryView.text)
     {
-        if(textEntryView.text)
-        {
-            textEntryView.textView.text = textEntryView.text
-        }
-        else
-        {
-            textEntryView.textView.text = ""
-        }
+        textEntryView.textView.text = textEntryView.text
+    }
+    else
+    {
+        textEntryView.textView.text = ""
+    }
 
-        if(textEntryView.disabled)
+    textEntryView.backgroundView.size = vec2(math.max(80, textEntryView.textView.size.x + 20), math.max(textEntryView.textView.size.y, textEntryView.size.y))
+    textEntryView.size = textEntryView.backgroundView.size
+    if(textEntryView.disabled)
+    {
+        textEntryView.textView.color = disabledColor
+    }
+    else
+    {
+        if(textEntryView.selected or textEntryView.editing)
         {
-            textEntryView.textView.color = disabledColor
+            textEntryView.textView.color = selectedColor
         }
         else
         {
-            if(textEntryView.selected or textEntryView.editing)
-            {
-                textEntryView.textView.color = selectedColor
-            }
-            else
-            {
-                textEntryView.textView.color = standardColor
-            }
+            textEntryView.textView.color = standardColor
         }
     }
 }
@@ -272,6 +265,7 @@ create = function(parentView, viewLayout)
     textView = textEntryView.addView(textViewLayout)
     textEntryView.initialOffset = textViewLayout.pos
     textEntryView.textView = textView
+
 
     textEntryView.cursorView.layoutParent = textView
 
@@ -623,7 +617,9 @@ setText = function(textEntryView, text_)
     {
         textToUse = string.subString(textToUse, 0, textEntryView.maxChars)
     }
+
     textEntryView.text = textToUse
+
     if(!textEntryView.editing)
     {
         textEntryView.cursorOffset = 0

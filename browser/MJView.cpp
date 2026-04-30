@@ -379,9 +379,15 @@ void MJView::setSize(dvec2 size_) //WARNING! MJTextView completely overrides thi
                 TuiRef* inRef = new TuiVec2(size);
                 TuiRef* sizeRef = subView->parentSizeChangedFunction->call("parentSizeChangedFunction", inRef);
                 //subView->stateTable->setVec2("size", ((TuiVec2*)sizeRef)->value);
-                subView->setSize(((TuiVec2*)sizeRef)->value);
+                if(sizeRef)
+                {
+                    if(sizeRef->type() == Tui_ref_type_VEC2)
+                    {
+                        subView->setSize(((TuiVec2*)sizeRef)->value);
+                    }
+                    sizeRef->release();
+                }
                 inRef->release();
-                sizeRef->release();
             }
             else if(subView->scaleToParentSize)
             {
@@ -1845,12 +1851,18 @@ void MJView::loadFromTable(TuiTable* table, bool needsToLayoutSubviews, TuiTable
             TuiRef* inSizeRef = new TuiVec2(parentView->size);
             
             TuiRef* sizeRef = parentSizeChangedFunction->call("parentSizeChangedFunction", inSizeRef);
-            stateTable->setVec2("size", ((TuiVec2*)sizeRef)->value);
             
-            setSize(((TuiVec2*)sizeRef)->value);
+            if(sizeRef)
+            {
+                if(sizeRef->type() == Tui_ref_type_VEC2)
+                {
+                    stateTable->setVec2("size", ((TuiVec2*)sizeRef)->value);
+                    setSize(((TuiVec2*)sizeRef)->value);
+                }
+                sizeRef->release();
+            }
             
             inSizeRef->release();
-            sizeRef->release();
         }
         else
         {
@@ -1972,10 +1984,16 @@ void MJView::tableKeyChanged(const std::string& key, TuiRef* value)
                 
                 TuiRef* inSizeRef = new TuiVec2(parentView->size);
                 TuiRef* sizeRef = parentSizeChangedFunction->call("parentSizeChangedFunction", inSizeRef);
-                stateTable->setVec2("size", ((TuiVec2*)sizeRef)->value);
-                setSize(((TuiVec2*)sizeRef)->value);
+                if(sizeRef)
+                {
+                    if(sizeRef->type() == Tui_ref_type_VEC2)
+                    {
+                        stateTable->setVec2("size", ((TuiVec2*)sizeRef)->value);
+                        setSize(((TuiVec2*)sizeRef)->value);
+                    }
+                    sizeRef->release();
+                }
                 inSizeRef->release();
-                sizeRef->release();
             }
                 
                 break;

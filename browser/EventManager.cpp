@@ -37,11 +37,11 @@ static bool resizingEventWatcher(void* data, SDL_Event* event) {
             MainController::getInstance()->mainMJView->needsToUpdateSizeDueToWindowChange = true;
         }
             break;
-        case SDL_EVENT_WINDOW_METAL_VIEW_RESIZED:
+        /*case SDL_EVENT_WINDOW_METAL_VIEW_RESIZED:
         {
             MainController::getInstance()->mainWindowChangedSize();
         }
-            break;
+            break;*/
         case SDL_EVENT_WINDOW_SAFE_AREA_CHANGED:
         {
             SDL_Rect rect;
@@ -340,6 +340,18 @@ void EventManager::handleEvent(SDL_Event* event)
             indexAndFunc.second->call("keyChangedListenerFunction", TUI_BOOL(keyDown), keyRef, modRef, TUI_BOOL(event->key.repeat != 0));
             keyRef->release();
             modRef->release();
+        }
+        
+        if(keyChangedByKeyListenerFunctions.count("") != 0 && keyChangedByKeyListenerFunctions[""].count(event->key.key) != 0) //bit hacky, "" is what happens when we set from the browser before a site has been loaded, eg cmd-R for reload
+        {
+            for(auto& indexAndFunc : keyChangedByKeyListenerFunctions[""][event->key.key])
+            {
+                TuiRef* keyRef = new TuiNumber(event->key.key);
+                TuiRef* modRef = new TuiNumber(getModKey());
+                indexAndFunc.second->call("keyChangedListenerFunction", TUI_BOOL(keyDown), keyRef, modRef, TUI_BOOL(event->key.repeat != 0));
+                keyRef->release();
+                modRef->release();
+            }
         }
         
         if(keyChangedByKeyListenerFunctions.count(currentHostID) != 0 && keyChangedByKeyListenerFunctions[currentHostID].count(event->key.key) != 0)

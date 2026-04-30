@@ -255,10 +255,15 @@ void MJTextView::setSizeInternal(dvec2 size_)
         {
             TuiRef* inRef = new TuiVec2(size);
             TuiRef* sizeRef = subView->parentSizeChangedFunction->call("parentSizeChangedFunction", inRef);
-            //subView->stateTable->setVec2("size", ((TuiVec2*)sizeRef)->value);
-            subView->setSize(((TuiVec2*)sizeRef)->value);
+            if(sizeRef)
+            {
+                if(sizeRef->type() == Tui_ref_type_VEC2)
+                {
+                    subView->setSize(((TuiVec2*)sizeRef)->value);
+                }
+                sizeRef->release();
+            }
             inRef->release();
-            sizeRef->release();
         }
     }
 }
@@ -396,6 +401,13 @@ void MJTextView::preRender(GCommandBuffer* commandBuffer, MJRenderPass renderPas
      */
     
     
+    
+    if(bufferNeedsUpdating && !getHidden() && font)
+    {
+        updateBuffer(commandBuffer);
+        bufferNeedsUpdating = false;
+    }
+    
     if(!nextVertices.empty())
     {
         Vulkan* vulkan = cache->vulkan;
@@ -408,12 +420,6 @@ void MJTextView::preRender(GCommandBuffer* commandBuffer, MJRenderPass renderPas
         vertices = nextVertices;
         nextVertices.clear();
         hasRenderData = true;
-    }
-    
-    if(bufferNeedsUpdating && !getHidden() && font)
-    {
-        updateBuffer(commandBuffer);
-        bufferNeedsUpdating = false;
     }
     
     MJView::preRender(commandBuffer, renderPass, renderTargetCompatibilityIndex, dt, frameLerp, animationTimer_);

@@ -70,7 +70,7 @@ void KatipoBrowser::doGet(const std::string& trackerKey,
         }
     }
     
-    MJLog("fetching from remote hostName:%s", hostName.c_str());
+    MJLog("fetching from remote hostName:%s fullURL:%s", hostName.c_str(), fullURL.c_str());
     
     
     TuiFunction* callHostFunctionCallbackFunction = new TuiFunction([mainGetCallbackFunction, fullURL](TuiTable* args, TuiRef* existingResult, TuiFunctionCallData* incomingCallData, TuiDebugInfo* callingDebugInfo) -> TuiRef* {
@@ -520,6 +520,7 @@ void KatipoBrowser::init()
                     else
                     {
                         hostName = "";
+                        remoteURL = "";
                     }
                 }
                 

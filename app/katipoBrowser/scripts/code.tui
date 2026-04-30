@@ -19,6 +19,7 @@ if(!bookmarks)
 #print("loaded bookmarks:", bookmarks)
 
 urlTextEntry = scene.getView("urlTextEntry")
+refreshButton = scene.getView("refreshButton")
 
 windowSafeBackground = scene.getView("windowSafeBackground")
 windowSafeBackground.onParentSizeChanged = function(parentSize)
@@ -84,6 +85,7 @@ fadeSiteContent = function(fadeIn)
 
 getCallback = function(result, hostID, url)
 {
+    print("getCallback url:", url, " currentURLFullLink:", currentURLFullLink)
     .getInProgress = false #warning this doesn't account for multiple requests returning in a row
     print("got result with status:", result.status, " message:", result.message, " hostID:", hostID, " url:", url)
     if(result.status != "ok")
@@ -196,8 +198,8 @@ getCallback = function(result, hostID, url)
             #siteImage = result.siteData.siteImage
         }
         table.insert(bookmarks, 0, bookmarkInfo)
-
         file.saveBinary(bookmarksPath, bookmarks) #todo use database
+        loadBookmarks()
     }
     else
     {
@@ -227,15 +229,25 @@ doGet = function(url, siteNameOrNil, checksumsOrNil)
     fadeSiteContent(false)
     urlTextEntry.setText(currentURLSiteName)
     katipo.get(currentURLFullLink, checksums, getCallback)
+    
     bookmarksScrollView.fadeOut()
+    refreshButton.fadeOut()
+}
+
+updateScrollViewSize = function()
+{
+    parentSize = bookmarksScrollView.parentSize
+    totalHeight = scene.bookMarkHeight * table.count(bookmarks)
+    height = math.min(totalHeight, parentSize.y - scene.urlTextEntryHeight)
+    width = math.min(scene.bookmarksListWidth, parentSize.x)
+    bookmarksScrollView.size = vec2(width, height)
 }
 
 bookmarksScrollView.onParentSizeChanged = function(parentSize)
 {
-    totalHeight = scene.bookMarkHeight * table.count(bookmarks)
-    height = math.min(totalHeight, parentSize.y - scene.urlTextEntryHeight)
-    width = math.min(scene.bookmarksListWidth, parentSize.x)
-    return vec2(width, height)
+    bookmarksScrollView.parentSize = parentSize
+    updateScrollViewSize()
+    return bookmarksScrollView.size
 }
 
 stripDefaultPortFromUrl = function(fullUrl)
@@ -294,6 +306,7 @@ loadBookmarks = function()
         bookmarkButton.click = bookmarkClick
         bookmarkButton.hueOffset = -0.1 - 0.1 * i
     }
+    updateScrollViewSize()
 }
 
 urlTextEntry.onStartedEditing = function()
@@ -301,6 +314,7 @@ urlTextEntry.onStartedEditing = function()
     loadBookmarks()
 
     bookmarksScrollView.fadeIn()
+    refreshButton.fadeIn()
 
     fadeSiteContent(false)
 
@@ -310,6 +324,7 @@ urlTextEntry.onStartedEditing = function()
 urlTextEntry.onFinishedEditing = function(textValue, changesMade)
 {
     bookmarksScrollView.fadeOut()
+    refreshButton.fadeOut()
 
     if(changesMade)
     {
@@ -328,6 +343,11 @@ katipo.onLinkClick = function(linkString)
     urlTextEntry.setText(currentURLFullLink)
 }
 
+
+refreshButton.click = function()
+{
+    doGet(currentURLFullLink, nil, nil)
+}
 
 reloadKey = function(isDown, code, mod, isRepeat)
 {
