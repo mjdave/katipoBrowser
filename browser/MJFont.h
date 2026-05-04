@@ -150,13 +150,19 @@ public:
 		int charIndex,
 		int alignment,
 		int wrapWidth,
-		float scale = 1.0f);
+		float scale = 1.0f,
+                                     bool clampToWrapWidth = false,
+                                     int* clampedWrapCharNextLineIndex = nullptr,
+                                   bool preventWordSeparation = false);
     
     int calculateIndexOfCharAtPos(std::vector<AttributedText>& attributedText,
         dvec2 pos,
         int alignment,
         int wrapWidth,
-        float scale = 1.0f);
+        float scale = 1.0f,
+                                  bool clampToWrapWidth = false,
+                                  int* clampedWrapCharNextLineIndex = nullptr,
+                                bool preventWordSeparation = false);
 
 private:
 	std::vector<FontLine> getLines(std::vector<AttributedText>& attributedText, 

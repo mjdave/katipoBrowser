@@ -569,9 +569,14 @@ dvec4 MJTextView::getRectForCharAtIndex(int charIndex)
         }
         
         charIndexToUse = clamp(charIndexToUse, 0, (int)textString.size() - 1);
-		double scaleToUse = renderScale;
-		double textRenderScaleToUse = textRenderScale;
-		irect charRect = font->calculateRectOfCharAtIndex(text, charIndexToUse, textAlignment, wrapWidth * scaleToUse, 1.0 / textRenderScaleToUse);
+		//double scaleToUse = renderScale;
+		//double textRenderScaleToUse = textRenderScale;
+		//irect charRect = font->calculateRectOfCharAtIndex(text, charIndexToUse, textAlignment, wrapWidth * scaleToUse, 1.0 / textRenderScaleToUse);
+        
+        double scaleToUse = renderScale;
+        double textRenderScaleToUse = textRenderScale;
+        int wrapClampCharIndex = 0;
+        irect charRect = font->calculateRectOfCharAtIndex(text, charIndexToUse, textAlignment, wrapWidth * scaleToUse, 1.0 / textRenderScaleToUse, wrapClamp, &wrapClampCharIndex, preventWordSeparation);
         
         if(returnStartPos)
         {

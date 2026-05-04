@@ -738,11 +738,14 @@ irect MJFont::calculateRectOfCharAtIndex(std::vector<AttributedText>& attributed
 	int charIndex_,
 	int alignment,
 	int wrapWidth,
-	float scale)
+	float scale,
+     bool clampToWrapWidth,
+     int* clampedWrapCharNextLineIndex,
+     bool preventWordSeparation)
 {
 	int indexToUse = charIndex_;
-
-	std::vector<FontLine> lines = getLines(attributedText,  alignment, wrapWidth, scale);
+    
+    std::vector<FontLine> lines = getLines(attributedText,  alignment, wrapWidth, scale, clampToWrapWidth, clampedWrapCharNextLineIndex, preventWordSeparation);
 
 	int charI = 0;
 
@@ -800,9 +803,12 @@ int MJFont::calculateIndexOfCharAtPos(std::vector<AttributedText>& attributedTex
     dvec2 pos,
     int alignment,
     int wrapWidth,
-    float scale)
+    float scale,
+      bool clampToWrapWidth,
+      int* clampedWrapCharNextLineIndex,
+    bool preventWordSeparation)
 {
-    std::vector<FontLine> lines = getLines(attributedText,  alignment, wrapWidth, scale);
+    std::vector<FontLine> lines = getLines(attributedText,  alignment, wrapWidth, scale, clampToWrapWidth, clampedWrapCharNextLineIndex, preventWordSeparation);
 
    // MJLog("calculateIndexOfCharAtPos:(%.2f, %.2f)", pos.x, pos.y)
     int charI = 0;

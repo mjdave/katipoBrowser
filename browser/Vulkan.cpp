@@ -808,7 +808,7 @@ void Vulkan::recreateSwapChain()
     //MJLog("recreateSwapChain drawable size:(%d,%d)", width, height);
 	if(width < 40 || height < 40)
 	{
-        MJError("Zero size window");
+        MJError("Window view is too small");
 		return;
 	}
     vkDeviceWaitIdle(device);

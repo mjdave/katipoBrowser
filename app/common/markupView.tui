@@ -1,3 +1,4 @@
+keys = require("app/common/keys.tui")
 
 topPaddingDefault = 20
 leftPaddingDefault = 20 #we don't support bottom or right padding yet
@@ -84,6 +85,366 @@ updateVisuals = function(view)
     }
 }
 
+
+finishEditing = function(markupView, textView, confirmChanges)
+{
+    if(textView.editing and textView == markupView.currentlyEditingTextView)
+    {
+        print("finish editing:", textView.text)
+        textView.editing = false
+        markupView.currentlyEditingTextView = nil
+
+        markupView.update = nil
+        markupView.cursorView.hidden = true
+        
+        eventManager.removeTextEntryListener(markupView.textEntryListenerID)
+        markupView.textEntryListenerID = nil
+
+        if((!textView.text) or string.length(textView.text) == 0)
+        {
+            if(markupView.allowsEmpty)
+            {
+                if(markupView.onFinishedEditing)
+                {
+                    markupView.onFinishedEditing("", confirmChanges)
+                }
+            }
+            else
+            {
+                updateText(markupView, textView, markupView.editStartTextValue)
+                if(markupView.onFinishedEditing)
+                {
+                    markupView.onFinishedEditing(markupView.editStartTextValue, false)
+                }
+            }
+        }
+        else
+        {
+            if(!confirmChanges and markupView.requireEnterToConfirm) #requireEnterToConfirm means we should revert if !confirmChanges
+            {
+                updateText(markupView, textView, markupView.editStartTextValue)
+                if(markupView.onFinishedEditing)
+                {
+                    markupView.onFinishedEditing(textView.text, false)
+                }
+            }
+            else
+            {
+                if(markupView.onFinishedEditing)
+                {
+                    markupView.onFinishedEditing(textView.text, confirmChanges)
+                }
+            }
+        }
+    }
+}
+
+updateCursorFunction = function(markupView, dt)
+{
+    markupView.cursorTimer = markupView.cursorTimer + dt
+    if(markupView.cursorTimer > 0.5)
+    {
+        markupView.cursorTimer = markupView.cursorTimer - 0.5
+        if(markupView.cursorTimer > 0.5)
+        {
+            markupView.cursorTimer = 0.0
+        }
+        markupView.cursorView.hidden = (!markupView.cursorView.hidden)
+    }
+}
+
+updateCursorPosition = function(markupView, textView)
+{
+    print("textView:", textView)
+    rect = textView.getRectForCharAtIndex(-1 + textView.cursorOffset)
+    print("rect:", rect, " textView.cursorOffset:", textView.cursorOffset)
+    xOffset = rect.x + rect.z
+    if(!textView.horizontalAlignment or textView.horizontalAlignment == "center")
+    {
+        xOffset /= 2
+    }
+    #todo handle right alignment
+    print("set cursor pos:", xOffset + 1,",",rect.y + 1,0)
+    markupView.cursorView.pos = vec3(xOffset + 1,rect.y + 1,0)
+}
+
+setTextViewText = function(textView, text_)
+{
+    textToUse = text_
+    if(!textToUse)
+    {
+        textToUse = ""
+    }
+    elseif(type(textToUse) != "string")
+    {
+        #textToUse = mj:tostring(textToUse) todo
+        error("expected string, got ", type(textToUse), ": ", textToUse)
+    }
+
+    textView.text = textToUse
+
+    if(!textView.editing)
+    {
+        textView.cursorOffset = 0
+    }
+    else
+    {
+        if(textToUse)
+        {
+            if(textView.cursorOffset < -string.length(textToUse))
+            {
+                textView.cursorOffset = -string.length(textToUse)
+            }
+        }
+        else
+        {
+            textView.cursorOffset = 0
+        }
+    }
+    
+    updateVisuals(textEntryView)
+    #textEntryView.textView:resetVerticalCursorMovementAnchors() #todo
+    showCursorAndResetTimerIfEditingForCursorChanged(textEntryView)
+}
+
+updateText = function(markupView, textEntryView, newText)
+{
+    setText(textEntryView, newText)
+
+    if(textEntryView.editing)
+    {
+        textEntryView.cursorView.hidden = false
+        markupView.cursorTimer = 0.0
+
+        updateCursorPosition(markupView, textEntryView) #todo
+    }
+    
+    if(textEntryView.textEntryChangedContinuousFunction)
+    {
+        textEntryView.textEntryChangedContinuousFunction(textEntryView.text)
+    }
+}
+
+textBackgroundViewClickFunction = function(markupView, textView, mouseLoc)
+{
+    print("textBackgroundViewClickFunction:", textView)
+    if(!markupView.disabled)
+    {
+        if(markupView.editing)
+        {
+            print("todo, allow cursor position change with click")
+            /*if(textView.text)
+            {
+                textViewLoc = textView:locationRelativeToView(mouseLoc, textView.textView)
+
+                charIndex = textView.textView:getCharIndexForPos(textViewLoc)
+                textLength = string.length(textView.text)
+                if(textLength > 0)
+                {
+                    charIndex = mjm.clamp(charIndex, 0, textLength)
+                    textView.cursorOffset = charIndex - textLength
+                    markupView.cursorView.hidden = false
+                    markupView.cursorTimer = 0.0
+                    updateCursorPosition(markupView, textView)
+                    textView.textView.resetVerticalCursorMovementAnchors()
+                }
+            }*/
+            #mj:log("mouseLoc:", mouseLoc - vec2(textView.pos.x, textView.pos.y), " charIndex:", charIndex)
+        }
+        else
+        {
+            if(markupView.currentlyEditingTextView)
+            {
+                markupView.currentlyEditingTextView.editing = false
+            }
+            markupView.currentlyEditingTextView = textView
+            textView.editing = true
+
+            #textView.textView:resetVerticalCursorMovementAnchors()
+            markupView.editStartTextValue = textView.text
+            markupView.cursorView.hidden = false
+            markupView.cursorView.layoutParent = textView
+            markupView.cursorTimer = 0.0
+
+            textView.cursorOffset = 0
+
+            print("start editing:", textView.text)
+            markupView.update = function(dt)
+            {
+                updateCursorFunction(markupView, dt)
+            }
+
+            updateCursorPosition(markupView, textView)
+            
+            keyMap = {
+                [keys.keyCodes.key_return] = function(isDown, keyCode, modCode, isRepeat)
+                {
+                    if(isDown)
+                    {
+                        if(modCode == keys.modifiers.shift)
+                        {
+                            newText = textView.text + "\n"
+                            updateText(textView, newText)
+                        }
+                        else if(!isRepeat)
+                        {
+                            finishEditing(markupView, textView, true)
+                        }
+                    }
+                }
+                [keys.keyCodes.backspace] = function(isDown, keyCode, modCode, isRepeat)
+                {
+                    if(isDown)
+                    {
+                        if(textView.text and string.length(textView.text) > 0)
+                        {
+                            newText = ""
+                            if(textView.cursorOffset and textView.cursorOffset != 0)
+                            {
+                                textLength = string.length(textView.text)
+                                if(textLength > 0)
+                                {
+                                    removePos = math.max(textLength + textView.cursorOffset, 0)
+                                    if(removePos >= 0)
+                                    {
+                                        newText = string.subString(textView.text,0,removePos) + string.subString(textView.text, removePos + 1)
+                                    }
+                                    else
+                                    {
+                                        return 
+                                    }
+                                }
+                                else
+                                {
+                                    return
+                                }
+                            }
+                            else
+                            {
+                                newText = string.subString(textView.text, 0, string.length(textView.text) - 1)
+                            }
+                            updateText(textView, newText)
+                        }
+                    }
+                    return true
+                }
+                [keys.keyCodes.escape] = function(isDown, keyCode, modCode, isRepeat)
+                {
+                    if(isDown and (!isRepeat))
+                    {
+                        finishEditing(markupView, textView, false)
+                    }
+                }
+                [keys.keyCodes.left] = function(isDown, keyCode, modCode, isRepeat)
+                {
+                    if(isDown)
+                    {
+                        cursorChanged(textView, -1, nil)
+                    }
+                }
+                [keys.keyCodes.right] = function(isDown, keyCode, modCode, isRepeat)
+                {
+                    if(isDown)
+                    {
+                        cursorChanged(textView, 1, nil)
+                    }
+                }
+                #[keyMapping:getMappingIndex("textEntry", "newline")] = function(isDown, isRepeat)
+                #    if(isDown)
+                #    {
+                #        newText = textView.text .. "\n"
+                #        updateText(textView, newText)
+                #    }
+                #    return true 
+                #end,
+                
+                [keys.keyCodes.delete] = function(isDown, keyCode, modCode, isRepeat)
+                {
+                    if(isDown)
+                    {
+                        if(textView.text and string.length(textView.text) > 0)
+                        {
+                            newText = ""
+                            if(textView.cursorOffset and textView.cursorOffset != 0)
+                            {
+                                textLength = string.length(textView.text)
+                                if(textLength > 0)
+                                {
+                                    removePos = math.max(textLength + textView.cursorOffset, 0)
+                                    if(removePos < textLength)
+                                    {
+                                        newText = string.subString(textView.text, 0, removePos) + string.subString(textView.text, removePos + 1)
+                                        textView.cursorOffset = textView.cursorOffset + 1
+                                    }
+                                    else
+                                    {
+                                        return 
+                                    }
+                                }
+                                else
+                                {
+                                    return
+                                }
+                            }
+
+                            updateText(textView, newText)
+                        }
+                    }
+                }
+
+                [keys.keyCodes.escape] = function(isDown, keyCode, modCode, isRepeat)
+                {
+                    if(isDown and !isRepeat)
+                    {
+                        finishEditing(markupView, textView, false)
+                    }
+                }
+            #todo [keyMapping:getMappingIndex("textEntry", "prevCommand")] = function(isDown, isRepeat) if(isDown then cursorChanged(textView, nil, 1) end return true end,
+            #[keyMapping:getMappingIndex("textEntry", "nextCommand")] = function(isDown, isRepeat) if(isDown then cursorChanged(textView, nil, -1) end return true end,
+                
+            }
+
+            keyChanged = function(isDown, keyCode, modCode, isRepeat)
+            {
+                func = keyMap[keyCode]
+                if(func)
+                {
+                    func(isDown, keyCode, modCode, isRepeat)
+                }
+            }
+
+            textEntry = function(text)
+            {
+                newText = text
+                if(textView.text)
+                {
+                    if(textView.cursorOffset < 0)
+                    {
+                        textLength = string.length(textView.text)
+                        if(textLength > 0)
+                        {
+                            insertAfterPos = math.max(textLength + textView.cursorOffset, 0)
+                            newText = stringInsert(textView.text, text, insertAfterPos)
+                        }
+                    }
+                    else
+                    {
+                        newText = textView.text + text
+                    }
+                }
+                updateText(textView, newText)
+            }
+            
+            textView.textEntryListenerID = eventManager.setTextEntryListener(textEntry, keyChanged)
+
+            if(textView.onStartedEditing)
+            {
+                textView.onStartedEditing()
+            }
+        }
+    }
+}
+
 createLinkButton = function(view, link)
 {
     if(!view.baseColor)
@@ -129,103 +490,100 @@ createLinkButton = function(view, link)
     updateVisuals(view)
 }
 
-getRowView = function(markupScrollView)
+getRowView = function(markupView)
 {
-    if(!markupScrollView.currentRowView)
+    if(!markupView.currentRowView)
     {
         rowLayout = {
             type = "view"
-            size = vec2(markupScrollView.markupPadding.left,minLineHeight)
+            size = vec2(markupView.padding.left,minLineHeight)
         }
-        markupScrollView.currentRowView = markupScrollView.addView(rowLayout)
-        markupScrollView.preventWordSeparation = false
+        markupView.currentRowView = markupView.scrollView.addView(rowLayout)
+        markupView.preventWordSeparation = false
     }
-    return markupScrollView.currentRowView
+    return markupView.currentRowView
 }
 
-addItemView = function(markupScrollView, style)
+addItemView = function(markupView, style)
 {
-    lineData = markupScrollView.lineData
-    rowView = getRowView(markupScrollView)
+    lineData = markupView.lineData
+    rowView = getRowView(markupView)
     #print("addItemView:", lineData.foundText)
 
-    layout = table.clone(textLayout)
+    textViewLayout = table.clone(textLayout)
+    textViewLayout.id = "textView"
 
-    if(markupScrollView.isHeader)
+    if(markupView.isHeader)
     {
-        layout.font = boldFont
-        layout.fontSize = headerFontSize
+        textViewLayout.font = boldFont
+        textViewLayout.fontSize = headerFontSize
     }
 
-    if(markupScrollView.bold)
+    if(markupView.bold)
     {
-        layout.font = boldFont
+        textViewLayout.font = boldFont
     }
-    else if(markupScrollView.italic)
+    else if(markupView.italic)
     {
-        layout.font = italicFont
-    }
-
-    if(markupScrollView.monospace)
-    {
-        layout.font = monoFont
+        textViewLayout.font = italicFont
     }
 
-    usesBackgroundColorView = false
+    if(markupView.monospace)
+    {
+        textViewLayout.font = monoFont
+    }
+
     link = false
+    backgroundLayout = false
 
     if(style)
     {
         if(style.link)
         {
             link = style.link
-            layout.color = linkColor
-            layout.font = boldFont
+            textViewLayout.color = linkColor
+            textViewLayout.font = boldFont
             # add button view
         }
 
         if(style.header)
         {
-            layout.font = boldFont
-            layout.fontSize = headerFontSize
+            textViewLayout.font = boldFont
+            textViewLayout.fontSize = headerFontSize
         }
 
         if(style.bold)
         {
-            layout.font = boldFont
+            textViewLayout.font = boldFont
         }
         else if(style.italic)
         {
-            layout.font = italicFont
+            textViewLayout.font = italicFont
         }
 
         if(style.monospace)
         {
-            layout.font = monoFont
+            textViewLayout.font = monoFont
         }
 
         if(style.font)
         {
-            layout.font = style.font
+            textViewLayout.font = style.font
         }
 
         if(style.fontSize)
         {
-            layout.fontSize = style.fontSize
+            textViewLayout.fontSize = style.fontSize
         }
 
         if(style.color)
         {
-            layout.color = style.color
+            textViewLayout.color = style.color
         }
 
         if(style.backgroundColor)
         {
-            usesBackgroundColorView = true
-            textViewLayout = layout
-            textViewLayout.id = "textView"
-            
-            layout = {
+            backgroundLayout = {
                 type = "color"
                 color = style.backgroundColor
                 alignmentX = "left"
@@ -237,25 +595,37 @@ addItemView = function(markupScrollView, style)
         }
     }
 
-    #print("layout:", layout)
+    if(!backgroundLayout)
+    {
+        backgroundLayout = {
+            type = "view"
+            alignmentX = "left"
+            alignmentY = "bottom"
+            subviews = {
+                textViewLayout
+            }
+        }
+    }
+
     
-    backgroundView = rowView.addView(layout)
-    textView = nil
-    if(usesBackgroundColorView)
-    {
-        textView = backgroundView.getView("textView")
-    }
-    else
-    {
-        textView = backgroundView
-    }
+    backgroundView = rowView.addView(backgroundLayout)
 
-    textView.wrapWidth = markupScrollView.parentSize.x - rowView.size.x - markupScrollView.markupPadding.left - 20
+    textView = backgroundView.getView("textView")
+    textView.wrapWidth = markupView.parentSize.x - rowView.size.x - markupView.padding.left - 20
     textView.wrapClamp = true
-    textView.preventWordSeparation = markupScrollView.preventWordSeparation
+    textView.preventWordSeparation = markupView.preventWordSeparation
     textView.text = lineData.foundText
+    backgroundView.click = function(mouseLoc)
+    {
+        textBackgroundViewClickFunction(markupView, textView, mouseLoc)
+    }
 
-    markupScrollView.preventWordSeparation = true #we allow word separation for the first item in the row only
+    backgroundView.clickOutside = function()
+    {
+        finishEditing(markupView, textView, false)
+    }
+
+    markupView.preventWordSeparation = true #we allow word separation for the first item in the row only
 
     backgroundView.pos = vec3(rowView.size.x, 0, 0)
 
@@ -265,10 +635,7 @@ addItemView = function(markupScrollView, style)
 
     
 
-    if(usesBackgroundColorView)
-    {
-        backgroundView.size = textView.size
-    }
+    backgroundView.size = textView.size
 
     if(link)
     {
@@ -282,7 +649,7 @@ addItemView = function(markupScrollView, style)
 
     if(addedTextLength < totalTextLength)
     {
-        markupScrollView.currentRowView = nil #finish current row #bug, this is not sticking
+        markupView.currentRowView = nil #finish current row #bug, this is not sticking
         if(addedTextLength != 0)
         {
             remainingText = string.subString(lineData.foundText, addedTextLength)
@@ -308,13 +675,13 @@ addItemView = function(markupScrollView, style)
             }
         }
 
-        addItemView(markupScrollView, style)
+        addItemView(markupView, style)
     }
 }
 
-renderCapture = function(markupScrollView, capture, parentStyle)
+renderCapture = function(markupView, capture, parentStyle)
 {
-    lineData = markupScrollView.lineData
+    lineData = markupView.lineData
     remainingText = lineData.foundText
     style = {}
     if(parentStyle)
@@ -339,19 +706,19 @@ renderCapture = function(markupScrollView, capture, parentStyle)
         if(type(item) == "string")
         {
             lineData.foundText = item
-            addItemView(markupScrollView, style)
+            addItemView(markupView, style)
         }
         else
         {
-            renderCapture(markupScrollView, item, style)
+            renderCapture(markupView, item, style)
         }
     }
     lineData.foundText = remainingText
 }
 
-charFunc = function(markupScrollView, charText, charIndex)
+charFunc = function(markupView, charText, charIndex)
 { 
-    lineData = markupScrollView.lineData
+    lineData = markupView.lineData
     if(lineData.captureClosedAwaitingParenthesis)
     {
         if(charText != "(")
@@ -385,7 +752,7 @@ charFunc = function(markupScrollView, charText, charIndex)
                     }
                     if(!parentCapture)
                     {
-                        renderCapture(markupScrollView, currentCapture)
+                        renderCapture(markupView, currentCapture)
                     }
                     lineData.currentCapture = parentCapture
                 }
@@ -427,7 +794,7 @@ charFunc = function(markupScrollView, charText, charIndex)
         {
             if(string.length(lineData.foundText) > 0)
             {
-                addItemView(markupScrollView, nil)
+                addItemView(markupView, nil)
                 lineData.foundText = ""
             }
         }
@@ -451,14 +818,14 @@ charFunc = function(markupScrollView, charText, charIndex)
         }
         else if(charText == "*")
         {
-            if(markupScrollView.italic or markupScrollView.bold)
+            if(markupView.italic or markupView.bold)
             {
-                if(lineData.starCount > 0 or markupScrollView.italic)
+                if(lineData.starCount > 0 or markupView.italic)
                 {
-                    addItemView(markupScrollView)
+                    addItemView(markupView)
                     lineData.foundText = ""
-                    markupScrollView.italic = nil
-                    markupScrollView.bold = nil
+                    markupView.italic = nil
+                    markupView.bold = nil
                     lineData.starCount = 0
                 }
                 else
@@ -473,11 +840,11 @@ charFunc = function(markupScrollView, charText, charIndex)
         }
         else if(charText == "`")
         {
-            if(markupScrollView.monospace)
+            if(markupView.monospace)
             {
-                addItemView(markupScrollView)
+                addItemView(markupView)
                 lineData.foundText = ""
-                markupScrollView.monospace = nil
+                markupView.monospace = nil
                 lineData.backtickCount = 0
             }
             else
@@ -495,7 +862,7 @@ charFunc = function(markupScrollView, charText, charIndex)
             }
             else if(charText == "#")
             {
-                markupScrollView.isHeader = true
+                markupView.isHeader = true
                 lineData.skipLeadingSpace = true
             }
             else
@@ -518,17 +885,17 @@ charFunc = function(markupScrollView, charText, charIndex)
             {
                 if(string.length(lineData.foundText) > 0)
                 {
-                    addItemView(markupScrollView)
+                    addItemView(markupView)
                     lineData.foundText = ""
                 }
 
                 if(lineData.starCount > 1)
                 {
-                    markupScrollView.bold = true
+                    markupView.bold = true
                 }
                 else
                 {
-                    markupScrollView.italic = true
+                    markupView.italic = true
                 }
                 lineData.starCount = 0
             }
@@ -537,10 +904,10 @@ charFunc = function(markupScrollView, charText, charIndex)
             {
                 if(string.length(lineData.foundText) > 0)
                 {
-                    addItemView(markupScrollView)
+                    addItemView(markupView)
                     lineData.foundText = ""
                 }
-                markupScrollView.monospace = true
+                markupView.monospace = true
                 lineData.backtickCount = 0
             }
 
@@ -549,7 +916,7 @@ charFunc = function(markupScrollView, charText, charIndex)
     }
 }
 
-lineFunc = function(markupScrollView, lineText)
+lineFunc = function(markupView, lineText)
 {
     lineData = {
         onlyFoundSpace = true
@@ -560,22 +927,22 @@ lineFunc = function(markupScrollView, lineText)
         backtickCount = 0
     }
 
-    markupScrollView.lineData = lineData
+    markupView.lineData = lineData
 
-    markupScrollView.isHeader = nil
-    markupScrollView.bold = nil
-    markupScrollView.italic = nil
-    markupScrollView.monospace = nil
+    markupView.isHeader = nil
+    markupView.bold = nil
+    markupView.italic = nil
+    markupView.monospace = nil
     
     localCharFunc = function(charText, charIndex)
     {
-        return charFunc(markupScrollView, charText, charIndex)
+        return charFunc(markupView, charText, charIndex)
     }
 
     string.eachChar(lineText, localCharFunc)
 
-    addItemView(markupScrollView)
-    markupScrollView.currentRowView = nil #finish current row
+    addItemView(markupView)
+    markupView.currentRowView = nil #finish current row
 }
 
 create = function(parentView, viewLayout)
@@ -602,10 +969,12 @@ create = function(parentView, viewLayout)
     cursorView.hidden = true
     markupView.cursorView = cursorView
 
-    markupScrollView.markupPadding = {
+    markupView.padding = {
         top = topPaddingDefault
         left = leftPaddingDefault
     }
+
+    markupScrollView.markupPadding = markupView.padding
     
     if(viewLayout.markupPadding)
     {
@@ -617,7 +986,7 @@ create = function(parentView, viewLayout)
 
     localLineFunc = function(line)
     {
-        return lineFunc(markupScrollView, line)
+        return lineFunc(markupView, line)
     }
 
     doSetText = function(markupText)
@@ -628,7 +997,7 @@ create = function(parentView, viewLayout)
 
         topPaddingLayout = {
             type = "view"
-            size = vec2(markupScrollView.markupPadding.top,markupScrollView.markupPadding.top)
+            size = vec2(markupView.padding.top,markupView.padding.top)
         }
 
         markupScrollView.addView(topPaddingLayout)
@@ -652,10 +1021,14 @@ create = function(parentView, viewLayout)
     {
         markupScrollView.layoutRows()
         markupScrollView.parentSize = parentSize
-        markupView.size = parentSize
         markupScrollView.size = parentSize
+
+        markupView.size = parentSize
+        markupView.parentSize = parentSize
+
         doSetText(markupScrollView.currentText)
     }
+
 
 
     return markupView
