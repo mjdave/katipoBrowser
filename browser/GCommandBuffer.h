@@ -2,6 +2,7 @@
 
 #include <vector>
 #include "Vulkan.h"
+#include <stdexcept>
 
 class GCommandBuffer
 {

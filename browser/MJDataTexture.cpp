@@ -1,6 +1,7 @@
 
 #include "MJDataTexture.h"
 #include "MJLog.h"
+#include <stdexcept>
 
 MJDataTexture::MJDataTexture(Vulkan* vulkan_, ivec2 sizei_, void* data, bool repeat_, bool mipmap_, VkFilter minFilter, VkFilter magFilter)
 {

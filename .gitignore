@@ -4,3 +4,5 @@ windows/katipoBrowser/x64
 windows/x64
 xcuserdata
 .DS_Store
+linux/bin
+linux/build

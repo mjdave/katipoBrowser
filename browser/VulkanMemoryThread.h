@@ -11,6 +11,7 @@
 #include "MJLog.h"
 #include "ThreadSafeQueue.h"
 #include "vulkan/vulkan.h"
+#include <string>
 
 #define DEBUG_VKBUFFER_ALLOCATIONS 0
 
