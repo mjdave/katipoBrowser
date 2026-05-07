@@ -180,6 +180,19 @@ TuiTable* addKatipoTable(TuiTable* rootTableToAddTo)
 
 void KatipoBrowser::init()
 {
+    
+    //todo remove this, backwards compatibility for 0.2->0.3
+    std::string oldBasePath = SDL_GetPrefPath("majicjungle", "katipo");
+    if(Tui::fileExistsAtPath(oldBasePath + "database"))
+    {
+        std::string newBasePath = SDL_GetPrefPath("katipo", "katipo");
+        if(!Tui::fileExistsAtPath(newBasePath + "database"))
+        {
+            Tui::moveFile(oldBasePath, newBasePath);
+        }
+    }
+    
+    
     if(sodium_init() < 0) //this is safe to call multiple times
     {
         MJError("Sodium initialization failed. Exiting.");
@@ -214,7 +227,7 @@ void KatipoBrowser::init()
     //rootTable->setVec2("screenSize", dvec2(MainController::getInstance()->windowInfo->screenWidth, MainController::getInstance()->windowInfo->screenHeight));
     
     
-    MainController::getInstance()->init(rootTable, appDatabase, "Katipo Browser");
+    MainController::getInstance()->init(rootTable, appDatabase, "Katipo");
     
     
     EventManager::getInstance()->bindTui(rootTable);
@@ -236,6 +249,31 @@ void KatipoBrowser::init()
         
         return TUI_NIL;
     });*/
+    
+    
+    katipoTable->setFunction("openURL", [this](TuiTable* args,
+                                                TuiRef* existingResult,
+                                                TuiFunctionCallData* incomingCallData,
+                                                TuiDebugInfo* callingDebugInfo) -> TuiRef* {
+        if(args->arrayObjects.size() >= 1)
+        {
+            std::string url = args->arrayObjects[0]->getStringValue();
+            SDL_OpenURL(url.c_str());
+        }
+        return TUI_NIL;
+    });
+    
+    katipoTable->setFunction("hideCurrentSite", [this](TuiTable* args,
+                                                TuiRef* existingResult,
+                                                TuiFunctionCallData* incomingCallData,
+                                                TuiDebugInfo* callingDebugInfo) -> TuiRef* {
+        if(currentSiteView)
+        {
+            currentSiteView->stateTable->setBool("hidden", TUI_TRUE);
+            currentSiteView = nullptr;
+        }
+        return TUI_NIL;
+    });
     
     //katipo.loadSite(siteSavePath, untrustedSiteCodePermissionFunction, publicDataOrNil)
     katipoTable->setFunction("loadSite", [this](TuiTable* args,

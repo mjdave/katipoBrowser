@@ -1,0 +1,56 @@
+
+buttonWidth = 200
+
+mainView = {
+    type = "color"
+    color = vec4(1.0,0.0,0.0,1.0)
+    subviews = {
+        {
+            id = "pageBody"
+            type = "markup"
+            alignmentY = "top"
+            variableHeight = true
+        }
+        {
+            id = "cancelButton"
+            type = "button"
+            alignmentY = "below"
+            layoutParentID = "pageBody"
+            buttonType = "color"
+            color = vec4(0.0,0.1,0.4,0.4)
+            pos = vec3(0,-30,0)
+            size = vec2(buttonWidth, 30)
+            subviews = {
+                {
+                    id = "cancelButtonText"
+                    type = "text"
+                    text = "Cancel"
+                    font = "robotoBold"
+                    fontSize = 20
+                    color = vec4(1.0,1.0,1.0,1.0)
+                }
+            }
+        }
+        {
+            id = "installButton"
+            type = "button"
+            alignmentY = "below"
+            layoutParentID = "cancelButton"
+            buttonType = "color"
+            color = vec4(0.4,0.1,0.0,0.4)
+            pos = vec3(0,-10,0)
+            size = vec2(buttonWidth, 30)
+            subviews = {
+                {
+                    id = "installButtonText"
+                    type = "text"
+                    text = "Install"
+                    font = "robotoBold"
+                    fontSize = 20
+                    color = vec4(1.0,1.0,1.0,1.0)
+                }
+            }
+        }
+
+    }
+}

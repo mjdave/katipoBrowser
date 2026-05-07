@@ -1,8 +1,4 @@
 # NOTE this is used in two places, both when there is a simple result, like an error with a message, and when displaying a basic tui markup document .tml site
-viewTypes = { #can be added to at any time
-    markup = require("app/common/markupView.tui")
-    scrollView = require("app/common/scrollView.tui") #required by markupView
-}
 
 mainView = {
     type = "view"

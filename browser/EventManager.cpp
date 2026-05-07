@@ -24,6 +24,7 @@ static bool resizingEventWatcher(void* data, SDL_Event* event) {
     switch(event->type)
     {
         case SDL_EVENT_WINDOW_RESIZED:
+        case SDL_EVENT_WINDOW_METAL_VIEW_RESIZED:
         {
             MainController::getInstance()->mainWindowChangedSize();
             /*EventManager::getInstance()->isResizingWindow = true;
@@ -37,11 +38,6 @@ static bool resizingEventWatcher(void* data, SDL_Event* event) {
             MainController::getInstance()->mainMJView->needsToUpdateSizeDueToWindowChange = true;
         }
             break;
-        /*case SDL_EVENT_WINDOW_METAL_VIEW_RESIZED:
-        {
-            MainController::getInstance()->mainWindowChangedSize();
-        }
-            break;*/
         case SDL_EVENT_WINDOW_SAFE_AREA_CHANGED:
         {
             SDL_Rect rect;

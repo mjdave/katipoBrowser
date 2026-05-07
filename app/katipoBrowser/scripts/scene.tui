@@ -10,6 +10,8 @@ urlTextEntryHeight = 30
 bookmarksListWidth = 500
 bookMarkHeight = 40
 
+mainButtonWidth = 160
+
 mainView = {
     id = "mainView"
     type = "image"
@@ -28,11 +30,76 @@ mainView = {
                     color = vec4(0.1,0.2,0.0,0.2)
                 }
                 {
-                    id = "bookmarksScrollView"
-                    type = "scrollView"
-                    alignmentY = "above"
-                    layoutParentID = "urlTextEntry"
+                    id = "browserManagementView"
+                    type = "view"
                     hidden = true
+                    subviews = {
+                        {
+                            id = "bookmarksScrollView"
+                            type = "scrollView"
+                            alignmentY = "above"
+                            layoutParentID = "urlTextEntry"
+                        }
+                        {
+                            id = "hostedSitesScrollView"
+                            type = "scrollView"
+                            alignmentY = "above"
+                            layoutParentID = "urlTextEntry"
+                            hidden = true
+                        }
+                        {
+                            id = "refreshButton"
+                            type = "button"
+                            buttonType = "image"
+                            color = vec4(1.0,1.0,1.0,1.0)
+                            path = "app/katipoBrowser/images/refresh.png"
+                            size = vec2(urlTextEntryHeight,urlTextEntryHeight)
+                            alignmentX = "outerRight"
+                            layoutParentID = "urlTextEntry"
+                            pos = vec3(10,0,0)
+                        }
+                        {
+                            id = "browseButton"
+                            type = "button"
+                            alignmentY = "top"
+                            buttonType = "color"
+                            color = vec4(0.2,0.0,0.2,0.1)
+                            selectedColor = vec4(0.4,0.0,0.4,0.7)
+                            selected = true
+                            pos = vec3(-mainButtonWidth / 2 - 5,-10,0)
+                            size = vec2(mainButtonWidth, 30)
+                            subviews = {
+                                {
+                                    id = "browseButtonText"
+                                    type = "text"
+                                    text = "Browse"
+                                    font = "robotoBold"
+                                    fontSize = 20
+                                    color = vec4(1.0,1.0,1.0,1.0)
+                                }
+                            }
+                        }
+                        {
+                            id = "hostButton"
+                            type = "button"
+                            alignmentY = "top"
+                            buttonType = "color"
+                            color = vec4(0.2,0.2,0.0,0.1)
+                            selectedColor = vec4(0.4,0.4,0.0,0.7)
+                            pos = vec3(mainButtonWidth / 2 + 5,-10,0)
+                            size = vec2(mainButtonWidth, 30)
+                            subviews = {
+                                {
+                                    id = "hostButtonText"
+                                    type = "text"
+                                    text = "Host"
+                                    font = "robotoBold"
+                                    fontSize = 20
+                                    color = vec4(1.0,1.0,1.0,1.0)
+                                }
+                            }
+                        }
+                    }
                 }
                 {
                     id = "urlTextEntry"
@@ -45,17 +112,6 @@ mainView = {
                     alignmentY = "bottom"
                     pos = vec3(0,10,0)
                 }
-                {
-                    id = "refreshButton"
-                    type = "button"
-                    buttonType = "imageHueShift"
-                    path = "app/katipoBrowser/images/refresh.png"
-                    size = vec2(urlTextEntryHeight,urlTextEntryHeight)
-                    alignmentX = "outerRight"
-                    layoutParentID = "urlTextEntry"
-                    hidden = true
-                    pos = vec3(10,0,0)
-                }
             }
         }
     }
@@ -64,9 +120,8 @@ mainView = {
 bookmarkIconPadding = 4
 
 bookmark = {
-    id = "bookmarkBackground"
-    type = "color"
-    color = vec4(0.0,0.0,0.0,0.2)
+    id = "bookmark"
+    type = "view"
     onParentSizeChanged = function(parentSize)
     {
         return vec2(parentSize.x - viewTypes.scrollView.scrollBarWidth, bookMarkHeight)
@@ -77,8 +132,8 @@ bookmark = {
             id = "bookmarkButton"
             type = "button"
             buttonType = "color"
-            color = vec4(0.0,0.0,0.0,0.0)
-            highlightColor = vec4(0.0,0.0,0.0,0.0)
+            #color = vec4(0.0,0.0,0.0,0.0)
+            #highlightColor = vec4(0.0,0.0,0.0,0.0)
             subviews = {
                 {
                     id = "bookmarkMissingImage"
@@ -122,7 +177,7 @@ bookmark = {
                     type = "text"
                     text = "Site Subtitle"
                     font = "roboto"
-                    fontSize = 10
+                    fontSize = 12
                     alignmentX = "left"
                     alignmentY = "below"
                     layoutParentID = "bookmarkTitle"

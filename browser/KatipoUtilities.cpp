@@ -18,7 +18,7 @@ std::string getResourcePath(const std::string &appendPath)
 
 std::string getSavePath(const std::string& appendPath)
 {
-    static std::string basePath = SDL_GetPrefPath("majicjungle", "katipo");
+    static std::string basePath = SDL_GetPrefPath("katipo", "katipo");
 
     if(appendPath.empty())
     {

@@ -1,0 +1,84 @@
+
+buttonWidth = 200
+
+startText = "Start"
+stopText = "Stop"
+updateText = "Update"
+openDirectoryText = "Inspect"
+
+startColor = vec4(0.0,0.4,0.0,0.4)
+stopColor = vec4(0.4,0.0,0.0,0.4)
+openDirectoryColor = vec4(0.0,0.0,0.4,0.4)
+
+mainView = {
+    type = "view"
+    subviews = {
+        {
+            id = "pageBody"
+            type = "markup"
+            alignmentY = "top"
+            variableHeight = true
+        }
+        {
+            id = "startStopButton"
+            type = "button"
+            alignmentY = "below"
+            layoutParentID = "pageBody"
+            buttonType = "color"
+            color = startColor
+            pos = vec3(0,-30,0)
+            size = vec2(buttonWidth, 30)
+            subviews = {
+                {
+                    id = "startStopButtonText"
+                    type = "text"
+                    text = startText
+                    font = "robotoBold"
+                    fontSize = 20
+                    color = vec4(1.0,1.0,1.0,1.0)
+                }
+            }
+        }
+        {
+            id = "updateButton"
+            type = "button"
+            alignmentY = "below"
+            layoutParentID = "startStopButton"
+            buttonType = "color"
+            color = openDirectoryColor
+            pos = vec3(0,-10,0)
+            size = vec2(buttonWidth, 30)
+            subviews = {
+                {
+                    id = "updateButtonText"
+                    type = "text"
+                    text = updateText
+                    font = "robotoBold"
+                    fontSize = 20
+                    color = vec4(1.0,1.0,1.0,1.0)
+                }
+            }
+        }
+        {
+            id = "openDirectoryButton"
+            type = "button"
+            alignmentY = "below"
+            layoutParentID = "updateButton"
+            buttonType = "color"
+            color = openDirectoryColor
+            pos = vec3(0,-10,0)
+            size = vec2(buttonWidth, 30)
+            subviews = {
+                {
+                    id = "openDirectoryButtonText"
+                    type = "text"
+                    text = openDirectoryText
+                    font = "robotoBold"
+                    fontSize = 20
+                    color = vec4(1.0,1.0,1.0,1.0)
+                }
+            }
+        }
+
+    }
+}

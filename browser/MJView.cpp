@@ -193,7 +193,7 @@ void MJView::initInternals()
     });
     
     stateTable->setFunction("fadeIn", [this](TuiTable* args, TuiRef* existingResult, TuiFunctionCallData* incomingCallData, TuiDebugInfo* callingDebugInfo) -> TuiRef* {
-        double duration = 0.25;
+        double duration = 0.125;
         if(args && args->arrayObjects.size() >= 1)
         {
             TuiRef* numberRef = args->arrayObjects[0];
@@ -212,7 +212,7 @@ void MJView::initInternals()
     });
     
     stateTable->setFunction("fadeOut", [this](TuiTable* args, TuiRef* existingResult, TuiFunctionCallData* incomingCallData, TuiDebugInfo* callingDebugInfo) -> TuiRef* {
-        double duration = 0.25;
+        double duration = 0.125;
         if(args && args->arrayObjects.size() >= 1)
         {
             TuiRef* numberRef = args->arrayObjects[0];

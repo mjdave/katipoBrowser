@@ -22,6 +22,7 @@ int main(int argc, const char * argv[]) {
 
 #include "MainController.h"
 #include "KatipoBrowser.h"
+#include "MJVersion.h"
 
 /* We will use this renderer to draw into this window every frame. */
 //static SDL_Window *window = NULL;
@@ -30,7 +31,7 @@ int main(int argc, const char * argv[]) {
 /* This function runs once at startup. */
 SDL_AppResult SDL_AppInit(void** appstate, int argc, char* argv[])
 {
-    SDL_SetAppMetadata("Katipo Browser", "1.0", "com.katipoBrowser");
+    SDL_SetAppMetadata("Katipo", KATIPO_VERSION, "com.katipobrowser");
 
     KatipoBrowser::getInstance()->init();
 

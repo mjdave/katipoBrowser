@@ -311,7 +311,7 @@ public:
     
     void doRelativeViewLayoutsForTablePostLoad();
     
-    void fadeIn(float duration = 0.25) {
+    void fadeIn(float duration = 0.125) {
         fadeDuration = duration;
         fadingIn = true;
         stateTable->setBool("hidden", false);
@@ -322,7 +322,7 @@ public:
         fadingOut = false;
     }
     
-    void fadeOut(float duration = 0.25) {
+    void fadeOut(float duration = 0.125) {
         if(!hidden && (fadingIn || alpha > 0.001))
         {
             fadeDuration = duration;

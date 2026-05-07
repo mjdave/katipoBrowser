@@ -2,24 +2,31 @@
 keys = require("app/common/keys.tui")
 
 defaultSiteScene = require("app/katipoBrowser/scripts/defaultSiteScene.tui")
+hostedSiteManagement = false
 
-print("katipoBrowser is running")
-currentSiteHostID = false #tui quirk, false instead of nil, as nil removes it
+currentSiteHostID = false
 currentURLFullLink = ""
 currentURLSiteName = false
 getInProgress = false
+hostTabSelected = false # very simple tab setup for now, we either have 'browse' or 'host' selected, this is that state
 
-bookmarksPath = file.getSavePath("bookmarks.tuib") #todo use database
-bookmarks = file.loadBinary(bookmarksPath)
+bookmarks = database.get("bookmarks")
 if(!bookmarks)
 {
     bookmarks = {}
 }
 
-#print("loaded bookmarks:", bookmarks)
+hostedSiteBookmarks = database.get("hostedSiteBookmarks")
+if(!hostedSiteBookmarks)
+{
+    hostedSiteBookmarks = {}
+}
 
 urlTextEntry = scene.getView("urlTextEntry")
 refreshButton = scene.getView("refreshButton")
+
+browseButton = scene.getView("browseButton")
+hostButton = scene.getView("hostButton")
 
 windowSafeBackground = scene.getView("windowSafeBackground")
 windowSafeBackground.onParentSizeChanged = function(parentSize)
@@ -41,10 +48,13 @@ siteContentBackground.update = function(dt)
 defaultSiteContent = siteContentBackground.addView(defaultSiteScene.mainView)
 defaultSiteContent.hidden = true
 
+installHostContent = false #only load this if required
+
 pageBody = defaultSiteContent.getView("pageBody")
 
 bookmarkLayout = scene.bookmark
 bookmarksScrollView = scene.getView("bookmarksScrollView")
+browserManagementView = scene.getView("browserManagementView")
 
 untrustedSiteCodePermissionFunction = function(functionName, args, hasPermissionCallback)
 {
@@ -52,9 +62,34 @@ untrustedSiteCodePermissionFunction = function(functionName, args, hasPermission
     hasPermissionCallback(false)
 }
 
-getSitePath = function(hostID)
+
+setHostTabSelected = function(newHostTabSelected)
+{
+    .hostTabSelected = newHostTabSelected
+    browseButton.setSelected(!newHostTabSelected)
+    hostButton.setSelected(newHostTabSelected)
+}
+
+browseButton.click = function()
+{
+    setHostTabSelected(false)
+    loadBookmarks()
+}
+
+hostButton.click = function()
+{
+    setHostTabSelected(true)
+    loadBookmarks()
+}
+
+getClientSitePath = function(hostID)
 {
     return file.getSavePath("browserSites/" + hostID + "/")
+}
+
+getHostSitePath = function(hostID)
+{
+    return file.getSavePath("hostedSites/" + hostID + "/")
 }
 
 findBookmark = function(url)
@@ -83,23 +118,224 @@ fadeSiteContent = function(fadeIn)
     katipo.setPauseSiteContentForModalOverlay(!fadeIn)
 }
 
+
+
+writeFile = function(siteSavePath, checksums, fileInfo)
+{
+    #print("fileInfo:", fileInfo)
+    filePath = siteSavePath + fileInfo.fileName
+    checksums[fileInfo.fileName] = fileInfo.checksum
+    if(file.isSubPath(filePath, siteSavePath))
+    {
+        file.createDirectoriesIfNeededForFilePath(filePath)
+        if(type(fileInfo.data) == "string")
+        {
+            #print("saved raw data:", filePath)
+            file.saveData(filePath, fileInfo.data) #write the string data (can be binary) to disk directly
+        }
+        else
+        {
+            file.saveBinary(filePath, fileInfo.data) #save the tui object as a binary export
+            #print("saved tui object:", filePath)
+        }
+    }
+}
+
+showSiteManagement = function(hostedSiteBookmarkInfo)
+{
+    if(!hostedSiteManagement)
+    {
+        .hostedSiteManagement = require("app/katipoBrowser/scripts/hostedSiteManagement.tui")
+
+        #hostedSiteManagement.siteContentBackground = siteContentBackground
+        hostedSiteManagement.init(siteContentBackground)
+    }
+
+    siteContentBackground.goalColor = vec4(0.0, 0.2, 0.01, 0.6) #green for editing host config
+
+    defaultSiteContent.hidden = true
+    browserManagementView.fadeOut()
+    katipo.hideCurrentSite()
+    hostedSiteManagement.show(hostedSiteBookmarkInfo, getHostSitePath(hostedSiteBookmarkInfo.hostID))
+    fadeSiteContent(true)
+}
+
+installSite = function(hostSiteData, hostID, url)
+{
+    siteSavePath = getHostSitePath(hostID)
+    file.mkdir(siteSavePath)
+
+    checksums = false
+
+    for(i, existing in hostedSiteBookmarks)
+    {
+        if(existing.hostID == hostID)
+        {
+            .checksums = existing.checksums
+            table.remove(hostedSiteBookmarks, i)
+            break
+        }
+    }
+
+    if(!checksums)
+    {
+        checksums = {}
+    }
+
+    files = hostSiteData.siteFiles
+    for(subFile in files)
+    {
+        writeFile(siteSavePath, checksums, subFile)
+    }
+
+    hostedSiteBookmarkInfo = {
+        url = url
+        hostID = hostID
+        siteInfo = hostSiteData.siteInfo
+        checksums = checksums
+        # the hostID is a string, and math.random can take either a number or a string as a seed for the second argument
+        color = vec4(math.random(1.0, hostID + "1"), math.random(1.0, hostID + "2"), math.random(1.0, hostID + "3"), 1.0)
+        #siteImage = hostSiteData.siteImage
+    }
+    table.insert(hostedSiteBookmarks, 0, hostedSiteBookmarkInfo)
+    database.set("hostedSiteBookmarks", hostedSiteBookmarks)
+    
+    setHostTabSelected(true)
+    loadBookmarks()
+    showSiteManagement(hostedSiteBookmarkInfo)
+}
+
+showInstallPanelForHostSite = function(hostSiteData, hostID, url)
+{
+    if(!hostSiteData.siteInfo)
+    {
+        error("missing hostSiteData.siteInfo")
+    }
+    if(!hostSiteData.siteInfo.title)
+    {
+        error("missing hostSiteData.siteInfo.title")
+    }
+    print("got hostSiteData siteInfo:", hostSiteData.siteInfo)
+    siteContentBackground.goalColor = vec4(0.7,0.3,0.0,0.4) #orange warning, danger zone
+    katipo.hideCurrentSite()
+
+    #pageText += "#" + title + "\n" #tui bug adding anything to title on either side
+
+
+    title = hostSiteData.siteInfo.title
+    description = hostSiteData.siteInfo.description
+    author = hostSiteData.siteInfo.author
+
+    pageText = "#Do you wish to install and host " + title + "?\n\n"
+    pageText += "#" + title + "\n"
+    pageText += description + "\n"
+    pageText += "by " + author + "\n\n"
+    pageText += "This will download and install a copy of the site to this device, adding it to the list of hosts here in Katipo. Once added, you can start and stop the host, and connect to it from within this app or from other devices on your network.\n\n"
+    pageText += "Warning: Hosting a site may pose a security risk. You should only do this if you trust the site creator and this host."
+
+    if(!installHostContent)
+    {
+        installHostScene = require("app/katipoBrowser/scripts/installHostScene.tui")
+        .installHostContent = siteContentBackground.addView(installHostScene.mainView)
+    }
+
+
+    installButton = installHostContent.getView("installButton")
+    installButton.click = function()
+    {
+        installSite(hostSiteData, hostID, url)
+        fadeSiteContent(false)
+    }
+
+    cancelButton = installHostContent.getView("cancelButton")
+    cancelButton.click = function()
+    {
+        fadeSiteContent(false)
+    }
+
+    installHostPageBody = installHostContent.getView("pageBody")
+
+    installHostContent.hidden = false
+    installHostPageBody.setText(pageText)
+}
+
+loadClientSite = function(siteData, hostID, url)
+{
+    siteContentBackground.goalColor = vec4(0.0,0.0,0.2,0.4) #blue, we have the most recent version
+    defaultSiteContent.hidden = true
+
+    siteSavePath = getClientSitePath(hostID)
+    file.mkdir(siteSavePath)
+
+    checksums = false
+
+    for(i, existing in bookmarks)
+    {
+        if(existing.hostID == hostID)
+        {
+            .checksums = existing.checksums
+            table.remove(bookmarks, i)
+            break
+        }
+    }
+
+    if(!checksums)
+    {
+        checksums = {}
+    }
+
+    files = siteData.files
+    for(subFile in files)
+    {
+        writeFile(siteSavePath, checksums, subFile)
+    }
+
+    publicData = siteData.publicData
+    #print("got publicData:", publicData)
+    katipo.loadSite(hostID, siteSavePath, publicData, untrustedSiteCodePermissionFunction, false)
+
+    .currentSiteHostID = hostID
+
+    bookmarkInfo = {
+        url = url
+        hostID = hostID
+        siteInfo = siteData.siteInfo
+        checksums = checksums
+        # the hostID is a string, and math.random can take either a number or a string as a seed for the second argument
+        color = vec4(math.random(1.0, hostID + "1"), math.random(1.0, hostID + "2"), math.random(1.0, hostID + "3"), 1.0)
+        #siteImage = siteData.siteImage
+    }
+    table.insert(bookmarks, 0, bookmarkInfo)
+    database.set("bookmarks", bookmarks)
+    setHostTabSelected(false)
+    loadBookmarks()
+}
+
 getCallback = function(result, hostID, url)
 {
     print("getCallback url:", url, " currentURLFullLink:", currentURLFullLink)
     .getInProgress = false #warning this doesn't account for multiple requests returning in a row
     print("got result with status:", result.status, " message:", result.message, " hostID:", hostID, " url:", url)
+
+    defaultSiteContent.hidden = true
+    if(installHostContent)
+    {
+        installHostContent.hidden = true
+    }
+
     if(result.status != "ok")
     {
         existing = findBookmark(url)
         if(existing)
         {
             siteContentBackground.goalColor = vec4(0.2,0.2,0.0,0.4) #yellow, we don't have a connection, loaded from cache
-            katipo.loadSite(existing.hostID, getSitePath(existing.hostID), nil, untrustedSiteCodePermissionFunction, true)
+            katipo.loadSite(existing.hostID, getClientSitePath(existing.hostID), nil, untrustedSiteCodePermissionFunction, true)
         }
         else
         {
             siteContentBackground.goalColor = vec4(0.2,0.0,0.0,0.6) #red, we don't have a connection, no cache
             defaultSiteContent.hidden = false
+            katipo.hideCurrentSite()
             pageBody.setText("#" + result.status + "\n" + result.message)
         }
     }
@@ -107,6 +343,7 @@ getCallback = function(result, hostID, url)
     {
         siteContentBackground.goalColor = vec4(0.0,0.0,0.2,0.4)
         defaultSiteContent.hidden = false
+        katipo.hideCurrentSite()
 
         if(result.pageBody)
         {
@@ -117,89 +354,13 @@ getCallback = function(result, hostID, url)
             pageBody.setText("#" + result.pageTitle)
         }
     }
+    else if(result.hostSiteData)
+    {
+        showInstallPanelForHostSite(result.hostSiteData, hostID, url)
+    }
     else if(result.siteData)
     {
-        siteContentBackground.goalColor = vec4(0.0,0.0,0.2,0.4) #blue, we have the most recent version
-        defaultSiteContent.hidden = true
-
-        siteSavePath = getSitePath(hostID)
-        file.mkdir(siteSavePath)
-
-        checksums = false
-
-        for(i, existing in bookmarks)
-        {
-            if(existing.hostID == hostID)
-            {
-                .checksums = existing.checksums
-                table.remove(bookmarks, i)
-                break
-            }
-        }
-
-        if(!checksums)
-        {
-            checksums = {}
-        }
-
-        #print("found existing checksums:", checksums)
-
-        files = result.siteData.files
-
-        writeFile = function(fileInfo)
-        {
-            #print("fileInfo:", fileInfo)
-            filePath = siteSavePath + fileInfo.fileName
-            checksums[fileInfo.fileName] = fileInfo.checksum
-            if(file.isSubPath(filePath, siteSavePath))
-            {
-                file.createDirectoriesIfNeededForFilePath(filePath)
-                if(type(fileInfo.data) == "string")
-                {
-                    #print("saved raw data:", filePath)
-                    file.saveData(filePath, fileInfo.data) #write the string data (can be binary) to disk directly
-                }
-                else
-                {
-                    file.saveBinary(filePath, fileInfo.data) #save the tui object as a binary export
-                    #print("saved tui object:", filePath)
-                }
-            }
-        }
-
-        for(subFile in files)
-        {
-            writeFile(subFile)
-        }
-
-
-        publicData = result.siteData.publicData
-
-        #print("got publicData:", publicData)
-
-        #print("loading freshly updated site code")
-        katipo.loadSite(hostID, siteSavePath, publicData, untrustedSiteCodePermissionFunction, false)
-
-        .currentSiteHostID = hostID
-
-        #update bookmarks
-
-        #print("updated checksums:", checksums)
-
-        #print("storing checksum:", result.siteData.checksum)
-
-        bookmarkInfo = {
-            url = url
-            hostID = hostID
-            siteInfo = result.siteData.siteInfo
-            checksums = checksums
-            # the hostID is a string, and math.random can take either a number or a string as a seed for the second argument
-            color = vec4(math.random(1.0, hostID + "1"), math.random(1.0, hostID + "2"), math.random(1.0, hostID + "3"), 1.0)
-            #siteImage = result.siteData.siteImage
-        }
-        table.insert(bookmarks, 0, bookmarkInfo)
-        file.saveBinary(bookmarksPath, bookmarks) #todo use database
-        loadBookmarks()
+        loadClientSite(result.siteData, hostID, url)
     }
     else
     {
@@ -230,14 +391,18 @@ doGet = function(url, siteNameOrNil, checksumsOrNil)
     urlTextEntry.setText(currentURLSiteName)
     katipo.get(currentURLFullLink, checksums, getCallback)
     
-    bookmarksScrollView.fadeOut()
-    refreshButton.fadeOut()
+    browserManagementView.fadeOut()
 }
 
 updateScrollViewSize = function()
 {
     parentSize = bookmarksScrollView.parentSize
-    totalHeight = scene.bookMarkHeight * table.count(bookmarks)
+    bookMarkCount = table.count(bookmarks)
+    if(hostTabSelected)
+    {
+        bookMarkCount = table.count(hostedSiteBookmarks)
+    }
+    totalHeight = scene.bookMarkHeight * bookMarkCount
     height = math.min(totalHeight, parentSize.y - scene.urlTextEntryHeight)
     width = math.min(scene.bookmarksListWidth, parentSize.x)
     bookmarksScrollView.size = vec2(width, height)
@@ -260,62 +425,84 @@ stripDefaultPortFromUrl = function(fullUrl)
     return fullUrl
 }
 
+
+
 loadBookmarks = function()
 {
     bookmarksScrollView.removeAllRows()
-    for(i = table.count(bookmarks) - 1, i>=0, i--)
+    bookmarksToUse = bookmarks
+    if(hostTabSelected)
     {
-        bookmarkInfo = bookmarks[i]
-        bookmarkView = bookmarksScrollView.addView(bookmarkLayout)
-        
-        title = bookmarkInfo.siteInfo.title
-        bookmarkTitleView = bookmarkView.getView("bookmarkTitle")
-        bookmarkTitleView.text = title
-
-        bookmarkSubtitleView = bookmarkView.getView("bookmarkSubtitle")
-        displayUrl = stripDefaultPortFromUrl(bookmarkInfo.url)
-        bookmarkSubtitleView.text = displayUrl
-
-        if(i % 2 == 0)
+        bookmarksToUse = hostedSiteBookmarks
+    }
+    for(i = table.count(bookmarksToUse) - 1, i>=0, i--)
+    {
+        bookmarkInfo = bookmarksToUse[i]
+        if(bookmarkInfo.url) #todo remove this, works around early bug
         {
-            bookmarkView.color += vec4(0.1,0.15,0.12,0.0)
-        }
+            bookmarkView = bookmarksScrollView.addView(bookmarkLayout)
+            
+            title = bookmarkInfo.siteInfo.title
+            bookmarkTitleView = bookmarkView.getView("bookmarkTitle")
+            bookmarkTitleView.text = title
 
-        if(bookmarkInfo.siteImage)
-        {
-            #todo
-        }
-        else
-        {
-            bookmarkMissingImage = bookmarkView.getView("bookmarkMissingImage")
-            if(bookmarkInfo.color)
+            bookmarkSubtitleView = bookmarkView.getView("bookmarkSubtitle")
+            displayUrl = stripDefaultPortFromUrl(bookmarkInfo.url)
+            bookmarkSubtitleView.text = displayUrl
+
+            bookmarkButton = bookmarkView.getView("bookmarkButton")
+            backgroundColor = vec4(0.0,0.0,0.1,0.5)
+            if(i % 2 == 0)
             {
-                bookmarkMissingImage.color = bookmarkInfo.color
+                backgroundColor += vec4(0.1,0.15,0.12,0.0)
             }
-            bookmarkMissingImageCharacter = bookmarkView.getView("bookmarkMissingImageCharacter")
-            bookmarkMissingImageCharacter.text = string.subString(title, 0, 1)
-        }
+            bookmarkButton.setColor(backgroundColor)
 
-        bookmarkClick = function()
-        {
-            siteContentBackground.goalColor = vec4(0.0, 0.015, 0.01, 0.6)
-            doGet(bookmarkInfo.url, bookmarkInfo.siteInfo.title, bookmarkInfo.checksums)
-        }
+            if(bookmarkInfo.siteImage)
+            {
+                #todo
+            }
+            else
+            {
+                bookmarkMissingImage = bookmarkView.getView("bookmarkMissingImage")
+                if(bookmarkInfo.color)
+                {
+                    bookmarkMissingImage.color = bookmarkInfo.color
+                }
+                bookmarkMissingImageCharacter = bookmarkView.getView("bookmarkMissingImageCharacter")
+                bookmarkMissingImageCharacter.text = string.subString(title, 0, 1)
+            }
 
-        bookmarkButton = bookmarkView.getView("bookmarkButton")
-        bookmarkButton.click = bookmarkClick
-        bookmarkButton.hueOffset = -0.1 - 0.1 * i
+            bookmarkButton = bookmarkView.getView("bookmarkButton")
+            bookmarkButton.hueOffset = -0.1 - 0.1 * i
+
+            if(hostTabSelected)
+            {
+                bookmarkButton.click = function()
+                {
+                    showSiteManagement(bookmarkInfo)
+                }
+            }
+            else
+            {
+                bookmarkButton.click = function()
+                {
+                    siteContentBackground.goalColor = vec4(0.0, 0.015, 0.01, 0.6)
+                    doGet(bookmarkInfo.url, bookmarkInfo.siteInfo.title, bookmarkInfo.checksums)
+                }
+            }
+        }
     }
     updateScrollViewSize()
 }
 
+
 urlTextEntry.onStartedEditing = function()
 {
+    setHostTabSelected(false)
     loadBookmarks()
 
-    bookmarksScrollView.fadeIn()
-    refreshButton.fadeIn()
-
+    browserManagementView.fadeIn()
     fadeSiteContent(false)
 
     urlTextEntry.setText(currentURLFullLink)
@@ -323,8 +510,12 @@ urlTextEntry.onStartedEditing = function()
 
 urlTextEntry.onFinishedEditing = function(textValue, changesMade)
 {
-    bookmarksScrollView.fadeOut()
-    refreshButton.fadeOut()
+    if(!changesMade and hostTabSelected)
+    {
+        return
+    }
+
+    browserManagementView.fadeOut()
 
     if(changesMade)
     {

@@ -1,0 +1,31 @@
+
+hostedSiteScene = require("app/katipoBrowser/scripts/hostedSiteManagementScene.tui")
+
+mainView = false
+
+init = function(siteContentBackground)
+{
+    .mainView = siteContentBackground.addView(hostedSiteScene.mainView)
+
+}
+
+show = function(bookmark, sitePath)
+{
+    title = bookmark.siteInfo.title
+    description = bookmark.siteInfo.description
+
+    pageText = "#" + title + "\n"
+    pageText += description + "\n"
+
+    pageBody = mainView.getView("pageBody")
+    pageBody.setText(pageText)
+
+    openDirectoryButton = mainView.getView("openDirectoryButton")
+    openDirectoryButton.click = function()
+    {
+        print("opening:", sitePath)
+        katipo.openURL("file://" + sitePath)
+    }
+
+    mainView.hidden = false
+}
