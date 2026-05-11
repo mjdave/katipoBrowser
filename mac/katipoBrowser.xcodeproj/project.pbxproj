@@ -18,6 +18,8 @@
 		5B49FE062F2C7EBC007C1980 /* app in Resources */ = {isa = PBXBuildFile; fileRef = 5B49FE052F2C7EBC007C1980 /* app */; };
 		5B63135F2F46F03200206946 /* libMoltenVK.dylib in Embed Libraries */ = {isa = PBXBuildFile; fileRef = 5B63135E2F46F03200206946 /* libMoltenVK.dylib */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
 		5B6313602F46F04200206946 /* libMoltenVK.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 5B63135E2F46F03200206946 /* libMoltenVK.dylib */; };
+		5B65961B2FAD3A980017322D /* host.tui in Resources */ = {isa = PBXBuildFile; fileRef = 5B65961A2FAD3A980017322D /* host.tui */; };
+		5B6596252FB14B050017322D /* tracker.tui in Resources */ = {isa = PBXBuildFile; fileRef = 5B6596242FB14B050017322D /* tracker.tui */; };
 		5BB245DA2F5A220800D72754 /* AppKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5BB245D92F5A220800D72754 /* AppKit.framework */; };
 		5BED52FC2E6014340028ED11 /* MediaPlayer.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5BED52FB2E6014340028ED11 /* MediaPlayer.framework */; };
 		5BF103792F3004410012FC48 /* protocol.c in Sources */ = {isa = PBXBuildFile; fileRef = 5BF103772F3004410012FC48 /* protocol.c */; };
@@ -72,6 +74,8 @@
 		5B49FE032F2C72C5007C1980 /* katipoBrowser.icon */ = {isa = PBXFileReference; lastKnownFileType = folder.iconcomposer.icon; name = katipoBrowser.icon; path = ../working/katipoBrowser.icon; sourceTree = SOURCE_ROOT; };
 		5B49FE052F2C7EBC007C1980 /* app */ = {isa = PBXFileReference; lastKnownFileType = folder; name = app; path = ../app; sourceTree = "<group>"; };
 		5B63135E2F46F03200206946 /* libMoltenVK.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libMoltenVK.dylib; path = thirdPartyMac/MoltenVK/dynamic/dylib/macOS/libMoltenVK.dylib; sourceTree = "<group>"; };
+		5B65961A2FAD3A980017322D /* host.tui */ = {isa = PBXFileReference; lastKnownFileType = text; name = host.tui; path = ../katipo/apps/katipoHost/scripts/host.tui; sourceTree = "<group>"; };
+		5B6596242FB14B050017322D /* tracker.tui */ = {isa = PBXFileReference; lastKnownFileType = text; name = tracker.tui; path = ../katipo/apps/katipoTracker/scripts/tracker.tui; sourceTree = "<group>"; };
 		5BB245D92F5A220800D72754 /* AppKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AppKit.framework; path = System/Library/Frameworks/AppKit.framework; sourceTree = SDKROOT; };
 		5BED52FB2E6014340028ED11 /* MediaPlayer.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MediaPlayer.framework; path = System/Library/Frameworks/MediaPlayer.framework; sourceTree = SDKROOT; };
 		5BF103712F3004410012FC48 /* callbacks.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; name = callbacks.c; path = "../katipo/thirdParty/enet-1.3.18/callbacks.c"; sourceTree = SOURCE_ROOT; };
@@ -88,7 +92,7 @@
 		5BF103862F3009100012FC48 /* MurmurHash3.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = MurmurHash3.h; path = ../thirdParty/MurmurHash3.h; sourceTree = SOURCE_ROOT; };
 		5BF103872F3009100012FC48 /* MurmurHash3.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = MurmurHash3.cpp; path = ../thirdParty/MurmurHash3.cpp; sourceTree = SOURCE_ROOT; };
 		5BF103882F3009100012FC48 /* stb_image.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = stb_image.h; path = ../thirdParty/stb_image.h; sourceTree = SOURCE_ROOT; };
-		5BFDBD012CC78B1E00247D8D /* Katipo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Katipo.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		5BFDBD012CC78B1E00247D8D /* Katipo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Katipo.app; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
@@ -177,6 +181,8 @@
 		5BFDBCF82CC78B1E00247D8D = {
 			isa = PBXGroup;
 			children = (
+				5B6596242FB14B050017322D /* tracker.tui */,
+				5B65961A2FAD3A980017322D /* host.tui */,
 				5B63135E2F46F03200206946 /* libMoltenVK.dylib */,
 				5B49FE052F2C7EBC007C1980 /* app */,
 				5B49FE012F2C6D4E007C1980 /* SDL3_mixer.framework */,
@@ -238,7 +244,7 @@
 				5B49FDA92F2C3690007C1980 /* browser */,
 				5B49FDED2F2C36FC007C1980 /* core */,
 			);
-			name = "Katipo";
+			name = Katipo;
 			packageProductDependencies = (
 			);
 			productName = katipoBrowser;
@@ -283,6 +289,8 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				5B6596252FB14B050017322D /* tracker.tui in Resources */,
+				5B65961B2FAD3A980017322D /* host.tui in Resources */,
 				5B49FE042F2C72C5007C1980 /* katipoBrowser.icon in Resources */,
 				5B49FE062F2C7EBC007C1980 /* app in Resources */,
 			);

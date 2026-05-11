@@ -21,6 +21,19 @@ if(!hostedSiteBookmarks)
 {
     hostedSiteBookmarks = {}
 }
+else
+{
+    for(i, hostedSiteBookmark in hostedSiteBookmarks)
+    {
+        hostedSiteBookmark.running = false
+        #todo if(hostedSiteBookmark.running and hostedSiteBookmark.autoStart) then start
+    }
+}
+
+saveHostedBookmarks = function()
+{
+    database.set("hostedSiteBookmarks", hostedSiteBookmarks)
+}
 
 urlTextEntry = scene.getView("urlTextEntry")
 refreshButton = scene.getView("refreshButton")
@@ -68,6 +81,11 @@ setHostTabSelected = function(newHostTabSelected)
     .hostTabSelected = newHostTabSelected
     browseButton.setSelected(!newHostTabSelected)
     hostButton.setSelected(newHostTabSelected)
+
+    if(!newHostTabSelected)
+    {
+        hideSiteManagement()
+    }
 }
 
 browseButton.click = function()
@@ -84,12 +102,17 @@ hostButton.click = function()
 
 getClientSitePath = function(hostID)
 {
-    return file.getSavePath("browserSites/" + hostID + "/")
+    return file.getSavePath("clientSites/" + hostID + "/")
 }
 
-getHostSitePath = function(hostID)
+getHostSitePublicPath = function(hostID)
 {
-    return file.getSavePath("hostedSites/" + hostID + "/")
+    return file.getSavePath("hostedSites/" + hostID + "/public/")
+}
+
+getHostSitePrivatePath = function(hostID)
+{
+    return file.getSavePath("hostedSites/" + hostID + "/private/")
 }
 
 findBookmark = function(url)
@@ -148,7 +171,7 @@ showSiteManagement = function(hostedSiteBookmarkInfo)
         .hostedSiteManagement = require("app/katipoBrowser/scripts/hostedSiteManagement.tui")
 
         #hostedSiteManagement.siteContentBackground = siteContentBackground
-        hostedSiteManagement.init(siteContentBackground)
+        hostedSiteManagement.init(siteContentBackground, saveHostedBookmarks)
     }
 
     siteContentBackground.goalColor = vec4(0.0, 0.2, 0.01, 0.6) #green for editing host config
@@ -156,14 +179,24 @@ showSiteManagement = function(hostedSiteBookmarkInfo)
     defaultSiteContent.hidden = true
     browserManagementView.fadeOut()
     katipo.hideCurrentSite()
-    hostedSiteManagement.show(hostedSiteBookmarkInfo, getHostSitePath(hostedSiteBookmarkInfo.hostID))
+    hostedSiteManagement.show(hostedSiteBookmarkInfo, getHostSitePublicPath(hostedSiteBookmarkInfo.hostID))
     fadeSiteContent(true)
+}
+
+hideSiteManagement = function()
+{
+    if(hostedSiteManagement)
+    {
+        hostedSiteManagement.hide()
+    }
 }
 
 installSite = function(hostSiteData, hostID, url)
 {
-    siteSavePath = getHostSitePath(hostID)
-    file.mkdir(siteSavePath)
+    publicSiteSavePath = getHostSitePublicPath(hostID)
+    file.mkdir(publicSiteSavePath)
+    privateSiteSavePath = getHostSitePrivatePath(hostID)
+    file.mkdir(privateSiteSavePath)
 
     checksums = false
 
@@ -185,7 +218,7 @@ installSite = function(hostSiteData, hostID, url)
     files = hostSiteData.siteFiles
     for(subFile in files)
     {
-        writeFile(siteSavePath, checksums, subFile)
+        writeFile(publicSiteSavePath, checksums, subFile)
     }
 
     hostedSiteBookmarkInfo = {
@@ -198,7 +231,7 @@ installSite = function(hostSiteData, hostID, url)
         #siteImage = hostSiteData.siteImage
     }
     table.insert(hostedSiteBookmarks, 0, hostedSiteBookmarkInfo)
-    database.set("hostedSiteBookmarks", hostedSiteBookmarks)
+    saveHostedBookmarks()
     
     setHostTabSelected(true)
     loadBookmarks()

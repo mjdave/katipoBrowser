@@ -2,8 +2,7 @@
 buttonWidth = 200
 
 mainView = {
-    type = "color"
-    color = vec4(1.0,0.0,0.0,1.0)
+    type = "view"
     subviews = {
         {
             id = "pageBody"

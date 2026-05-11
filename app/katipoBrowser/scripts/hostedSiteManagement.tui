@@ -3,9 +3,17 @@ hostedSiteScene = require("app/katipoBrowser/scripts/hostedSiteManagementScene.t
 
 mainView = false
 
-init = function(siteContentBackground)
+saveHostedBookmarksFunc = false
+
+init = function(siteContentBackground, saveHostedBookmarksFunc_)
 {
     .mainView = siteContentBackground.addView(hostedSiteScene.mainView)
+    .saveHostedBookmarksFunc = saveHostedBookmarksFunc_
+}
+
+
+updateStartStopButton = function(bookmark)
+{
 
 }
 
@@ -20,6 +28,41 @@ show = function(bookmark, sitePath)
     pageBody = mainView.getView("pageBody")
     pageBody.setText(pageText)
 
+    startStopButton = mainView.getView("startStopButton")
+    startStopButtonText = startStopButton.getView("startStopButtonText")
+
+    updateStartStopButton = function(running)
+    {
+        if(running) #todo start running bookmarks when app launches
+        {
+            startStopButtonText.text = hostedSiteScene.stopText
+            startStopButton.setColor(hostedSiteScene.stopColor)
+        }
+        else
+        {
+            startStopButtonText.text = hostedSiteScene.startText
+            startStopButton.setColor(hostedSiteScene.startColor)
+        }
+    }
+
+    updateStartStopButton(bookmark.running)
+
+
+    updateButton = mainView.getView("updateButton")
+    updateButton.setDisabled(true)
+    #updateButton.click = function()
+    #{
+    #}
+
+
+    startStopButton.click = function()
+    {
+        bookmark.running = katipo.setHostRunning(bookmark.hostID, !bookmark.running) #returns the running state
+
+        saveHostedBookmarksFunc()
+        updateStartStopButton(bookmark.running)
+    }
+
     openDirectoryButton = mainView.getView("openDirectoryButton")
     openDirectoryButton.click = function()
     {
@@ -28,4 +71,9 @@ show = function(bookmark, sitePath)
     }
 
     mainView.hidden = false
+}
+
+hide = function()
+{
+    mainView.hidden = true
 }

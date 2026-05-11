@@ -116,6 +116,15 @@ updateColorVisuals = function(view)
     {
         view.color = view.color + view.highlightColor
     }
+
+    if(view.disabled)
+    {
+        view.alpha = 0.3
+    }
+    else
+    {
+        view.alpha = 1.0
+    }
 }
 
 buttonTypes = {
@@ -214,8 +223,11 @@ create = function(parentView, viewLayout)
 
     view.hoverStart = function()
     {
-        view.isHover = true
-        updateVisuals(view)
+        if(!view.disabled)
+        {
+            view.isHover = true
+            updateVisuals(view)
+        }
     }
 
     view.hoverEnd = function()
@@ -226,8 +238,11 @@ create = function(parentView, viewLayout)
 
     view.mouseDown = function()
     {
-        view.mouseIsDown = true
-        updateVisuals(view)
+        if(!view.disabled)
+        {
+            view.mouseIsDown = true
+            updateVisuals(view)
+        }
     }
 
     view.mouseUp = function()
@@ -240,6 +255,12 @@ create = function(parentView, viewLayout)
     {
         view.color = newColor
         updateDerivedColors(view, newColor)
+    }
+
+    view.setDisabled = function(newDisabled)
+    {
+        view.disabled = newDisabled
+        updateVisuals(view)
     }
 
     updateVisuals(view)

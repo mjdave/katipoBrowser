@@ -19,6 +19,8 @@
 #include "DatabaseEnvironment.h"
 #include "Database.h"
 #include "Scanner.h"
+#include "BrowserHost.h"
+#include "BrowserTracker.h"
 
 #include "MJView.h"
 
@@ -192,6 +194,18 @@ void KatipoBrowser::init()
         }
     }
     
+    //todo remove this, backwards compatibility for 0.2->0.3
+    std::string basePath = SDL_GetPrefPath("katipo", "katipo");
+    std::string oldClientSitesPath = basePath + "browserSites";
+    if(Tui::fileExistsAtPath(oldClientSitesPath))
+    {
+        std::string newClientSitesPath = basePath + "clientSites";
+        if(!Tui::fileExistsAtPath(newClientSitesPath))
+        {
+            Tui::moveFile(oldClientSitesPath, newClientSitesPath);
+        }
+    }
+    
     
     if(sodium_init() < 0) //this is safe to call multiple times
     {
@@ -234,22 +248,6 @@ void KatipoBrowser::init()
     MJAudio::getInstance()->bindTui(rootTable);
     katipoTable = addKatipoTable(rootTable);
     
-    //katipo.gotSiteUnchanged(hostID)
-    /*katipoTable->setFunction("gotSiteUnchanged", [this](TuiTable* args, TuiRef* existingResult, TuiFunctionCallData* incomingCallData, TuiDebugInfo* callingDebugInfo) -> TuiRef* {
-        if(args->arrayObjects.size() >= 1)
-        {
-            std::string hostID = args->arrayObjects[0]->getStringValue();
-            SiteConnectionInfo& siteConnectionInfo = siteConnectionInfosByHostID[hostID];
-            TuiFunction* onSiteLoadFunc = siteConnectionInfo.katipoTable->getFunction("onSiteLoad");
-            if(onSiteLoadFunc)
-            {
-                onSiteLoadFunc->call("site loaded onSiteLoad", TUI_FALSE, siteConnectionInfo.publicData);
-            }
-        }
-        
-        return TUI_NIL;
-    });*/
-    
     
     katipoTable->setFunction("openURL", [this](TuiTable* args,
                                                 TuiRef* existingResult,
@@ -261,6 +259,47 @@ void KatipoBrowser::init()
             SDL_OpenURL(url.c_str());
         }
         return TUI_NIL;
+    });
+    
+    katipoTable->setFunction("setHostRunning", [this, basePath, rootTable](TuiTable* args,
+                                                TuiRef* existingResult,
+                                                TuiFunctionCallData* incomingCallData,
+                                                TuiDebugInfo* callingDebugInfo) -> TuiRef* {
+        if(args->arrayObjects.size() >= 2)
+        {
+            std::string hostID = args->arrayObjects[0]->getStringValue();
+            bool shouldRun = args->arrayObjects[1]->boolValue();
+            
+            if(!hostID.empty())
+            {
+                if(browserHostsByHostID.count(hostID) == 0)
+                {
+                    if(shouldRun)
+                    {
+                        if(!browserTracker)
+                        {
+                            browserTracker = new BrowserTracker();
+                        }
+                        BrowserHost* host = new BrowserHost(hostID);
+                        browserHostsByHostID[hostID] = host;
+                        return TUI_TRUE;
+                    }
+                }
+                else
+                {
+                    if(!shouldRun)
+                    {
+                        delete browserHostsByHostID[hostID];
+                        browserHostsByHostID.erase(hostID);
+                        return TUI_FALSE;
+                    }
+                    return TUI_TRUE;
+                }
+                
+            }
+            
+        }
+        return TUI_FALSE;
     });
     
     katipoTable->setFunction("hideCurrentSite", [this](TuiTable* args,
@@ -760,6 +799,11 @@ KatipoBrowser::KatipoBrowser()
 
 KatipoBrowser::~KatipoBrowser()
 {
+    if(browserTracker)
+    {
+        delete browserTracker;
+    }
+    
     scriptState->release();
     rootTable->release();
     delete mainView;

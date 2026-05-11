@@ -16,6 +16,8 @@ class ClientNetInterface;
 class DatabaseEnvironment;
 class Database;
 class Scanner;
+class BrowserHost;
+class BrowserTracker;
 
 struct SiteConnectionInfo {
     MJView* mainView = nullptr;
@@ -43,6 +45,9 @@ public:
     std::map<std::string, ClientNetInterface*> netInterfaces;
     
     std::map<std::string, SiteConnectionInfo> siteConnectionInfosByHostID;
+    
+    BrowserTracker* browserTracker = nullptr;
+    std::map<std::string, BrowserHost*> browserHostsByHostID;
     
     MJView* currentSiteView = nullptr;
     
