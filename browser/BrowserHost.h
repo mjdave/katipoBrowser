@@ -25,7 +25,7 @@ public:
     TuiTable* katipoTable;
     TuiTable* scriptState;
     
-    BrowserHost(std::string hostID);
+    BrowserHost(std::string hostID, std::string basePath_ = "");
     ~BrowserHost();
     
 private:

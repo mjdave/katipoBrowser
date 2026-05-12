@@ -9,9 +9,13 @@
 #include "sodium.h"
 #include "KatipoUtilities.h"
 
-BrowserHost::BrowserHost(std::string hostID)
+BrowserHost::BrowserHost(std::string hostID, std::string basePath_)
 {
-    basePath = Katipo::getSavePath("hostedSites/" + hostID + "/public/");
+    basePath = basePath_;
+    if(basePath.empty())
+    {
+        basePath = Katipo::getSavePath("hostedSites/" + hostID + "/public/");
+    }
     std::string privateSavePath = Katipo::getSavePath("hostedSites/" + hostID + "/private/");
     
     rootTable = Tui::initRootTable(); //todo this should optionally use a safe root table, probably by default

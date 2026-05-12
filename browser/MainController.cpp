@@ -49,13 +49,6 @@ MainController::MainController()
 void MainController::init(TuiTable* rootTable, Database* appDatabase_, std::string windowTitle, std::string organizationName, std::string appTitle)
 {
     appDatabase = appDatabase_;
-    
-	char *basePathCString = SDL_GetPrefPath(organizationName.c_str(), appTitle.c_str());
-	if(!basePathCString)
-	{
-		SDL_ShowSimpleMessageBox(SDL_MESSAGEBOX_ERROR,"Failed to find save files location", "You might be able to work around this by running the application as an administrator, or by fixing issues with file permissions.",NULL);
-		exit(0);
-	}
 
     multiSamplingEnabled = false;
     

@@ -3,6 +3,8 @@
 
 namespace Katipo {
 
+std::string baseSavePath = "";
+
 std::string getResourcePath(const std::string &appendPath)
 {
     static std::string basePath = SDL_GetBasePath();
@@ -18,14 +20,17 @@ std::string getResourcePath(const std::string &appendPath)
 
 std::string getSavePath(const std::string& appendPath)
 {
-    static std::string basePath = SDL_GetPrefPath("katipo", "katipo");
+    if(baseSavePath.empty())
+    {
+        baseSavePath = SDL_GetPrefPath("katipo", "katipo");
+    }
 
     if(appendPath.empty())
     {
-        return basePath;
+        return baseSavePath;
     }
 
-    return basePath + appendPath;
+    return baseSavePath + appendPath;
 }
 
 };
