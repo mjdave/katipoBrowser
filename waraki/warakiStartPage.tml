@@ -1,0 +1,33 @@
+# Welcome to Waraki
+
+If you have music files stored on this device that you would like to play, or host for playing elsewhere, then you can set up a music library by telling Waraki where your music files are.
+[set up new music library] 
+
+If you have already set up a music library, you can connect to it
+[connect to music library]
+
+
+——
+
+
+# Set up new music library
+
+Please select where your music files are stored on your device. Waraki will search this directory and all sub-directories for any mp3, m4a, ogg, or flac files.
+
+[Files]({id = “musicDirFileBrowser”})
+
+
+
+[cancel]({id = “cancelButton”}) [ok]({id = “okButton”})
+
+—
+
+# Searching..
+
+If you have an IP address or url where your Waraki music library is hosted, you can enter it here to connect directly.
+
+[]({id = “ipTextEntry”})
+[connect]({id = “connectButton”})
+
+
+[cancel]({id = “cancelButton”})

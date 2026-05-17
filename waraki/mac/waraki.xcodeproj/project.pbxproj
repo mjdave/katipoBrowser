@@ -67,36 +67,36 @@
 		5B1384AD2E3A08B600AEF9AD /* AudioToolbox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioToolbox.framework; path = System/Library/Frameworks/AudioToolbox.framework; sourceTree = SDKROOT; };
 		5B1384B02E3A08F900AEF9AD /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = System/Library/Frameworks/AVFoundation.framework; sourceTree = SDKROOT; };
 		5B1AD7902E6069B6005D15BD /* CoreMedia.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreMedia.framework; path = System/Library/Frameworks/CoreMedia.framework; sourceTree = SDKROOT; };
-		5B49FD252F2C2019007C1980 /* Waraki.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = Waraki.h; path = ../waraki/Waraki.h; sourceTree = SOURCE_ROOT; };
-		5B49FD262F2C2019007C1980 /* Waraki.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = Waraki.cpp; path = ../waraki/Waraki.cpp; sourceTree = SOURCE_ROOT; };
-		5B49FD282F2C21BB007C1980 /* SDL3.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SDL3.framework; path = thirdPartyMac/SDL3.framework; sourceTree = "<group>"; };
-		5B49FD292F2C21BB007C1980 /* SDL3_mixer.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SDL3_mixer.framework; path = thirdPartyMac/SDL3_mixer.framework; sourceTree = "<group>"; };
-		5B49FDFC2F2C5A3E007C1980 /* libsodium.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libsodium.a; path = ../katipo/thirdParty/libsodium/macos/lib/libsodium.a; sourceTree = "<group>"; };
-		5B49FDFF2F2C6D3A007C1980 /* SDL3.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SDL3.framework; path = thirdPartyMac/SDL3.framework; sourceTree = "<group>"; };
-		5B49FE012F2C6D4E007C1980 /* SDL3_mixer.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SDL3_mixer.framework; path = thirdPartyMac/SDL3_mixer.framework; sourceTree = "<group>"; };
-		5B49FE032F2C72C5007C1980 /* waraki.icon */ = {isa = PBXFileReference; lastKnownFileType = folder.iconcomposer.icon; name = waraki.icon; path = ../waraki/waraki.icon; sourceTree = SOURCE_ROOT; };
-		5B49FE052F2C7EBC007C1980 /* app */ = {isa = PBXFileReference; lastKnownFileType = folder; name = app; path = ../app; sourceTree = "<group>"; };
-		5B63135E2F46F03200206946 /* libMoltenVK.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libMoltenVK.dylib; path = thirdPartyMac/MoltenVK/dynamic/dylib/macOS/libMoltenVK.dylib; sourceTree = "<group>"; };
-		5B65961A2FAD3A980017322D /* host.tui */ = {isa = PBXFileReference; lastKnownFileType = text; name = host.tui; path = ../katipo/apps/katipoHost/scripts/host.tui; sourceTree = "<group>"; };
-		5B6596242FB14B050017322D /* tracker.tui */ = {isa = PBXFileReference; lastKnownFileType = text; name = tracker.tui; path = ../katipo/apps/katipoTracker/scripts/tracker.tui; sourceTree = "<group>"; };
-		5B714C3C2FB2E203006184D4 /* waraki */ = {isa = PBXFileReference; lastKnownFileType = folder; name = waraki; path = "../../Documents/daves-katipo-sites/waraki"; sourceTree = "<group>"; };
-		5B89E8912FB3C40300683008 /* waraki.tui */ = {isa = PBXFileReference; lastKnownFileType = text; name = waraki.tui; path = ../waraki/waraki.tui; sourceTree = "<group>"; };
+		5B49FD252F2C2019007C1980 /* Waraki.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = Waraki.h; path = ../Waraki.h; sourceTree = SOURCE_ROOT; };
+		5B49FD262F2C2019007C1980 /* Waraki.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = Waraki.cpp; path = ../Waraki.cpp; sourceTree = SOURCE_ROOT; };
+		5B49FD282F2C21BB007C1980 /* SDL3.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SDL3.framework; path = ../../mac/thirdPartyMac/SDL3.framework; sourceTree = "<group>"; };
+		5B49FD292F2C21BB007C1980 /* SDL3_mixer.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SDL3_mixer.framework; path = ../../mac/thirdPartyMac/SDL3_mixer.framework; sourceTree = "<group>"; };
+		5B49FDFC2F2C5A3E007C1980 /* libsodium.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libsodium.a; path = ../../katipo/thirdParty/libsodium/macos/lib/libsodium.a; sourceTree = "<group>"; };
+		5B49FDFF2F2C6D3A007C1980 /* SDL3.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SDL3.framework; path = ../../mac/thirdPartyMac/SDL3.framework; sourceTree = "<group>"; };
+		5B49FE012F2C6D4E007C1980 /* SDL3_mixer.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SDL3_mixer.framework; path = ../../mac/thirdPartyMac/SDL3_mixer.framework; sourceTree = "<group>"; };
+		5B49FE032F2C72C5007C1980 /* waraki.icon */ = {isa = PBXFileReference; lastKnownFileType = folder.iconcomposer.icon; name = waraki.icon; path = waraki.icon; sourceTree = SOURCE_ROOT; };
+		5B49FE052F2C7EBC007C1980 /* app */ = {isa = PBXFileReference; lastKnownFileType = folder; name = app; path = ../../app; sourceTree = "<group>"; };
+		5B63135E2F46F03200206946 /* libMoltenVK.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libMoltenVK.dylib; path = ../../mac/thirdPartyMac/MoltenVK/dynamic/dylib/macOS/libMoltenVK.dylib; sourceTree = "<group>"; };
+		5B65961A2FAD3A980017322D /* host.tui */ = {isa = PBXFileReference; lastKnownFileType = text; name = host.tui; path = ../../katipo/apps/katipoHost/scripts/host.tui; sourceTree = "<group>"; };
+		5B6596242FB14B050017322D /* tracker.tui */ = {isa = PBXFileReference; lastKnownFileType = text; name = tracker.tui; path = ../../katipo/apps/katipoTracker/scripts/tracker.tui; sourceTree = "<group>"; };
+		5B714C3C2FB2E203006184D4 /* waraki */ = {isa = PBXFileReference; lastKnownFileType = folder; name = waraki; path = "waraki"; sourceTree = "<group>"; };
+		5B89E8912FB3C40300683008 /* waraki.tui */ = {isa = PBXFileReference; lastKnownFileType = text; name = waraki.tui; path = ../waraki.tui; sourceTree = "<group>"; };
 		5BB245D92F5A220800D72754 /* AppKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AppKit.framework; path = System/Library/Frameworks/AppKit.framework; sourceTree = SDKROOT; };
 		5BED52FB2E6014340028ED11 /* MediaPlayer.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MediaPlayer.framework; path = System/Library/Frameworks/MediaPlayer.framework; sourceTree = SDKROOT; };
-		5BF103712F3004410012FC48 /* callbacks.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; name = callbacks.c; path = "../katipo/thirdParty/enet-1.3.18/callbacks.c"; sourceTree = SOURCE_ROOT; };
-		5BF103722F3004410012FC48 /* compress.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; name = compress.c; path = "../katipo/thirdParty/enet-1.3.18/compress.c"; sourceTree = SOURCE_ROOT; };
-		5BF103732F3004410012FC48 /* host.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; name = host.c; path = "../katipo/thirdParty/enet-1.3.18/host.c"; sourceTree = SOURCE_ROOT; };
-		5BF103742F3004410012FC48 /* list.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; name = list.c; path = "../katipo/thirdParty/enet-1.3.18/list.c"; sourceTree = SOURCE_ROOT; };
-		5BF103752F3004410012FC48 /* packet.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; name = packet.c; path = "../katipo/thirdParty/enet-1.3.18/packet.c"; sourceTree = SOURCE_ROOT; };
-		5BF103762F3004410012FC48 /* peer.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; name = peer.c; path = "../katipo/thirdParty/enet-1.3.18/peer.c"; sourceTree = SOURCE_ROOT; };
-		5BF103772F3004410012FC48 /* protocol.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; name = protocol.c; path = "../katipo/thirdParty/enet-1.3.18/protocol.c"; sourceTree = SOURCE_ROOT; };
-		5BF103782F3004410012FC48 /* unix.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; name = unix.c; path = "../katipo/thirdParty/enet-1.3.18/unix.c"; sourceTree = SOURCE_ROOT; };
-		5BF103812F3004790012FC48 /* lmdb.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = lmdb.h; path = ../katipo/thirdParty/liblmdb/lmdb.h; sourceTree = SOURCE_ROOT; };
-		5BF103822F3004790012FC48 /* mdb.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; name = mdb.c; path = ../katipo/thirdParty/liblmdb/mdb.c; sourceTree = SOURCE_ROOT; };
-		5BF103832F3004790012FC48 /* midl.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; name = midl.c; path = ../katipo/thirdParty/liblmdb/midl.c; sourceTree = SOURCE_ROOT; };
-		5BF103862F3009100012FC48 /* MurmurHash3.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = MurmurHash3.h; path = ../thirdParty/MurmurHash3.h; sourceTree = SOURCE_ROOT; };
-		5BF103872F3009100012FC48 /* MurmurHash3.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = MurmurHash3.cpp; path = ../thirdParty/MurmurHash3.cpp; sourceTree = SOURCE_ROOT; };
-		5BF103882F3009100012FC48 /* stb_image.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = stb_image.h; path = ../thirdParty/stb_image.h; sourceTree = SOURCE_ROOT; };
+		5BF103712F3004410012FC48 /* callbacks.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; name = callbacks.c; path = "../../katipo/thirdParty/enet-1.3.18/callbacks.c"; sourceTree = SOURCE_ROOT; };
+		5BF103722F3004410012FC48 /* compress.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; name = compress.c; path = "../../katipo/thirdParty/enet-1.3.18/compress.c"; sourceTree = SOURCE_ROOT; };
+		5BF103732F3004410012FC48 /* host.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; name = host.c; path = "../../katipo/thirdParty/enet-1.3.18/host.c"; sourceTree = SOURCE_ROOT; };
+		5BF103742F3004410012FC48 /* list.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; name = list.c; path = "../../katipo/thirdParty/enet-1.3.18/list.c"; sourceTree = SOURCE_ROOT; };
+		5BF103752F3004410012FC48 /* packet.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; name = packet.c; path = "../../katipo/thirdParty/enet-1.3.18/packet.c"; sourceTree = SOURCE_ROOT; };
+		5BF103762F3004410012FC48 /* peer.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; name = peer.c; path = "../../katipo/thirdParty/enet-1.3.18/peer.c"; sourceTree = SOURCE_ROOT; };
+		5BF103772F3004410012FC48 /* protocol.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; name = protocol.c; path = "../../katipo/thirdParty/enet-1.3.18/protocol.c"; sourceTree = SOURCE_ROOT; };
+		5BF103782F3004410012FC48 /* unix.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; name = unix.c; path = "../../katipo/thirdParty/enet-1.3.18/unix.c"; sourceTree = SOURCE_ROOT; };
+		5BF103812F3004790012FC48 /* lmdb.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = lmdb.h; path = ../../katipo/thirdParty/liblmdb/lmdb.h; sourceTree = SOURCE_ROOT; };
+		5BF103822F3004790012FC48 /* mdb.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; name = mdb.c; path = ../../katipo/thirdParty/liblmdb/mdb.c; sourceTree = SOURCE_ROOT; };
+		5BF103832F3004790012FC48 /* midl.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; name = midl.c; path = ../../katipo/thirdParty/liblmdb/midl.c; sourceTree = SOURCE_ROOT; };
+		5BF103862F3009100012FC48 /* MurmurHash3.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = MurmurHash3.h; path = ../../thirdParty/MurmurHash3.h; sourceTree = SOURCE_ROOT; };
+		5BF103872F3009100012FC48 /* MurmurHash3.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = MurmurHash3.cpp; path = ../../thirdParty/MurmurHash3.cpp; sourceTree = SOURCE_ROOT; };
+		5BF103882F3009100012FC48 /* stb_image.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = stb_image.h; path = ../../thirdParty/stb_image.h; sourceTree = SOURCE_ROOT; };
 		5BFDBD012CC78B1E00247D8D /* Waraki.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Waraki.app; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
@@ -136,7 +136,7 @@
 		5B49FD402F2C23A8007C1980 /* source */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
 			name = source;
-			path = ../katipo/thirdParty/tui/source;
+			path = ../../katipo/thirdParty/tui/source;
 			sourceTree = SOURCE_ROOT;
 		};
 		5B49FDA92F2C3690007C1980 /* browser */ = {
@@ -145,7 +145,7 @@
 				5B714C3B2FB278D1006184D4 /* Exceptions for "browser" folder in "Waraki" target */,
 			);
 			name = browser;
-			path = ../browser;
+			path = ../../browser;
 			sourceTree = SOURCE_ROOT;
 		};
 		5B49FDED2F2C36FC007C1980 /* core */ = {
@@ -154,7 +154,7 @@
 				5B49FDFE2F2C6CB1007C1980 /* Exceptions for "core" folder in "Waraki" target */,
 			);
 			name = core;
-			path = ../katipo/core;
+			path = ../../katipo/core;
 			sourceTree = SOURCE_ROOT;
 		};
 /* End PBXFileSystemSynchronizedRootGroup section */
@@ -472,9 +472,9 @@
 				ENABLE_USER_SCRIPT_SANDBOXING = NO;
 				FRAMEWORK_SEARCH_PATHS = (
 					"\"$(SRCROOT)/../ThirdParty\"",
-					"\"$(SRCROOT)/thirdPartyMac\"",
-					"$(PROJECT_DIR)/thirdPartyMac",
-					"$(PROJECT_DIR)/thirdPartyMac/MoltenVK/dynamic/MoltenVK.xcframework/macos-arm64_x86_64",
+					"\"$(SRCROOT)/../../mac/thirdPartyMac\"",
+					"$(PROJECT_DIR)/../../mac/thirdPartyMac",
+					"$(PROJECT_DIR)/../../mac/thirdPartyMac/MoltenVK/dynamic/MoltenVK.xcframework/macos-arm64_x86_64",
 				);
 				GCC_WARN_64_TO_32_BIT_CONVERSION = NO;
 				GENERATE_INFOPLIST_FILE = YES;
@@ -492,8 +492,8 @@
 				);
 				LIBRARY_SEARCH_PATHS = (
 					"\"$(SRCROOT)/../ThirdParty\"",
-					"\"$(SRCROOT)/../katipo/thirdParty/libsodium/macos/lib\"",
-					"$(PROJECT_DIR)/thirdPartyMac/MoltenVK/dynamic/dylib/macOS",
+					"\"$(SRCROOT)/../../katipo/thirdParty/libsodium/macos/lib\"",
+					"$(PROJECT_DIR)/../../mac/thirdPartyMac/MoltenVK/dynamic/dylib/macOS",
 				);
 				MACOSX_DEPLOYMENT_TARGET = 11.5;
 				MARKETING_VERSION = 0.3.0.0;
@@ -501,17 +501,17 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				USER_HEADER_SEARCH_PATHS = (
-					"\"$(SRCROOT)/thirdPartyMac/SDL3.framework/Headers\"",
-					"\"$(SRCROOT)/thirdPartyMac/SDL3_mixer.framework/Headers\"",
-					"\"$(SRCROOT)/../katipo/thirdParty/enet-1.3.18/include\"",
-					"\"$(SRCROOT)/thirdPartyMac/MoltenVK/include\"",
-					"\"$(SRCROOT)/../katipo/thirdParty/tui/source\"",
-					"\"$(SRCROOT)/../katipo/thirdParty/tui/thirdParty/glm/glm\"",
-					"\"$(SRCROOT)/../thirdParty/VulkanMemoryAllocator-3.2.1/include\"",
-					"\"$(SRCROOT)/../thirdParty/rapidjson-1.1.0/include\"",
-					"\"$(SRCROOT)/../katipo/thirdParty/libsodium/macos/include\"",
-					"\"$(SRCROOT)/../katipo/thirdParty/liblmdb\"",
-					"\"$(SRCROOT)/../thirdParty/utfcpp-3.2.1/source\"",
+					"\"$(SRCROOT)/../../mac/thirdPartyMac/SDL3.framework/Headers\"",
+					"\"$(SRCROOT)/../../mac/thirdPartyMac/SDL3_mixer.framework/Headers\"",
+					"\"$(SRCROOT)/../../katipo/thirdParty/enet-1.3.18/include\"",
+					"\"$(SRCROOT)/../../mac/thirdPartyMac/MoltenVK/include\"",
+					"\"$(SRCROOT)/../../katipo/thirdParty/tui/source\"",
+					"\"$(SRCROOT)/../../katipo/thirdParty/tui/thirdParty/glm/glm\"",
+					"\"$(SRCROOT)/../../thirdParty/VulkanMemoryAllocator-3.2.1/include\"",
+					"\"$(SRCROOT)/../../thirdParty/rapidjson-1.1.0/include\"",
+					"\"$(SRCROOT)/../../katipo/thirdParty/libsodium/macos/include\"",
+					"\"$(SRCROOT)/../../katipo/thirdParty/liblmdb\"",
+					"\"$(SRCROOT)/../../thirdParty/utfcpp-3.2.1/source\"",
 				);
 				WARNING_CFLAGS = "-Wno-nullability-completeness";
 			};
@@ -534,9 +534,9 @@
 				ENABLE_USER_SCRIPT_SANDBOXING = NO;
 				FRAMEWORK_SEARCH_PATHS = (
 					"\"$(SRCROOT)/../ThirdParty\"",
-					"\"$(SRCROOT)/thirdPartyMac\"",
-					"$(PROJECT_DIR)/thirdPartyMac",
-					"$(PROJECT_DIR)/thirdPartyMac/MoltenVK/dynamic/MoltenVK.xcframework/macos-arm64_x86_64",
+					"\"$(SRCROOT)/../../mac/thirdPartyMac\"",
+					"$(PROJECT_DIR)/../../mac/thirdPartyMac",
+					"$(PROJECT_DIR)/../../mac/thirdPartyMac/MoltenVK/dynamic/MoltenVK.xcframework/macos-arm64_x86_64",
 				);
 				GCC_WARN_64_TO_32_BIT_CONVERSION = NO;
 				GENERATE_INFOPLIST_FILE = YES;
@@ -554,8 +554,8 @@
 				);
 				LIBRARY_SEARCH_PATHS = (
 					"\"$(SRCROOT)/../ThirdParty\"",
-					"\"$(SRCROOT)/../katipo/thirdParty/libsodium/macos/lib\"",
-					"$(PROJECT_DIR)/thirdPartyMac/MoltenVK/dynamic/dylib/macOS",
+					"\"$(SRCROOT)/../../katipo/thirdParty/libsodium/macos/lib\"",
+					"$(PROJECT_DIR)/../../mac/thirdPartyMac/MoltenVK/dynamic/dylib/macOS",
 				);
 				MACOSX_DEPLOYMENT_TARGET = 11.5;
 				MARKETING_VERSION = 0.3.0.0;
@@ -563,17 +563,17 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				USER_HEADER_SEARCH_PATHS = (
-					"\"$(SRCROOT)/thirdPartyMac/SDL3.framework/Headers\"",
-					"\"$(SRCROOT)/thirdPartyMac/SDL3_mixer.framework/Headers\"",
-					"\"$(SRCROOT)/../katipo/thirdParty/enet-1.3.18/include\"",
-					"\"$(SRCROOT)/thirdPartyMac/MoltenVK/include\"",
-					"\"$(SRCROOT)/../katipo/thirdParty/tui/source\"",
-					"\"$(SRCROOT)/../katipo/thirdParty/tui/thirdParty/glm/glm\"",
-					"\"$(SRCROOT)/../thirdParty/VulkanMemoryAllocator-3.2.1/include\"",
-					"\"$(SRCROOT)/../thirdParty/rapidjson-1.1.0/include\"",
-					"\"$(SRCROOT)/../katipo/thirdParty/libsodium/macos/include\"",
-					"\"$(SRCROOT)/../katipo/thirdParty/liblmdb\"",
-					"\"$(SRCROOT)/../thirdParty/utfcpp-3.2.1/source\"",
+					"\"$(SRCROOT)/../../mac/thirdPartyMac/SDL3.framework/Headers\"",
+					"\"$(SRCROOT)/../../mac/thirdPartyMac/SDL3_mixer.framework/Headers\"",
+					"\"$(SRCROOT)/../../katipo/thirdParty/enet-1.3.18/include\"",
+					"\"$(SRCROOT)/../../mac/thirdPartyMac/MoltenVK/include\"",
+					"\"$(SRCROOT)/../../katipo/thirdParty/tui/source\"",
+					"\"$(SRCROOT)/../../katipo/thirdParty/tui/thirdParty/glm/glm\"",
+					"\"$(SRCROOT)/../../thirdParty/VulkanMemoryAllocator-3.2.1/include\"",
+					"\"$(SRCROOT)/../../thirdParty/rapidjson-1.1.0/include\"",
+					"\"$(SRCROOT)/../../katipo/thirdParty/libsodium/macos/include\"",
+					"\"$(SRCROOT)/../../katipo/thirdParty/liblmdb\"",
+					"\"$(SRCROOT)/../../thirdParty/utfcpp-3.2.1/source\"",
 				);
 				WARNING_CFLAGS = "-Wno-nullability-completeness";
 			};

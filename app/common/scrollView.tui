@@ -182,6 +182,7 @@ create = function(parentView, viewLayout)
 
         mainViewMouseDown = function(buttonIndex, mouseLoc)
         {
+            print("mainViewMouseDown")
             if(!scrollView.disabled and scrollView.scrollYIndexMax != 0)
             {
                 scrollView.lastY = mouseLoc.y
