@@ -161,7 +161,10 @@ void BrowserHost::createThread()
         
         //double dt = std::clamp(deltaTimer->getDt(), 0.0, 4.0);
         
-        trackerNetInterface->pollNetEvents();
+        if(trackerNetInterface)
+        {
+            trackerNetInterface->pollNetEvents();
+        }
         
         if(needsToExit)
         {

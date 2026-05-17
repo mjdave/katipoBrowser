@@ -257,7 +257,7 @@ void Waraki::init()
                         {
                             browserTracker = new BrowserTracker();
                         }
-                        BrowserHost* host = new BrowserHost(hostID, Katipo::getResourcePath("waraki"));
+                        BrowserHost* host = new BrowserHost(hostID, Katipo::getResourcePath("waraki-site"));
                         browserHostsByHostID[hostID] = host;
                         return TUI_TRUE;
                     }
