@@ -24,6 +24,7 @@
 
 #include "MJView.h"
 
+#define APP_NAME "Waraki"
 
 void Waraki::doGet(const std::string& trackerKey,
                           const std::string& hostID,
@@ -218,7 +219,7 @@ void Waraki::init()
     //rootTable->setVec2("screenSize", dvec2(MainController::getInstance()->windowInfo->screenWidth, MainController::getInstance()->windowInfo->screenHeight));
     
     
-    MainController::getInstance()->init(rootTable, appDatabase, "Katipo");
+    MainController::getInstance()->init(rootTable, appDatabase, APP_NAME);
     
     
     EventManager::getInstance()->bindTui(rootTable);
@@ -255,9 +256,9 @@ void Waraki::init()
                     {
                         if(!browserTracker)
                         {
-                            browserTracker = new BrowserTracker();
+                            browserTracker = new BrowserTracker(Katipo::getResourcePath("app/tracker.tui"));
                         }
-                        BrowserHost* host = new BrowserHost(hostID, Katipo::getResourcePath("waraki-site"));
+                        BrowserHost* host = new BrowserHost(hostID, Katipo::getResourcePath("waraki-site"), Katipo::getResourcePath("app/host.tui"));
                         browserHostsByHostID[hostID] = host;
                         return TUI_TRUE;
                     }
@@ -729,7 +730,7 @@ void Waraki::init()
     
     mainView = MJView::loadUnknownViewFromTable(sceneTable->getTable("mainView"), MainController::getInstance()->mainMJView, true, rootTable);
     
-    scriptState = (TuiTable*)TuiRef::runScriptFile(Katipo::getResourcePath("waraki.tui"), rootTable);
+    scriptState = (TuiTable*)TuiRef::runScriptFile(Katipo::getResourcePath("waraki-app/waraki.tui"), rootTable);
     
     //scanner = new Scanner();
     

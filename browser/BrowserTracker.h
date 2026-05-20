@@ -2,6 +2,7 @@
 #define BrowserTracker_h
 
 #include "TuiScript.h"
+#include "KatipoUtilities.h"
 #include <thread>
 
 class Tracker;
@@ -20,7 +21,7 @@ public:
     TuiTable* katipoTable;
     TuiTable* scriptState;
     
-    BrowserTracker();
+    BrowserTracker(std::string trackerScriptPath = Katipo::getResourcePath("tracker.tui"));
     ~BrowserTracker();
     
 private:

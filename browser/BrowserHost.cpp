@@ -9,7 +9,7 @@
 #include "sodium.h"
 #include "KatipoUtilities.h"
 
-BrowserHost::BrowserHost(std::string hostID, std::string basePath_)
+BrowserHost::BrowserHost(std::string hostID, std::string basePath_, std::string hostScriptPath)
 {
     basePath = basePath_;
     if(basePath.empty())
@@ -24,7 +24,7 @@ BrowserHost::BrowserHost(std::string hostID, std::string basePath_)
     rootTable->set("katipo", katipoTable);
     katipoTable->release();
     
-    TuiRef* hostScriptState = (TuiTable*)TuiRef::runScriptFile(Katipo::getResourcePath("host.tui"), rootTable);
+    TuiRef* hostScriptState = (TuiTable*)TuiRef::runScriptFile(hostScriptPath, rootTable);
     katipoTable->set("host", hostScriptState);
     hostScriptState->release();
     

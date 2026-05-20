@@ -3,6 +3,7 @@
 
 //#include "ThreadSafeQueue.h"
 #include "TuiScript.h"
+#include "KatipoUtilities.h"
 #include <thread>
 
 class ClientNetInterface;
@@ -25,7 +26,7 @@ public:
     TuiTable* katipoTable;
     TuiTable* scriptState;
     
-    BrowserHost(std::string hostID, std::string basePath_ = "");
+    BrowserHost(std::string hostID, std::string basePath_ = "", std::string hostScriptPath = Katipo::getResourcePath("host.tui"));
     ~BrowserHost();
     
 private:

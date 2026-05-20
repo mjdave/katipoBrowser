@@ -44,7 +44,7 @@
  
  */
 
-BrowserTracker::BrowserTracker()
+BrowserTracker::BrowserTracker(std::string trackerScriptPath)
 {
     //std::string basePath = Katipo::getSavePath("tracker/"); //will be needed
     //katipoTable->setString("basePath", basePath);
@@ -55,7 +55,7 @@ BrowserTracker::BrowserTracker()
     rootTable->set("katipo", katipoTable);
     katipoTable->release();
     
-    TuiTable* trackerScriptState = (TuiTable*)TuiRef::runScriptFile(Katipo::getResourcePath("tracker.tui"), rootTable);
+    TuiTable* trackerScriptState = (TuiTable*)TuiRef::runScriptFile(trackerScriptPath, rootTable);
     katipoTable->set("tracker", trackerScriptState);
     trackerScriptState->release();
     

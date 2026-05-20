@@ -2,6 +2,16 @@
 urlTextEntry = scene.getView("urlTextEntry")
 urlTextEntry.hidden = true
 
+mainViewLayout = {
+    type = "view"
+    subviews = {
+        {
+            id = "pageBody"
+            type = "markup"
+        }
+    }
+}
+
 windowSafeBackground = scene.getView("windowSafeBackground")
 windowSafeBackground.onParentSizeChanged = function(parentSize)
 {
@@ -18,6 +28,11 @@ siteContentBackground.update = function(dt)
         siteContentBackground.color = math.mix(siteContentBackground.color, siteContentBackground.goalColor, dt * 4.0)
     }
 }
+
+siteContent = siteContentBackground.addView(mainViewLayout)
+pageBody = siteContent.getView("pageBody")
+
+
 
 getClientSitePath = function(hostID)
 {
@@ -81,6 +96,10 @@ loadInitialLink = function()
     katipo.get("waraki", database.get("checksums"), getCallback)
 }
 
-katipo.setBundledHostRunning("waraki", true)
+#katipo.setBundledHostRunning("waraki", true)
+#loadInitialLink()
 
-loadInitialLink()
+welcomeFilePath = file.getResourcePath("waraki-app/welcome.tml")
+welcomeMarkup = file.loadData(welcomeFilePath)
+print("welcomeMarkup:", welcomeMarkup)
+pageBody.setText(welcomeMarkup)
