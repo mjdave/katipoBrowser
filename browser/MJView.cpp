@@ -1896,6 +1896,11 @@ void MJView::loadFromTable(TuiTable* table, bool needsToLayoutSubviews, TuiTable
         stateTable->setBool("hidden", table->getBool("hidden"));
     }
     
+    if(table->hasKey("styles"))
+    {
+        stateTable->set("styles", table->get("styles"));
+    }
+    
     idString = table->getString("id");
     
     if(!idString.empty())

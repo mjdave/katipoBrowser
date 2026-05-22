@@ -2,15 +2,9 @@
 urlTextEntry = scene.getView("urlTextEntry")
 urlTextEntry.hidden = true
 
-mainViewLayout = {
-    type = "view"
-    subviews = {
-        {
-            id = "pageBody"
-            type = "markup"
-        }
-    }
-}
+welcomePage = false
+setupPage = false
+connectPage = false
 
 windowSafeBackground = scene.getView("windowSafeBackground")
 windowSafeBackground.onParentSizeChanged = function(parentSize)
@@ -29,9 +23,162 @@ siteContentBackground.update = function(dt)
     }
 }
 
-siteContent = siteContentBackground.addView(mainViewLayout)
-pageBody = siteContent.getView("pageBody")
 
+setupClicked = function()
+{
+    welcomePage.fadeOut()
+
+    if(!setupPage)
+    {
+        setupFilePath = file.getResourcePath("waraki-app/setup.tml")
+        markup = file.loadData(setupFilePath)
+
+        .setupPage = siteContent.getView("setupPage")
+
+        setupPage.setText(markup)
+    }
+
+    setupPage.fadeIn()
+}
+
+scanFoundResults = {}
+foundResult = false
+
+scanCallback = function(status, result)
+{
+    print("got scan callback:", status)
+    if(status == "error")
+    {
+        thisMarkup = "# Scan failed\n" + "Something went wrong, the app may not have permission to access your local network.\n" + connectPageMarkup
+        connectPage.setText(thisMarkup)
+    }
+    else if(status == "connected") #NOTE we might get this after "complete", but not before we got a "connecting"
+    {
+        .foundResult = true
+        table.insert(scanFoundResults, result)
+
+        thisMarkup = "# Waraki music library found\n\n"
+        for(i, ip in scanFoundResults)
+        {
+            buttonID = "connectButton" + i
+            thisMarkup += ip + "    [connect](id='" + buttonID + "')"
+
+            clickFunction = function()
+            {
+                katipo.connectToScanResult(ip)
+                connectPage.fadeOut()
+            }
+
+            connectPage.styles[buttonID] = {
+                link = clickFunction
+            }
+        }
+        thisMarkup += "\n" + connectPageMarkup
+
+        connectPage.setText(thisMarkup)
+    }
+    else if(status == "complete")
+    {
+        if(!foundResult)
+        {
+            thisMarkup = "# Scan complete\n" + "No Waraki music libraries found on your network.\n" + connectPageMarkup
+            connectPage.setText(thisMarkup)
+        }
+    }
+
+}
+
+connectPageMarkup = false
+
+connectClicked = function()
+{
+    welcomePage.fadeOut()
+
+    if(!connectPage)
+    {
+        filePath = file.getResourcePath("waraki-app/connect.tml")
+        .connectPageMarkup = file.loadData(filePath)
+        .connectPage = siteContent.getView("connectPage")
+
+        katipo.startScan(scanCallback)
+    }
+
+    thisMarkup = "# Searching...\n" + "Waraki is scanning your local network for music libraries.\n" + connectPageMarkup
+    connectPage.setText(thisMarkup)
+    connectPage.fadeIn()
+}
+
+setupCancelClicked = function()
+{
+    setupPage.fadeOut()
+    welcomePage.fadeIn()
+}
+
+setupOKClicked = function()
+{
+    #setupPage.fadeOut()
+}
+
+
+connectCancelClicked = function()
+{
+    connectPage.fadeOut()
+    welcomePage.fadeIn()
+}
+
+connectConnectClicked = function()
+{
+    #setupPage.fadeOut()
+}
+
+mainViewLayout = {
+    type = "view"
+    subviews = {
+        {
+            id = "welcomePage"
+            type = "markup"
+            hidden = true
+            styles = {
+                setupButton = {
+                    link = setupClicked
+                }
+                connectButton = {
+                    link = connectClicked
+                }
+            }
+        }
+
+        {
+            id = "setupPage"
+            type = "markup"
+            hidden = true
+            styles = {
+                cancelButton = {
+                    link = setupCancelClicked
+                }
+                okButton = {
+                    link = setupOKClicked
+                }
+            }
+        }
+
+        {
+            id = "connectPage"
+            type = "markup"
+            hidden = true
+            styles = {
+                cancelButton = {
+                    link = connectCancelClicked
+                }
+                connectButton = {
+                    link = connectConnectClicked
+                }
+            }
+        }
+    }
+}
+
+siteContent = siteContentBackground.addView(mainViewLayout)
 
 
 getClientSitePath = function(hostID)
@@ -90,16 +237,21 @@ getCallback = function(result, hostID, url)
     }
 }
 
-loadInitialLink = function()
+init = function()
 {
-    siteContentBackground.goalColor = vec4(0.0, 0.015, 0.01, 0.6)
-    katipo.get("waraki", database.get("checksums"), getCallback)
+    siteContentBackground.goalColor = vec4(0.0, 0.2, 0.8, 0.3)
+    #katipo.get("waraki", database.get("checksums"), getCallback)
+
+    welcomeFilePath = file.getResourcePath("waraki-app/welcome.tml")
+    markup = file.loadData(welcomeFilePath)
+
+    .welcomePage = siteContent.getView("welcomePage")
+
+    welcomePage.setText(markup)
+    welcomePage.fadeIn()
 }
+
+init()
 
 #katipo.setBundledHostRunning("waraki", true)
 #loadInitialLink()
-
-welcomeFilePath = file.getResourcePath("waraki-app/welcome.tml")
-welcomeMarkup = file.loadData(welcomeFilePath)
-print("welcomeMarkup:", welcomeMarkup)
-pageBody.setText(welcomeMarkup)

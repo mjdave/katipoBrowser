@@ -186,6 +186,24 @@ updateVisuals = function(view)
     {
         view.buttonType.updateFunc(view)
     }
+
+    if(view.textView)
+    {
+        if(!view.baseTextColor)
+        {
+            view.baseTextColor = view.textView.color
+        }
+
+        if(view.mouseIsDown or view.selected or view.isHover)
+        {
+            view.textView.color = vec4(1.0,1.0,1.0,1.0)
+        }
+        else
+        {
+            view.textView.color = view.baseTextColor
+        }
+    }
+
 }
 
 create = function(parentView, viewLayout)

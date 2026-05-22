@@ -181,6 +181,37 @@ TuiTable* addKatipoTable(TuiTable* rootTableToAddTo)
     return katipoTableResult;
 }
 
+void getLocalKeys(std::string* publicKey, std::string* secretKey)
+{
+    
+    std::string clientKeyPath = Katipo::getSavePath("client_privateKey.tuib");
+    
+    if(Tui::fileExistsAtPath(clientKeyPath))
+    {
+        TuiTable* saveData = (TuiTable*)TuiRef::loadBinary(clientKeyPath);
+        if(saveData)
+        {
+            *publicKey = saveData->getString("publicKey");
+            *secretKey = saveData->getString("secretKey");
+            saveData->release();
+            return;
+        }
+    }
+    
+    publicKey->resize(crypto_box_PUBLICKEYBYTES);
+    secretKey->resize(crypto_box_SECRETKEYBYTES);
+    crypto_box_keypair((unsigned char*)&((*publicKey)[0]), (unsigned char*)&((*secretKey)[0]));
+    
+    TuiTable* saveData = new TuiTable(nullptr);
+    
+    saveData->setString("publicKey", *publicKey);
+    saveData->setString("secretKey", *secretKey);
+    
+    saveData->saveBinary(clientKeyPath);
+    saveData->release();
+    MJLog("Generated and saved new private key:\n%s.\nPlease backup this file and keep it safe and secure!", Tui::getAbsolutePath(clientKeyPath).c_str());
+}
+
 void Waraki::init()
 {
     Katipo::baseSavePath = SDL_GetPrefPath("katipobrowser", "waraki");
@@ -291,6 +322,77 @@ void Waraki::init()
         }
         return TUI_NIL;
     });
+    
+    
+    // START WARAKI, NEED TO PORT PROBABLY
+    
+    katipoTable->setFunction("startScan", [this](TuiTable* args,
+                                                TuiRef* existingResult,
+                                                TuiFunctionCallData* incomingCallData,
+                                                TuiDebugInfo* callingDebugInfo) -> TuiRef* {
+        if(args->arrayObjects.size() >= 1 && args->arrayObjects[0]->type() == Tui_ref_type_FUNCTION)
+        {
+            if(!scanner)
+            {
+                scanner = new Scanner((TuiFunction*)args->arrayObjects[0]);
+            }
+            else
+            {
+                TuiParseWarn(callingDebugInfo, "startScan() called when scan already running. Ignoring.");
+            }
+        }
+        return TUI_NIL;
+    });
+    
+    
+    katipoTable->setFunction("connectToScanResult", [this](TuiTable* args,
+                                                TuiRef* existingResult,
+                                                TuiFunctionCallData* incomingCallData,
+                                                TuiDebugInfo* callingDebugInfo) -> TuiRef* {
+        if(args->arrayObjects.size() >= 1 && args->arrayObjects[0]->type() == Tui_ref_type_STRING)
+        {
+            //scanner
+            
+            std::string trackerURL = args->arrayObjects[0]->getStringValue();
+            
+            if(scanner->validConnectionsByIP.count(trackerURL) == 0)
+            {
+                MJError("invalid url");
+                return TUI_NIL;
+            }
+            
+            ScannerConnection& connection = scanner->validConnectionsByIP[trackerURL]; //todo cleanup scanner at some point
+            
+            std::string publicKey = "";
+            std::string secretKey = "";
+            getLocalKeys(&publicKey, &secretKey);
+        
+            std::string trackerPort = "3471";
+            std::string trackerKey = trackerURL + ":" + trackerPort;
+            
+            ClientNetInterface* netInterface = new ClientNetInterface(trackerURL,
+                                                  trackerPort,
+                                                  publicKey,
+                                                  secretKey,
+                                                  connection.trackerPublicKey,
+                                                  connection.enetClient,
+                                                  connection.enetPeer);
+            netInterfaces[trackerKey] = netInterface;
+            
+            netInterface->bindTui(katipoTable);
+            
+            std::string url = trackerURL + "/waraki";
+            TuiString* urlString = new TuiString(url);
+            katipoTable->getFunction("get")->call(incomingCallData, callingDebugInfo, urlString);
+            urlString->release();
+            
+        }
+        return TUI_NIL;
+    });
+    
+    
+    
+    // END WARAKI
     
     //katipo.loadSite(siteSavePath, untrustedSiteCodePermissionFunction, publicDataOrNil)
     katipoTable->setFunction("loadSite", [this](TuiTable* args,
@@ -615,38 +717,7 @@ void Waraki::init()
                     std::string publicKey = "";
                     std::string secretKey = "";
                     
-                    std::string clientKeyPath = Katipo::getSavePath("client_privateKey.tuib");
-                    
-                    if(Tui::fileExistsAtPath(clientKeyPath))
-                    {
-                        TuiTable* saveData = (TuiTable*)TuiRef::loadBinary(clientKeyPath);
-                        if(saveData)
-                        {
-                            publicKey = saveData->getString("publicKey");
-                            secretKey = saveData->getString("secretKey");
-                            saveData->release();
-                        }
-                    }
-                    
-                    if(publicKey.empty())
-                    {
-                        publicKey.resize(crypto_box_PUBLICKEYBYTES);
-                        secretKey.resize(crypto_box_SECRETKEYBYTES);
-                        crypto_box_keypair((unsigned char*)&(publicKey[0]), (unsigned char*)&(secretKey[0]));
-                        
-                        TuiTable* saveData = new TuiTable(nullptr);
-                        
-                        saveData->setString("publicKey", publicKey);
-                        saveData->setString("secretKey", secretKey);
-                        
-                        saveData->saveBinary(clientKeyPath);
-                        saveData->release();
-                        MJLog("Generated and saved new private key:\n%s.\nPlease backup this file and keep it safe and secure!", Tui::getAbsolutePath(clientKeyPath).c_str());
-                    }
-                    else
-                    {
-                        MJLog("loaded private key:\n%s", Tui::getAbsolutePath(clientKeyPath).c_str());
-                    }
+                    getLocalKeys(&publicKey, &secretKey);
                     
                     TuiTable* getArgs = args;
                     getArgs->retain();
@@ -732,8 +803,6 @@ void Waraki::init()
     
     scriptState = (TuiTable*)TuiRef::runScriptFile(Katipo::getResourcePath("waraki-app/waraki.tui"), rootTable);
     
-    //scanner = new Scanner();
-    
     updateTimerID = MJTimer::getInstance()->addUpdateTimer([this](uint32_t timerID, float dt) {
         for(auto& idAndRequestInterface : netInterfaces)
         {
@@ -764,7 +833,10 @@ void Waraki::init()
             }
         }
         
-        //scanner->update();
+        if(scanner)
+        {
+            scanner->update();
+        }
     });
     
 }

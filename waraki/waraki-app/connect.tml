@@ -1,0 +1,6 @@
+
+If you know the url or IP address where your Waraki music library is hosted, you can enter it here.
+
+[192.168.0.x](id = "ipTextEntry")   [connect](id="connectButton")
+
+[cancel](id="cancelButton")

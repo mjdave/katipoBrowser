@@ -7,7 +7,6 @@
 //#include "Database.h"
 //#include "DatabaseEnvironment.h"
 //#include "sodium.h"
-#include "KatipoUtilities.h"
 #include "Tracker.h"
 
 /*

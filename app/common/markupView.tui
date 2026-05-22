@@ -69,22 +69,6 @@ getViewLayout = function(incomingLayout)
     return layout
 }
 
-updateVisuals = function(view)
-{
-    if(view.mouseIsDown)
-    {
-        view.color = view.mouseDownColor
-    }
-    else if(view.isHover)
-    {
-        view.color = view.highlightColor
-    }
-    else
-    {
-        view.color = view.baseColor
-    }
-}
-
 
 finishEditing = function(markupView, textView, confirmChanges)
 {
@@ -168,48 +152,9 @@ updateCursorPosition = function(markupView, textView)
     markupView.cursorView.pos = vec3(xOffset + 1,rect.y + 1,0)
 }
 
-setTextViewText = function(textView, text_)
-{
-    textToUse = text_
-    if(!textToUse)
-    {
-        textToUse = ""
-    }
-    elseif(type(textToUse) != "string")
-    {
-        #textToUse = mj:tostring(textToUse) todo
-        error("expected string, got ", type(textToUse), ": ", textToUse)
-    }
-
-    textView.text = textToUse
-
-    if(!textView.editing)
-    {
-        textView.cursorOffset = 0
-    }
-    else
-    {
-        if(textToUse)
-        {
-            if(textView.cursorOffset < -string.length(textToUse))
-            {
-                textView.cursorOffset = -string.length(textToUse)
-            }
-        }
-        else
-        {
-            textView.cursorOffset = 0
-        }
-    }
-    
-    updateVisuals(textEntryView)
-    #textEntryView.textView:resetVerticalCursorMovementAnchors() #todo
-    showCursorAndResetTimerIfEditingForCursorChanged(textEntryView)
-}
-
 updateText = function(markupView, textEntryView, newText)
 {
-    setText(textEntryView, newText)
+    setText(textEntryView, newText) #todo
 
     if(textEntryView.editing)
     {
@@ -227,7 +172,10 @@ updateText = function(markupView, textEntryView, newText)
 
 textBackgroundViewClickFunction = function(markupView, textView, mouseLoc)
 {
-    print("textBackgroundViewClickFunction:", textView)
+    if(!markupView.editable)
+    {
+        return
+    }
     if(!markupView.disabled)
     {
         if(markupView.editing)
@@ -445,51 +393,6 @@ textBackgroundViewClickFunction = function(markupView, textView, mouseLoc)
     }
 }
 
-createLinkButton = function(view, link)
-{
-    if(!view.baseColor)
-    {
-        if(!view.color)
-        {
-            view.color = linkColor
-        }
-        view.baseColor = view.color
-        view.highlightColor = view.baseColor + vec4(0.0,0.2,0.4,0.4)
-        view.mouseDownColor = view.baseColor + vec4(0.5,0.5,0.5,0.5)
-    }
-
-    view.click = function()
-    {
-        katipo.linkClicked(link)
-    }
-
-    view.hoverStart = function()
-    {
-        view.isHover = true
-        updateVisuals(view)
-    }
-
-    view.hoverEnd = function()
-    {
-        view.isHover = false
-        updateVisuals(view)
-    }
-
-    view.mouseDown = function()
-    {
-        view.mouseIsDown = true
-        updateVisuals(view)
-    }
-
-    view.mouseUp = function()
-    {
-        view.mouseIsDown = false
-        updateVisuals(view)
-    }
-
-    updateVisuals(view)
-}
-
 getRowView = function(markupView)
 {
     if(!markupView.currentRowView)
@@ -543,7 +446,34 @@ addItemView = function(markupView, style)
             link = style.link
             textViewLayout.color = linkColor
             textViewLayout.font = boldFont
-            # add button view
+            
+            backgroundLayout = {
+                type = "button"
+                buttonType = "color"
+                color = vec4(0.0,0.0,0.2,0.4)
+                alignmentX = "left"
+                alignmentY = "bottom"
+                subviews = {
+                    textViewLayout
+                }
+            }
+
+            if(style.backgroundColor)
+            {
+                backgroundLayout.color = style.backgroundColor
+            }
+        }
+        else if(style.backgroundColor)
+        {
+            backgroundLayout = {
+                type = "color"
+                color = style.backgroundColor
+                alignmentX = "left"
+                alignmentY = "bottom"
+                subviews = {
+                    textViewLayout
+                }
+            }
         }
 
         if(style.header)
@@ -581,18 +511,6 @@ addItemView = function(markupView, style)
             textViewLayout.color = style.color
         }
 
-        if(style.backgroundColor)
-        {
-            backgroundLayout = {
-                type = "color"
-                color = style.backgroundColor
-                alignmentX = "left"
-                alignmentY = "bottom"
-                subviews = {
-                    textViewLayout
-                }
-            }
-        }
     }
 
     if(!backgroundLayout)
@@ -607,16 +525,35 @@ addItemView = function(markupView, style)
         }
     }
 
+    if(style)
+    {
+        backgroundLayout.id = style.id
+    }
     
     backgroundView = rowView.addView(backgroundLayout)
 
     textView = backgroundView.getView("textView")
+
+    backgroundView.textView = textView #button.tui uses this
+
     textView.wrapWidth = markupView.parentSize.x - rowView.size.x - markupView.padding.left - 20
     textView.wrapClamp = true
     textView.preventWordSeparation = markupView.preventWordSeparation
     textView.text = lineData.foundText
+
     backgroundView.click = function(mouseLoc)
     {
+        if(link)
+        {
+            if(type(link) == "function")
+            {
+                link()
+            }
+            else
+            {
+                katipo.linkClicked(link)
+            }
+        }
         textBackgroundViewClickFunction(markupView, textView, mouseLoc)
     }
 
@@ -637,10 +574,10 @@ addItemView = function(markupView, style)
 
     backgroundView.size = textView.size
 
-    if(link)
-    {
-        createLinkButton(backgroundView, link)
-    }
+    #if(link)
+    #{
+    #    createLinkButton(backgroundView, link)
+    #}
 
     addedTextLength = string.length(textView.text)
     totalTextLength = string.length(lineData.foundText)
@@ -698,6 +635,21 @@ renderCapture = function(markupView, capture, parentStyle)
         for(k,v in loadedValue)
         {
             style[k] = v
+
+            if(k == "id")
+            {
+                if(markupView.styles)
+                {
+                    idStyle = markupView.styles[v]
+                    if(type(idStyle) == "table")
+                    {
+                        for(idK,idV in idStyle)
+                        {
+                            style[idK] = idV
+                        }
+                    }
+                }
+            }
         }
     }
 
@@ -950,7 +902,9 @@ create = function(parentView, viewLayout)
     layout = getViewLayout(viewLayout)
     markupView = parentView.addView(layout)
 
-    scrollViewLayout = table.clone(viewLayout) #may not be desirable?
+    scrollViewLayout = {
+        size = viewLayout.size
+    }
     scrollViewLayout.type = "scrollView"
 
     markupScrollView = markupView.addView(scrollViewLayout)
@@ -993,7 +947,6 @@ create = function(parentView, viewLayout)
     {
         markupScrollView.removeAllRows()
         markupScrollView.currentText = markupText
-
 
         topPaddingLayout = {
             type = "view"

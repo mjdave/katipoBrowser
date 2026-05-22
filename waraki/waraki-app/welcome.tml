@@ -1,7 +1,10 @@
 # Welcome to Waraki
 
 If you have music files stored on this device that you would like to play here, and host for playing elsewhere, you can set up a music library by telling Waraki where your music files are.
-[set up new music library]({id="setupButton", color = vec4(0.4,0.7,1.0,1.0)})
+
+[Set up new music library](id="setupButton")
+
 
 If you have already set up a music library, you can connect to it
-[connect to music library]({id="connectButton", color = vec4(0.4,0.7,1.0,1.0)})
+
+[Connect to music library](id="connectButton")
