@@ -24,6 +24,85 @@ siteContentBackground.update = function(dt)
 }
 
 
+
+getClientSitePath = function(hostID)
+{
+    return file.getSavePath("clientSites/" + hostID + "/")
+}
+
+untrustedSiteCodePermissionFunction = function(functionName, args, hasPermissionCallback)
+{
+    print("Warning: host is attempting to use protected tui function:\"", functionName, "\" with args:", args, "\nTODO: Katipo needs to check client settings or ask if this is OK, but for now it is not OK")
+    hasPermissionCallback(false)
+}
+
+
+writeFile = function(siteSavePath, checksums, fileInfo)
+{
+    #print("fileInfo:", fileInfo)
+    filePath = siteSavePath + fileInfo.fileName
+    checksums[fileInfo.fileName] = fileInfo.checksum
+    if(file.isSubPath(filePath, siteSavePath))
+    {
+        file.createDirectoriesIfNeededForFilePath(filePath)
+        if(type(fileInfo.data) == "string")
+        {
+            #print("saved raw data:", filePath)
+            file.saveData(filePath, fileInfo.data) #write the string data (can be binary) to disk directly
+        }
+        else
+        {
+            file.saveBinary(filePath, fileInfo.data) #save the tui object as a binary export
+            #print("saved tui object:", filePath)
+        }
+    }
+}
+
+loadClientSite = function(siteData, hostID, url)
+{
+    siteContentBackground.goalColor = vec4(0.0,0.0,0.2,0.4) #blue, we have the most recent version
+
+    siteSavePath = getClientSitePath(hostID)
+    file.mkdir(siteSavePath)
+
+    checksums = database.get("checksums")
+    if(!checksums)
+    {
+        checksums = {}
+    }
+
+    files = siteData.files
+    for(subFile in files)
+    {
+        writeFile(siteSavePath, checksums, subFile)
+    }
+
+    publicData = siteData.publicData
+    #print("got publicData:", publicData)
+    katipo.loadSite(hostID, siteSavePath, publicData, untrustedSiteCodePermissionFunction, false)
+
+    database.set("checksums", checksums)
+}
+
+getCallback = function(result, hostID, url)
+{
+    print("getCallback url:", url, " currentURLFullLink:", currentURLFullLink)
+    print("got result with status:", result.status, " message:", result.message, " hostID:", hostID, " url:", url)
+
+    if(result.status != "ok")
+    {
+        katipo.loadSite(hostID, getClientSitePath(hostID), nil, untrustedSiteCodePermissionFunction, true) #load cache
+    }
+    else if(result.siteData)
+    {
+        loadClientSite(result.siteData, hostID, url)
+    }
+    else
+    {
+        print("warning: unhandled result:", result)
+    }
+}
+
 setupClicked = function()
 {
     welcomePage.fadeOut()
@@ -61,11 +140,12 @@ scanCallback = function(status, result)
         for(i, ip in scanFoundResults)
         {
             buttonID = "connectButton" + i
-            thisMarkup += ip + "    [connect](id='" + buttonID + "')"
+            thisMarkup += ip + "    [connect](id='" + buttonID + "')\n\n"
 
             clickFunction = function()
             {
                 katipo.connectToScanResult(ip)
+                katipo.get(ip + "/waraki", database.get("checksums"), getCallback)
                 connectPage.fadeOut()
             }
 
@@ -181,66 +261,9 @@ mainViewLayout = {
 siteContent = siteContentBackground.addView(mainViewLayout)
 
 
-getClientSitePath = function(hostID)
-{
-    return file.getSavePath("clientSites/" + hostID + "/")
-}
-
-untrustedSiteCodePermissionFunction = function(functionName, args, hasPermissionCallback)
-{
-    print("Warning: host is attempting to use protected tui function:\"", functionName, "\" with args:", args, "\nTODO: Katipo needs to check client settings or ask if this is OK, but for now it is not OK")
-    hasPermissionCallback(false)
-}
-
-loadClientSite = function(siteData, hostID, url)
-{
-    siteContentBackground.goalColor = vec4(0.0,0.0,0.2,0.4) #blue, we have the most recent version
-
-    siteSavePath = getClientSitePath(hostID)
-    file.mkdir(siteSavePath)
-
-    checksums = database.get("checksums")
-    if(!checksums)
-    {
-        checksums = {}
-    }
-
-    files = siteData.files
-    for(subFile in files)
-    {
-        writeFile(siteSavePath, checksums, subFile)
-    }
-
-    publicData = siteData.publicData
-    #print("got publicData:", publicData)
-    katipo.loadSite(hostID, siteSavePath, publicData, untrustedSiteCodePermissionFunction, false)
-
-    database.set("checksums", checksums)
-}
-
-getCallback = function(result, hostID, url)
-{
-    print("getCallback url:", url, " currentURLFullLink:", currentURLFullLink)
-    print("got result with status:", result.status, " message:", result.message, " hostID:", hostID, " url:", url)
-
-    if(result.status != "ok")
-    {
-        katipo.loadSite(hostID, getClientSitePath(hostID), nil, untrustedSiteCodePermissionFunction, true) #load cache
-    }
-    else if(result.siteData)
-    {
-        loadClientSite(result.siteData, hostID, url)
-    }
-    else
-    {
-        print("warning: unhandled result:", result)
-    }
-}
-
 init = function()
 {
     siteContentBackground.goalColor = vec4(0.0, 0.2, 0.8, 0.3)
-    #katipo.get("waraki", database.get("checksums"), getCallback)
 
     welcomeFilePath = file.getResourcePath("waraki-app/welcome.tml")
     markup = file.loadData(welcomeFilePath)

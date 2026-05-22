@@ -34,7 +34,7 @@ void Waraki::doGet(const std::string& trackerKey,
 {
     
     TuiFunction* mainGetCallbackFunction = nullptr;
-    if(!args->arrayObjects.empty() && args->arrayObjects[args->arrayObjects.size() - 1]->type() == Tui_ref_type_FUNCTION)
+    if(args && !args->arrayObjects.empty() && args->arrayObjects[args->arrayObjects.size() - 1]->type() == Tui_ref_type_FUNCTION)
     {
         mainGetCallbackFunction = ((TuiFunction*)args->arrayObjects[args->arrayObjects.size() - 1]);
         mainGetCallbackFunction->retain();
@@ -62,14 +62,16 @@ void Waraki::doGet(const std::string& trackerKey,
     TuiString* remoteURLStringForArg = new TuiString(remoteURL);
     remoteFuncCallArgs->arrayObjects.push_back(remoteURLStringForArg); //push_back, not retained, no need to release
     
-    
-    for(int i = 1; i < args->arrayObjects.size(); i++)
+    if(args)
     {
-        if(args->arrayObjects[i]->type() != Tui_ref_type_FUNCTION)
+        for(int i = 1; i < args->arrayObjects.size(); i++)
         {
-            TuiRef* arg = args->arrayObjects[i];
-            arg->retain();
-            remoteFuncCallArgs->arrayObjects.push_back(arg);
+            if(args->arrayObjects[i]->type() != Tui_ref_type_FUNCTION)
+            {
+                TuiRef* arg = args->arrayObjects[i];
+                arg->retain();
+                remoteFuncCallArgs->arrayObjects.push_back(arg);
+            }
         }
     }
     
@@ -132,8 +134,11 @@ void Waraki::doGet(const std::string& trackerKey,
                     MJError("missing public key");
                     TuiRef* statusResult = new TuiTable("{status='error',message='missing public key'}");
                     TuiString* remoteURLString = new TuiString(fullURL);
-                    mainGetCallbackFunction->call("mainGetCallbackFunction", statusResult, TUI_NIL, remoteURLString);
-                    mainGetCallbackFunction->release();
+                    if(mainGetCallbackFunction)
+                    {
+                        mainGetCallbackFunction->call("mainGetCallbackFunction", statusResult, TUI_NIL, remoteURLString);
+                        mainGetCallbackFunction->release();
+                    }
                     statusResult->release();
                     remoteURLString->release();
                 }
@@ -141,10 +146,13 @@ void Waraki::doGet(const std::string& trackerKey,
             }
             else
             {
-                TuiString* remoteURLString = new TuiString(fullURL);
-                mainGetCallbackFunction->call("mainGetCallbackFunction", result, TUI_NIL, remoteURLString); //status not ok
-                mainGetCallbackFunction->release();
-                remoteURLString->release();
+                if(mainGetCallbackFunction)
+                {
+                    TuiString* remoteURLString = new TuiString(fullURL);
+                    mainGetCallbackFunction->call("mainGetCallbackFunction", result, TUI_NIL, remoteURLString); //status not ok
+                    mainGetCallbackFunction->release();
+                    remoteURLString->release();
+                }
             }
         }
         /*else //this causes a crash as we get another callback later... usually? all the time? Not sure yet
@@ -349,7 +357,7 @@ void Waraki::init()
                                                 TuiRef* existingResult,
                                                 TuiFunctionCallData* incomingCallData,
                                                 TuiDebugInfo* callingDebugInfo) -> TuiRef* {
-        if(args->arrayObjects.size() >= 1 && args->arrayObjects[0]->type() == Tui_ref_type_STRING)
+        if(args->arrayObjects.size() >= 2 && args->arrayObjects[0]->type() == Tui_ref_type_STRING)
         {
             //scanner
             
@@ -369,6 +377,9 @@ void Waraki::init()
         
             std::string trackerPort = "3471";
             std::string trackerKey = trackerURL + ":" + trackerPort;
+
+            
+            //katipoTable->set("onConnectionFailed", onConnect); //hmm
             
             ClientNetInterface* netInterface = new ClientNetInterface(trackerURL,
                                                   trackerPort,
@@ -380,11 +391,6 @@ void Waraki::init()
             netInterfaces[trackerKey] = netInterface;
             
             netInterface->bindTui(katipoTable);
-            
-            std::string url = trackerURL + "/waraki";
-            TuiString* urlString = new TuiString(url);
-            katipoTable->getFunction("get")->call(incomingCallData, callingDebugInfo, urlString);
-            urlString->release();
             
         }
         return TUI_NIL;
