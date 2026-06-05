@@ -88,18 +88,12 @@ finishEditing = function(markupView, textView, confirmChanges)
         {
             if(markupView.allowsEmpty)
             {
-                if(markupView.onFinishedEditing)
-                {
-                    markupView.onFinishedEditing("", confirmChanges)
-                }
+                textView.styleTextEntryFunction("", confirmChanges)
             }
             else
             {
                 updateText(markupView, textView, markupView.editStartTextValue)
-                if(markupView.onFinishedEditing)
-                {
-                    markupView.onFinishedEditing(markupView.editStartTextValue, false)
-                }
+                textView.styleTextEntryFunction(markupView.editStartTextValue, false)
             }
         }
         else
@@ -107,17 +101,11 @@ finishEditing = function(markupView, textView, confirmChanges)
             if(!confirmChanges and markupView.requireEnterToConfirm) #requireEnterToConfirm means we should revert if !confirmChanges
             {
                 updateText(markupView, textView, markupView.editStartTextValue)
-                if(markupView.onFinishedEditing)
-                {
-                    markupView.onFinishedEditing(textView.text, false)
-                }
+                textView.styleTextEntryFunction(textView.text, false)
             }
             else
             {
-                if(markupView.onFinishedEditing)
-                {
-                    markupView.onFinishedEditing(textView.text, confirmChanges)
-                }
+                textView.styleTextEntryFunction(textView.text, confirmChanges)
             }
         }
     }
@@ -152,27 +140,27 @@ updateCursorPosition = function(markupView, textView)
     markupView.cursorView.pos = vec3(xOffset + 1,rect.y + 1,0)
 }
 
-updateText = function(markupView, textEntryView, newText)
+updateText = function(markupView, textView, newText)
 {
-    setText(textEntryView, newText) #todo
+    textView.text = newText #todo we will need to update the size and re-layout later views
 
-    if(textEntryView.editing)
+    if(textView.editing)
     {
-        textEntryView.cursorView.hidden = false
+        markupView.cursorView.hidden = false
         markupView.cursorTimer = 0.0
 
-        updateCursorPosition(markupView, textEntryView) #todo
+        updateCursorPosition(markupView, textView)
     }
     
-    if(textEntryView.textEntryChangedContinuousFunction)
+    if(textView.textEntryChangedContinuousFunction)
     {
-        textEntryView.textEntryChangedContinuousFunction(textEntryView.text)
+        textView.textEntryChangedContinuousFunction(textView.text)
     }
 }
 
 textBackgroundViewClickFunction = function(markupView, textView, mouseLoc)
 {
-    if(!markupView.editable)
+    if(!textView.styleTextEntryFunction)
     {
         return
     }
@@ -232,7 +220,7 @@ textBackgroundViewClickFunction = function(markupView, textView, mouseLoc)
                         if(modCode == keys.modifiers.shift)
                         {
                             newText = textView.text + "\n"
-                            updateText(textView, newText)
+                            updateText(markupView, textView, newText)
                         }
                         else if(!isRepeat)
                         {
@@ -271,7 +259,7 @@ textBackgroundViewClickFunction = function(markupView, textView, mouseLoc)
                             {
                                 newText = string.subString(textView.text, 0, string.length(textView.text) - 1)
                             }
-                            updateText(textView, newText)
+                            updateText(markupView, textView, newText)
                         }
                     }
                     return true
@@ -335,7 +323,7 @@ textBackgroundViewClickFunction = function(markupView, textView, mouseLoc)
                                 }
                             }
 
-                            updateText(textView, newText)
+                            updateText(markupView, textView, newText)
                         }
                     }
                 }
@@ -380,7 +368,7 @@ textBackgroundViewClickFunction = function(markupView, textView, mouseLoc)
                         newText = textView.text + text
                     }
                 }
-                updateText(textView, newText)
+                updateText(markupView, textView, newText)
             }
             
             textView.textEntryListenerID = eventManager.setTextEntryListener(textEntry, keyChanged)
@@ -393,45 +381,133 @@ textBackgroundViewClickFunction = function(markupView, textView, mouseLoc)
     }
 }
 
+finishCurrentRow = function(markupView)
+{
+    parser = markupView.parser
+    if(parser.currentRowInfo)
+    {
+        parser.cacheRowIndex++
+        parser.currentRowInfo = nil
+    }
+}
+        #markupView.cachedInputLines
+
+        #parser.currentLineCacheState = {
+        #    text = lineText
+        #    startRowIndex = parser.cacheRowIndex
+        #    rowCount = 1
+        #    items = {}
+        #}
+
 getRowView = function(markupView)
 {
-    if(!markupView.currentRowView)
+    parser = markupView.parser
+    if(!parser.currentRowInfo)
     {
-        rowLayout = {
-            type = "view"
-            size = vec2(markupView.padding.left,minLineHeight)
+        print("getRowView parser.cacheRowIndex:", parser.cacheRowIndex)
+        print("table.count(markupView.cachedRows):", table.count(markupView.cachedRows))
+        if(table.count(markupView.cachedRows) > parser.cacheRowIndex)
+        {
+            parser.currentRowInfo = markupView.cachedRows[parser.cacheRowIndex]
         }
-        markupView.currentRowView = markupView.scrollView.addView(rowLayout)
-        markupView.preventWordSeparation = false
+        else
+        {
+            rowLayout = {
+                type = "view"
+                size = vec2(markupView.padding.left,minLineHeight)
+            }
+
+            parser.currentRowInfo = {
+                view = markupView.scrollView.addView(rowLayout)
+                items = {}
+            }
+            table.insert(markupView.cachedRows, parser.currentRowInfo)
+        }
+        
+        parser.cacheItemIndex = 0
+        parser.cacheRowWidthAccumulator = 0
+        parser.preventWordSeparation = false
+        
     }
-    return markupView.currentRowView
+    return parser.currentRowInfo.view
+}
+
+addItemView = false
+
+addNextRowForWrapOverflow = function(markupView, style, addedTextLength)
+{
+    print("addNextRowForWrapOverflow")
+    parser = markupView.parser
+    finishCurrentRow(markupView)
+    if(addedTextLength != 0)
+    {
+        remainingText = string.subString(parser.foundText, addedTextLength)
+
+        startIndex = 0
+        innerCharFunc = function(charText, charIndex){
+            if(charText != " ")
+            {
+                .startIndex = charIndex
+                return true
+            }
+        }
+
+        string.eachChar(remainingText, innerCharFunc)
+
+        if(startIndex != 0)
+        {
+            parser.foundText = string.subString(remainingText, startIndex)
+        }
+        else
+        {
+            parser.foundText = remainingText
+        }
+    }
+
+    print("adding:", parser.foundText)
+
+    addItemView(markupView, style)
 }
 
 addItemView = function(markupView, style)
 {
-    lineData = markupView.lineData
+    if(style and style.hidden)
+    {
+        return
+    }
+    parser = markupView.parser
+
+    if(parser.foundText == "\n")
+    {
+        finishCurrentRow(markupView)
+        getRowView(markupView) #generate a new row, to add a newline
+        return
+    }
+
     rowView = getRowView(markupView)
-    #print("addItemView:", lineData.foundText)
+
+
+    print("addItemView:", parser.foundText)
 
     textViewLayout = table.clone(textLayout)
     textViewLayout.id = "textView"
 
-    if(markupView.isHeader)
+    if(parser.isHeader)
     {
         textViewLayout.font = boldFont
         textViewLayout.fontSize = headerFontSize
     }
 
-    if(markupView.bold)
+    if(parser.bold)
     {
         textViewLayout.font = boldFont
     }
-    else if(markupView.italic)
+    else if(parser.italic)
     {
         textViewLayout.font = italicFont
     }
 
-    if(markupView.monospace)
+    if(parser.monospace)
     {
         textViewLayout.font = monoFont
     }
@@ -529,17 +605,126 @@ addItemView = function(markupView, style)
     {
         backgroundLayout.id = style.id
     }
+
+    stateHash = string.format("%d%d%d%d", parser.monospace, parser.bold, parser.italic, parser.isHeader)
+    accumulatedWidth = parser.cacheRowWidthAccumulator
+    wrapWidth = markupView.parentSize.x - accumulatedWidth - markupView.padding.left - 20
+    rowInfo = parser.currentRowInfo
+
+    getCacheIfMatch = function(cacheItemIndex)
+    {
+       # print("in checkCacheMatches, rowInfo:", rowInfo)
+        #print("parser.foundText:", parser.foundText)
+        print("in checkCacheMatches cacheItemIndex:", cacheItemIndex, "\nnumber of items in this row:", table.count(rowInfo.items), " parser.cacheRowIndex:", parser.cacheRowIndex)
+        if(cacheItemIndex < table.count(rowInfo.items))
+        {
+            itemInfo = rowInfo.items[cacheItemIndex]
+            #if(itemInfo.text != parser.foundText)
+            #{
+            #    print("itemInfo.text:",itemInfo.text," != parser.foundText:", parser.foundText)
+            #    return nil
+            #}
+
+            if(stateHash != itemInfo.stateHash)
+            {
+                print("stateHash:",stateHash," != itemInfo.stateHash:", itemInfo.stateHash)
+                return nil
+            }
+            if(style)
+            {
+                itemStyle = itemInfo.style
+                if(!itemStyle)
+                {
+                    print("!itemStyle")
+                    return nil
+                }
+
+                for(k,v in style)
+                {
+                    if(itemStyle[k] != v)
+                    {
+                        print("itemStyle[",k,"] != ",v)
+                        return nil
+                    }
+                }
+            }
+            else if(itemInfo.style)
+            {
+                print("itemInfo.style")
+                return nil
+            }
+            return itemInfo
+        }
+        return nil
+    }
+
+    foundCache = getCacheIfMatch(parser.cacheItemIndex)
+
+
+    if(foundCache)
+    {
+        parser.cacheItemIndex++
+
+        if((foundCache.text != parser.foundText) or (wrapWidth != foundCache.wrapWidth))
+        {
+            textView = foundCache.textView
+            textView.wrapWidth = wrapWidth
+            textView.text = parser.foundText
+
+            foundCache.textWidth = textView.size.x
+            foundCache.text = textView.text
+
+            addedTextLength = string.length(textView.text)
+            totalTextLength = string.length(parser.foundText)
+
+            #print("addedTextLength:", addedTextLength, "/", totalTextLength)
+
+            if(addedTextLength < totalTextLength)
+            {
+                addNextRowForWrapOverflow(markupView, style, addedTextLength)
+            }
+        }
+        else
+        {
+            parser.cacheRowWidthAccumulator += foundCache.textWidth
+        }
+
+        print("found cache:", parser.foundText)
+        
+        return
+    }
+    
+    print("no cache found:", parser.foundText)
+
+    if(parser.cacheItemIndex < table.count(rowInfo.items))
+    {
+        startPos = rowInfo.items[parser.cacheItemIndex].xPos
+        for(i = table.count(rowInfo.items) - 1, i >= parser.cacheItemIndex, i--)
+        {
+            itemCache = rowInfo.items[i]
+            rowView.removeView(itemCache.backgroundView)
+            table.remove(rowInfo.items, i)
+        }
+        rowView.size = vec2(startPos, rowView.size.y)
+    }
     
     backgroundView = rowView.addView(backgroundLayout)
 
+    rowInfo = parser.currentRowInfo
+
     textView = backgroundView.getView("textView")
 
-    backgroundView.textView = textView #button.tui uses this
+    backgroundView.textView = textView #button.tui uses this too
 
-    textView.wrapWidth = markupView.parentSize.x - rowView.size.x - markupView.padding.left - 20
+    textView.wrapWidth = wrapWidth
     textView.wrapClamp = true
-    textView.preventWordSeparation = markupView.preventWordSeparation
-    textView.text = lineData.foundText
+    textView.preventWordSeparation = parser.preventWordSeparation
+    textView.text = parser.foundText
+
+    if(style and style.textEntry) #textEntry should be a function textEntry(textValue, changesMade)
+    {
+        textView.styleTextEntryFunction = style.textEntry
+    }
 
     backgroundView.click = function(mouseLoc)
     {
@@ -562,11 +747,12 @@ addItemView = function(markupView, style)
         finishEditing(markupView, textView, false)
     }
 
-    markupView.preventWordSeparation = true #we allow word separation for the first item in the row only
+    parser.preventWordSeparation = true #we allow word separation for the first item in the row only
 
-    backgroundView.pos = vec3(rowView.size.x, 0, 0)
+    xPos = rowView.size.x
+    backgroundView.pos = vec3(xPos, 0, 0)
 
-    rowView.size = vec2(rowView.size.x + textView.size.x, 
+    rowView.size = vec2(xPos + textView.size.x, 
                             math.max(textView.size.y, rowView.size.y))
 
 
@@ -574,52 +760,58 @@ addItemView = function(markupView, style)
 
     backgroundView.size = textView.size
 
-    #if(link)
-    #{
-    #    createLinkButton(backgroundView, link)
-    #}
-
     addedTextLength = string.length(textView.text)
-    totalTextLength = string.length(lineData.foundText)
+    totalTextLength = string.length(parser.foundText)
 
     #print("addedTextLength:", addedTextLength, " totalTextLength:", totalTextLength)
 
+    #################### add to cache
+
+    cacheData = {
+        xPos = xPos
+        text = textView.text
+        textView = textView
+        textWidth = textView.size.x
+        wrapWidth = wrapWidth
+        backgroundView = backgroundView
+        stateHash = stateHash
+    }
+
+    if(style)
+    {
+        cacheData.style = table.clone(style)
+    }
+
+    #print("parser.cacheItemIndex:", parser.cacheItemIndex, " rowInfo.items:", rowInfo.items)
+
+    if(parser.cacheItemIndex < table.count(rowInfo.items))
+    {
+        #rowView remove
+    }
+    else
+    {
+        table.insert(rowInfo.items, cacheData)
+    }
+
+
+    parser.cacheItemIndex = table.count(rowInfo.items)
+
+    #print("added to cache:", cacheData.text)
+    #print("parser.cacheItemIndex:", parser.cacheItemIndex)
+
+    parser.cacheRowWidthAccumulator += cacheData.textWidth
+
+    print("addedTextLength:", addedTextLength, " totalTextLength:", totalTextLength)
     if(addedTextLength < totalTextLength)
     {
-        markupView.currentRowView = nil #finish current row #bug, this is not sticking
-        if(addedTextLength != 0)
-        {
-            remainingText = string.subString(lineData.foundText, addedTextLength)
-
-            startIndex = 0
-            innerCharFunc = function(charText, charIndex){
-                if(charText != " ")
-                {
-                    .startIndex = charIndex
-                    return true
-                }
-            }
-
-            string.eachChar(remainingText, innerCharFunc)
-
-            if(startIndex != 0)
-            {
-                lineData.foundText = string.subString(remainingText, startIndex)
-            }
-            else
-            {
-                lineData.foundText = remainingText
-            }
-        }
-
-        addItemView(markupView, style)
+        addNextRowForWrapOverflow(markupView, style, addedTextLength)
     }
 }
 
 renderCapture = function(markupView, capture, parentStyle)
 {
-    lineData = markupView.lineData
-    remainingText = lineData.foundText
+    parser = markupView.parser
+    remainingText = parser.foundText
     style = {}
     if(parentStyle)
     {
@@ -630,7 +822,9 @@ renderCapture = function(markupView, capture, parentStyle)
     }
     loadedValue = load(capture.markupString, scene)
     #print("in renderCapture loadedValue:", loadedValue, " from string:", capture.markupString)
-    if(type(loadedValue) == "table")
+
+    valueType = type(loadedValue)
+    if(valueType == "table") # [foo](id="bar", hidden=true)
     {
         for(k,v in loadedValue)
         {
@@ -652,61 +846,124 @@ renderCapture = function(markupView, capture, parentStyle)
             }
         }
     }
+    else if(valueType == "string") # [foo]("bar") treat "bar" as the id string
+    {
+        if(markupView.styles)
+        {
+            idStyle = markupView.styles[loadedValue]
+            if(type(idStyle) == "table")
+            {
+                for(idK,idV in idStyle)
+                {
+                    style[idK] = idV
+                }
+            }
+        }
+    }
 
     for(item in capture.items)
     {
-        if(type(item) == "string")
+        if(item.text)
         {
-            lineData.foundText = item
+            parser.foundText = item.text
+
+            #this is a bit hacky, just need to pass through this capture's style somehow, but restore the parser state
+            prevBold = parser.bold
+            prevItalic = parser.italic
+            prevMonospace = parser.monospace
+
+            parser.bold = item.bold
+            parser.italic = item.italic
+            parser.monospace = item.monospace
+
             addItemView(markupView, style)
+
+            parser.bold = prevBold
+            parser.italic = prevItalic
+            parser.monospace = prevMonospace
         }
         else
         {
             renderCapture(markupView, item, style)
         }
     }
-    lineData.foundText = remainingText
+    parser.foundText = remainingText
+}
+
+
+finishCurrentText = function(markupView)
+{
+    parser = markupView.parser
+    if(parser.currentCapture)
+    {
+        currentCapture = parser.currentCapture
+        if(currentCapture.currentText)
+        {
+            item = {
+                text = currentCapture.currentText
+                bold = parser.bold
+                italic = parser.italic
+                monospace = parser.monospace
+            }
+            table.insert(currentCapture.items, item)
+
+            currentCapture.currentText = nil
+        }
+    }
+    else
+    {
+        if(string.length(parser.foundText) > 0)
+        {
+            #print("adding:", parser.foundText)
+            addItemView(markupView, nil)
+            parser.foundText = ""
+        }
+    }
 }
 
 charFunc = function(markupView, charText, charIndex)
 { 
-    lineData = markupView.lineData
-    if(lineData.captureClosedAwaitingParenthesis)
+    parser = markupView.parser
+
+    if(parser.captureClosedAwaitingParenthesis)
     {
         if(charText != "(")
         {
             print("error: expected '('")
             return true
         }
-        lineData.parenthesisStackCount = 1
-        lineData.foundMarkupCodeString = ""
-        lineData.captureClosedAwaitingParenthesis = false
+        parser.parenthesisStackCount = 1
+        parser.foundMarkupCodeString = ""
+        parser.captureClosedAwaitingParenthesis = false
     }
-    else if(lineData.parenthesisStackCount > 0)
+    else if(parser.parenthesisStackCount > 0)
     {
         if(charText == ")")
         {
-            lineData.parenthesisStackCount--
-            if(lineData.parenthesisStackCount == 0)
+            parser.parenthesisStackCount--
+            if(parser.parenthesisStackCount == 0)
             {
-                #print("found markup:", lineData.foundMarkupCodeString)
-                currentCapture = lineData.currentCapture
+                #print("found markup:", parser.foundMarkupCodeString)
+                currentCapture = parser.currentCapture
                 if(currentCapture)
                 {
-                    currentCapture.markupString = lineData.foundMarkupCodeString
+                    currentCapture.markupString = parser.foundMarkupCodeString
                     parentCapture = currentCapture.parentCapture
                     currentCapture.parentCapture = nil
 
                     if(currentCapture.currentText)
                     {
-                        table.insert(currentCapture.items, currentCapture.currentText)
+                        item = {
+                            text = currentCapture.currentText
+                        }
+                        table.insert(currentCapture.items, item)
                         currentCapture.currentText = nil
                     }
                     if(!parentCapture)
                     {
                         renderCapture(markupView, currentCapture)
                     }
-                    lineData.currentCapture = parentCapture
+                    parser.currentCapture = parentCapture
                 }
                 else
                 {
@@ -716,18 +973,18 @@ charFunc = function(markupView, charText, charIndex)
         }
         else if(charText == "(")
         {
-            lineData.parenthesisStackCount++
+            parser.parenthesisStackCount++
         }
 
-        if(lineData.parenthesisStackCount != 0) 
+        if(parser.parenthesisStackCount != 0) 
         {
-            lineData.foundMarkupCodeString += charText
+            parser.foundMarkupCodeString += charText
         }
     }
     else if(charText == "[")
     {
-        prevCapture = lineData.currentCapture
-        lineData.currentCapture = {
+        prevCapture = parser.currentCapture
+        newCapture = {
             parentCapture = prevCapture
             items = {}
         }
@@ -736,155 +993,157 @@ charFunc = function(markupView, charText, charIndex)
         {
             if(prevCapture.currentText)
             {
-                table.insert(prevCapture.items, prevCapture.currentText)
+                item = { #tui bug, adding this directly as a function call arg causes prevCapture to appear to be nil
+                    text = prevCapture.currentText
+                }
+                table.insert(prevCapture.items, item)
                 prevCapture.currentText = nil
             }
 
-            table.insert(prevCapture.items, lineData.currentCapture)
+            table.insert(prevCapture.items, newCapture)
         }
         else
         {
-            if(string.length(lineData.foundText) > 0)
-            {
-                addItemView(markupView, nil)
-                lineData.foundText = ""
-            }
+            finishCurrentText(markupView)
         }
+
+        parser.currentCapture = newCapture
     }
     else if(charText == "]")
     {
-        lineData.captureClosedAwaitingParenthesis = true
+        finishCurrentText(markupView) hmm
+
+        parser.captureClosedAwaitingParenthesis = true
     }
     else
     {
-        if(lineData.currentCapture)
+        if(charText == "*")
         {
-            if(!lineData.currentCapture.currentText)
+            if(parser.italic or parser.bold)
             {
-                lineData.currentCapture.currentText = charText
-            }
-            else
-            {
-                lineData.currentCapture.currentText += charText
-            }
-        }
-        else if(charText == "*")
-        {
-            if(markupView.italic or markupView.bold)
-            {
-                if(lineData.starCount > 0 or markupView.italic)
+                if(parser.starCount > 0 or parser.italic)
                 {
-                    addItemView(markupView)
-                    lineData.foundText = ""
-                    markupView.italic = nil
-                    markupView.bold = nil
-                    lineData.starCount = 0
+                    finishCurrentText(markupView)
+                    parser.italic = nil
+                    parser.bold = nil
+                    parser.starCount = 0
                 }
                 else
                 {
-                    lineData.starCount++
+                    parser.starCount++
                 }
             }
             else
             {
-                lineData.starCount++
+                parser.starCount++
             }
         }
         else if(charText == "`")
         {
-            if(markupView.monospace)
+            if(parser.monospace)
             {
-                addItemView(markupView)
-                lineData.foundText = ""
-                markupView.monospace = nil
-                lineData.backtickCount = 0
+                finishCurrentText(markupView)
+                parser.monospace = nil
+                parser.backtickCount = 0
             }
             else
             {
-                lineData.backtickCount++
+                parser.backtickCount++
             }
         }
-        else if(lineData.onlyFoundSpace)
+        else if(parser.onlyFoundSpace)
         {
             if(charText == "(")
             {
-                lineData.parenthesisStackCount = 1
-                lineData.foundMarkupCodeString = ""
-                lineData.skipLeadingSpace = true
+                parser.parenthesisStackCount = 1
+                parser.foundMarkupCodeString = ""
+                parser.skipLeadingSpace = true
             }
             else if(charText == "#")
             {
-                markupView.isHeader = true
-                lineData.skipLeadingSpace = true
+                parser.isHeader = true
+                parser.skipLeadingSpace = true
             }
             else
             {
                 if(charText != " ")
                 {
-                    lineData.onlyFoundSpace = false
-                    lineData.foundText += charText
+                    parser.onlyFoundSpace = false
+                    parser.foundText += charText
                 }
-                else if(!lineData.skipLeadingSpace)
+                else if(!parser.skipLeadingSpace)
                 {
-                    lineData.foundText += charText
+                    parser.foundText += charText
                 }
 
             }
         }
-        else
+        else #!onlyFoundSpace, !currentCapture, not ` or * or [] or inside ()
         {
-            if(lineData.starCount > 0)
+            if(parser.starCount > 0)
             {
-                if(string.length(lineData.foundText) > 0)
-                {
-                    addItemView(markupView)
-                    lineData.foundText = ""
-                }
+                finishCurrentText(markupView)
 
-                if(lineData.starCount > 1)
+                if(parser.starCount > 1)
                 {
-                    markupView.bold = true
+                    parser.bold = true
                 }
                 else
                 {
-                    markupView.italic = true
+                    parser.italic = true
                 }
-                lineData.starCount = 0
+                parser.starCount = 0
             }
-
-            if(lineData.backtickCount > 0)
+            else if(parser.backtickCount > 0)
             {
-                if(string.length(lineData.foundText) > 0)
-                {
-                    addItemView(markupView)
-                    lineData.foundText = ""
-                }
-                markupView.monospace = true
-                lineData.backtickCount = 0
+                finishCurrentText(markupView)
+                parser.monospace = true
+                parser.backtickCount = 0
             }
 
-            lineData.foundText += charText
+            if(parser.currentCapture)
+            {
+                if(!parser.currentCapture.currentText)
+                {
+                    parser.currentCapture.currentText = charText
+                }
+                else
+                {
+                    parser.currentCapture.currentText += charText
+                }
+            }
+            else
+            {
+                parser.foundText += charText
+            }
         }
     }
 }
 
 lineFunc = function(markupView, lineText)
 {
-    lineData = {
-        onlyFoundSpace = true
-        foundMarkupCodeString = ""
-        foundText = ""
-        parenthesisStackCount = 0
-        starCount = 0
-        backtickCount = 0
-    }
+    parser = markupView.parser
+    parser.isHeader = nil #anything that is closed by the line end needs to be set to nil here
 
-    markupView.lineData = lineData
+    #if(parser.currentCapture)
+    #{
+    #    parser.currentLineCacheState.rowCount++
+    #    parser.currentLineCacheState.text += "\n" + lineText
+    #}
+    #else
+    #{
+    #    #todo if we have a match, skip
+    #    parser.currentLineCacheState = {
+    #        #startRowIndex = parser.cacheRowIndex
+    #        rowCount = 1
+    #        items = {}
+    #    }
+    #}
 
-    markupView.isHeader = nil
-    markupView.bold = nil
-    markupView.italic = nil
-    markupView.monospace = nil
+    #if(parser.existingLineIndex and table.count(markupView.markupLines) > parser.existingLineIndex)
+    #{
+    #    parser.existingLineIndex++
+    #}
     
     localCharFunc = function(charText, charIndex)
     {
@@ -892,15 +1151,32 @@ lineFunc = function(markupView, lineText)
     }
 
     string.eachChar(lineText, localCharFunc)
+    
+    if(parser.currentCapture)
+    {
+        finishCurrentText(markupView)
+        parser.currentCapture.currentText = "\n"
+    }
+    else
+    {
+        #todo if we have a match, skip
 
-    addItemView(markupView)
-    markupView.currentRowView = nil #finish current row
+        addItemView(markupView, nil)
+        parser.foundText = ""
+
+        #print("add final:", parser.currentLineCacheState)
+    }
+    
+    finishCurrentRow(markupView)
+
 }
 
 create = function(parentView, viewLayout)
 {
     layout = getViewLayout(viewLayout)
     markupView = parentView.addView(layout)
+
+    markupView.cachedRows = {}
 
     scrollViewLayout = {
         size = viewLayout.size
@@ -938,6 +1214,13 @@ create = function(parentView, viewLayout)
         }
     }
 
+    topPaddingLayout = {
+        type = "view"
+        size = vec2(markupView.padding.top,markupView.padding.top)
+    }
+
+    markupScrollView.addView(topPaddingLayout)
+
     localLineFunc = function(line)
     {
         return lineFunc(markupView, line)
@@ -945,15 +1228,22 @@ create = function(parentView, viewLayout)
 
     doSetText = function(markupText)
     {
-        markupScrollView.removeAllRows()
-        markupScrollView.currentText = markupText
+        print("markupText:", markupText)
+        #markupScrollView.removeAllRows()
+        markupView.currentMarkupText = markupText
 
-        topPaddingLayout = {
-            type = "view"
-            size = vec2(markupView.padding.top,markupView.padding.top)
+
+        parser = {
+            onlyFoundSpace = true
+            foundMarkupCodeString = ""
+            foundText = ""
+            parenthesisStackCount = 0
+            starCount = 0
+            backtickCount = 0
+            cacheRowIndex = 0
         }
 
-        markupScrollView.addView(topPaddingLayout)
+        markupView.parser = parser
 
         if(markupText)
         {
@@ -979,10 +1269,13 @@ create = function(parentView, viewLayout)
         markupView.size = parentSize
         markupView.parentSize = parentSize
 
-        doSetText(markupScrollView.currentText)
+        doSetText(markupView.currentMarkupText)
     }
 
-
+    markupView.reload = function()
+    {
+        doSetText(markupScrollView.currentMarkupText)
+    }
 
     return markupView
 }

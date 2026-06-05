@@ -1326,12 +1326,13 @@ bool MJView::mouseDown3D(dvec3 windowRayStart, dvec3 windowRayDirection, bool ob
 
 	std::vector<MJView*> subviewsCopy = subviews;
 
-	bool insideAnySubview = false;
+	//bool insideAnySubview = false;
 
 	for(int i = ((int)subviewsCopy.size()) - 1; i >=0; i--)
 	{
 		MJView* subView = subviewsCopy[i];
-		bool insideSubview = subView->mouseDown3D(windowRayStart, windowRayDirection, obstructed || insideAnySubview, buttonIndex);
+		//bool insideSubview = subView->mouseDown3D(windowRayStart, windowRayDirection, obstructed || insideAnySubview, buttonIndex);
+        bool insideSubview = subView->mouseDown3D(windowRayStart, windowRayDirection, false, buttonIndex); //todo obstructed is buggy, this needs reworking for 3D, disabled is fine for 2D.
 
 		if(invalidated)
 		{
@@ -1344,7 +1345,7 @@ bool MJView::mouseDown3D(dvec3 windowRayStart, dvec3 windowRayDirection, bool ob
 			//break;
 		}
 
-		insideAnySubview = insideAnySubview || insideSubview;
+		//insideAnySubview = insideAnySubview || insideSubview;
 	}
 
 	//if(!inside)

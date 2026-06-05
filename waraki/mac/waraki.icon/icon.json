@@ -1,83 +1,123 @@
 {
   "fill" : {
-    "automatic-gradient" : "extended-srgb:0.00000,0.47843,1.00000,1.00000"
+    "linear-gradient" : [
+      "extended-gray:0.00000,1.00000",
+      "display-p3:0.00000,0.02305,0.27795,1.00000"
+    ],
+    "orientation" : {
+      "start" : {
+        "x" : 0.5,
+        "y" : 0
+      },
+      "stop" : {
+        "x" : 0.5,
+        "y" : 0.7
+      }
+    }
   },
   "groups" : [
     {
+      "blur-material" : null,
+      "hidden" : false,
       "layers" : [
         {
-          "blend-mode-specializations" : [
-            {
-              "appearance" : "dark",
-              "value" : "plus-lighter"
-            }
-          ],
           "glass" : false,
-          "image-name" : "iconLayerPlay2.png",
-          "name" : "iconLayerPlay2",
-          "opacity-specializations" : [
-            {
-              "appearance" : "dark",
-              "value" : 0.81
-            }
-          ]
+          "image-name" : "warakiIcon2Layer4.png",
+          "name" : "warakiIcon2Layer4"
         },
         {
-          "blend-mode-specializations" : [
-            {
-              "appearance" : "dark",
-              "value" : "plus-lighter"
-            }
-          ],
           "glass" : false,
-          "image-name" : "iconLayer2 3.png",
-          "name" : "iconLayer2 3",
-          "opacity-specializations" : [
-            {
-              "appearance" : "dark",
-              "value" : 0.5
-            }
-          ],
+          "image-name" : "warakiIcon2Layer3.png",
+          "name" : "warakiIcon2Layer3"
+        },
+        {
+          "glass" : false,
+          "image-name" : "warakiIcon2Layer2.png",
+          "name" : "warakiIcon2Layer2"
+        },
+        {
+          "glass" : false,
+          "image-name" : "warakiIcon2Layer1.png",
+          "name" : "warakiIcon2Layer1"
+        },
+        {
+          "blend-mode" : "plus-lighter",
+          "glass" : false,
+          "hidden" : true,
+          "image-name" : "warakiIconLayer4.png",
+          "name" : "warakiIconLayer4"
+        },
+        {
+          "blend-mode" : "plus-lighter",
+          "glass" : false,
+          "hidden" : true,
+          "image-name" : "warakiIconLayer4 2.png",
+          "name" : "warakiIconLayer4 2"
+        },
+        {
+          "blend-mode" : "multiply",
+          "glass" : false,
+          "hidden" : true,
+          "image-name" : "warakiIconLayer3.png",
+          "name" : "warakiIconLayer3"
+        },
+        {
+          "blend-mode" : "multiply",
+          "glass" : false,
+          "hidden" : true,
+          "image-name" : "warakiIconLayer3 2.png",
+          "name" : "warakiIconLayer3 2"
+        },
+        {
+          "blend-mode" : "normal",
+          "glass" : false,
+          "hidden" : true,
+          "image-name" : "warakiIconLayer2.png",
+          "name" : "warakiIconLayer2",
+          "opacity" : 1
+        },
+        {
+          "glass" : false,
+          "hidden" : true,
+          "image-name" : "warakiIconLayer2 2.png",
+          "name" : "warakiIconLayer2 2",
           "position" : {
-            "scale" : 1.57,
+            "scale" : 1,
             "translation-in-points" : [
-              -201,
-              160
+              0,
+              0
             ]
           }
         },
         {
-          "blend-mode-specializations" : [
-            {
-              "appearance" : "dark",
-              "value" : "darken"
-            }
-          ],
-          "image-name" : "iconLayer1 3.png",
-          "name" : "iconLayer1 3",
-          "opacity-specializations" : [
-            {
-              "appearance" : "dark",
-              "value" : 0.5
-            }
-          ]
-        },
-        {
-          "blend-mode-specializations" : [
-            {
-              "appearance" : "dark",
-              "value" : "multiply"
-            }
-          ],
+          "blend-mode" : "normal",
+          "fill" : "none",
+          "glass" : false,
           "hidden" : false,
-          "image-name" : "iconLayer3 3.png",
-          "name" : "iconLayer3 3"
+          "image-name" : "warakiIconLayer1.png",
+          "name" : "warakiIconLayer1",
+          "position" : {
+            "scale" : 1.13,
+            "translation-in-points" : [
+              0,
+              0
+            ]
+          }
         }
       ],
+      "lighting" : "combined",
+      "position" : {
+        "scale" : 0.95,
+        "translation-in-points" : [
+          0,
+          0
+        ]
+      },
       "shadow" : {
         "kind" : "neutral",
         "opacity" : 0.5
       },
+      "specular" : true,
       "translucency" : {
         "enabled" : true,
         "value" : 0.5

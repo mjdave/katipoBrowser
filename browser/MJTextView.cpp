@@ -227,7 +227,7 @@ void MJTextView::updateBuffer(GCommandBuffer* commandBuffer)
 
 void MJTextView::setText(std::string text_)
 {
-    if(textString != text_)
+    //if(textString != text_) if we are going to cache based on text, we also need to cache based on a few other things, like where it wraps
     {
         textString = "";
         text.clear();

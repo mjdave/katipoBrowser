@@ -153,12 +153,13 @@ scanCallback = function(status, result)
                 link = clickFunction
             }
         }
-        thisMarkup += "\n" + connectPageMarkup
+        thisMarkup += connectPageMarkup
 
         connectPage.setText(thisMarkup)
     }
     else if(status == "complete")
     {
+
         if(!foundResult)
         {
             thisMarkup = "# Scan complete\n" + "No Waraki music libraries found on your network.\n" + connectPageMarkup
@@ -180,8 +181,11 @@ connectClicked = function()
         .connectPageMarkup = file.loadData(filePath)
         .connectPage = siteContent.getView("connectPage")
 
-        katipo.startScan(scanCallback)
     }
+
+    .foundResult = false
+    .scanFoundResults = {}
+    katipo.startScan(scanCallback)
 
     thisMarkup = "# Searching...\n" + "Waraki is scanning your local network for music libraries.\n" + connectPageMarkup
     connectPage.setText(thisMarkup)
@@ -206,9 +210,25 @@ connectCancelClicked = function()
     welcomePage.fadeIn()
 }
 
-connectConnectClicked = function()
+
+
+showCustomEntryLinkClicked = function()
 {
-    #setupPage.fadeOut()
+    connectPage.styles.customEntry.hidden = false
+    connectPage.reload()
+}
+
+customConnectButtonClicked = function()
+{
+
+}
+
+customIPTextEntryChanged = function(textValue, changesMade)
+{
+    if(changesMade)
+    {
+        print("ip changed:", textValue)
+    }
 }
 
 mainViewLayout = {
@@ -250,8 +270,18 @@ mainViewLayout = {
                 cancelButton = {
                     link = connectCancelClicked
                 }
-                connectButton = {
-                    link = connectConnectClicked
+                customConnectButton = {
+                    link = customConnectButtonClicked
+                }
+                showCustomEntryLink = {
+                    link = showCustomEntryLinkClicked
+                }
+                customIPTextEntry = {
+                    textEntry = customIPTextEntryChanged # setting this function sets this as editable
+                    backgroundColor = vec4(0.0,0.3,0.6,0.8)
+                }
+                customEntry = {
+                    hidden = true
                 }
             }
         }
@@ -272,6 +302,10 @@ init = function()
 
     welcomePage.setText(markup)
     welcomePage.fadeIn()
+
+    markup = string.replace(markup, "you", "YOU\n")
+    
+    welcomePage.setText(markup)
 }
 
 init()

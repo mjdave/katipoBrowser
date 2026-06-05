@@ -353,9 +353,9 @@ create = function(parentView, viewLayout)
         insertRow(scrollView, insertRowView, rowIndexOrNil)
     }
 
-    scrollView.removeAllRows = function()
+    scrollView.removeAllRows = function(startIndexOrNil)
     {
-        removeAllRows(scrollView)
+        removeAllRows(scrollView, startIndexOrNil)
     }
 
     scrollView.removeRowAtIndex = function(rowIndex)
@@ -522,13 +522,34 @@ insertRow = function(scrollView, insertRowView, rowIndexOrNil)
 }
 
 
-removeAllRows = function(scrollView)
+removeAllRows = function(scrollView, startIndexOrNil) # NOTE startIndexOrNil is untested, was't needed
 {
-    for(i=table.count(scrollView.rowInfos) - 1, i >= 0, i--)
+    startIndex = startIndexOrNil
+    if(!startIndex)
+    {
+        startIndex = 0
+    }
+
+    rowCount = table.count(scrollView.rowInfos)
+    if(rowCount <= startIndex)
+    {
+        return
+    }
+
+    for(i=rowCount - 1, i >= startIndex, i--)
     {
         scrollView.baseView.removeView(scrollView.rowInfos[i].rowView)
+        if(startIndexOrNil)
+        {
+            table.remove(scrollView.rowInfos, i)
+        }
     }
-    scrollView.rowInfos = {}
+
+    if(!startIndexOrNil)
+    {
+        scrollView.rowInfos = {}
+    }
+
     scrollView.scrollYIndexMax = 0
     scrollView.dirty = true
 }

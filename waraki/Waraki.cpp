@@ -342,12 +342,11 @@ void Waraki::init()
         {
             if(!scanner)
             {
-                scanner = new Scanner((TuiFunction*)args->arrayObjects[0]);
+                scanner = new Scanner();
             }
-            else
-            {
-                TuiParseWarn(callingDebugInfo, "startScan() called when scan already running. Ignoring.");
-            }
+            
+            scanner->startScan((TuiFunction*)args->arrayObjects[0]);
+            
         }
         return TUI_NIL;
     });
@@ -363,13 +362,12 @@ void Waraki::init()
             
             std::string trackerURL = args->arrayObjects[0]->getStringValue();
             
-            if(scanner->validConnectionsByIP.count(trackerURL) == 0)
+            ScannerConnection connection = scanner->getConnection(trackerURL); //we are now responsible for closing the connection
+            if(!connection.enetClient)
             {
                 MJError("invalid url");
                 return TUI_NIL;
             }
-            
-            ScannerConnection& connection = scanner->validConnectionsByIP[trackerURL]; //todo cleanup scanner at some point
             
             std::string publicKey = "";
             std::string secretKey = "";
