@@ -383,6 +383,7 @@ textBackgroundViewClickFunction = function(markupView, textView, mouseLoc)
 
 finishCurrentRow = function(markupView)
 {
+    clearAnyRemainingCachedItemsFromCurrentRow(markupView)
     parser = markupView.parser
     if(parser.currentRowInfo)
     {
@@ -390,22 +391,14 @@ finishCurrentRow = function(markupView)
         parser.currentRowInfo = nil
     }
 }
-        #markupView.cachedInputLines
-
-        #parser.currentLineCacheState = {
-        #    text = lineText
-        #    startRowIndex = parser.cacheRowIndex
-        #    rowCount = 1
-        #    items = {}
-        #}
 
 getRowView = function(markupView)
 {
     parser = markupView.parser
     if(!parser.currentRowInfo)
     {
-        print("getRowView parser.cacheRowIndex:", parser.cacheRowIndex)
-        print("table.count(markupView.cachedRows):", table.count(markupView.cachedRows))
+        #print("getRowView parser.cacheRowIndex:", parser.cacheRowIndex)
+        #print("table.count(markupView.cachedRows):", table.count(markupView.cachedRows))
         if(table.count(markupView.cachedRows) > parser.cacheRowIndex)
         {
             parser.currentRowInfo = markupView.cachedRows[parser.cacheRowIndex]
@@ -425,8 +418,7 @@ getRowView = function(markupView)
         }
         
         parser.cacheItemIndex = 0
-        parser.cacheRowWidthAccumulator = 0
-        parser.preventWordSeparation = false
+        parser.cacheRowWidthAccumulator = markupView.padding.left
         
     }
     return parser.currentRowInfo.view
@@ -436,7 +428,7 @@ addItemView = false
 
 addNextRowForWrapOverflow = function(markupView, style, addedTextLength)
 {
-    print("addNextRowForWrapOverflow")
+    #print("addNextRowForWrapOverflow")
     parser = markupView.parser
     finishCurrentRow(markupView)
     if(addedTextLength != 0)
@@ -464,9 +456,31 @@ addNextRowForWrapOverflow = function(markupView, style, addedTextLength)
         }
     }
 
-    print("adding:", parser.foundText)
+    #print("adding:", parser.foundText)
 
     addItemView(markupView, style)
+}
+
+
+
+clearAnyRemainingCachedItemsFromCurrentRow = function(markupView)
+{
+    parser = markupView.parser
+    rowInfo = parser.currentRowInfo
+    rowView = rowInfo.view
+
+    if(parser.cacheItemIndex < table.count(rowInfo.items))
+    {
+        #print("parser.cacheItemIndex:",parser.cacheItemIndex," < table.count(rowInfo.items):", table.count(rowInfo.items))
+        #startPos = rowInfo.items[parser.cacheItemIndex].xPos
+        for(i = table.count(rowInfo.items) - 1, i >= parser.cacheItemIndex, i--)
+        {
+            itemCache = rowInfo.items[i]
+            #print("remove:", itemCache)
+            rowView.removeView(itemCache.backgroundView)
+            table.remove(rowInfo.items, i)
+        }
+    }
 }
 
 addItemView = function(markupView, style)
@@ -487,7 +501,7 @@ addItemView = function(markupView, style)
     rowView = getRowView(markupView)
 
 
-    print("addItemView:", parser.foundText)
+    #print("addItemView:", parser.foundText)
 
     textViewLayout = table.clone(textLayout)
     textViewLayout.id = "textView"
@@ -608,14 +622,14 @@ addItemView = function(markupView, style)
 
     stateHash = string.format("%d%d%d%d", parser.monospace, parser.bold, parser.italic, parser.isHeader)
     accumulatedWidth = parser.cacheRowWidthAccumulator
-    wrapWidth = markupView.parentSize.x - accumulatedWidth - markupView.padding.left - 20
+    wrapWidth = markupView.parentSize.x - accumulatedWidth - markupView.padding.left - markupView.padding.right
     rowInfo = parser.currentRowInfo
 
     getCacheIfMatch = function(cacheItemIndex)
     {
        # print("in checkCacheMatches, rowInfo:", rowInfo)
         #print("parser.foundText:", parser.foundText)
-        print("in checkCacheMatches cacheItemIndex:", cacheItemIndex, "\nnumber of items in this row:", table.count(rowInfo.items), " parser.cacheRowIndex:", parser.cacheRowIndex)
+        #print("in checkCacheMatches cacheItemIndex:", cacheItemIndex, "\nnumber of items in this row:", table.count(rowInfo.items), " parser.cacheRowIndex:", parser.cacheRowIndex)
         if(cacheItemIndex < table.count(rowInfo.items))
         {
             itemInfo = rowInfo.items[cacheItemIndex]
@@ -627,7 +641,7 @@ addItemView = function(markupView, style)
 
             if(stateHash != itemInfo.stateHash)
             {
-                print("stateHash:",stateHash," != itemInfo.stateHash:", itemInfo.stateHash)
+                #print("stateHash:",stateHash," != itemInfo.stateHash:", itemInfo.stateHash)
                 return nil
             }
             if(style)
@@ -635,7 +649,7 @@ addItemView = function(markupView, style)
                 itemStyle = itemInfo.style
                 if(!itemStyle)
                 {
-                    print("!itemStyle")
+                    #print("!itemStyle")
                     return nil
                 }
 
@@ -643,14 +657,14 @@ addItemView = function(markupView, style)
                 {
                     if(itemStyle[k] != v)
                     {
-                        print("itemStyle[",k,"] != ",v)
+                        #print("itemStyle[",k,"] != ",v)
                         return nil
                     }
                 }
             }
             else if(itemInfo.style)
             {
-                print("itemInfo.style")
+                #print("itemInfo.style")
                 return nil
             }
             return itemInfo
@@ -658,16 +672,19 @@ addItemView = function(markupView, style)
         return nil
     }
 
+
     foundCache = getCacheIfMatch(parser.cacheItemIndex)
 
+    xPos = parser.cacheRowWidthAccumulator
 
     if(foundCache)
     {
         parser.cacheItemIndex++
+        textView = foundCache.textView
+
 
         if((foundCache.text != parser.foundText) or (wrapWidth != foundCache.wrapWidth))
         {
-            textView = foundCache.textView
             textView.wrapWidth = wrapWidth
             textView.text = parser.foundText
 
@@ -681,7 +698,25 @@ addItemView = function(markupView, style)
 
             if(addedTextLength < totalTextLength)
             {
+                if(addedTextLength == 0)
+                {
+                    parser.cacheItemIndex-- #bit of a hack, will clear this incomplete cached item when clearAnyRemainingCachedItemsFromCurrentRow is called
+                }
+
+                clearAnyRemainingCachedItemsFromCurrentRow(markupView)
+
+                foundCache.backgroundView.pos = vec3(xPos, 0, 0)
+                foundCache.backgroundView.size = textView.size
+
+                rowView.size = vec2(xPos + textView.size.x, 
+                            math.max(textView.size.y, rowView.size.y))
+
                 addNextRowForWrapOverflow(markupView, style, addedTextLength)
+                return
+            }
+            else
+            {
+                parser.cacheRowWidthAccumulator += foundCache.textWidth
             }
         }
         else
@@ -689,23 +724,24 @@ addItemView = function(markupView, style)
             parser.cacheRowWidthAccumulator += foundCache.textWidth
         }
 
-        print("found cache:", parser.foundText)
+
+        foundCache.backgroundView.pos = vec3(xPos, 0, 0)
+        foundCache.backgroundView.size = textView.size
+
+        rowView.size = vec2(xPos + textView.size.x, 
+                            math.max(textView.size.y, rowView.size.y))
+
+        #print("found cache:", parser.foundText, " cacheRowWidthAccumulator:", parser.cacheRowWidthAccumulator)
         
         return
     }
     
-    print("no cache found:", parser.foundText)
+    #print("no cache found:", parser.foundText)
 
     if(parser.cacheItemIndex < table.count(rowInfo.items))
     {
-        startPos = rowInfo.items[parser.cacheItemIndex].xPos
-        for(i = table.count(rowInfo.items) - 1, i >= parser.cacheItemIndex, i--)
-        {
-            itemCache = rowInfo.items[i]
-            rowView.removeView(itemCache.backgroundView)
-            table.remove(rowInfo.items, i)
-        }
-        rowView.size = vec2(startPos, rowView.size.y)
+        clearAnyRemainingCachedItemsFromCurrentRow(markupView)
+        rowView.size = vec2(xPos, minLineHeight)
     }
     
     backgroundView = rowView.addView(backgroundLayout)
@@ -718,7 +754,7 @@ addItemView = function(markupView, style)
 
     textView.wrapWidth = wrapWidth
     textView.wrapClamp = true
-    textView.preventWordSeparation = parser.preventWordSeparation
+    textView.preventWordSeparation = (parser.cacheItemIndex != 0)
     textView.text = parser.foundText
 
     if(style and style.textEntry) #textEntry should be a function textEntry(textValue, changesMade)
@@ -747,9 +783,7 @@ addItemView = function(markupView, style)
         finishEditing(markupView, textView, false)
     }
 
-    parser.preventWordSeparation = true #we allow word separation for the first item in the row only
-
-    xPos = rowView.size.x
+    #xPos = rowView.size.x
     backgroundView.pos = vec3(xPos, 0, 0)
 
     rowView.size = vec2(xPos + textView.size.x, 
@@ -784,14 +818,7 @@ addItemView = function(markupView, style)
 
     #print("parser.cacheItemIndex:", parser.cacheItemIndex, " rowInfo.items:", rowInfo.items)
 
-    if(parser.cacheItemIndex < table.count(rowInfo.items))
-    {
-        #rowView remove
-    }
-    else
-    {
-        table.insert(rowInfo.items, cacheData)
-    }
+    table.insert(rowInfo.items, cacheData)
 
 
     parser.cacheItemIndex = table.count(rowInfo.items)
@@ -801,7 +828,7 @@ addItemView = function(markupView, style)
 
     parser.cacheRowWidthAccumulator += cacheData.textWidth
 
-    print("addedTextLength:", addedTextLength, " totalTextLength:", totalTextLength)
+    #print("addedTextLength:", addedTextLength, " totalTextLength:", totalTextLength)
     if(addedTextLength < totalTextLength)
     {
         addNextRowForWrapOverflow(markupView, style, addedTextLength)
@@ -1201,7 +1228,9 @@ create = function(parentView, viewLayout)
 
     markupView.padding = {
         top = topPaddingDefault
+        bottom = topPaddingDefault
         left = leftPaddingDefault
+        right = leftPaddingDefault
     }
 
     markupScrollView.markupPadding = markupView.padding
@@ -1228,7 +1257,7 @@ create = function(parentView, viewLayout)
 
     doSetText = function(markupText)
     {
-        print("markupText:", markupText)
+        #print("markupText:", markupText)
         #markupScrollView.removeAllRows()
         markupView.currentMarkupText = markupText
 
@@ -1248,6 +1277,17 @@ create = function(parentView, viewLayout)
         if(markupText)
         {
             string.eachLine(markupText, localLineFunc)
+        }
+
+       #print("table.count(markupView.cachedRows):", table.count(markupView.cachedRows), " parser.cacheRowIndex:", parser.cacheRowIndex)
+
+        if(table.count(markupView.cachedRows) >= parser.cacheRowIndex)
+        {
+            markupScrollView.removeAllRows(parser.cacheRowIndex + 1)
+            for(i = table.count(markupView.cachedRows) -1, i >= parser.cacheRowIndex, i--)
+            {
+                table.remove(markupView.cachedRows, i)
+            }
         }
 
         if(markupScrollView.variableHeight)

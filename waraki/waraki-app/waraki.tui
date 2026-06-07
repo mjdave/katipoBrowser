@@ -136,7 +136,7 @@ scanCallback = function(status, result)
         .foundResult = true
         table.insert(scanFoundResults, result)
 
-        thisMarkup = "# Waraki music library found\n\n"
+        thisMarkup = "#Waraki music library found\n\n"
         for(i, ip in scanFoundResults)
         {
             buttonID = "connectButton" + i
@@ -162,7 +162,9 @@ scanCallback = function(status, result)
 
         if(!foundResult)
         {
-            thisMarkup = "# Scan complete\n" + "No Waraki music libraries found on your network.\n" + connectPageMarkup
+            thisMarkup = "#Scan complete\n\n" 
+            thisMarkup += "No Waraki music libraries found on your network.\n\n"
+            thisMarkup += connectPageMarkup
             connectPage.setText(thisMarkup)
         }
     }
@@ -187,7 +189,9 @@ connectClicked = function()
     .scanFoundResults = {}
     katipo.startScan(scanCallback)
 
-    thisMarkup = "# Searching...\n" + "Waraki is scanning your local network for music libraries.\n" + connectPageMarkup
+    thisMarkup = "#Searching...\n\n" 
+    thisMarkup += "Waraki is scanning your local network for music libraries.\n\n"
+    thisMarkup += connectPageMarkup
     connectPage.setText(thisMarkup)
     connectPage.fadeIn()
 }
@@ -244,6 +248,9 @@ mainViewLayout = {
                 }
                 connectButton = {
                     link = connectClicked
+                }
+                showCustomEntryLink = { #todo remove this unused test
+                    link = showCustomEntryLinkClicked
                 }
             }
         }
@@ -303,9 +310,9 @@ init = function()
     welcomePage.setText(markup)
     welcomePage.fadeIn()
 
-    markup = string.replace(markup, "you", "YOU\n")
+    #markup = string.replace(markup, "you", "YOU\n")
     
-    welcomePage.setText(markup)
+    #welcomePage.setText(markup)
 }
 
 init()
