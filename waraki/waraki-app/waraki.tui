@@ -249,9 +249,6 @@ mainViewLayout = {
                 connectButton = {
                     link = connectClicked
                 }
-                showCustomEntryLink = { #todo remove this unused test
-                    link = showCustomEntryLinkClicked
-                }
             }
         }
 

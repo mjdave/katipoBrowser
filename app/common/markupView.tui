@@ -14,6 +14,7 @@ headerFontSize = 26
 
 linkColor = vec4(0.5,0.8,1.0,1.0)
 onLinkClick = false
+reloadText = false
 
 textLayout = {
     type = "text"
@@ -142,20 +143,27 @@ updateCursorPosition = function(markupView, textView)
 
 updateText = function(markupView, textView, newText)
 {
-    textView.text = newText #todo we will need to update the size and re-layout later views
-
-    if(textView.editing)
+    if(textView.captureStartCharacterIndex)
     {
-        markupView.cursorView.hidden = false
-        markupView.cursorTimer = 0.0
+        beforeText = string.subString(markupView.currentMarkupText, 0, textView.captureStartCharacterIndex + 1)
+        afterText = string.subString(markupView.currentMarkupText, textView.captureStartCharacterIndex + 1 + string.length(textView.text))
+        markupView.currentMarkupText = beforeText + newText + afterText
+        reloadText(markupView)
+    }
 
-        updateCursorPosition(markupView, textView)
-    }
-    
-    if(textView.textEntryChangedContinuousFunction)
-    {
-        textView.textEntryChangedContinuousFunction(textView.text)
-    }
+    #todo we need to get the new text view, it might have changed
+    #if(textView.editing)
+    #{
+    #    markupView.cursorView.hidden = false
+    #    markupView.cursorTimer = 0.0
+#
+    #    updateCursorPosition(markupView, textView)
+    #}
+    #
+    #if(textView.textEntryChangedContinuousFunction)
+    #{
+    #    textView.textEntryChangedContinuousFunction(textView.text)
+    #}
 }
 
 textBackgroundViewClickFunction = function(markupView, textView, mouseLoc)
@@ -467,6 +475,11 @@ clearAnyRemainingCachedItemsFromCurrentRow = function(markupView)
 {
     parser = markupView.parser
     rowInfo = parser.currentRowInfo
+    if(!rowInfo)
+    {
+        return
+    }
+
     rowView = rowInfo.view
 
     if(parser.cacheItemIndex < table.count(rowInfo.items))
@@ -483,7 +496,7 @@ clearAnyRemainingCachedItemsFromCurrentRow = function(markupView)
     }
 }
 
-addItemView = function(markupView, style)
+addItemView = function(markupView, style, captureStartCharacterIndex)
 {
     if(style and style.hidden)
     {
@@ -681,6 +694,7 @@ addItemView = function(markupView, style)
     {
         parser.cacheItemIndex++
         textView = foundCache.textView
+        textView.captureStartCharacterIndex = captureStartCharacterIndex
 
 
         if((foundCache.text != parser.foundText) or (wrapWidth != foundCache.wrapWidth))
@@ -757,6 +771,8 @@ addItemView = function(markupView, style)
     textView.preventWordSeparation = (parser.cacheItemIndex != 0)
     textView.text = parser.foundText
 
+    textView.captureStartCharacterIndex = captureStartCharacterIndex
+
     if(style and style.textEntry) #textEntry should be a function textEntry(textValue, changesMade)
     {
         textView.styleTextEntryFunction = style.textEntry
@@ -809,6 +825,7 @@ addItemView = function(markupView, style)
         wrapWidth = wrapWidth
         backgroundView = backgroundView
         stateHash = stateHash
+        #inputTextCharacterIndex = captureStartCharacterIndex
     }
 
     if(style)
@@ -903,7 +920,7 @@ renderCapture = function(markupView, capture, parentStyle)
             parser.italic = item.italic
             parser.monospace = item.monospace
 
-            addItemView(markupView, style)
+            addItemView(markupView, style, item.startCharacterIndex)
 
             parser.bold = prevBold
             parser.italic = prevItalic
@@ -928,6 +945,7 @@ finishCurrentText = function(markupView)
         {
             item = {
                 text = currentCapture.currentText
+                startCharacterIndex = currentCapture.startCharacterIndex
                 bold = parser.bold
                 italic = parser.italic
                 monospace = parser.monospace
@@ -982,6 +1000,7 @@ charFunc = function(markupView, charText, charIndex)
                     {
                         item = {
                             text = currentCapture.currentText
+                            startCharacterIndex = currentCapture.startCharacterIndex
                         }
                         table.insert(currentCapture.items, item)
                         currentCapture.currentText = nil
@@ -1013,6 +1032,7 @@ charFunc = function(markupView, charText, charIndex)
         prevCapture = parser.currentCapture
         newCapture = {
             parentCapture = prevCapture
+            startCharacterIndex = parser.characterIndex
             items = {}
         }
 
@@ -1022,6 +1042,7 @@ charFunc = function(markupView, charText, charIndex)
             {
                 item = { #tui bug, adding this directly as a function call arg causes prevCapture to appear to be nil
                     text = prevCapture.currentText
+                    startCharacterIndex = prevCapture.startCharacterIndex
                 }
                 table.insert(prevCapture.items, item)
                 prevCapture.currentText = nil
@@ -1174,10 +1195,14 @@ lineFunc = function(markupView, lineText)
     
     localCharFunc = function(charText, charIndex)
     {
-        return charFunc(markupView, charText, charIndex)
+        result = charFunc(markupView, charText, charIndex)
+        parser.characterIndex++
+        return result
     }
 
     string.eachChar(lineText, localCharFunc)
+
+    parser.characterIndex++ #\n as we are in eachLine
     
     if(parser.currentCapture)
     {
@@ -1197,6 +1222,54 @@ lineFunc = function(markupView, lineText)
     finishCurrentRow(markupView)
 
 }
+
+reloadText = function(markupView)
+{
+    markupText = markupView.currentMarkupText
+    markupScrollView = markupView.scrollView
+
+    parser = {
+        onlyFoundSpace = true
+        foundMarkupCodeString = ""
+        foundText = ""
+        parenthesisStackCount = 0
+        starCount = 0
+        backtickCount = 0
+        cacheRowIndex = 0
+        characterIndex = 0
+    }
+
+    markupView.parser = parser
+
+
+    localLineFunc = function(line)
+    {
+        return lineFunc(markupView, line)
+    }
+
+    if(markupText)
+    {
+        string.eachLine(markupText, localLineFunc)
+    }
+
+    #print("table.count(markupView.cachedRows):", table.count(markupView.cachedRows), " parser.cacheRowIndex:", parser.cacheRowIndex)
+
+    if(table.count(markupView.cachedRows) >= parser.cacheRowIndex)
+    {
+        markupScrollView.removeAllRows(parser.cacheRowIndex + 1)
+        for(i = table.count(markupView.cachedRows) -1, i >= parser.cacheRowIndex, i--)
+        {
+            table.remove(markupView.cachedRows, i)
+        }
+    }
+
+    if(markupScrollView.variableHeight)
+    {
+        markupScrollView.layoutRows()
+        markupView.size = vec2(markupScrollView.size.x, math.max(markupScrollView.totalHeight, minLineHeight))
+        #markupView.size = markupScrollView.size
+    }
+} 
 
 create = function(parentView, viewLayout)
 {
@@ -1250,55 +1323,11 @@ create = function(parentView, viewLayout)
 
     markupScrollView.addView(topPaddingLayout)
 
-    localLineFunc = function(line)
+    markupView.setText = function(newText)
     {
-        return lineFunc(markupView, line)
+        markupView.currentMarkupText = newText
+        reloadText(markupView)
     }
-
-    doSetText = function(markupText)
-    {
-        #print("markupText:", markupText)
-        #markupScrollView.removeAllRows()
-        markupView.currentMarkupText = markupText
-
-
-        parser = {
-            onlyFoundSpace = true
-            foundMarkupCodeString = ""
-            foundText = ""
-            parenthesisStackCount = 0
-            starCount = 0
-            backtickCount = 0
-            cacheRowIndex = 0
-        }
-
-        markupView.parser = parser
-
-        if(markupText)
-        {
-            string.eachLine(markupText, localLineFunc)
-        }
-
-       #print("table.count(markupView.cachedRows):", table.count(markupView.cachedRows), " parser.cacheRowIndex:", parser.cacheRowIndex)
-
-        if(table.count(markupView.cachedRows) >= parser.cacheRowIndex)
-        {
-            markupScrollView.removeAllRows(parser.cacheRowIndex + 1)
-            for(i = table.count(markupView.cachedRows) -1, i >= parser.cacheRowIndex, i--)
-            {
-                table.remove(markupView.cachedRows, i)
-            }
-        }
-
-        if(markupScrollView.variableHeight)
-        {
-            markupScrollView.layoutRows()
-            markupView.size = vec2(markupScrollView.size.x, math.max(markupScrollView.totalHeight, minLineHeight))
-            #markupView.size = markupScrollView.size
-        }
-    } 
-
-    markupView.setText = doSetText
 
     markupView.onParentSizeChanged = function(parentSize) #override the scrollView one with our own
     {
@@ -1309,12 +1338,12 @@ create = function(parentView, viewLayout)
         markupView.size = parentSize
         markupView.parentSize = parentSize
 
-        doSetText(markupView.currentMarkupText)
+        reloadText(markupView)
     }
 
     markupView.reload = function()
     {
-        doSetText(markupScrollView.currentMarkupText)
+        reloadText(markupView)
     }
 
     return markupView
