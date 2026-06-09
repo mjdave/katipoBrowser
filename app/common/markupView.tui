@@ -71,78 +71,15 @@ getViewLayout = function(incomingLayout)
 }
 
 
-finishEditing = function(markupView, textView, confirmChanges)
+
+updateEditingText = function(markupView, newText)
 {
-    if(textView.editing and textView == markupView.currentlyEditingTextView)
+    textView = markupView.currentEditingTextView
+    if(!textView)
     {
-        print("finish editing:", textView.text)
-        textView.editing = false
-        markupView.currentlyEditingTextView = nil
-
-        markupView.update = nil
-        markupView.cursorView.hidden = true
-        
-        eventManager.removeTextEntryListener(markupView.textEntryListenerID)
-        markupView.textEntryListenerID = nil
-
-        if((!textView.text) or string.length(textView.text) == 0)
-        {
-            if(markupView.allowsEmpty)
-            {
-                textView.styleTextEntryFunction("", confirmChanges)
-            }
-            else
-            {
-                updateText(markupView, textView, markupView.editStartTextValue)
-                textView.styleTextEntryFunction(markupView.editStartTextValue, false)
-            }
-        }
-        else
-        {
-            if(!confirmChanges and markupView.requireEnterToConfirm) #requireEnterToConfirm means we should revert if !confirmChanges
-            {
-                updateText(markupView, textView, markupView.editStartTextValue)
-                textView.styleTextEntryFunction(textView.text, false)
-            }
-            else
-            {
-                textView.styleTextEntryFunction(textView.text, confirmChanges)
-            }
-        }
+        return
     }
-}
 
-updateCursorFunction = function(markupView, dt)
-{
-    markupView.cursorTimer = markupView.cursorTimer + dt
-    if(markupView.cursorTimer > 0.5)
-    {
-        markupView.cursorTimer = markupView.cursorTimer - 0.5
-        if(markupView.cursorTimer > 0.5)
-        {
-            markupView.cursorTimer = 0.0
-        }
-        markupView.cursorView.hidden = (!markupView.cursorView.hidden)
-    }
-}
-
-updateCursorPosition = function(markupView, textView)
-{
-    print("textView:", textView)
-    rect = textView.getRectForCharAtIndex(-1 + textView.cursorOffset)
-    print("rect:", rect, " textView.cursorOffset:", textView.cursorOffset)
-    xOffset = rect.x + rect.z
-    if(!textView.horizontalAlignment or textView.horizontalAlignment == "center")
-    {
-        xOffset /= 2
-    }
-    #todo handle right alignment
-    print("set cursor pos:", xOffset + 1,",",rect.y + 1,0)
-    markupView.cursorView.pos = vec3(xOffset + 1,rect.y + 1,0)
-}
-
-updateText = function(markupView, textView, newText)
-{
     if(textView.captureStartCharacterIndex)
     {
         beforeText = string.subString(markupView.currentMarkupText, 0, textView.captureStartCharacterIndex + 1)
@@ -152,18 +89,230 @@ updateText = function(markupView, textView, newText)
     }
 
     #todo we need to get the new text view, it might have changed
-    #if(textView.editing)
     #{
     #    markupView.cursorView.hidden = false
     #    markupView.cursorTimer = 0.0
 #
-    #    updateCursorPosition(markupView, textView)
+    #    updateCursorPosition(markupView)
     #}
     #
     #if(textView.textEntryChangedContinuousFunction)
     #{
     #    textView.textEntryChangedContinuousFunction(textView.text)
     #}
+}
+
+finishEditing = function(markupView, confirmChanges)
+{
+    textView = markupView.currentEditingTextView
+    if(!textView)
+    {
+        return
+    }
+
+    print("finish editing:", textView.text)
+    debug.backtrace()
+    markupView.currentEditingTextView = nil
+    markupView.currentEditingTextViewCaptureStartCharacterIndex = nil
+
+    markupView.cursorView.hidden = true
+    
+    eventManager.removeTextEntryListener(markupView.textEntryListenerID)
+    markupView.textEntryListenerID = nil
+
+    if((!textView.text) or string.length(textView.text) == 0)
+    {
+        if(markupView.allowsEmpty)
+        {
+            textView.styleTextEntryFunction("", confirmChanges)
+        }
+        else
+        {
+            updateEditingText(markupView, markupView.editStartTextValue)
+            textView.styleTextEntryFunction(markupView.editStartTextValue, false)
+        }
+    }
+    else
+    {
+        if(!confirmChanges and markupView.requireEnterToConfirm) #requireEnterToConfirm means we should revert if !confirmChanges
+        {
+            updateEditingText(markupView, markupView.editStartTextValue)
+            textView.styleTextEntryFunction(textView.text, false)
+        }
+        else
+        {
+            textView.styleTextEntryFunction(textView.text, confirmChanges)
+        }
+    }
+}
+
+updateCursorFunction = function(markupView, dt)
+{
+    if(markupView.currentEditingTextView)
+    {
+        markupView.cursorTimer = markupView.cursorTimer + dt
+        if(markupView.cursorTimer > 0.5)
+        {
+            markupView.cursorTimer = markupView.cursorTimer - 0.5
+            if(markupView.cursorTimer > 0.5)
+            {
+                markupView.cursorTimer = 0.0
+            }
+            markupView.cursorView.hidden = (!markupView.cursorView.hidden)
+        }
+    }
+}
+
+updateCursorPosition = function(markupView)
+{
+    textView = markupView.currentEditingTextView
+    if(!textView)
+    {
+        return
+    }
+
+    #print("textView:", textView)
+    rect = textView.getRectForCharAtIndex(-1 + markupView.cursorOffset)
+    #print("rect:", rect, " markupView.cursorOffset:", markupView.cursorOffset)
+    xOffset = rect.x + rect.z
+
+    if(textView.horizontalAlignment == "center")
+    {
+        xOffset /= 2
+    }
+    
+    #todo handle right alignment
+    #print("set cursor pos:", xOffset + 1,",",rect.y + 1,0)
+    markupView.cursorView.pos = vec3(xOffset + 1,rect.y + 1,0)
+}
+
+keyMap = {
+    [keys.keyCodes.key_return] = function(markupView, isDown, keyCode, modCode, isRepeat)
+    {
+        if(isDown)
+        {
+            if(modCode == keys.modifiers.shift)
+            {
+                updateEditingText(markupView, markupView.currentEditingTextView.text + "\n")
+            }
+            else if(!isRepeat)
+            {
+                finishEditing(markupView, true)
+            }
+        }
+    }
+    [keys.keyCodes.backspace] = function(markupView, isDown, keyCode, modCode, isRepeat)
+    {
+        if(isDown)
+        {
+            textView = markupView.currentEditingTextView
+            if(textView.text and string.length(textView.text) > 0)
+            {
+                newText = ""
+                if(markupView.cursorOffset and markupView.cursorOffset != 0)
+                {
+                    textLength = string.length(textView.text)
+                    if(textLength > 0)
+                    {
+                        removePos = math.max(textLength + markupView.cursorOffset, 0)
+                        if(removePos >= 0)
+                        {
+                            newText = string.subString(textView.text,0,removePos) + string.subString(textView.text, removePos + 1)
+                        }
+                        else
+                        {
+                            return 
+                        }
+                    }
+                    else
+                    {
+                        return
+                    }
+                }
+                else
+                {
+                    newText = string.subString(textView.text, 0, string.length(textView.text) - 1)
+                }
+                updateEditingText(markupView, newText)
+            }
+        }
+        return true
+    }
+    [keys.keyCodes.escape] = function(markupView, isDown, keyCode, modCode, isRepeat)
+    {
+        if(isDown and (!isRepeat))
+        {
+            finishEditing(markupView, false)
+        }
+    }
+    [keys.keyCodes.left] = function(markupView, isDown, keyCode, modCode, isRepeat)
+    {
+        if(isDown)
+        {
+            #cursorChanged(markupView, -1, nil) todo
+        }
+    }
+    [keys.keyCodes.right] = function(markupView, isDown, keyCode, modCode, isRepeat)
+    {
+        if(isDown)
+        {
+            #cursorChanged(markupView, 1, nil) todo
+        }
+    }
+    #[keyMapping:getMappingIndex("textEntry", "newline")] = function(isDown, isRepeat)
+    #    if(isDown)
+    #    {
+    #        newText = textView.text .. "\n"
+    #        updateEditingText(textView, newText)
+    #    }
+    #    return true 
+    #end,
+    
+    [keys.keyCodes.delete] = function(markupView, isDown, keyCode, modCode, isRepeat)
+    {
+        if(isDown)
+        {
+            textView = markupView.currentEditingTextView
+            if(textView.text and string.length(textView.text) > 0)
+            {
+                newText = ""
+                if(markupView.cursorOffset and markupView.cursorOffset != 0)
+                {
+                    textLength = string.length(textView.text)
+                    if(textLength > 0)
+                    {
+                        removePos = math.max(textLength + markupView.cursorOffset, 0)
+                        if(removePos < textLength)
+                        {
+                            newText = string.subString(textView.text, 0, removePos) + string.subString(textView.text, removePos + 1)
+                            markupView.cursorOffset = markupView.cursorOffset + 1
+                        }
+                        else
+                        {
+                            return 
+                        }
+                    }
+                    else
+                    {
+                        return
+                    }
+                }
+
+                updateEditingText(markupView, newText)
+            }
+        }
+    }
+
+    [keys.keyCodes.escape] = function(markupView, isDown, keyCode, modCode, isRepeat)
+    {
+        if(isDown and !isRepeat)
+        {
+            finishEditing(markupView, false)
+        }
+    }
+#todo [keyMapping:getMappingIndex("textEntry", "prevCommand")] = function(isDown, isRepeat) if(isDown then cursorChanged(textView, nil, 1) end return true end,
+#[keyMapping:getMappingIndex("textEntry", "nextCommand")] = function(isDown, isRepeat) if(isDown then cursorChanged(textView, nil, -1) end return true end,
+    
 }
 
 textBackgroundViewClickFunction = function(markupView, textView, mouseLoc)
@@ -174,7 +323,7 @@ textBackgroundViewClickFunction = function(markupView, textView, mouseLoc)
     }
     if(!markupView.disabled)
     {
-        if(markupView.editing)
+        if(markupView.currentEditingTextView == textView)
         {
             print("todo, allow cursor position change with click")
             /*if(textView.text)
@@ -186,10 +335,10 @@ textBackgroundViewClickFunction = function(markupView, textView, mouseLoc)
                 if(textLength > 0)
                 {
                     charIndex = mjm.clamp(charIndex, 0, textLength)
-                    textView.cursorOffset = charIndex - textLength
+                    markupView.cursorOffset = charIndex - textLength
                     markupView.cursorView.hidden = false
                     markupView.cursorTimer = 0.0
-                    updateCursorPosition(markupView, textView)
+                    updateCursorPosition(markupView)
                     textView.textView.resetVerticalCursorMovementAnchors()
                 }
             }*/
@@ -197,12 +346,8 @@ textBackgroundViewClickFunction = function(markupView, textView, mouseLoc)
         }
         else
         {
-            if(markupView.currentlyEditingTextView)
-            {
-                markupView.currentlyEditingTextView.editing = false
-            }
-            markupView.currentlyEditingTextView = textView
-            textView.editing = true
+            markupView.currentEditingTextView = textView
+            markupView.currentEditingTextViewCaptureStartCharacterIndex = textView.captureStartCharacterIndex
 
             #textView.textView:resetVerticalCursorMovementAnchors()
             markupView.editStartTextValue = textView.text
@@ -210,180 +355,49 @@ textBackgroundViewClickFunction = function(markupView, textView, mouseLoc)
             markupView.cursorView.layoutParent = textView
             markupView.cursorTimer = 0.0
 
-            textView.cursorOffset = 0
+            markupView.cursorOffset = 0
 
             print("start editing:", textView.text)
-            markupView.update = function(dt)
-            {
-                updateCursorFunction(markupView, dt)
-            }
 
-            updateCursorPosition(markupView, textView)
-            
-            keyMap = {
-                [keys.keyCodes.key_return] = function(isDown, keyCode, modCode, isRepeat)
-                {
-                    if(isDown)
-                    {
-                        if(modCode == keys.modifiers.shift)
-                        {
-                            newText = textView.text + "\n"
-                            updateText(markupView, textView, newText)
-                        }
-                        else if(!isRepeat)
-                        {
-                            finishEditing(markupView, textView, true)
-                        }
-                    }
-                }
-                [keys.keyCodes.backspace] = function(isDown, keyCode, modCode, isRepeat)
-                {
-                    if(isDown)
-                    {
-                        if(textView.text and string.length(textView.text) > 0)
-                        {
-                            newText = ""
-                            if(textView.cursorOffset and textView.cursorOffset != 0)
-                            {
-                                textLength = string.length(textView.text)
-                                if(textLength > 0)
-                                {
-                                    removePos = math.max(textLength + textView.cursorOffset, 0)
-                                    if(removePos >= 0)
-                                    {
-                                        newText = string.subString(textView.text,0,removePos) + string.subString(textView.text, removePos + 1)
-                                    }
-                                    else
-                                    {
-                                        return 
-                                    }
-                                }
-                                else
-                                {
-                                    return
-                                }
-                            }
-                            else
-                            {
-                                newText = string.subString(textView.text, 0, string.length(textView.text) - 1)
-                            }
-                            updateText(markupView, textView, newText)
-                        }
-                    }
-                    return true
-                }
-                [keys.keyCodes.escape] = function(isDown, keyCode, modCode, isRepeat)
-                {
-                    if(isDown and (!isRepeat))
-                    {
-                        finishEditing(markupView, textView, false)
-                    }
-                }
-                [keys.keyCodes.left] = function(isDown, keyCode, modCode, isRepeat)
-                {
-                    if(isDown)
-                    {
-                        cursorChanged(textView, -1, nil)
-                    }
-                }
-                [keys.keyCodes.right] = function(isDown, keyCode, modCode, isRepeat)
-                {
-                    if(isDown)
-                    {
-                        cursorChanged(textView, 1, nil)
-                    }
-                }
-                #[keyMapping:getMappingIndex("textEntry", "newline")] = function(isDown, isRepeat)
-                #    if(isDown)
-                #    {
-                #        newText = textView.text .. "\n"
-                #        updateText(textView, newText)
-                #    }
-                #    return true 
-                #end,
-                
-                [keys.keyCodes.delete] = function(isDown, keyCode, modCode, isRepeat)
-                {
-                    if(isDown)
-                    {
-                        if(textView.text and string.length(textView.text) > 0)
-                        {
-                            newText = ""
-                            if(textView.cursorOffset and textView.cursorOffset != 0)
-                            {
-                                textLength = string.length(textView.text)
-                                if(textLength > 0)
-                                {
-                                    removePos = math.max(textLength + textView.cursorOffset, 0)
-                                    if(removePos < textLength)
-                                    {
-                                        newText = string.subString(textView.text, 0, removePos) + string.subString(textView.text, removePos + 1)
-                                        textView.cursorOffset = textView.cursorOffset + 1
-                                    }
-                                    else
-                                    {
-                                        return 
-                                    }
-                                }
-                                else
-                                {
-                                    return
-                                }
-                            }
-
-                            updateText(markupView, textView, newText)
-                        }
-                    }
-                }
-
-                [keys.keyCodes.escape] = function(isDown, keyCode, modCode, isRepeat)
-                {
-                    if(isDown and !isRepeat)
-                    {
-                        finishEditing(markupView, textView, false)
-                    }
-                }
-            #todo [keyMapping:getMappingIndex("textEntry", "prevCommand")] = function(isDown, isRepeat) if(isDown then cursorChanged(textView, nil, 1) end return true end,
-            #[keyMapping:getMappingIndex("textEntry", "nextCommand")] = function(isDown, isRepeat) if(isDown then cursorChanged(textView, nil, -1) end return true end,
-                
-            }
+            updateCursorPosition(markupView)
 
             keyChanged = function(isDown, keyCode, modCode, isRepeat)
             {
                 func = keyMap[keyCode]
                 if(func)
                 {
-                    func(isDown, keyCode, modCode, isRepeat)
+                    func(markupView, isDown, keyCode, modCode, isRepeat)
                 }
             }
 
             textEntry = function(text)
             {
+                currentEditingTextView = markupView.currentEditingTextView #we cannot use textView directly, it may be replaced
                 newText = text
-                if(textView.text)
+                if(currentEditingTextView.text)
                 {
-                    if(textView.cursorOffset < 0)
+                    if(markupView.cursorOffset < 0)
                     {
-                        textLength = string.length(textView.text)
+                        textLength = string.length(currentEditingTextView.text)
                         if(textLength > 0)
                         {
-                            insertAfterPos = math.max(textLength + textView.cursorOffset, 0)
-                            newText = stringInsert(textView.text, text, insertAfterPos)
+                            insertAfterPos = math.max(textLength + markupView.cursorOffset, 0)
+                            newText = stringInsert(currentEditingTextView.text, text, insertAfterPos)
                         }
                     }
                     else
                     {
-                        newText = textView.text + text
+                        newText = currentEditingTextView.text + text
                     }
                 }
-                updateText(markupView, textView, newText)
+                updateEditingText(markupView, newText)
             }
             
-            textView.textEntryListenerID = eventManager.setTextEntryListener(textEntry, keyChanged)
+            markupView.textEntryListenerID = eventManager.setTextEntryListener(textEntry, keyChanged)
 
-            if(textView.onStartedEditing)
+            if(markupView.onStartedEditing)
             {
-                textView.onStartedEditing()
+                markupView.onStartedEditing()
             }
         }
     }
@@ -685,7 +699,6 @@ addItemView = function(markupView, style, captureStartCharacterIndex)
         return nil
     }
 
-
     foundCache = getCacheIfMatch(parser.cacheItemIndex)
 
     xPos = parser.cacheRowWidthAccumulator
@@ -693,9 +706,9 @@ addItemView = function(markupView, style, captureStartCharacterIndex)
     if(foundCache)
     {
         parser.cacheItemIndex++
+
         textView = foundCache.textView
         textView.captureStartCharacterIndex = captureStartCharacterIndex
-
 
         if((foundCache.text != parser.foundText) or (wrapWidth != foundCache.wrapWidth))
         {
@@ -725,6 +738,15 @@ addItemView = function(markupView, style, captureStartCharacterIndex)
                 rowView.size = vec2(xPos + textView.size.x, 
                             math.max(textView.size.y, rowView.size.y))
 
+                if(markupView.currentEditingTextViewCaptureStartCharacterIndex)
+                {
+                    if(markupView.currentEditingTextViewCaptureStartCharacterIndex == textView.captureStartCharacterIndex)
+                    {
+                        markupView.currentEditingTextView = textView
+                        markupView.cursorView.layoutParent = textView
+                    }
+                }
+
                 addNextRowForWrapOverflow(markupView, style, addedTextLength)
                 return
             }
@@ -744,6 +766,16 @@ addItemView = function(markupView, style, captureStartCharacterIndex)
 
         rowView.size = vec2(xPos + textView.size.x, 
                             math.max(textView.size.y, rowView.size.y))
+
+
+        if(markupView.currentEditingTextViewCaptureStartCharacterIndex)
+        {
+            if(markupView.currentEditingTextViewCaptureStartCharacterIndex == textView.captureStartCharacterIndex)
+            {
+                markupView.currentEditingTextView = textView
+                markupView.cursorView.layoutParent = textView
+            }
+        }
 
         #print("found cache:", parser.foundText, " cacheRowWidthAccumulator:", parser.cacheRowWidthAccumulator)
         
@@ -778,6 +810,15 @@ addItemView = function(markupView, style, captureStartCharacterIndex)
         textView.styleTextEntryFunction = style.textEntry
     }
 
+    if(markupView.currentEditingTextViewCaptureStartCharacterIndex)
+    {
+        if(markupView.currentEditingTextViewCaptureStartCharacterIndex == textView.captureStartCharacterIndex)
+        {
+            markupView.currentEditingTextView = textView
+            markupView.cursorView.layoutParent = textView
+        }
+    }
+
     backgroundView.click = function(mouseLoc)
     {
         if(link)
@@ -796,7 +837,10 @@ addItemView = function(markupView, style, captureStartCharacterIndex)
 
     backgroundView.clickOutside = function()
     {
-        finishEditing(markupView, textView, false)
+        if(markupView.currentEditingTextView == textView)
+        {
+            finishEditing(markupView, false)
+        }
     }
 
     #xPos = rowView.size.x
@@ -1241,6 +1285,7 @@ reloadText = function(markupView)
 
     markupView.parser = parser
 
+    markupView.cursorView.layoutParent = markupView #bit of a hack, otherwise cursor may get removed when its parent text view is
 
     localLineFunc = function(line)
     {
@@ -1344,6 +1389,11 @@ create = function(parentView, viewLayout)
     markupView.reload = function()
     {
         reloadText(markupView)
+    }
+
+    markupView.update = function(dt)
+    {
+        updateCursorFunction(markupView, dt)
     }
 
     return markupView

@@ -1,3 +1,10 @@
+
+#
+#
+# WARNING this file textEntry.tui is going to be removed or replaced. Use a markup view and set a textEntry function on the style instead
+#
+#
+
 keys = require("app/common/keys.tui")
 
 standardColor = vec4(1.0,1.0,1.0,1.0)
