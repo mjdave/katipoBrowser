@@ -180,6 +180,61 @@ TuiTable* addKatipoTable(TuiTable* rootTableToAddTo)
     return katipoTableResult;
 }
 
+TuiTable* setupScene(SiteConnectionInfo& siteConnectionInfo, std::string siteSavePath)
+{
+    std::string siteScenePath = siteSavePath + "/scripts/scene.tui";
+    if(!Tui::fileExistsAtPath(siteScenePath))
+    {
+        siteScenePath = siteSavePath + "/scene.tui";
+        if(!Tui::fileExistsAtPath(siteScenePath))
+        {
+            siteScenePath = Katipo::getResourcePath("app/katipoBrowser/scripts/defaultSiteScene.tui");
+        }
+    }
+    
+    TuiTable* sceneTable = (TuiTable*)TuiRef::runScriptFile(siteScenePath, siteConnectionInfo.rootTable);
+    siteConnectionInfo.rootTable->setTable("scene", sceneTable);
+    sceneTable->release();
+    
+    TuiTable* viewTypes = nullptr;
+    if(sceneTable->hasKey("viewTypes"))
+    {
+        viewTypes = sceneTable->getTable("viewTypes");
+    }
+    else
+    {
+        viewTypes = new TuiTable();
+        sceneTable->setTable("viewTypes", viewTypes);
+        viewTypes->release();
+    }
+    
+    if(!viewTypes->hasKey("markup"))
+    {
+        TuiString* path = new TuiString("app/common/markupView.tui");
+        TuiRef* result = siteConnectionInfo.rootTable->getFunction("require")->call("loading index.tml->scene view required types", path);
+        viewTypes->set("markup", result);
+        path->release();
+    }
+    
+    if(!viewTypes->hasKey("scrollView"))
+    {
+        TuiString* path = new TuiString("app/common/scrollView.tui");
+        TuiRef* result = siteConnectionInfo.rootTable->getFunction("require")->call("loading index.tml->scene view required types", path);
+        viewTypes->set("scrollView", result);
+        path->release();
+    }
+    
+    if(!viewTypes->hasKey("button"))
+    {
+        TuiString* path = new TuiString("app/common/button.tui");
+        TuiRef* result = siteConnectionInfo.rootTable->getFunction("require")->call("loading index.tml->scene view required types", path);
+        viewTypes->set("button", result);
+        path->release();
+    }
+    
+    return sceneTable;
+}
+
 void KatipoBrowser::init()
 {
     
@@ -462,19 +517,8 @@ void KatipoBrowser::init()
             EventManager::getInstance()->currentHostID = hostID;
             EventManager::getInstance()->currentKatipoTable = siteConnectionInfo.katipoTable;
             
-            std::string siteScenePath = siteSavePath + "/scripts/scene.tui";
-            if(!Tui::fileExistsAtPath(siteScenePath))
-            {
-                siteScenePath = siteSavePath + "/scene.tui";
-                if(!Tui::fileExistsAtPath(siteScenePath))
-                {
-                    siteScenePath = Katipo::getResourcePath("app/katipoBrowser/scripts/defaultSiteScene.tui");
-                }
-            }
+            TuiTable* sceneTable = setupScene(siteConnectionInfo, siteSavePath);
             
-            TuiTable* sceneTable = (TuiTable*)TuiRef::runScriptFile(siteScenePath, siteConnectionInfo.rootTable);
-            siteConnectionInfo.rootTable->setTable("scene", sceneTable);
-            sceneTable->release();
             
             sceneTable->setFunction("getView", [this, hostID](TuiTable* args, TuiRef* existingResult, TuiFunctionCallData* incomingCallData, TuiDebugInfo* callingDebugInfo) -> TuiRef* {
                 if(args->arrayObjects.size() >= 1)
@@ -508,6 +552,7 @@ void KatipoBrowser::init()
                 }
             }
             
+            
             siteConnectionInfo.mainView = MJView::loadUnknownViewFromTable(sceneTable->getTable("mainView"), MainController::getInstance()->mainMJView->getSubViewWithID("siteContent"), true, siteConnectionInfo.rootTable);
             currentSiteView = siteConnectionInfo.mainView;
             currentSiteView->alpha = 0.0;
@@ -529,12 +574,12 @@ void KatipoBrowser::init()
                     }
                     else
                     {
-                        MJError("pageBody view type must implement setText:%s", siteScenePath.c_str());
+                        MJError("pageBody view type must implement setText:%s", siteMarkupPath.c_str());
                     }
                 }
                 else
                 {
-                    MJError("No pageBody found in scene file:%s", siteScenePath.c_str());
+                    MJError("No pageBody found in scene file:%s", siteMarkupPath.c_str());
                 }
             }
             

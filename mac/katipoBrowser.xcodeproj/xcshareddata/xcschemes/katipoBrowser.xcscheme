@@ -16,8 +16,8 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "5BFDBD002CC78B1E00247D8D"
-               BuildableName = "Katipo.app"
-               BlueprintName = "Katipo"
+               BuildableName = "Koru.app"
+               BlueprintName = "Koru"
                ReferencedContainer = "container:katipoBrowser.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
@@ -45,8 +45,8 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "5BFDBD002CC78B1E00247D8D"
-            BuildableName = "Katipo.app"
-            BlueprintName = "Katipo"
+            BuildableName = "Koru.app"
+            BlueprintName = "Koru"
             ReferencedContainer = "container:katipoBrowser.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
@@ -69,8 +69,8 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "5BFDBD002CC78B1E00247D8D"
-            BuildableName = "Katipo.app"
-            BlueprintName = "Katipo"
+            BuildableName = "Koru.app"
+            BlueprintName = "Koru"
             ReferencedContainer = "container:katipoBrowser.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>

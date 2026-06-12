@@ -1,5 +1,5 @@
-# Katipo Browser
-![Katipo browser for iOS icon](https://github.com/mjdave/katipoBrowser/blob/main/katipoBrowser-iOS-256.png)
+# Koru Browser
+![Koru browser icon](https://github.com/mjdave/katipoBrowser/blob/main/katipoBrowser-iOS-256.png)
 
 Katipo is a minimal internet alternative. A free and open platform that lives entirely outside of the existing HTML/CSS/JS based web.
 
