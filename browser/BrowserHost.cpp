@@ -1,3 +1,11 @@
+
+#ifdef _MSC_VER
+#define _WINSOCKAPI_    // stops windows.h including winsock.h
+#include <windows.h>
+#include <direct.h>
+#include <cstdint>
+#endif
+
 #include "BrowserHost.h"
 #include "Timer.h"
 #include "MJVersion.h"

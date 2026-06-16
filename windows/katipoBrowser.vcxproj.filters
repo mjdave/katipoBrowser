@@ -195,6 +195,15 @@
     <ClCompile Include="..\browser\MJAudioSDLMixer.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="..\browser\BrowserHost.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\browser\BrowserTracker.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\katipo\core\Tracker.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\browser\Camera.h">
@@ -396,6 +405,15 @@
       <Filter>Source Files</Filter>
     </ClInclude>
     <ClInclude Include="..\browser\WindowInfo.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\browser\BrowserTracker.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\browser\BrowserHost.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\katipo\core\Tracker.h">
       <Filter>Source Files</Filter>
     </ClInclude>
   </ItemGroup>
