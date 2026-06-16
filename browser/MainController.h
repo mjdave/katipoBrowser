@@ -61,7 +61,7 @@ public:
     MainController();
     ~MainController();
     
-    void init(TuiTable* rootTable, Database* appDatabase_, std::string windowTitle = "Katipo", std::string organizationName = "katipo", std::string appTitle = "katipo");
+    void init(TuiTable* rootTable, Database* appDatabase_, std::string windowTitle = "Koru", std::string organizationName = "katipobrowser", std::string appTitle = "Koru");
     
     void applicationWillTerminate();
 

@@ -296,7 +296,7 @@ void KatipoBrowser::init()
     //rootTable->setVec2("screenSize", dvec2(MainController::getInstance()->windowInfo->screenWidth, MainController::getInstance()->windowInfo->screenHeight));
     
     
-    MainController::getInstance()->init(rootTable, appDatabase, "Katipo");
+    MainController::getInstance()->init(rootTable, appDatabase, "Koru");
     
     
     EventManager::getInstance()->bindTui(rootTable);

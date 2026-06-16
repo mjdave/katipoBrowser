@@ -235,7 +235,7 @@ XCOPY "$(SolutionDir)thirdPartyWindows\SDL3-3.4.0\lib\x64\*.dll" "$(TargetDir)" 
     <ResourceCompile Include="katipoBrowser.rc" />
   </ItemGroup>
   <ItemGroup>
-    <Image Include="katipoBrowser-iOS-256.ico" />
+    <Image Include="koru.ico" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

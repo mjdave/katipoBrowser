@@ -104,7 +104,7 @@ mainView = {
                 {
                     id = "urlTextEntry"
                     type = "textEntry"
-                    fontSize = 14
+                    fontSize = 16
                     onParentSizeChanged = function(parentSize)
                     {
                         return vec2(parentSize.x, urlTextEntryHeight)
