@@ -2,6 +2,8 @@
 *.tlog
 windows/katipoBrowser/x64
 windows/x64
+waraki/windows/x64
+waraki/windows/waraki/x64
 xcuserdata
 .DS_Store
 linux/bin

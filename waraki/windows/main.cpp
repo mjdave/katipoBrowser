@@ -1,4 +1,11 @@
 
+#ifdef _MSC_VER
+#define _WINSOCKAPI_    // stops windows.h including winsock.h
+#define NOMINMAX
+#include <windows.h>
+#endif
+
+
 #define SDL_MAIN_USE_CALLBACKS 1 
 #include <SDL3/SDL.h>
 #include <SDL3/SDL_main.h>

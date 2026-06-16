@@ -31,9 +31,9 @@
     <WholeProgramOptimization>true</WholeProgramOptimization>
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
-<PropertyGroup>
+  <PropertyGroup>
     <DisableFastUpToDateCheck>True</DisableFastUpToDateCheck>
-</PropertyGroup>
+  </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
   <ImportGroup Label="ExtensionSettings">
   </ImportGroup>
