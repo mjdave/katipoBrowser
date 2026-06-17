@@ -65,7 +65,8 @@ loadClientSite = function(siteData, hostID, url)
     siteSavePath = getClientSitePath(hostID)
     file.mkdir(siteSavePath)
 
-    checksums = database.get("checksums")
+    checksumKey = "checksums_" + hostID
+    checksums = database.get(checksumKey)
     if(!checksums)
     {
         checksums = {}
@@ -81,7 +82,7 @@ loadClientSite = function(siteData, hostID, url)
     #print("got publicData:", publicData)
     katipo.loadSite(hostID, siteSavePath, publicData, untrustedSiteCodePermissionFunction, false)
 
-    database.set("checksums", checksums)
+    database.set(checksumKey, checksums)
 }
 
 getCallback = function(result, hostID, url)
@@ -145,7 +146,8 @@ scanCallback = function(status, result)
             clickFunction = function()
             {
                 katipo.connectToScanResult(ip)
-                katipo.get(ip + "/waraki", database.get("checksums"), getCallback)
+                checksumKey = "checksums_" + hostID
+                katipo.get(ip + "/waraki", database.get(checksumKey), getCallback)
                 connectPage.fadeOut()
             }
 

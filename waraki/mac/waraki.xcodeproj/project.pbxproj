@@ -496,7 +496,7 @@
 				);
 				MACOSX_DEPLOYMENT_TARGET = 11.5;
 				MARKETING_VERSION = 0.3.0.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.katipobrowser;
+				PRODUCT_BUNDLE_IDENTIFIER = nz.ktp.waraki;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				USER_HEADER_SEARCH_PATHS = (
@@ -543,7 +543,7 @@
 				INFOPLIST_KEY_CFBundleDisplayName = Waraki;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.utilities";
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";
-				INFOPLIST_KEY_NSLocalNetworkUsageDescription = "Waraki uses the local network to find and connect to local katipo hosts";
+				INFOPLIST_KEY_NSLocalNetworkUsageDescription = "Waraki uses the local network to find and connect to local waraki hosts";
 				INFOPLIST_KEY_NSMainStoryboardFile = Main;
 				INFOPLIST_KEY_NSPrincipalClass = NSApplication;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -558,7 +558,7 @@
 				);
 				MACOSX_DEPLOYMENT_TARGET = 11.5;
 				MARKETING_VERSION = 0.3.0.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.katipobrowser;
+				PRODUCT_BUNDLE_IDENTIFIER = nz.ktp.waraki;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				USER_HEADER_SEARCH_PATHS = (

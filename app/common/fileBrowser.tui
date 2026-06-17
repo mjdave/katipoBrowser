@@ -5,11 +5,6 @@ headerBackButtonSize = vec2(30,30)
 
 leftPaneLayout = {
     type = "view"
-    alignmentX = "left"
-    onParentSizeChanged = function(parentSize)
-    {
-        return vec2(parentSize.x / 2, parentSize.y)
-    }
     subviews = {
         {
             id = "headerLeft"
@@ -37,7 +32,7 @@ leftPaneLayout = {
                     text = "Directory"
                     font = "roboto"
                     additiveBlend = true
-                    fontSize = 14
+                    fontSize = 18
                 }
             }
         }
@@ -53,66 +48,6 @@ leftPaneLayout = {
     }
 }
 
-rightPaneLayout = {
-    type = "view"
-    alignmentX = "right"
-    onParentSizeChanged = function(parentSize)
-    {
-        return vec2(parentSize.x / 2, parentSize.y)
-    }
-
-    subviews = {
-        {
-            id = "headerRight"
-            type = "color"
-            color = vec4(0.0,0.2,0.3,0.2)
-            onParentSizeChanged = function(parentSize)
-            {
-                return vec2(parentSize.x, headerHeight)
-            }
-            alignmentY = "top"
-            subviews = {
-                {
-                    id = "headerTitleRight"
-                    type = "text"
-                    text = "File"
-                    font = "roboto"
-                    additiveBlend = true
-                    fontSize = 14
-                }
-            }
-        }
-        {
-            type = "scrollView"
-            id = "scrollView"
-            alignmentY = "bottom"
-            onParentSizeChanged = function(parentSize)
-            {
-                return vec2(parentSize.x, parentSize.y - headerHeight)
-            }
-        }
-    }
-}
-
-leftPanelVerticalLayout = {
-    type = "view"
-    alignmentY = "top"
-    onParentSizeChanged = function(parentSize)
-    {
-        return vec2(parentSize.x, parentSize.y / 2)
-    }
-    subviews = leftPaneLayout.subviews
-}
-
-rightPanelVerticalLayout = {
-    type = "view"
-    alignmentY = "bottom"
-    onParentSizeChanged = function(parentSize)
-    {
-        return vec2(parentSize.x, parentSize.y / 2)
-    }
-    subviews = rightPaneLayout.subviews
-}
 
 fileItemLayout = {
     id = "fileItem"
@@ -138,7 +73,7 @@ fileItemLayout = {
             alignmentX = "left"
             additiveBlend = true
             pos = vec3(10,0,0)
-            fontSize = 14
+            fontSize = 16
         }
     }
 }
@@ -164,7 +99,7 @@ dirItemLayout = {
             type = "text"
             text = "Title"
             font = "roboto"
-            fontSize = 14
+            fontSize = 16
             alignmentX = "left"
             additiveBlend = true
             pos = vec3(10,0,0)
@@ -203,12 +138,6 @@ setDirectoryTree = function(fileBrowserView, directoryTree, selectedIndex, isFro
     }
 
     leftLayoutToUse = leftPaneLayout
-    if(fileBrowserView.parentSize.y > fileBrowserView.parentSize.x)
-    {
-        print("using vertical layout")
-        leftLayoutToUse = leftPanelVerticalLayout
-    }
-
     leftPaneView = fileBrowserView.addView(leftLayoutToUse)
     fileBrowserView.leftPaneView = leftPaneView
 
@@ -254,114 +183,30 @@ setDirectoryTree = function(fileBrowserView, directoryTree, selectedIndex, isFro
 
     leftPaneScrollView = leftPaneView.getView("scrollView")
 
-    #print("directoryTree:", directoryTree)
 
-    updateRightPanel = function(subTree)
-    {
-        if(fileBrowserView.rightPaneView)
-        {
-            fileBrowserView.removeView(fileBrowserView.rightPaneView)
-            fileBrowserView.rightPaneView = nil
-        }
-
-        fileBrowserView.rightItemViews = {}
-
-        rightLayoutToUse = rightPaneLayout
-        if(fileBrowserView.parentSize.y > fileBrowserView.parentSize.x)
-        {
-            rightLayoutToUse = rightPanelVerticalLayout
-        }
-
-        rightPaneView = fileBrowserView.addView(rightLayoutToUse)
-        fileBrowserView.rightPaneView = rightPaneView
-
-        fileBrowserView.headerTitleRight = rightPaneView.getView("headerTitleRight")
-        if(!subTree)
-        {
-            fileBrowserView.headerTitleRight.text = ""
-        }
-        else
-        {
-            fileBrowserView.headerTitleRight.text = subTree.fileName
-
-            if(subTree.files)
-            {
-                sortedFiles = {}
-                for(i,file in subTree.files)
-                {
-                    table.insert(sortedFiles, file)
-                }
-                table.sort(sortedFiles, compareFunction)
-
-                rightPaneScrollView = rightPaneView.getView("scrollView")
-
-                for(i,file in sortedFiles)
-                {
-                    itemLayout = dirItemLayout
-                    if(file.localPath)
-                    {
-                        itemLayout = fileItemLayout
-                    }
-                    itemView = rightPaneScrollView.addView(itemLayout)
-                    itemView.fileInfo = file
-
-                    titleTextView = itemView.getView("fileItemTitle")
-                    titleTextView.text = file.fileName
-
-                    backgroundView = itemView.getView("fileItemBackground")
-                    if(i % 2 == 0)
-                    {
-                        backgroundView.color.w = 0.5
-                    }
-                    backgroundView.baseColor = backgroundView.color
-
-                    backgroundView.click = function() #right panel click
-                    {
-                        if(file.files)
-                        {
-                            tuiBug = { #definite tui bug here, couldn't pass this directly as function arg
-                                selectedIndex = fileBrowserView.leftSelectedIndex
-                                tree = subTree
-                            }
-                            
-                            table.insert(fileBrowserView.currentDirectoryStack, tuiBug)
-                            setDirectoryTree(fileBrowserView, subTree, i, true)
-                        }
-                    }
-
-                    table.insert(fileBrowserView.rightItemViews, itemView)
-
-                    if(onBrowserItemCreate)
-                    {
-                        onBrowserItemCreate(itemView, i)
-                    }
-                }
-            }
-        }
-    }
 
     if(directoryTree.files)
     {
         fileBrowserView.leftItemViews = {}
 
         sortedFiles = {}
-        for(i,file in directoryTree.files)
+        for(i,thisFile in directoryTree.files)
         {
-            table.insert(sortedFiles, file)
+            table.insert(sortedFiles, thisFile)
         }
         table.sort(sortedFiles, compareFunction)
 
-        for(i,file in sortedFiles)
+        for(i,thisFile in sortedFiles)
         {
             itemLayout = dirItemLayout
-            if(file.localPath)
+            if(thisFile.localPath)
             {
                 itemLayout = fileItemLayout
             }
             itemView = leftPaneScrollView.addView(itemLayout)
-            itemView.fileInfo = file
+            itemView.fileInfo = thisFile
             titleTextView = itemView.getView("fileItemTitle")
-            titleTextView.text = file.fileName
+            titleTextView.text = thisFile.fileName
 
             backgroundView = itemView.getView("fileItemBackground")
             if(i % 2 == 0)
@@ -370,22 +215,35 @@ setDirectoryTree = function(fileBrowserView, directoryTree, selectedIndex, isFro
             }
             backgroundView.baseColor = backgroundView.color
 
-            if(!file.localPath)
+            if(!thisFile.localPath)
             {
                 backgroundView.click = function() #left panel click
                 {
-                    if(fileBrowserView.leftSelectedIndex)
+
+                    if(thisFile.files)
                     {
-                        if(table.count(fileBrowserView.leftItemViews) > fileBrowserView.leftSelectedIndex)
-                        {
-                            previousItemView = fileBrowserView.leftItemViews[fileBrowserView.leftSelectedIndex]
-                            previousBackgroundView = previousItemView.getView("fileItemBackground")
-                            previousBackgroundView.setSelected(false)
+                        tuiBug = { #definite tui bug here, couldn't pass this directly as function arg
+                            selectedIndex = fileBrowserView.leftSelectedIndex
+                            tree = thisFile
                         }
+                        
+                        table.insert(fileBrowserView.currentDirectoryStack, tuiBug)
+                        setDirectoryTree(fileBrowserView, thisFile, i, true)
                     }
-                    backgroundView.setSelected(true)
-                    fileBrowserView.leftSelectedIndex = i
-                    updateRightPanel(file)
+                    else 
+                    {
+                        #if(fileBrowserView.leftSelectedIndex)
+                        #{
+                        #    if(table.count(fileBrowserView.leftItemViews) > fileBrowserView.leftSelectedIndex)
+                        #    {
+                        #        previousItemView = fileBrowserView.leftItemViews[fileBrowserView.leftSelectedIndex]
+                        #        previousBackgroundView = previousItemView.getView("fileItemBackground")
+                        #        previousBackgroundView.setSelected(false)
+                        #    }
+                        #}
+                        backgroundView.setSelected(true)
+                        fileBrowserView.leftSelectedIndex = i
+                    }
 
                     if(onBrowserContentChange)
                     {
@@ -408,14 +266,14 @@ setDirectoryTree = function(fileBrowserView, directoryTree, selectedIndex, isFro
             }
         }
 
-        if(fileBrowserView.leftSelectedIndex != nil)
-        {
-            updateRightPanel(sortedFiles[fileBrowserView.leftSelectedIndex])
-        }
-        else
-        {
-            updateRightPanel()
-        }
+        #if(fileBrowserView.leftSelectedIndex != nil)
+        ##{
+        #    updateRightPanel(sortedFiles[fileBrowserView.leftSelectedIndex])
+        #}
+        #else
+        #{
+        #    updateRightPanel()
+        #}
     }
 
 }
