@@ -903,7 +903,7 @@ void MJView::preRender(GCommandBuffer* commandBuffer, MJRenderPass renderPass, i
 	if(!isWorldView && mouseHoverDirty)
 	{
         //MJLog("hover dirty:%.2f", lastMouseMovedWindowRayStart.x);
-		mouseMoved3D(MainController::getInstance()->getPointerRayStartUISpace(), MainController::getInstance()->getPointerRayDirectionUISpace(), false, true);
+		mouseMoved3D(MainController::getInstance()->getPointerRayStartUISpace(), MainController::getInstance()->getPointerRayDirectionUISpace(), true);
 		mouseHoverDirty = false;
 	}
 
@@ -1132,7 +1132,7 @@ bool MJView::getIntersection(dvec3 rayStart, dvec3 rayDirection, double* distanc
 	return inside;
 }
 
-bool MJView::mouseMoved3D(dvec3 windowRayStart, dvec3 windowRayDirection, bool obstructed, bool triggeredByUIMovement)
+bool MJView::mouseMoved3D(dvec3 windowRayStart, dvec3 windowRayDirection, bool triggeredByUIMovement)
 {
 	if(hidden || invalidated)
 	{
@@ -1168,7 +1168,7 @@ bool MJView::mouseMoved3D(dvec3 windowRayStart, dvec3 windowRayDirection, bool o
 		//dvec2 localSize = getSize() * renderScale;
 		//MJLog("localMouseLoc: %.4f,%.4f : \tmax:%.4f,%.4f", localMouseLoc.x, localMouseLoc.y, localSize.x, localSize.y);
 
-		if(containsPointInView && !obstructed)
+		if(containsPointInView)
 		{
 			if(!mouseInside)
 			{
@@ -1254,7 +1254,7 @@ bool MJView::mouseMoved3D(dvec3 windowRayStart, dvec3 windowRayDirection, bool o
 	for(int i = ((int)subviewsCopy.size()) - 1; i >=0; i--)
 	{
 		MJView* subView = subviewsCopy[i];
-		bool insideSubview = subView->mouseMoved3D(windowRayStart, windowRayDirection, obstructed || insideAnySubview, triggeredByUIMovement);
+		bool insideSubview = subView->mouseMoved3D(windowRayStart, windowRayDirection, triggeredByUIMovement);
 
 		if(invalidated)
 		{
@@ -1262,23 +1262,22 @@ bool MJView::mouseMoved3D(dvec3 windowRayStart, dvec3 windowRayDirection, bool o
 		}
 
 		inside = inside || insideSubview;
-		insideAnySubview = insideAnySubview || insideSubview;
 	}
 
 	return inside;
 }
 
-bool MJView::mouseMoved(dvec2 mousePos, bool obstructed)
+bool MJView::mouseMoved(dvec2 mousePos)
 {
     if(hidden || invalidated)
     {
         return false;
     }
     
-	return mouseMoved3D(dvec3(mousePos.x, mousePos.y, 100.0), dvec3(0.0,0.0,-1.0), obstructed, false);
+	return mouseMoved3D(dvec3(mousePos.x, mousePos.y, 100.0), dvec3(0.0,0.0,-1.0), false);
 }
 
-bool MJView::mouseDown3D(dvec3 windowRayStart, dvec3 windowRayDirection, bool obstructed, int buttonIndex)
+bool MJView::mouseDown3D(dvec3 windowRayStart, dvec3 windowRayDirection, int buttonIndex)
 {
 	if(hidden || invalidated)
 	{
@@ -1294,7 +1293,7 @@ bool MJView::mouseDown3D(dvec3 windowRayStart, dvec3 windowRayDirection, bool ob
 	mouseDownLocalPoint = localPoint;
 	dragDistanceAboveClickOutsideThreshold = false;
 
-	if(containsPointInView && !obstructed)
+	if(containsPointInView)
 	{
 		mouseDownWasInside[buttonIndex] = true;
 		sendClickEventOnMouseUpInside[buttonIndex] = true;
@@ -1332,7 +1331,7 @@ bool MJView::mouseDown3D(dvec3 windowRayStart, dvec3 windowRayDirection, bool ob
 	{
 		MJView* subView = subviewsCopy[i];
 		//bool insideSubview = subView->mouseDown3D(windowRayStart, windowRayDirection, obstructed || insideAnySubview, buttonIndex);
-        bool insideSubview = subView->mouseDown3D(windowRayStart, windowRayDirection, false, buttonIndex); //todo obstructed is buggy, this needs reworking for 3D, disabled is fine for 2D.
+        bool insideSubview = subView->mouseDown3D(windowRayStart, windowRayDirection, buttonIndex); //todo obstructed is buggy, this needs reworking for 3D, disabled is fine for 2D.
 
 		if(invalidated)
 		{
@@ -1425,14 +1424,14 @@ bool MJView::mouseWheel3D(dvec3 windowRayStart, dvec3 windowRayDirection, dvec2 
 	return inside;
 }
 
-bool MJView::mouseDown(dvec2 mousePos, int buttonIndex, bool obstructed)
+bool MJView::mouseDown(dvec2 mousePos, int buttonIndex)
 {
     if(hidden || invalidated)
     {
         return false;
     }
     
-    return mouseDown3D(dvec3(mousePos.x, mousePos.y, 100.0), dvec3(0.0,0.0,-1.0), obstructed, buttonIndex);
+    return mouseDown3D(dvec3(mousePos.x, mousePos.y, 100.0), dvec3(0.0,0.0,-1.0), buttonIndex);
 }
 
 bool MJView::visibleUIContainsPointIncludingSubViews3D(dvec3 windowRayStart, dvec3 windowRayDirection)

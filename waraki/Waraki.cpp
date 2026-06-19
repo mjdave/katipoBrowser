@@ -62,6 +62,8 @@ void Waraki::doGet(const std::string& trackerKey,
     TuiString* remoteURLStringForArg = new TuiString(remoteURL);
     remoteFuncCallArgs->arrayObjects.push_back(remoteURLStringForArg); //push_back, not retained, no need to release
     
+    TuiFunction* progressCallbackFunction = nullptr;
+    
     if(args)
     {
         for(int i = 1; i < args->arrayObjects.size(); i++)
@@ -72,6 +74,12 @@ void Waraki::doGet(const std::string& trackerKey,
                 arg->retain();
                 remoteFuncCallArgs->arrayObjects.push_back(arg);
             }
+        }
+        
+        if(args->arrayObjects.size() > 1 && args->arrayObjects[args->arrayObjects.size() - 2]->type() == Tui_ref_type_FUNCTION)
+        {
+            progressCallbackFunction = ((TuiFunction*)args->arrayObjects[args->arrayObjects.size() - 2]);
+            progressCallbackFunction->retain();
         }
     }
     
@@ -102,6 +110,12 @@ void Waraki::doGet(const std::string& trackerKey,
         }
         return TUI_NIL;
     });
+    
+    if(progressCallbackFunction)
+    {
+        remoteFuncCallArgs->push(progressCallbackFunction);
+        progressCallbackFunction->release();
+    }
     
     remoteFuncCallArgs->push(callHostFunctionCallbackFunction);
     callHostFunctionCallbackFunction->release();

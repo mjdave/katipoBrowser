@@ -1,7 +1,7 @@
 keys = require("app/common/keys.tui")
 
-topPaddingDefault = 20
-leftPaddingDefault = 20 #we don't support bottom or right padding yet
+topPaddingDefault = 10
+leftPaddingDefault = 10 #we don't support bottom or right padding yet
 minLineHeight = 20
 
 
@@ -110,8 +110,8 @@ finishEditing = function(markupView, confirmChanges)
         return
     }
 
-    print("finish editing:", textView.text)
-    debug.backtrace()
+    #print("finish editing:", textView.text)
+    #debug.backtrace()
     markupView.currentEditingTextView = nil
     markupView.currentEditingTextViewCaptureStartCharacterIndex = nil
 
@@ -1103,12 +1103,13 @@ charFunc = function(markupView, charText, charIndex)
     }
     else if(charText == "]")
     {
-        finishCurrentText(markupView) hmm
+        finishCurrentText(markupView)
 
         parser.captureClosedAwaitingParenthesis = true
     }
     else
     {
+        addChar = false
         if(charText == "*")
         {
             if(parser.italic or parser.bold)
@@ -1161,11 +1162,11 @@ charFunc = function(markupView, charText, charIndex)
                 if(charText != " ")
                 {
                     parser.onlyFoundSpace = false
-                    parser.foundText += charText
+                    addChar = true
                 }
                 else if(!parser.skipLeadingSpace)
                 {
-                    parser.foundText += charText
+                    addChar = true
                 }
 
             }
@@ -1193,6 +1194,11 @@ charFunc = function(markupView, charText, charIndex)
                 parser.backtickCount = 0
             }
 
+            addChar = true
+        }
+
+        if(addChar)
+        {
             if(parser.currentCapture)
             {
                 if(!parser.currentCapture.currentText)
@@ -1325,6 +1331,7 @@ create = function(parentView, viewLayout)
 
     scrollViewLayout = {
         size = viewLayout.size
+        variableHeight = viewLayout.variableHeight
     }
     scrollViewLayout.type = "scrollView"
 
@@ -1371,6 +1378,16 @@ create = function(parentView, viewLayout)
     markupView.setText = function(newText)
     {
         markupView.currentMarkupText = newText
+        reloadText(markupView)
+    }
+
+    markupView.setTextWithStyleID = function(newText, styleID)
+    {
+        if(!styleID)
+        {
+            error("markupView.setTextWithStyleID expected styleID")
+        }
+        markupView.currentMarkupText = "[" + newText + "]('" + styleID + "')"
         reloadText(markupView)
     }
 

@@ -409,12 +409,12 @@ dvec3 MainController::getPointerRayDirectionUISpace()
 
 bool MainController::mouseDown(dvec2 mousePos, int buttonIndex, int modKey)
 {
-	return mainMJView->mouseDown3D(getPointerRayStartUISpace(), getPointerRayDirectionUISpace(), false, buttonIndex);
+	return mainMJView->mouseDown3D(getPointerRayStartUISpace(), getPointerRayDirectionUISpace(), buttonIndex);
 }
 
 bool MainController::mouseMoved()
 {
-	return mainMJView->mouseMoved3D(getPointerRayStartUISpace(), getPointerRayDirectionUISpace(), false, false);
+	return mainMJView->mouseMoved3D(getPointerRayStartUISpace(), getPointerRayDirectionUISpace(), false);
 }
 
 bool MainController::mouseUp(dvec2 mousePos, int buttonIndex, int modKey)
