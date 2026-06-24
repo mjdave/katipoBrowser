@@ -9,62 +9,6 @@ keys = require("app/common/keys.tui")
 
 setText = false
 
-finishEditing = function(textEntryView, confirmChanges)
-{
-    if(textEntryView.editing)
-    {
-        textEntryView.keyChanged = nil
-        textEntryView.editing = false
-        textEntryView.backgroundView.update = nil
-        textEntryView.cursorView.hidden = true
-        updateVisuals(textEntryView)
-        eventManager.removeTextEntryListener(textEntryView.textEntryListenerID)
-        textEntryView.textEntryListenerID = nil
-
-        if(!textEntryView.onFinishedEditing) #todo remove this, only for 0.3->0.2 backwards compatibility
-        {
-            textEntryView.onFinishedEditing = textEntryView.onChange
-        }
-
-        if((!textEntryView.text) or string.length(textEntryView.text) == 0)
-        {
-            if(textEntryView.allowsEmpty)
-            {
-                if(textEntryView.onFinishedEditing)
-                {
-                    textEntryView.onFinishedEditing("", confirmChanges)
-                }
-            }
-            else
-            {
-                setText(textEntryView, textEntryView.editStartTextValue)
-                if(textEntryView.onFinishedEditing)
-                {
-                    textEntryView.onFinishedEditing(textEntryView.editStartTextValue, false)
-                }
-            }
-        }
-        else
-        {
-            if(!confirmChanges and textEntryView.requireEnterToConfirm) #requireEnterToConfirm means we should revert if !confirmChanges
-            {
-                setText(textEntryView, textEntryView.editStartTextValue)
-                if(textEntryView.onFinishedEditing)
-                {
-                    textEntryView.onFinishedEditing(textEntryView.text, false)
-                }
-            }
-            else
-            {
-                if(textEntryView.onFinishedEditing)
-                {
-                    textEntryView.onFinishedEditing(textEntryView.text, confirmChanges)
-                }
-            }
-        }
-    }
-}
-
 getViewLayout = function(viewLayout)
 {
     buttonViewLayout = {}
@@ -73,15 +17,7 @@ getViewLayout = function(viewLayout)
         buttonViewLayout[k] = v
     }
 
-    buttonViewLayout.type = "color"
-    if(!buttonViewLayout.color)
-    {
-        buttonViewLayout.color = buttonViewLayout.backgroundColor
-    }
-    if(!buttonViewLayout.color)
-    {
-        buttonViewLayout.type = "view"
-    }
+    buttonViewLayout.type = "view"
     
     return buttonViewLayout
 }
@@ -95,9 +31,15 @@ create = function(parentView, viewLayout)
         font = viewLayout.font
         variableHeight = true
         fontSize = viewLayout.fontSize
-        horizontalAlignment = viewLayout.horizontalAlignment
+        alignmentX = viewLayout.alignmentX
         verticalAlignment = viewLayout.verticalAlignment
         #pos = vec3(xOffset,yOffset,0)
+    }
+
+    textEntryView.minWidth = viewLayout.minWidth
+    if(!textEntryView.minWidth)
+    {
+        textEntryView.minWidth = 20
     }
 
     entryMarkupView = textEntryView.addView(markupViewLayout)
@@ -115,17 +57,47 @@ create = function(parentView, viewLayout)
         }
     }
 
+    textEntryView.setOnStartedEditing = function(func)
+    {
+        textEntryView.textEntryMarkupView.onStartedEditing = func
+    }
+
+    textEntryView.setOnFinishedEditing = function(func)
+    {
+        textEntryView.onFinishedEditing = func
+    }
+
+    textEntryView.setOnTextChanged = function(func)
+    {
+        textEntryView.onTextChanged = func
+    }
+
+    entryMarkupView.styles = {
+        textEntryStyle = {
+            backgroundColor = viewLayout.backgroundColor
+            textEntry = function(text, confirmChanges)
+            {
+                if(textEntryView.onFinishedEditing)
+                {
+                    textEntryView.onFinishedEditing(text, confirmChanges)
+                }
+            }
+            onTextChanged = function(text)
+            {
+                if(textEntryView.onTextChanged)
+                {
+                    textEntryView.onTextChanged(text)
+                }
+            }
+        }
+    }
+
     return textEntryView
 }
 
 setAllowsEmpty = function(textEntryView, allowsEmpty) #todo pass this on to markup view
 { #defaults to not allowing empty strings
     #textEntryView.allowsEmpty = allowsEmpty
-}
-
-setChangedContinuousCallback = function(textEntryView, callbackFunc) #todo
-{
-    textEntryView.textEntryChangedContinuousFunction = callbackFunc #todo
 }
 
 setText = function(textEntryView, text_)

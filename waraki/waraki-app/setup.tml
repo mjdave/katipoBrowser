@@ -2,7 +2,7 @@
 
 Please select where your music files are stored on your device. Waraki will search this directory and all sub-directories for any mp3, m4a, ogg, or flac files.
 
-[Files](id = "musicDirFileBrowser")
+[Files->](id = "musicDirFileBrowser")
 
 
-[cancel](id="cancelButton")            [ok](id="okButton")
+[<-Cancel](id="cancelButton")            [OK->](id="okButton")

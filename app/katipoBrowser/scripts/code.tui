@@ -530,7 +530,7 @@ loadBookmarks = function()
 }
 
 
-urlTextEntry.onStartedEditing = function()
+onStartedEditing = function()
 {
     setHostTabSelected(false)
     loadBookmarks()
@@ -540,8 +540,9 @@ urlTextEntry.onStartedEditing = function()
 
     urlTextEntry.setText(currentURLFullLink)
 }
+urlTextEntry.setOnStartedEditing(onStartedEditing)
 
-urlTextEntry.onFinishedEditing = function(textValue, changesMade)
+urlTextFinishedEditing = function(textValue, changesMade)
 {
     if(!changesMade and hostTabSelected)
     {
@@ -560,6 +561,7 @@ urlTextEntry.onFinishedEditing = function(textValue, changesMade)
         fadeSiteContent(true)
     }
 }
+urlTextEntry.setOnFinishedEditing(urlTextFinishedEditing)
 
 katipo.onLinkClick = function(linkString)
 {

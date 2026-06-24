@@ -110,7 +110,8 @@ mainView = {
                         return vec2(parentSize.x, urlTextEntryHeight)
                     }
                     alignmentY = "bottom"
-                    pos = vec3(0,10,0)
+                    pos = vec3(5,5,0)
+                    backgroundColor = vec4(0.0,0.0,0.05,1.0)
                 }
             }
         }

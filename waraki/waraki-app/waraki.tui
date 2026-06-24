@@ -141,7 +141,7 @@ scanCallback = function(status, result)
         for(i, ip in scanFoundResults)
         {
             buttonID = "connectButton" + i
-            thisMarkup += ip + "    [connect](id='" + buttonID + "')\n\n"
+            thisMarkup += ip + "    [Connect->](id='" + buttonID + "')\n\n"
 
             clickFunction = function()
             {

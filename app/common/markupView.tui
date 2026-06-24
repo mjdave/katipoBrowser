@@ -13,6 +13,7 @@ fontSize = 16
 headerFontSize = 26
 
 linkColor = vec4(0.5,0.8,1.0,1.0)
+#textEntryColor = vec4(0.5,1.0,0.8,1.0)
 onLinkClick = false
 reloadText = false
 
@@ -74,18 +75,58 @@ getViewLayout = function(incomingLayout)
 
 updateEditingText = function(markupView, newText)
 {
+    print("updateEditingText:", newText)
     textView = markupView.currentEditingTextView
     if(!textView)
     {
+        print("not textView")
         return
     }
 
-    if(textView.captureStartCharacterIndex)
+    captureStartCharacterIndex = textView.captureStartCharacterIndex
+    if(!captureStartCharacterIndex)
     {
-        beforeText = string.subString(markupView.currentMarkupText, 0, textView.captureStartCharacterIndex + 1)
-        afterText = string.subString(markupView.currentMarkupText, textView.captureStartCharacterIndex + 1 + string.length(textView.text))
-        markupView.currentMarkupText = beforeText + newText + afterText
-        reloadText(markupView)
+        print("no captureStartCharacterIndex")
+        captureStartCharacterIndex = 0
+    }
+
+    beforeText = ""
+    if(captureStartCharacterIndex > 0)
+    {
+        beforeText = string.subString(markupView.currentMarkupText, 0, captureStartCharacterIndex + 1)
+    }
+
+    afterTextStartCharIndex = captureStartCharacterIndex + 1 + string.length(textView.text)
+    #previousLength = 
+    #print("prev text:", textView.text, " length:", previousLength)
+    #if(previousLength > 0)
+    #{
+        #afterTextStartCharIndex += previousLength
+    #}
+    #else
+    #{
+        #afterTextStartCharIndex-- #a curiosity
+    #}
+    
+
+    afterText = ""
+    if(afterTextStartCharIndex < string.length(markupView.currentMarkupText))
+    {
+        afterText = string.subString(markupView.currentMarkupText, afterTextStartCharIndex)
+    }
+
+    print("captureStartCharacterIndex:", textView.captureStartCharacterIndex)
+    print("beforeText:", beforeText)
+    print("newText:", newText)
+    print("afterText:", afterText)
+    
+    markupView.currentMarkupText = beforeText + newText + afterText
+    print("complete new text:", markupView.currentMarkupText)
+    reloadText(markupView)
+    textView = markupView.currentEditingTextView #it might have changed
+    if(textView.styleOnTextChangedFunction)
+    {
+        textView.styleOnTextChangedFunction(textView.text)
     }
 
     #todo we need to get the new text view, it might have changed
@@ -96,9 +137,9 @@ updateEditingText = function(markupView, newText)
     #    updateCursorPosition(markupView)
     #}
     #
-    #if(textView.textEntryChangedContinuousFunction)
+    #if(textView.onTextChanged)
     #{
-    #    textView.textEntryChangedContinuousFunction(textView.text)
+    #    textView.onTextChanged(textView.text)
     #}
 }
 
@@ -113,6 +154,7 @@ finishEditing = function(markupView, confirmChanges)
     #print("finish editing:", textView.text)
     #debug.backtrace()
     markupView.currentEditingTextView = nil
+    markupView.currentEditingBackgroundView = nil
     markupView.currentEditingTextViewCaptureStartCharacterIndex = nil
 
     markupView.cursorView.hidden = true
@@ -129,7 +171,7 @@ finishEditing = function(markupView, confirmChanges)
         else
         {
             updateEditingText(markupView, markupView.editStartTextValue)
-            textView.styleTextEntryFunction(markupView.editStartTextValue, false)
+            textView.styleTextEntryFunction(textView.text, false) #todo this is basically onFinished editing, should be cleaner
         }
     }
     else
@@ -137,7 +179,7 @@ finishEditing = function(markupView, confirmChanges)
         if(!confirmChanges and markupView.requireEnterToConfirm) #requireEnterToConfirm means we should revert if !confirmChanges
         {
             updateEditingText(markupView, markupView.editStartTextValue)
-            textView.styleTextEntryFunction(textView.text, false)
+            textView.styleTextEntryFunction(textView.text, false) #todo this is basically onFinished editing, should be cleaner
         }
         else
         {
@@ -171,19 +213,25 @@ updateCursorPosition = function(markupView)
         return
     }
 
+    backgroundView = markupView.currentEditingBackgroundView
+
     #print("textView:", textView)
     rect = textView.getRectForCharAtIndex(-1 + markupView.cursorOffset)
+    localOffset = vec2(rect.x + rect.z, rect.y)
+    offset = textView.locationRelativeToView(localOffset, markupView)
     #print("rect:", rect, " markupView.cursorOffset:", markupView.cursorOffset)
-    xOffset = rect.x + rect.z
+    #print("backgroundView pos:", backgroundView.pos)
+    #xOffset = rect.x + rect.z + backgroundView.pos.x
+    #yOffset = rect.y + backgroundView.pos.y
 
-    if(textView.horizontalAlignment == "center")
-    {
-        xOffset /= 2
-    }
+    #if(textView.horizontalAlignment == "center")
+    #{
+    #    xOffset /= 2
+    #}
     
     #todo handle right alignment
     #print("set cursor pos:", xOffset + 1,",",rect.y + 1,0)
-    markupView.cursorView.pos = vec3(xOffset + 1,rect.y + 1,0)
+    markupView.cursorView.pos = vec3(offset.x,offset.y,0)
 }
 
 keyMap = {
@@ -315,14 +363,11 @@ keyMap = {
     
 }
 
-textBackgroundViewClickFunction = function(markupView, textView, mouseLoc)
+textBackgroundViewClickFunction = function(markupView, backgroundView, mouseLoc)
 {
-    if(!textView.styleTextEntryFunction)
-    {
-        return
-    }
     if(!markupView.disabled)
     {
+        textView = backgroundView.textView
         if(markupView.currentEditingTextView == textView)
         {
             print("todo, allow cursor position change with click")
@@ -347,17 +392,18 @@ textBackgroundViewClickFunction = function(markupView, textView, mouseLoc)
         else
         {
             markupView.currentEditingTextView = textView
+            markupView.currentEditingBackgroundView = backgroundView
             markupView.currentEditingTextViewCaptureStartCharacterIndex = textView.captureStartCharacterIndex
 
             #textView.textView:resetVerticalCursorMovementAnchors()
             markupView.editStartTextValue = textView.text
             markupView.cursorView.hidden = false
-            markupView.cursorView.layoutParent = textView
+            #markupView.cursorView.layoutParent = textView
             markupView.cursorTimer = 0.0
 
             markupView.cursorOffset = 0
 
-            print("start editing:", textView.text)
+            #print("start editing:", textView.text)
 
             updateCursorPosition(markupView)
 
@@ -403,12 +449,16 @@ textBackgroundViewClickFunction = function(markupView, textView, mouseLoc)
     }
 }
 
+clearAnyRemainingCachedItemsFromCurrentRow = false
+
 finishCurrentRow = function(markupView)
 {
     clearAnyRemainingCachedItemsFromCurrentRow(markupView)
     parser = markupView.parser
     if(parser.currentRowInfo)
     {
+        rowWidth = parser.currentRowInfo.view.size.x
+        parser.maxRowWidth = math.max(rowWidth, parser.maxRowWidth)
         parser.cacheRowIndex++
         parser.currentRowInfo = nil
     }
@@ -510,12 +560,19 @@ clearAnyRemainingCachedItemsFromCurrentRow = function(markupView)
     }
 }
 
-addItemView = function(markupView, style, captureStartCharacterIndex)
+addItemView = function(markupView, style_, captureStartCharacterIndex)
 {
+    style = style_
+    if(!style)
+    {
+        style = markupView.style
+    }
+
     if(style and style.hidden)
     {
         return
     }
+
     parser = markupView.parser
 
     if(parser.foundText == "\n")
@@ -528,7 +585,7 @@ addItemView = function(markupView, style, captureStartCharacterIndex)
     rowView = getRowView(markupView)
 
 
-    #print("addItemView:", parser.foundText)
+   # print("addItemView:", parser.foundText)
 
     textViewLayout = table.clone(textLayout)
     textViewLayout.id = "textView"
@@ -556,13 +613,29 @@ addItemView = function(markupView, style, captureStartCharacterIndex)
     link = false
     backgroundLayout = false
 
+    styleTextEntryFunction = false
+    styleOnTextChangedFunction = false
+
+   # print("style:", style)
+
+    if(style) 
+    {
+        styleTextEntryFunction = style.textEntry #textEntry should be a function textEntry(textValue, changesMade)
+        styleOnTextChangedFunction = style.onTextChanged #onTextChanged(textValue, changesMade)
+
+    }
+
     if(style)
     {
-        if(style.link)
+        if(style.link or styleTextEntryFunction or styleOnTextChangedFunction)
         {
             link = style.link
-            textViewLayout.color = linkColor
-            textViewLayout.font = boldFont
+
+            if(style.link)
+            {
+                textViewLayout.color = linkColor
+                textViewLayout.font = boldFont
+            }
             
             backgroundLayout = {
                 type = "button"
@@ -578,6 +651,21 @@ addItemView = function(markupView, style, captureStartCharacterIndex)
             if(style.backgroundColor)
             {
                 backgroundLayout.color = style.backgroundColor
+            }
+
+            if(!style.padding)
+            {
+                style.padding = {}
+            }
+
+            if(!style.padding.left)
+            {
+                style.padding.left = 4
+            }
+
+            if(!style.padding.right)
+            {
+                style.padding.right = 4
             }
         }
         else if(style.backgroundColor)
@@ -647,9 +735,23 @@ addItemView = function(markupView, style, captureStartCharacterIndex)
         backgroundLayout.id = style.id
     }
 
+    paddingLeft = 0
+    paddingRight = 0
+    if(style and style.padding)
+    {
+        if(style.padding.left)
+        {
+            paddingLeft = style.padding.left
+        }
+        if(style.padding.right)
+        {
+            paddingRight = style.padding.right
+        }
+    }
+
     stateHash = string.format("%d%d%d%d", parser.monospace, parser.bold, parser.italic, parser.isHeader)
     accumulatedWidth = parser.cacheRowWidthAccumulator
-    wrapWidth = markupView.parentSize.x - accumulatedWidth - markupView.padding.left - markupView.padding.right
+    wrapWidth = markupView.parentSize.x - accumulatedWidth - markupView.padding.left - markupView.padding.right + paddingLeft + paddingRight
     rowInfo = parser.currentRowInfo
 
     getCacheIfMatch = function(cacheItemIndex)
@@ -715,7 +817,7 @@ addItemView = function(markupView, style, captureStartCharacterIndex)
             textView.wrapWidth = wrapWidth
             textView.text = parser.foundText
 
-            foundCache.textWidth = textView.size.x
+            foundCache.width = textView.size.x + paddingLeft + paddingRight
             foundCache.text = textView.text
 
             addedTextLength = string.length(textView.text)
@@ -733,17 +835,18 @@ addItemView = function(markupView, style, captureStartCharacterIndex)
                 clearAnyRemainingCachedItemsFromCurrentRow(markupView)
 
                 foundCache.backgroundView.pos = vec3(xPos, 0, 0)
-                foundCache.backgroundView.size = textView.size
+                foundCache.backgroundView.size = vec2(textView.size.x + paddingLeft + paddingRight, textView.size.y)
 
-                rowView.size = vec2(xPos + textView.size.x, 
-                            math.max(textView.size.y, rowView.size.y))
+                rowView.size = vec2(xPos + foundCache.backgroundView.size.x, 
+                            math.max(foundCache.backgroundView.size.y, rowView.size.y))
 
                 if(markupView.currentEditingTextViewCaptureStartCharacterIndex)
                 {
                     if(markupView.currentEditingTextViewCaptureStartCharacterIndex == textView.captureStartCharacterIndex)
                     {
                         markupView.currentEditingTextView = textView
-                        markupView.cursorView.layoutParent = textView
+                        markupView.currentEditingBackgroundView = foundCache.backgroundView
+                        #markupView.cursorView.layoutParent = textView
                     }
                 }
 
@@ -752,20 +855,21 @@ addItemView = function(markupView, style, captureStartCharacterIndex)
             }
             else
             {
-                parser.cacheRowWidthAccumulator += foundCache.textWidth
+                foundCache.backgroundView.size = vec2(foundCache.width, textView.size.y)
+                parser.cacheRowWidthAccumulator += foundCache.width
             }
         }
         else
         {
-            parser.cacheRowWidthAccumulator += foundCache.textWidth
+            parser.cacheRowWidthAccumulator += foundCache.width
         }
 
 
         foundCache.backgroundView.pos = vec3(xPos, 0, 0)
-        foundCache.backgroundView.size = textView.size
+        foundCache.backgroundView.size = vec2(textView.size.x + paddingLeft + paddingRight, textView.size.y)
 
-        rowView.size = vec2(xPos + textView.size.x, 
-                            math.max(textView.size.y, rowView.size.y))
+        rowView.size = vec2(xPos + foundCache.backgroundView.size.x, 
+                            math.max(foundCache.backgroundView.size.y, rowView.size.y))
 
 
         if(markupView.currentEditingTextViewCaptureStartCharacterIndex)
@@ -773,7 +877,8 @@ addItemView = function(markupView, style, captureStartCharacterIndex)
             if(markupView.currentEditingTextViewCaptureStartCharacterIndex == textView.captureStartCharacterIndex)
             {
                 markupView.currentEditingTextView = textView
-                markupView.cursorView.layoutParent = textView
+                markupView.currentEditingBackgroundView = foundCache.backgroundView
+                #markupView.cursorView.layoutParent = textView
             }
         }
 
@@ -795,6 +900,7 @@ addItemView = function(markupView, style, captureStartCharacterIndex)
     rowInfo = parser.currentRowInfo
 
     textView = backgroundView.getView("textView")
+    textView.pos = vec3(paddingLeft - 2, 0, 0) #-2 is a fudge, I don't know why it looks better at this point.
 
     backgroundView.textView = textView #button.tui uses this too
 
@@ -804,18 +910,16 @@ addItemView = function(markupView, style, captureStartCharacterIndex)
     textView.text = parser.foundText
 
     textView.captureStartCharacterIndex = captureStartCharacterIndex
-
-    if(style and style.textEntry) #textEntry should be a function textEntry(textValue, changesMade)
-    {
-        textView.styleTextEntryFunction = style.textEntry
-    }
+    textView.styleTextEntryFunction = styleTextEntryFunction
+    textView.styleOnTextChangedFunction = styleOnTextChangedFunction
 
     if(markupView.currentEditingTextViewCaptureStartCharacterIndex)
     {
         if(markupView.currentEditingTextViewCaptureStartCharacterIndex == textView.captureStartCharacterIndex)
         {
             markupView.currentEditingTextView = textView
-            markupView.cursorView.layoutParent = textView
+            markupView.currentEditingBackgroundView = backgroundView
+            #markupView.cursorView.layoutParent = textView
         }
     }
 
@@ -832,7 +936,10 @@ addItemView = function(markupView, style, captureStartCharacterIndex)
                 katipo.linkClicked(link)
             }
         }
-        textBackgroundViewClickFunction(markupView, textView, mouseLoc)
+        else if(textView.styleTextEntryFunction or textView.styleOnTextChangedFunction)
+        {
+            textBackgroundViewClickFunction(markupView, backgroundView, mouseLoc)
+        }
     }
 
     backgroundView.clickOutside = function()
@@ -846,13 +953,16 @@ addItemView = function(markupView, style, captureStartCharacterIndex)
     #xPos = rowView.size.x
     backgroundView.pos = vec3(xPos, 0, 0)
 
-    rowView.size = vec2(xPos + textView.size.x, 
-                            math.max(textView.size.y, rowView.size.y))
+    backgroundView.size = vec2(textView.size.x + paddingLeft + paddingRight, textView.size.y)
+
+    rowView.size = vec2(xPos + backgroundView.size.x, 
+                            math.max(backgroundView.size.y, rowView.size.y))
 
 
     
 
-    backgroundView.size = textView.size
+
+    #todo add padding
 
     addedTextLength = string.length(textView.text)
     totalTextLength = string.length(parser.foundText)
@@ -865,7 +975,7 @@ addItemView = function(markupView, style, captureStartCharacterIndex)
         xPos = xPos
         text = textView.text
         textView = textView
-        textWidth = textView.size.x
+        width = backgroundView.size.x
         wrapWidth = wrapWidth
         backgroundView = backgroundView
         stateHash = stateHash
@@ -887,7 +997,7 @@ addItemView = function(markupView, style, captureStartCharacterIndex)
     #print("added to cache:", cacheData.text)
     #print("parser.cacheItemIndex:", parser.cacheItemIndex)
 
-    parser.cacheRowWidthAccumulator += cacheData.textWidth
+    parser.cacheRowWidthAccumulator += cacheData.width
 
     #print("addedTextLength:", addedTextLength, " totalTextLength:", totalTextLength)
     if(addedTextLength < totalTextLength)
@@ -896,11 +1006,18 @@ addItemView = function(markupView, style, captureStartCharacterIndex)
     }
 }
 
-renderCapture = function(markupView, capture, parentStyle)
+renderCapture = function(markupView, markupString, captureItemGroup, parentStyle)
 {
     parser = markupView.parser
-    remainingText = parser.foundText
     style = {}
+    if(markupView.style)
+    {
+        for(k,v in markupView.style)
+        {
+            style[k] = v
+        }
+    }
+
     if(parentStyle)
     {
         for(k,v in parentStyle)
@@ -908,8 +1025,8 @@ renderCapture = function(markupView, capture, parentStyle)
             style[k] = v
         }
     }
-    loadedValue = load(capture.markupString, scene)
-    #print("in renderCapture loadedValue:", loadedValue, " from string:", capture.markupString)
+    loadedValue = load(markupString, scene)
+    #print("in renderCapture loadedValue:", loadedValue, " from string:", captureItemGroup.markupString)
 
     valueType = type(loadedValue)
     if(valueType == "table") # [foo](id="bar", hidden=true)
@@ -949,10 +1066,26 @@ renderCapture = function(markupView, capture, parentStyle)
         }
     }
 
-    for(item in capture.items)
+    if(style and style.hidden)
     {
-        if(item.text)
+        return
+    }
+
+    #print("captureItemGroup:", captureItemGroup)
+
+    for(item in captureItemGroup.items)
+    {
+        #print("item:", item)
+        if(item.newline)
         {
+            #print("adding newline")
+            getRowView(markupView) #make sure we have started a row, this api sucks, I know
+            finishCurrentRow(markupView)
+            getRowView(markupView) #generate a new row
+        }
+        else if(item.text)
+        {
+            initialText = parser.foundText
             parser.foundText = item.text
 
             #this is a bit hacky, just need to pass through this capture's style somehow, but restore the parser state
@@ -969,13 +1102,16 @@ renderCapture = function(markupView, capture, parentStyle)
             parser.bold = prevBold
             parser.italic = prevItalic
             parser.monospace = prevMonospace
+
+            parser.foundText = initialText
         }
         else
         {
-            renderCapture(markupView, item, style)
+            #print("render sub capture:", item)
+            localItem = item
+            renderCapture(markupView, localItem.markupString, localItem, style)
         }
     }
-    parser.foundText = remainingText
 }
 
 
@@ -1049,9 +1185,20 @@ charFunc = function(markupView, charText, charIndex)
                         table.insert(currentCapture.items, item)
                         currentCapture.currentText = nil
                     }
+
+                    if(table.count(currentCapture.items) == 0) #found no text, insert an empty text view for editing purposes
+                    {
+                        item = {
+                            text = ""
+                            startCharacterIndex = currentCapture.startCharacterIndex
+                        }
+                        print("item:", item)
+                        table.insert(currentCapture.items, item)
+                    }
+
                     if(!parentCapture)
                     {
-                        renderCapture(markupView, currentCapture)
+                        renderCapture(markupView, currentCapture.markupString, currentCapture, nil)
                     }
                     parser.currentCapture = parentCapture
                 }
@@ -1223,6 +1370,12 @@ lineFunc = function(markupView, lineText)
     parser = markupView.parser
     parser.isHeader = nil #anything that is closed by the line end needs to be set to nil here
 
+    #if(parser.currentCapture and parser.currentCapture.currentText == "\n")
+    #{
+    #    finishCurrentText(markupView)
+    #    getRowView(markupView)
+    #}
+
     #if(parser.currentCapture)
     #{
     #    parser.currentLineCacheState.rowCount++
@@ -1252,16 +1405,28 @@ lineFunc = function(markupView, lineText)
 
     string.eachChar(lineText, localCharFunc)
 
-    parser.characterIndex++ #\n as we are in eachLine
     
     if(parser.currentCapture)
     {
-        finishCurrentText(markupView)
-        parser.currentCapture.currentText = "\n"
+        finishCurrentText(markupView) #creates an item, clears currentCapture.currentText
+
+        item = {
+            newline = true
+            startCharacterIndex = parser.characterIndex
+        }
+        table.insert(parser.currentCapture.items, item)
+        parser.characterIndex++ #\n as we are in eachLine
+
+        #parser.currentCapture.currentText = "\n"
+        #finishCurrentText(markupView)
+        #getRowView(markupView)
+        #print("parser.currentCapture:", parser.currentCapture)
     }
     else
     {
         #todo if we have a match, skip
+
+        parser.characterIndex++ #\n as we are in eachLine
 
         addItemView(markupView, nil)
         parser.foundText = ""
@@ -1287,11 +1452,12 @@ reloadText = function(markupView)
         backtickCount = 0
         cacheRowIndex = 0
         characterIndex = 0
+        maxRowWidth = 0
     }
 
     markupView.parser = parser
 
-    markupView.cursorView.layoutParent = markupView #bit of a hack, otherwise cursor may get removed when its parent text view is
+    #markupView.cursorView.layoutParent = markupView #bit of a hack, otherwise cursor may get removed when its parent text view is
 
     localLineFunc = function(line)
     {
@@ -1320,6 +1486,15 @@ reloadText = function(markupView)
         markupView.size = vec2(markupScrollView.size.x, math.max(markupScrollView.totalHeight, minLineHeight))
         #markupView.size = markupScrollView.size
     }
+    
+    
+    markupView.contentSize = vec2(parser.maxRowWidth, markupScrollView.totalHeight)
+    if(markupView.currentEditingTextView)
+    {
+        markupView.cursorView.hidden = false
+        markupView.cursorTimer = 0.0
+        updateCursorPosition(markupView)
+    }
 } 
 
 create = function(parentView, viewLayout)
@@ -1339,11 +1514,11 @@ create = function(parentView, viewLayout)
     markupView.scrollView = markupScrollView
     
     cursorViewLayout = {
-        size = vec2(1,minLineHeight)
+        size = vec2(1.5,minLineHeight - 1)
         type = "color"
         color = vec4(1.0,1.0,1.0,1.0)
-        horizontalAlignment = "left"
-        verticalAlignment = verticalAlignment
+        alignmentX = "left"
+        alignmentY = "bottom"
         pos = vec3(2,1,0)
     }
     

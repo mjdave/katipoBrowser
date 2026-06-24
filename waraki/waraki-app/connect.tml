@@ -1,5 +1,6 @@
 If you know the url or IP address where your Waraki music library is hosted, you can [enter it manually](id="showCustomEntryLink").
 [
-    Custom: [192.168.0.](id = "customIPTextEntry")   [connect](id="customConnectButton")
+IP address or url: [192.168.0.](id = "customIPTextEntry")
+[Connect->](id="customConnectButton")
 ](id="customEntry")
-[cancel](id="cancelButton")
+[<-Cancel](id="cancelButton")
