@@ -71,76 +71,91 @@ getViewLayout = function(incomingLayout)
     return layout
 }
 
+#we have to get the whole captured text, so we can send it to the callback
+# [captured 
+# text]()
 
+# each item needs both the start and end characters of the actual item, so it can then append the beforeText and afterText to the textView's value
 
 updateEditingText = function(markupView, newText)
 {
-    print("updateEditingText:", newText)
+    #print("updateEditingText:", newText)
     textView = markupView.currentEditingTextView
     if(!textView)
     {
-        print("not textView")
-        return
+        error("no textView")
     }
 
-    captureStartCharacterIndex = textView.captureStartCharacterIndex
-    if(!captureStartCharacterIndex)
-    {
-        print("no captureStartCharacterIndex")
-        captureStartCharacterIndex = 0
-    }
+    captureItem = textView.captureItem
 
-    beforeText = ""
+    captureStartCharacterIndex = captureItem.captureStartCharacterIndex
+    captureEndCharacterIndex = captureItem.captureEndCharacterIndex
+
+    itemStartCharacterIndex = captureItem.itemStartCharacterIndex
+    itemEndCharacterIndex = captureItem.itemEndCharacterIndex
+
+    beforeCaptureText = ""
     if(captureStartCharacterIndex > 0)
     {
-        beforeText = string.subString(markupView.currentMarkupText, 0, captureStartCharacterIndex + 1)
+        beforeCaptureText = string.subString(markupView.currentMarkupText, 0, captureStartCharacterIndex + 1)
     }
 
-    afterTextStartCharIndex = captureStartCharacterIndex + 1 + string.length(textView.text)
-    #previousLength = 
-    #print("prev text:", textView.text, " length:", previousLength)
-    #if(previousLength > 0)
-    #{
-        #afterTextStartCharIndex += previousLength
-    #}
-    #else
-    #{
-        #afterTextStartCharIndex-- #a curiosity
-    #}
-    
-
-    afterText = ""
-    if(afterTextStartCharIndex < string.length(markupView.currentMarkupText))
+    fullCaptureText = ""
+    beforeItemText = beforeCaptureText
+    if(itemStartCharacterIndex > captureStartCharacterIndex)
     {
-        afterText = string.subString(markupView.currentMarkupText, afterTextStartCharIndex)
+        betweenCaptureStartAndItemStartText = string.subString(markupView.currentMarkupText, captureStartCharacterIndex, (itemStartCharacterIndex - captureStartCharacterIndex))
+        beforeItemText += betweenCaptureStartAndItemStartText
+        fullCaptureText += betweenCaptureStartAndItemStartText
     }
 
-    print("captureStartCharacterIndex:", textView.captureStartCharacterIndex)
-    print("beforeText:", beforeText)
-    print("newText:", newText)
-    print("afterText:", afterText)
+    fullCaptureText += newText
+
+    afterItemText = ""
+    if(itemEndCharacterIndex < string.length(markupView.currentMarkupText))
+    {
+        afterItemText = string.subString(markupView.currentMarkupText, itemEndCharacterIndex + 1)
+
+        if(itemEndCharacterIndex < captureEndCharacterIndex)
+        {
+            fullCaptureText += string.subString(markupView.currentMarkupText, itemEndCharacterIndex + 1, (captureEndCharacterIndex - itemEndCharacterIndex))
+        }
+    }
+
+    textView.fullCaptureText = fullCaptureText
+
+    #afterTextStartCharIndex = captureStartCharacterIndex + 1 + string.length(textView.text)
+
+    #afterCaptureText = ""
+    ##if(captureEndCharacterIndex < string.length(markupView.currentMarkupText))
+    #{
+    #    afterCaptureText = string.subString(markupView.currentMarkupText, captureEndCharacterIndex)
+    #}
+    #afterItemRemainingCaptureText = ""
+    #if(itemEndCharacterIndex < captureEndCharacterIndex)
+    #{
+    #    afterItemRemainingCaptureText = string.subString(markupView.currentMarkupText, itemEndCharacterIndex + 1, captureEndCharacterIndex - itemEndCharacterIndex)
+    #}
+    #if(afterTextStartCharIndex < string.length(markupView.currentMarkupText))
+    #{
+    #    afterText = string.subString(markupView.currentMarkupText, afterTextStartCharIndex)
+    #}
+
+    #print("beforeItemText:", beforeItemText)
+    #print("afterItemText:", afterItemText)
+    #print("fullCaptureText:", fullCaptureText)
+    #print("afterCaptureText:", afterCaptureText)
     
-    markupView.currentMarkupText = beforeText + newText + afterText
-    print("complete new text:", markupView.currentMarkupText)
+    markupView.currentMarkupText = beforeItemText + newText + afterItemText
+
+
     reloadText(markupView)
     textView = markupView.currentEditingTextView #it might have changed
     if(textView.styleOnTextChangedFunction)
     {
-        textView.styleOnTextChangedFunction(textView.text)
+        #print("calling styleOnTextChangedFunction:", fullCaptureText)
+        textView.styleOnTextChangedFunction(fullCaptureText)
     }
-
-    #todo we need to get the new text view, it might have changed
-    #{
-    #    markupView.cursorView.hidden = false
-    #    markupView.cursorTimer = 0.0
-#
-    #    updateCursorPosition(markupView)
-    #}
-    #
-    #if(textView.onTextChanged)
-    #{
-    #    textView.onTextChanged(textView.text)
-    #}
 }
 
 finishEditing = function(markupView, confirmChanges)
@@ -153,16 +168,12 @@ finishEditing = function(markupView, confirmChanges)
 
     #print("finish editing:", textView.text)
     #debug.backtrace()
-    markupView.currentEditingTextView = nil
-    markupView.currentEditingBackgroundView = nil
-    markupView.currentEditingTextViewCaptureStartCharacterIndex = nil
 
-    markupView.cursorView.hidden = true
     
     eventManager.removeTextEntryListener(markupView.textEntryListenerID)
     markupView.textEntryListenerID = nil
 
-    if((!textView.text) or string.length(textView.text) == 0)
+    if((!textView.fullCaptureText) or string.length(textView.fullCaptureText) == 0)
     {
         if(markupView.allowsEmpty)
         {
@@ -171,7 +182,7 @@ finishEditing = function(markupView, confirmChanges)
         else
         {
             updateEditingText(markupView, markupView.editStartTextValue)
-            textView.styleTextEntryFunction(textView.text, false) #todo this is basically onFinished editing, should be cleaner
+            textView.styleTextEntryFunction(textView.fullCaptureText, false) #todo this is basically onFinished editing, should be cleaner
         }
     }
     else
@@ -179,13 +190,19 @@ finishEditing = function(markupView, confirmChanges)
         if(!confirmChanges and markupView.requireEnterToConfirm) #requireEnterToConfirm means we should revert if !confirmChanges
         {
             updateEditingText(markupView, markupView.editStartTextValue)
-            textView.styleTextEntryFunction(textView.text, false) #todo this is basically onFinished editing, should be cleaner
+            textView.styleTextEntryFunction(textView.fullCaptureText, false) #todo this is basically onFinished editing, should be cleaner
         }
         else
         {
-            textView.styleTextEntryFunction(textView.text, confirmChanges)
+            textView.styleTextEntryFunction(textView.fullCaptureText, confirmChanges)
         }
     }
+
+    markupView.currentEditingTextView = nil
+    markupView.currentEditingBackgroundView = nil
+    markupView.currentEditingTextViewCaptureStartCharacterIndex = nil
+    
+    markupView.cursorView.hidden = true
 }
 
 updateCursorFunction = function(markupView, dt)
@@ -393,7 +410,7 @@ textBackgroundViewClickFunction = function(markupView, backgroundView, mouseLoc)
         {
             markupView.currentEditingTextView = textView
             markupView.currentEditingBackgroundView = backgroundView
-            markupView.currentEditingTextViewCaptureStartCharacterIndex = textView.captureStartCharacterIndex
+            markupView.currentEditingTextViewCaptureStartCharacterIndex = textView.captureItem.captureStartCharacterIndex
 
             #textView.textView:resetVerticalCursorMovementAnchors()
             markupView.editStartTextValue = textView.text
@@ -498,39 +515,44 @@ getRowView = function(markupView)
 
 addItemView = false
 
-addNextRowForWrapOverflow = function(markupView, style, addedTextLength)
+addNextRowForWrapOverflow = function(markupView, style, captureItem, addedTextLength)
 {
-    #print("addNextRowForWrapOverflow")
     parser = markupView.parser
     finishCurrentRow(markupView)
     if(addedTextLength != 0)
     {
+        print("addNextRowForWrapOverflow parser.foundText:", parser.foundText, " addedTextLength:", addedTextLength)
         remainingText = string.subString(parser.foundText, addedTextLength)
+        
 
-        startIndex = 0
+        /*startIndex = 0
         innerCharFunc = function(charText, charIndex){
+            print("charText:", charText)
             if(charText != " ")
             {
                 .startIndex = charIndex
                 return true
             }
         }
-
+#
         string.eachChar(remainingText, innerCharFunc)
-
+#
         if(startIndex != 0)
         {
             parser.foundText = string.subString(remainingText, startIndex)
+            captureItem.captureStartCharacterIndex += startIndex
         }
         else
         {
             parser.foundText = remainingText
-        }
+        }*/
+
+        parser.foundText = remainingText
     }
 
     #print("adding:", parser.foundText)
 
-    addItemView(markupView, style)
+    addItemView(markupView, style, captureItem)
 }
 
 
@@ -560,7 +582,29 @@ clearAnyRemainingCachedItemsFromCurrentRow = function(markupView)
     }
 }
 
-addItemView = function(markupView, style_, captureStartCharacterIndex)
+assignCurrentlyEditingIfNeededForTextView = function(markupView, textView, backgroundView)
+{
+    captureItem = textView.captureItem
+    #print("assignCurrentlyEditingIfNeededForTextView captureItem:", captureItem)
+    if(captureItem)
+    {
+        #print("captureItem.captureStartCharacterIndex:", captureItem.captureStartCharacterIndex)
+        #print("markupView.currentEditingTextViewCaptureStartCharacterIndex:", markupView.currentEditingTextViewCaptureStartCharacterIndex)
+        if(markupView.currentEditingTextViewCaptureStartCharacterIndex and markupView.currentEditingTextViewCaptureStartCharacterIndex == captureItem.captureStartCharacterIndex)
+        {
+            editingCharIndex = captureItem.captureEndCharacterIndex + markupView.cursorOffset
+            #print("editingCharIndex:", editingCharIndex)
+            if(editingCharIndex >= captureItem.itemStartCharacterIndex) #we do this every time and rely on item order for now
+            {
+                #print("setting current text view:", textView)
+                markupView.currentEditingTextView = textView
+                markupView.currentEditingBackgroundView = backgroundView
+            }
+        }
+    }
+}
+
+addItemView = function(markupView, style_, captureItemOrNil)
 {
     style = style_
     if(!style)
@@ -577,6 +621,7 @@ addItemView = function(markupView, style_, captureStartCharacterIndex)
 
     if(parser.foundText == "\n")
     {
+        print("parser.foundText == \\n")
         finishCurrentRow(markupView)
         getRowView(markupView) #generate a new row, to add a newline
         return
@@ -805,12 +850,15 @@ addItemView = function(markupView, style_, captureStartCharacterIndex)
 
     xPos = parser.cacheRowWidthAccumulator
 
+
     if(foundCache)
     {
         parser.cacheItemIndex++
 
         textView = foundCache.textView
-        textView.captureStartCharacterIndex = captureStartCharacterIndex
+
+        #print("setting cache textView.captureItem:", captureItemOrNil)
+        textView.captureItem = captureItemOrNil
 
         if((foundCache.text != parser.foundText) or (wrapWidth != foundCache.wrapWidth))
         {
@@ -840,17 +888,23 @@ addItemView = function(markupView, style_, captureStartCharacterIndex)
                 rowView.size = vec2(xPos + foundCache.backgroundView.size.x, 
                             math.max(foundCache.backgroundView.size.y, rowView.size.y))
 
-                if(markupView.currentEditingTextViewCaptureStartCharacterIndex)
+
+
+                #todo create a opy of the capture item, update it
+
+                if(captureItemOrNil)
                 {
-                    if(markupView.currentEditingTextViewCaptureStartCharacterIndex == textView.captureStartCharacterIndex)
-                    {
-                        markupView.currentEditingTextView = textView
-                        markupView.currentEditingBackgroundView = foundCache.backgroundView
-                        #markupView.cursorView.layoutParent = textView
-                    }
+                    captureCopy = table.clone(captureItemOrNil)
+                    captureItemOrNil.itemEndCharacterIndex = captureItemOrNil.itemStartCharacterIndex + addedTextLength - 1
+                    captureCopy.itemStartCharacterIndex = captureItemOrNil.itemEndCharacterIndex + 1
                 }
 
-                addNextRowForWrapOverflow(markupView, style, addedTextLength)
+                assignCurrentlyEditingIfNeededForTextView(markupView, textView, foundCache.backgroundView)
+
+        print("B just added item:", captureItemOrNil)
+        print("adding overflow:", captureCopy)
+
+                addNextRowForWrapOverflow(markupView, style, captureCopy, addedTextLength)
                 return
             }
             else
@@ -872,15 +926,7 @@ addItemView = function(markupView, style_, captureStartCharacterIndex)
                             math.max(foundCache.backgroundView.size.y, rowView.size.y))
 
 
-        if(markupView.currentEditingTextViewCaptureStartCharacterIndex)
-        {
-            if(markupView.currentEditingTextViewCaptureStartCharacterIndex == textView.captureStartCharacterIndex)
-            {
-                markupView.currentEditingTextView = textView
-                markupView.currentEditingBackgroundView = foundCache.backgroundView
-                #markupView.cursorView.layoutParent = textView
-            }
-        }
+        assignCurrentlyEditingIfNeededForTextView(markupView, textView, foundCache.backgroundView)
 
         #print("found cache:", parser.foundText, " cacheRowWidthAccumulator:", parser.cacheRowWidthAccumulator)
         
@@ -909,19 +955,14 @@ addItemView = function(markupView, style_, captureStartCharacterIndex)
     textView.preventWordSeparation = (parser.cacheItemIndex != 0)
     textView.text = parser.foundText
 
-    textView.captureStartCharacterIndex = captureStartCharacterIndex
+    textView.captureItem = captureItemOrNil
+
+    print("setting textView.captureItem:", textView.captureItem)
+
     textView.styleTextEntryFunction = styleTextEntryFunction
     textView.styleOnTextChangedFunction = styleOnTextChangedFunction
 
-    if(markupView.currentEditingTextViewCaptureStartCharacterIndex)
-    {
-        if(markupView.currentEditingTextViewCaptureStartCharacterIndex == textView.captureStartCharacterIndex)
-        {
-            markupView.currentEditingTextView = textView
-            markupView.currentEditingBackgroundView = backgroundView
-            #markupView.cursorView.layoutParent = textView
-        }
-    }
+    assignCurrentlyEditingIfNeededForTextView(markupView, textView, backgroundView)
 
     backgroundView.click = function(mouseLoc)
     {
@@ -967,7 +1008,7 @@ addItemView = function(markupView, style_, captureStartCharacterIndex)
     addedTextLength = string.length(textView.text)
     totalTextLength = string.length(parser.foundText)
 
-    #print("addedTextLength:", addedTextLength, " totalTextLength:", totalTextLength)
+    print("addedTextLength:", addedTextLength, " totalTextLength:", totalTextLength)
 
     #################### add to cache
 
@@ -979,7 +1020,6 @@ addItemView = function(markupView, style_, captureStartCharacterIndex)
         wrapWidth = wrapWidth
         backgroundView = backgroundView
         stateHash = stateHash
-        #inputTextCharacterIndex = captureStartCharacterIndex
     }
 
     if(style)
@@ -1002,7 +1042,16 @@ addItemView = function(markupView, style_, captureStartCharacterIndex)
     #print("addedTextLength:", addedTextLength, " totalTextLength:", totalTextLength)
     if(addedTextLength < totalTextLength)
     {
-        addNextRowForWrapOverflow(markupView, style, addedTextLength)
+        #todo create a copy of the capture item, update it
+        if(captureItemOrNil)
+        {
+            captureCopy = table.clone(captureItemOrNil)
+            captureItemOrNil.itemEndCharacterIndex = captureItemOrNil.itemStartCharacterIndex + addedTextLength - 1
+            captureCopy.itemStartCharacterIndex = captureItemOrNil.itemEndCharacterIndex + 1
+        }
+        print("just added item:", captureItemOrNil)
+        print("adding overflow:", captureCopy)
+        addNextRowForWrapOverflow(markupView, style, captureCopy, addedTextLength)
     }
 }
 
@@ -1097,7 +1146,9 @@ renderCapture = function(markupView, markupString, captureItemGroup, parentStyle
             parser.italic = item.italic
             parser.monospace = item.monospace
 
-            addItemView(markupView, style, item.startCharacterIndex)
+            localItem = item
+            print("add item view:", localItem)
+            addItemView(markupView, style, localItem)
 
             parser.bold = prevBold
             parser.italic = prevItalic
@@ -1125,7 +1176,9 @@ finishCurrentText = function(markupView)
         {
             item = {
                 text = currentCapture.currentText
-                startCharacterIndex = currentCapture.startCharacterIndex
+                captureStartCharacterIndex = currentCapture.startCharacterIndex
+                itemStartCharacterIndex = currentCapture.itemStartCharacterIndex
+                itemEndCharacterIndex = currentCapture.itemStartCharacterIndex + string.length(currentCapture.currentText)
                 bold = parser.bold
                 italic = parser.italic
                 monospace = parser.monospace
@@ -1139,7 +1192,7 @@ finishCurrentText = function(markupView)
     {
         if(string.length(parser.foundText) > 0)
         {
-            #print("adding:", parser.foundText)
+            print("adding:", parser.foundText)
             addItemView(markupView, nil)
             parser.foundText = ""
         }
@@ -1174,13 +1227,15 @@ charFunc = function(markupView, charText, charIndex)
                 {
                     currentCapture.markupString = parser.foundMarkupCodeString
                     parentCapture = currentCapture.parentCapture
-                    currentCapture.parentCapture = nil
+                    currentCapture.parentCapture = nil #avoid retain loop
 
                     if(currentCapture.currentText)
                     {
                         item = {
                             text = currentCapture.currentText
-                            startCharacterIndex = currentCapture.startCharacterIndex
+                            captureStartCharacterIndex = currentCapture.startCharacterIndex
+                            itemStartCharacterIndex = currentCapture.itemStartCharacterIndex
+                            itemEndCharacterIndex = currentCapture.itemStartCharacterIndex + string.length(currentCapture.currentText)
                         }
                         table.insert(currentCapture.items, item)
                         currentCapture.currentText = nil
@@ -1190,10 +1245,19 @@ charFunc = function(markupView, charText, charIndex)
                     {
                         item = {
                             text = ""
-                            startCharacterIndex = currentCapture.startCharacterIndex
+                            captureStartCharacterIndex = currentCapture.startCharacterIndex
+                            itemStartCharacterIndex = currentCapture.startCharacterIndex
+                            itemEndCharacterIndex = currentCapture.startCharacterIndex
+                            captureEndCharacterIndex = currentCapture.endCharacterIndex
                         }
-                        print("item:", item)
                         table.insert(currentCapture.items, item)
+                    }
+                    else
+                    {
+                        for(item in currentCapture.items)
+                        {
+                            item.captureEndCharacterIndex = currentCapture.endCharacterIndex
+                        }
                     }
 
                     if(!parentCapture)
@@ -1233,7 +1297,9 @@ charFunc = function(markupView, charText, charIndex)
             {
                 item = { #tui bug, adding this directly as a function call arg causes prevCapture to appear to be nil
                     text = prevCapture.currentText
-                    startCharacterIndex = prevCapture.startCharacterIndex
+                    captureStartCharacterIndex = prevCapture.startCharacterIndex
+                    itemStartCharacterIndex = prevCapture.itemStartCharacterIndex
+                    itemEndCharacterIndex = prevCapture.itemStartCharacterIndex + string.length(prevCapture.currentText)
                 }
                 table.insert(prevCapture.items, item)
                 prevCapture.currentText = nil
@@ -1250,9 +1316,11 @@ charFunc = function(markupView, charText, charIndex)
     }
     else if(charText == "]")
     {
+        parser.captureClosedAwaitingParenthesis = true
+        parser.currentCapture.endCharacterIndex = parser.characterIndex
+        
         finishCurrentText(markupView)
 
-        parser.captureClosedAwaitingParenthesis = true
     }
     else
     {
@@ -1351,6 +1419,7 @@ charFunc = function(markupView, charText, charIndex)
                 if(!parser.currentCapture.currentText)
                 {
                     parser.currentCapture.currentText = charText
+                    parser.currentCapture.itemStartCharacterIndex = parser.characterIndex# - 1 #maybe not -1?
                 }
                 else
                 {
@@ -1369,6 +1438,8 @@ lineFunc = function(markupView, lineText)
 {
     parser = markupView.parser
     parser.isHeader = nil #anything that is closed by the line end needs to be set to nil here
+
+    print("lineText:", lineText)
 
     #if(parser.currentCapture and parser.currentCapture.currentText == "\n")
     #{
@@ -1412,7 +1483,8 @@ lineFunc = function(markupView, lineText)
 
         item = {
             newline = true
-            startCharacterIndex = parser.characterIndex
+            #captureStartCharacterIndex = parser.currentCapture.startCharacterIndex #not needed
+            #itemStartCharacterIndex = parser.characterIndex
         }
         table.insert(parser.currentCapture.items, item)
         parser.characterIndex++ #\n as we are in eachLine
@@ -1426,10 +1498,20 @@ lineFunc = function(markupView, lineText)
     {
         #todo if we have a match, skip
 
-        parser.characterIndex++ #\n as we are in eachLine
 
-        addItemView(markupView, nil)
+        print("adding direct:", parser.foundText)
+        textLength = string.length(parser.foundText)
+        item = {
+            text = parser.foundText
+            captureStartCharacterIndex = parser.characterIndex - textLength
+            itemStartCharacterIndex = parser.characterIndex - textLength
+            itemEndCharacterIndex = parser.characterIndex
+            captureEndCharacterIndex = parser.characterIndex
+        }
+        addItemView(markupView, nil, item)
+
         parser.foundText = ""
+        parser.characterIndex++ #\n as we are in eachLine
 
         #print("add final:", parser.currentLineCacheState)
     }
@@ -1442,6 +1524,8 @@ reloadText = function(markupView)
 {
     markupText = markupView.currentMarkupText
     markupScrollView = markupView.scrollView
+
+    markupView.currentEditingTextView = nil
 
     parser = {
         onlyFoundSpace = true
@@ -1464,9 +1548,13 @@ reloadText = function(markupView)
         return lineFunc(markupView, line)
     }
 
-    if(markupText)
+    if(markupText and string.length(markupText) > 0)
     {
         string.eachLine(markupText, localLineFunc)
+    }
+    else
+    {
+        localLineFunc("")
     }
 
     #print("table.count(markupView.cachedRows):", table.count(markupView.cachedRows), " parser.cacheRowIndex:", parser.cacheRowIndex)
