@@ -83,6 +83,12 @@ loadClientSite = function(siteData, hostID, url)
     katipo.loadSite(hostID, siteSavePath, publicData, untrustedSiteCodePermissionFunction, false)
 
     database.set(checksumKey, checksums)
+
+    hostInfo = {
+        hostID = hostID
+        url = url
+    }
+    database.set("lastHost", hostInfo)
 }
 
 getCallback = function(result, hostID, url)
@@ -146,9 +152,9 @@ scanCallback = function(status, result)
             clickFunction = function()
             {
                 katipo.connectToScanResult(ip)
-                checksumKey = "checksums_" + ip
-                database.set("latestConnection", ip)
-                katipo.get(ip + "/waraki", database.get(checksumKey), getCallback)
+                hostID = ip + "/waraki"
+                checksumKey = "checksums_" + hostID
+                katipo.get(hostID, database.get(checksumKey), getCallback)
                 connectPage.fadeOut()
             }
 
@@ -305,11 +311,17 @@ init = function()
     welcomeFilePath = file.getResourcePath("waraki-app/welcome.tml")
     markup = file.loadData(welcomeFilePath)
 
-    latestConnection = database.get("latestConnection")
-    if(latestConnection)
+    lastHost = database.get("lastHost")
+    if(lastHost)
     {
-        checksumKey = "checksums_" + latestConnection
-        katipo.get(latestConnection + "/waraki", database.get(checksumKey), getCallback)
+        hostID = lastHost.hostID
+        checksumKey = "checksums_" + lastHost.hostID
+        localGetCallback = function(result, hostID_bad, url) #todo haccck for host id
+        {
+            getCallback(result, hostID, url)
+        }
+
+        katipo.get(lastHost.url, database.get(checksumKey), localGetCallback)
     }
     else
     {
