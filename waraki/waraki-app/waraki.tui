@@ -146,7 +146,8 @@ scanCallback = function(status, result)
             clickFunction = function()
             {
                 katipo.connectToScanResult(ip)
-                checksumKey = "checksums_" + hostID
+                checksumKey = "checksums_" + ip
+                database.set("latestConnection", ip)
                 katipo.get(ip + "/waraki", database.get(checksumKey), getCallback)
                 connectPage.fadeOut()
             }
@@ -304,10 +305,19 @@ init = function()
     welcomeFilePath = file.getResourcePath("waraki-app/welcome.tml")
     markup = file.loadData(welcomeFilePath)
 
-    .welcomePage = siteContent.getView("welcomePage")
+    latestConnection = database.get("latestConnection")
+    if(latestConnection)
+    {
+        checksumKey = "checksums_" + latestConnection
+        katipo.get(latestConnection + "/waraki", database.get(checksumKey), getCallback)
+    }
+    else
+    {
+        .welcomePage = siteContent.getView("welcomePage")
 
-    welcomePage.setText(markup)
-    welcomePage.fadeIn()
+        welcomePage.setText(markup)
+        welcomePage.fadeIn()
+    }
 
     #markup = string.replace(markup, "you", "YOU\n")
     

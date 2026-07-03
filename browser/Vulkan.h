@@ -229,7 +229,7 @@ private:
     std::vector<VkFence> inFlightFences;
     size_t currentFrame = 0;
 
-    uint32_t currentRecordingImageIndex;
+    uint32_t currentRecordingImageIndex = 0;
 
     bool framebufferResized = false;
 
