@@ -370,6 +370,8 @@ void MJView::setSize(dvec2 size_) //WARNING! MJTextView completely overrides thi
 	if(!approxEqualVec2(size, size_))
 	{
 		size = size_;
+        ((TuiVec2*)stateTable->objectsByStringKey["size"])->value = size;
+        
 		updateMatrix();
         
         for(MJView* subView : subviews)

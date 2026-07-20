@@ -275,7 +275,7 @@ void EventManager::update(float dt)
         rect.y = windowInfo->screenHeight;
         rect.w = windowInfo->screenWidth;
         rect.h = 20;
-        SDL_SetTextInputArea(window, &rect, NULL);
+        SDL_SetTextInputArea(window, &rect, 0);
         
         SDL_PropertiesID props = SDL_CreateProperties();
         SDL_SetBooleanProperty(props, SDL_PROP_TEXTINPUT_AUTOCORRECT_BOOLEAN, false);
