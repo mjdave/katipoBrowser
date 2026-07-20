@@ -8,5 +8,7 @@ xcuserdata
 .DS_Store
 linux/bin
 linux/build
+waraki/linux/bin
+waraki/linux/build
 *~lock~
 build

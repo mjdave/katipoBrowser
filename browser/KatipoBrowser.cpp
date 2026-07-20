@@ -250,36 +250,13 @@ TuiTable* setupScene(SiteConnectionInfo& siteConnectionInfo, std::string siteSav
 
 void KatipoBrowser::init()
 {
-    
-    //todo remove this, backwards compatibility for 0.2->0.3
-    std::string oldBasePath = SDL_GetPrefPath("majicjungle", "katipo");
-    if(Tui::fileExistsAtPath(oldBasePath + "database"))
-    {
-        std::string newBasePath = SDL_GetPrefPath("katipo", "katipo");
-        if(!Tui::fileExistsAtPath(newBasePath + "database"))
-        {
-            Tui::moveFile(oldBasePath, newBasePath);
-        }
-    }
-    
-    //todo remove this, backwards compatibility for 0.2->0.3
-    std::string basePath = SDL_GetPrefPath("katipo", "katipo");
-    std::string oldClientSitesPath = basePath + "browserSites";
-    if(Tui::fileExistsAtPath(oldClientSitesPath))
-    {
-        std::string newClientSitesPath = basePath + "clientSites";
-        if(!Tui::fileExistsAtPath(newClientSitesPath))
-        {
-            Tui::moveFile(oldClientSitesPath, newClientSitesPath);
-        }
-    }
-    
-    
     if(sodium_init() < 0) //this is safe to call multiple times
     {
         MJError("Sodium initialization failed. Exiting.");
         abort();
     }
+
+    Katipo::baseSavePath = SDL_GetPrefPath("katipobrowser", "koru");
     
     TuiTable* rootTable = Tui::getRootTable();
     appDatabaseEnvironment = new DatabaseEnvironment(Katipo::getSavePath("database"),

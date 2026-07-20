@@ -22,7 +22,7 @@ std::string getSavePath(const std::string& appendPath)
 {
     if(baseSavePath.empty())
     {
-        baseSavePath = SDL_GetPrefPath("katipo", "katipo");
+        TuiError("base save path must be set with eg: Katipo::baseSavePath = SDL_GetPrefPath(\"katipobrowser\", \"waraki\");");
     }
 
     if(appendPath.empty())

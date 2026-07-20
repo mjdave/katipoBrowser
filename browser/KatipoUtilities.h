@@ -8,7 +8,7 @@
 
 namespace Katipo {
 
-extern std::string baseSavePath;
+extern std::string baseSavePath; //this must be set from init
 
 std::string getResourcePath(const std::string &appendPath = "");
 std::string getSavePath(const std::string &appendPath = "");
