@@ -256,7 +256,8 @@ void KatipoBrowser::init()
         abort();
     }
 
-    Katipo::baseSavePath = SDL_GetPrefPath("katipobrowser", "koru");
+    std::string basePath = SDL_GetPrefPath("katipobrowser", "koru");
+    Katipo::baseSavePath = basePath;
     
     TuiTable* rootTable = Tui::getRootTable();
     appDatabaseEnvironment = new DatabaseEnvironment(Katipo::getSavePath("database"),
