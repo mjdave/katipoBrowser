@@ -23,6 +23,8 @@ find_package(Threads REQUIRED)
 
 set(SOURCES 
 ../browser/Camera.cpp
+../browser/BrowserHost.cpp
+../browser/BrowserTracker.cpp
 ../browser/EventManager.cpp
 ../browser/GCommandBuffer.cpp
 ../browser/GPipeline.cpp
@@ -64,6 +66,7 @@ set(SOURCES
 ../katipo/core/Server.cpp
 ../katipo/core/ServerNetInterface.cpp
 ../katipo/core/Timer.cpp
+../katipo/core/Tracker.cpp
 ../katipo/thirdParty/enet-1.3.18/callbacks.c
 ../katipo/thirdParty/enet-1.3.18/compress.c
 ../katipo/thirdParty/enet-1.3.18/host.c

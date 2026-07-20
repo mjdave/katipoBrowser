@@ -1,3 +1,4 @@
 {
-    "shaderc-lint.shadercOutputDir": "app/common/spv"
+    "shaderc-lint.shadercOutputDir": "app/common/spv",
+    "cmake.sourceDirectory": "/home/dave/source/katipoBrowser/linux"
 }
