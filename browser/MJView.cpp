@@ -1134,15 +1134,14 @@ bool MJView::getIntersection(dvec3 rayStart, dvec3 rayDirection, double* distanc
 	return inside;
 }
 
-bool MJView::mouseMoved3D(dvec3 windowRayStart, dvec3 windowRayDirection, bool triggeredByUIMovement)
+void MJView::mouseMoved3D(dvec3 windowRayStart, dvec3 windowRayDirection, bool triggeredByUIMovement)
 {
 	if(hidden || invalidated)
 	{
-		return false;
+		return;
 	}
     
 
-	bool inside = false;
 	dvec2 localPoint;
 	bool hasLocalPoint = false;
 
@@ -1196,11 +1195,6 @@ bool MJView::mouseMoved3D(dvec3 windowRayStart, dvec3 windowRayDirection, bool t
                     localPointRef->release();
 				}
 			}
-
-			if(masksEvents)
-			{
-				inside = true;
-			}
 		}
 		else
 		{
@@ -1246,47 +1240,40 @@ bool MJView::mouseMoved3D(dvec3 windowRayStart, dvec3 windowRayDirection, bool t
 
 	if(invalidated)
 	{
-		return false;
+		return;
 	}
 
 	std::vector<MJView*> subviewsCopy = subviews;
 
-	bool insideAnySubview = false;
-
 	for(int i = ((int)subviewsCopy.size()) - 1; i >=0; i--)
 	{
 		MJView* subView = subviewsCopy[i];
-		bool insideSubview = subView->mouseMoved3D(windowRayStart, windowRayDirection, triggeredByUIMovement);
+		subView->mouseMoved3D(windowRayStart, windowRayDirection, triggeredByUIMovement);
 
 		if(invalidated)
 		{
-			return false;
+			return;
 		}
-
-		inside = inside || insideSubview;
 	}
-
-	return inside;
 }
 
-bool MJView::mouseMoved(dvec2 mousePos)
+void MJView::mouseMoved(dvec2 mousePos)
 {
     if(hidden || invalidated)
     {
-        return false;
+        return;
     }
     
-	return mouseMoved3D(dvec3(mousePos.x, mousePos.y, 100.0), dvec3(0.0,0.0,-1.0), false);
+	mouseMoved3D(dvec3(mousePos.x, mousePos.y, 100.0), dvec3(0.0,0.0,-1.0), false);
 }
 
-bool MJView::mouseDown3D(dvec3 windowRayStart, dvec3 windowRayDirection, int buttonIndex)
+void MJView::mouseDown3D(dvec3 windowRayStart, dvec3 windowRayDirection, int buttonIndex)
 {
 	if(hidden || invalidated)
 	{
-		return false;
+		return;
 	}
 
-	bool inside = false;
 
 	bool containsPointInView = containsPoint(windowRayStart, windowRayDirection);
 
@@ -1307,11 +1294,6 @@ bool MJView::mouseDown3D(dvec3 windowRayStart, dvec3 windowRayDirection, int but
             buttonIndexRef->release();
             localPointRef->release();
 		}
-
-		if(masksEvents)
-		{
-			inside = true;
-		}
 	}
 	else
 	{
@@ -1320,7 +1302,7 @@ bool MJView::mouseDown3D(dvec3 windowRayStart, dvec3 windowRayDirection, int but
 	}
 	if(invalidated)
 	{
-		return false;
+		return;
 	}
 
 	receivedMouseDown[buttonIndex] = true;
@@ -1333,18 +1315,13 @@ bool MJView::mouseDown3D(dvec3 windowRayStart, dvec3 windowRayDirection, int but
 	{
 		MJView* subView = subviewsCopy[i];
 		//bool insideSubview = subView->mouseDown3D(windowRayStart, windowRayDirection, obstructed || insideAnySubview, buttonIndex);
-        bool insideSubview = subView->mouseDown3D(windowRayStart, windowRayDirection, buttonIndex); //todo obstructed is buggy, this needs reworking for 3D, disabled is fine for 2D.
+        subView->mouseDown3D(windowRayStart, windowRayDirection, buttonIndex); //todo obstructed is buggy, this needs reworking for 3D, disabled is fine for 2D.
 
 		if(invalidated)
 		{
-			return false;
+			return;
 		}
 
-		if(insideSubview)
-		{
-			inside = true;
-			//break;
-		}
 
 		//insideAnySubview = insideAnySubview || insideSubview;
 	}
@@ -1365,8 +1342,6 @@ bool MJView::mouseDown3D(dvec3 windowRayStart, dvec3 windowRayDirection, int but
 			}
 		}
 	}
-
-	return inside;
 }
 
 bool MJView::mouseWheel3D(dvec3 windowRayStart, dvec3 windowRayDirection, dvec2 scrollChange)
@@ -1426,14 +1401,14 @@ bool MJView::mouseWheel3D(dvec3 windowRayStart, dvec3 windowRayDirection, dvec2 
 	return inside;
 }
 
-bool MJView::mouseDown(dvec2 mousePos, int buttonIndex)
+void MJView::mouseDown(dvec2 mousePos, int buttonIndex)
 {
     if(hidden || invalidated)
     {
-        return false;
+        return;
     }
     
-    return mouseDown3D(dvec3(mousePos.x, mousePos.y, 100.0), dvec3(0.0,0.0,-1.0), buttonIndex);
+    mouseDown3D(dvec3(mousePos.x, mousePos.y, 100.0), dvec3(0.0,0.0,-1.0), buttonIndex);
 }
 
 bool MJView::visibleUIContainsPointIncludingSubViews3D(dvec3 windowRayStart, dvec3 windowRayDirection)
@@ -1470,14 +1445,25 @@ bool MJView::visibleUIContainsPointIncludingSubViews(dvec2 mousePos)
 }
 
 
-bool MJView::mouseUp3D(dvec3 windowRayStart, dvec3 windowRayDirection, int buttonIndex)
+void MJView::mouseUp3D(dvec3 windowRayStart, dvec3 windowRayDirection, int buttonIndex, bool* foundClickFunction)
 {
 	if(hidden || invalidated)
 	{
-		return false;
+		return;
 	}
+    
+    std::vector<MJView*> subviewsCopy = subviews;
 
-	bool inside = false;
+    for(int i = ((int)subviewsCopy.size()) - 1; i >=0; i--)
+    {
+        MJView* subView = subviewsCopy[i];
+        subView->mouseUp3D(windowRayStart, windowRayDirection, buttonIndex, foundClickFunction);
+        
+        if(invalidated)
+        {
+            return;
+        }
+    }
 
 	if(mouseDownWasInside[buttonIndex])
 	{
@@ -1485,19 +1471,21 @@ bool MJView::mouseUp3D(dvec3 windowRayStart, dvec3 windowRayDirection, int butto
 		{
 			if(containsPoint(windowRayStart, windowRayDirection))
 			{
-				if(buttonIndex == 0 && clickFunction)
+				if(buttonIndex == 0 && clickFunction && !(*foundClickFunction))
 				{
 					dvec2 localPoint = windowPointToLocal(windowRayStart, windowRayDirection);
                     TuiRef* localPointRef = new TuiVec2(localPoint / renderScale);
                     clickFunction->call("clickFunction", localPointRef);
                     localPointRef->release();
+                    *foundClickFunction = true;
 				}
-                else if(buttonIndex == 1 && rightClickFunction)
+                else if(buttonIndex == 1 && rightClickFunction && !(*foundClickFunction))
 				{
 					dvec2 localPoint = windowPointToLocal(windowRayStart, windowRayDirection);
                     TuiRef* localPointRef = new TuiVec2(localPoint / renderScale);
                     rightClickFunction->call("rightClickFunction", localPointRef);
                     localPointRef->release();
+                    *foundClickFunction = true;
 				}
 			}
 		}
@@ -1512,7 +1500,7 @@ bool MJView::mouseUp3D(dvec3 windowRayStart, dvec3 windowRayDirection, int butto
             localPointRef->release();
 		}
 
-		if(!masksEvents)
+		/*if(!masksEvents) //dubious, commented out Jul 2026
 		{
 			if(clickOutsideFunction && !dragDistanceAboveClickOutsideThreshold && receivedMouseDown[buttonIndex])
 			{
@@ -1521,14 +1509,12 @@ bool MJView::mouseUp3D(dvec3 windowRayStart, dvec3 windowRayDirection, int butto
 					dvec2 localPoint = windowPointToLocal(windowRayStart, windowRayDirection);
                     TuiRef* buttonIndexRef = new TuiNumber(buttonIndex);
                     TuiRef* localPointRef = new TuiVec2(localPoint / renderScale);
-                    mouseDownFunction->call("clickOutsideFunction", buttonIndexRef, localPointRef);
+                    clickOutsideFunction->call("clickOutsideFunction", buttonIndexRef, localPointRef);
                     buttonIndexRef->release();
                     localPointRef->release();
 				}
 			}
-		}
-
-		inside = true;
+		}*/
 	}
 	else 
 	{
@@ -1556,41 +1542,20 @@ bool MJView::mouseUp3D(dvec3 windowRayStart, dvec3 windowRayDirection, int butto
 		}
 	}
 
-
-
-	if(invalidated)
-	{
-		return false;
-	}
-
-
-	std::vector<MJView*> subviewsCopy = subviews;
-
-	for(MJView* subView : subviewsCopy)
-	{
-		inside = subView->mouseUp3D(windowRayStart, windowRayDirection, buttonIndex) || inside;
-		if(invalidated)
-		{
-			return false;
-		}
-	}
-
 	mouseDownWasInside[buttonIndex] = false;
 	sendClickEventOnMouseUpInside[buttonIndex] = false;
 	receivedMouseDown[buttonIndex] = false;
 
-	return inside;
 }
 
-bool MJView::mouseUp(dvec2 mousePos, int buttonIndex)
+void MJView::mouseUp(dvec2 mousePos, int buttonIndex)
 {
     if(hidden || invalidated)
     {
-        return false;
+        return;
     }
-    
-
-	return mouseUp3D(dvec3(mousePos.x, mousePos.y, 100.0), dvec3(0.0,0.0,-1.0), buttonIndex);
+    bool foundClickFunction = false;
+    mouseUp3D(dvec3(mousePos.x, mousePos.y, 100.0), dvec3(0.0,0.0,-1.0), buttonIndex, &foundClickFunction);
 }
 
 bool MJView::keyChanged(bool isDown, int code, int modKey, bool isRepeat)

@@ -407,19 +407,20 @@ dvec3 MainController::getPointerRayDirectionUISpace()
     return normalize(dvec3(rayProj));
 }
 
-bool MainController::mouseDown(dvec2 mousePos, int buttonIndex, int modKey)
+void MainController::mouseDown(dvec2 mousePos, int buttonIndex, int modKey)
 {
-	return mainMJView->mouseDown3D(getPointerRayStartUISpace(), getPointerRayDirectionUISpace(), buttonIndex);
+	mainMJView->mouseDown3D(getPointerRayStartUISpace(), getPointerRayDirectionUISpace(), buttonIndex);
 }
 
-bool MainController::mouseMoved()
+void MainController::mouseMoved()
 {
-	return mainMJView->mouseMoved3D(getPointerRayStartUISpace(), getPointerRayDirectionUISpace(), false);
+	mainMJView->mouseMoved3D(getPointerRayStartUISpace(), getPointerRayDirectionUISpace(), false);
 }
 
-bool MainController::mouseUp(dvec2 mousePos, int buttonIndex, int modKey)
+void MainController::mouseUp(dvec2 mousePos, int buttonIndex, int modKey)
 {
-	return mainMJView->mouseUp3D(getPointerRayStartUISpace(), getPointerRayDirectionUISpace(), buttonIndex);
+    bool foundClickFunction = false;
+	mainMJView->mouseUp3D(getPointerRayStartUISpace(), getPointerRayDirectionUISpace(), buttonIndex, &foundClickFunction);
 }
 
 bool MainController::mouseWheel(dvec2 mousePos, dvec2 scrollChange)

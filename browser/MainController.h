@@ -88,9 +88,9 @@ public:
 	dvec3 getPointerRayStartUISpace();
 	dvec3 getPointerRayDirectionUISpace();
 
-	bool mouseMoved();
-	bool mouseDown(dvec2 mousePos, int buttonIndex, int modKey);
-	bool mouseUp(dvec2 mousePos, int buttonIndex, int modKey);
+	void mouseMoved();
+    void mouseDown(dvec2 mousePos, int buttonIndex, int modKey);
+    void mouseUp(dvec2 mousePos, int buttonIndex, int modKey);
 	bool mouseWheel(dvec2 mousePos, dvec2 scrollChange);
 
 	void updateWindowInfoSize();

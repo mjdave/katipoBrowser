@@ -267,15 +267,15 @@ public:
 
 
 	virtual bool visibleUIContainsPointIncludingSubViews3D(dvec3 windowRayStart, dvec3 windowRayDirection);
-	virtual bool mouseMoved3D(dvec3 windowRayStart, dvec3 windowRayDirection, bool triggeredByUIMovement);
-	virtual bool mouseDown3D(dvec3 windowRayStart, dvec3 windowRayDirection, int buttonIndex);
-	virtual bool mouseUp3D(dvec3 windowRayStart, dvec3 windowRayDirection, int buttonIndex);
+	virtual void mouseMoved3D(dvec3 windowRayStart, dvec3 windowRayDirection, bool triggeredByUIMovement);
+	virtual void mouseDown3D(dvec3 windowRayStart, dvec3 windowRayDirection, int buttonIndex);
+	virtual void mouseUp3D(dvec3 windowRayStart, dvec3 windowRayDirection, int buttonIndex, bool* foundClickFunction);
 	virtual bool mouseWheel3D(dvec3 windowRayStart, dvec3 windowRayDirection, dvec2 scrollChange);
 
 	virtual bool visibleUIContainsPointIncludingSubViews(dvec2 mousePos);
-    virtual bool mouseMoved(dvec2 mousePos);
-    virtual bool mouseDown(dvec2 mousePos, int buttonIndex);
-    virtual bool mouseUp(dvec2 mousePos, int buttonIndex);
+    virtual void mouseMoved(dvec2 mousePos);
+    virtual void mouseDown(dvec2 mousePos, int buttonIndex);
+    virtual void mouseUp(dvec2 mousePos, int buttonIndex);
 
     virtual bool keyChanged(bool isDown, int code, int modKey, bool isRepeat);
     
