@@ -217,7 +217,7 @@ setDirectoryTree = function(fileBrowserView, directoryTree, selectedIndex, isFro
 
             if(!thisFile.localPath)
             {
-                backgroundView.click = function() #left panel click
+                backgroundViewClick = function() #left panel click
                 {
 
                     if(thisFile.files)
@@ -250,6 +250,8 @@ setDirectoryTree = function(fileBrowserView, directoryTree, selectedIndex, isFro
                         onBrowserContentChange()
                     }
                 }
+
+                backgroundView.setClickFunction(backgroundViewClick)
 
                 if(fileBrowserView.leftSelectedIndex == i)
                 {

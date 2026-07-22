@@ -56,7 +56,7 @@ updateDerivedColors = function(view, baseColor, highlightColorOrNil, mouseDownCo
 
     if(!view.highlightColor)
     {
-        view.highlightColor = view.baseColor + vec4(0.0,0.1,0.0,0.05)
+        view.highlightColor = view.baseColor + vec4(0.0,0.02,0.01,0.0)
     }
 
     if(mouseDownColorOrNil)
@@ -65,7 +65,7 @@ updateDerivedColors = function(view, baseColor, highlightColorOrNil, mouseDownCo
     }
     if(!view.mouseDownColor)
     {
-        view.mouseDownColor = view.baseColor + vec4(0.5,0.5,0.5,0.5)
+        view.mouseDownColor = view.baseColor + vec4(0.0,0.05,0.02,0.0)
     }
     if(selectedColorOrNil)
     {
@@ -73,10 +73,11 @@ updateDerivedColors = function(view, baseColor, highlightColorOrNil, mouseDownCo
     }
     if(!view.selectedColor)
     {
-        view.selectedColor = view.baseColor + vec4(0.2,0.0,0.5,0.5)
+        view.selectedColor = view.baseColor + vec4(0.02,0.0,0.05,0.0)
     }
 
     view.color = view.baseColor
+    view.currentDesiredColor = view.color
 }
 
 initColor = function(view, buttonViewLayout)
@@ -116,6 +117,8 @@ updateColorVisuals = function(view)
     {
         view.color = view.color + view.highlightColor
     }
+
+    view.currentDesiredColor = view.color
 
     if(view.disabled)
     {
@@ -187,23 +190,33 @@ updateVisuals = function(view)
         view.buttonType.updateFunc(view)
     }
 
-    if(view.textView)
-    {
-        if(!view.baseTextColor)
-        {
-            view.baseTextColor = view.textView.color
-        }
+}
 
-        if(view.mouseIsDown or view.selected or view.isHover)
+createAnimationUpdateFunc = function(view)
+{
+    if(!view.update)
+    {
+        view.update = function(dt)
         {
-            view.textView.color = vec4(1.0,1.0,1.0,1.0)
-        }
-        else
-        {
-            view.textView.color = view.baseTextColor
+            if(view.clickFraction != nil)
+            {
+                view.clickFraction -= dt * 4.0
+                if(view.clickFraction > 0.0)
+                {
+                    view.color = math.mix(view.currentDesiredColor, view.mouseDownColor, view.clickFraction)
+                }
+                else
+                {
+                    view.color = view.currentDesiredColor
+                    view.clickFraction = nil
+                }
+            }
+            else
+            {
+                view.update = nil
+            }
         }
     }
-
 }
 
 create = function(parentView, viewLayout)
@@ -279,6 +292,16 @@ create = function(parentView, viewLayout)
     {
         view.disabled = newDisabled
         updateVisuals(view)
+    }
+
+    view.setClickFunction = function(clickFunc)
+    {
+        view.click = function()
+        {
+            view.clickFraction = 1.0
+            createAnimationUpdateFunc(view)
+            clickFunc()
+        }
     }
 
     updateVisuals(view)

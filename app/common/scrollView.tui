@@ -119,9 +119,6 @@ create = function(parentView, viewLayout)
     scrollView.scrollYOffset = 0.0
     scrollView.scrollVelocity = 0
 
-    scrollView.backgroundHover = false
-    scrollView.knobHover = false
-
     scrollView.layoutSizeFunction = viewLayout.onParentSizeChanged
     if(type(scrollView.layoutSizeFunction) != "function")
     {
@@ -305,58 +302,6 @@ create = function(parentView, viewLayout)
             }
 
             scrollView.scrollVelocity += offset * 10.0
-        }
-
-        hoverStart = function()
-        {
-            if(!scrollView.hover)
-            {
-                if(scrollView.backgroundHover or scrollView.knobHover)
-                {
-                    if(!scrollView.disabled and scrollView.scrollYIndexMax != 0)
-                    {
-                        scrollView.hover = true
-                    }
-                }
-            }
-        }
-
-        hoverEnd = function()
-        {
-            if(scrollView.hover)
-            {
-                if((!scrollView.backgroundHover) and (!scrollView.knobHover))
-                {
-                    scrollView.hover = false
-                    #knobView:setModel(model:modelIndexForName("ui_slider_knob"))
-                    #scrollerBackgroundView:setModel(model:modelIndexForName("ui_slider_vertical_bg"))
-                }
-            }
-        }
-        
-        scrollerBackgroundView.hoverStart = function()
-        {
-            scrollView.backgroundHover = true
-            hoverStart()
-        }
-
-        scrollerBackgroundView.hoverEnd = function()
-        {
-            scrollView.backgroundHover = false
-            hoverEnd()
-        }
-        
-        
-        knobView.hoverStart = function()
-        {
-            scrollView.knobHover = true
-            hoverStart()
-        }
-
-        knobView.hoverEnd = function()
-        {
-            scrollView.knobHover = false
-            hoverEnd()
         }
     }
 
