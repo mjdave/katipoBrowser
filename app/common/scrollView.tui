@@ -1,9 +1,4 @@
 
-knobSize = vec2(20.0, 60.0)
-scrollBarWidth = 20.0
-knobZOffset = 0
-
-
 layoutRows = function(scrollView)
 {
     if(!scrollView.dirty)
@@ -89,7 +84,8 @@ updatePositionsAndVisibilities = function(scrollView)
 
         fraction = -scrollView.scrollYOffset / scrollView.scrollYHeight
         knobY = size.y * fraction
-        knobView.pos = vec3(2, size.y - (knobY - fraction * knobSize.y) - knobSize.y, knobZOffset)
+        knobHeight = 60
+        knobView.pos = vec3(0, size.y - (knobY - fraction * knobHeight) - knobHeight, 0)
     }
 }
 
@@ -111,6 +107,12 @@ create = function(parentView, viewLayout)
     scrollView = parentView.addView(getViewLayout(viewLayout))
     scrollView.setClipChildren(true)
     scrollView.variableHeight = viewLayout.variableHeight
+
+    scrollView.scrollBarWidth = viewLayout.scrollBarWidth
+    if(!scrollView.scrollBarWidth)
+    {
+        scrollView.scrollBarWidth = 15.0
+    }
 
     scrollView.rowInfos = {}
     scrollView.scrollYIndexMax = 0
@@ -154,13 +156,24 @@ create = function(parentView, viewLayout)
             id = "scrollerBackground"
             onParentSizeChanged = function(parentSize)
             {
-                return vec2(scrollBarWidth, parentSize.y)
+                return vec2(scrollView.scrollBarWidth, parentSize.y)
             }
             alignmentX = "right"
             alignmentY = "top"
             type = "color"
             color = vec4(0.0,0.05,0.1,0.5)
-            additiveBlend = true
+            subviews = {
+                {
+                    type = "color"
+                    alignmentX = "outerLeft"
+                    color = vec4(0.0,0.8,0.3,0.2)
+                    additiveBlend = true
+                    onParentSizeChanged = function(parentSize)
+                    {
+                        return vec2(2, parentSize.y)
+                    }
+                }
+            }
         }
 
         scrollerBackgroundView = scrollView.addView(scrollerBackgroundLayout)
@@ -168,13 +181,13 @@ create = function(parentView, viewLayout)
 
 
         knobLayout = {
-            size = knobSize
+            size = vec2(scrollView.scrollBarWidth - 2, 60.0)
             alignmentY = "bottom"
+            alignmentX = "left"
             type = "color"
-            color = vec4(0.0,0.8,1.0,0.6)
+            color = vec4(0.0,0.8,1.0,0.3)
             additiveBlend = true
             layoutParentID = "scrollerBackground"
-            pos = vec3(2, 0, knobZOffset)
         }
 
         knobView = scrollView.addView(knobLayout)
@@ -182,9 +195,11 @@ create = function(parentView, viewLayout)
 
         mainViewMouseDown = function(buttonIndex, mouseLoc)
         {
-            #print("mainViewMouseDown")
-            if(!scrollView.disabled and scrollView.scrollYIndexMax != 0)
+            print("mainViewMouseDown:", scrollView.scrollYIndexMax, " scrollView.scrollerMouseDown:", scrollView.scrollerMouseDown)
+            if(!scrollView.disabled and scrollView.scrollYIndexMax != 0 and (!scrollView.scrollerMouseDown))
             {
+            print("mainViewMouseDown b")
+                scrollView.mainMouseDown = true
                 scrollView.lastY = mouseLoc.y
                 scrollView.startY = mouseLoc.y
             }
@@ -192,8 +207,10 @@ create = function(parentView, viewLayout)
         
         mainViewMouseDragged = function(buttonIndex, mouseLoc)
         {
-            if(!scrollView.disabled and scrollView.lastY and scrollView.scrollYIndexMax != 0 and !scrollView.isScrollBarMouseDown)
+            #print("mainViewMouseDragged:", scrollView.mainMouseDown, " scrollView.lastY:", scrollView.lastY, " scrollView.scrollYIndexMax:", scrollView.scrollYIndexMax)
+            if(!scrollView.disabled and scrollView.mainMouseDown and scrollView.lastY and scrollView.scrollYIndexMax != 0)
             {
+            #print("mainViewMouseDragged b")
                 diff = scrollView.lastY - mouseLoc.y
                 if(diff > 1 or diff < -1)
                 {
@@ -219,16 +236,19 @@ create = function(parentView, viewLayout)
 
         mainViewMouseUp = function(buttonIndex, mouseLoc)
         {
-            scrollView.isScrollBarMouseDown = false
+            print("mainViewMouseUp")
+            scrollView.mainMouseDown = false
             scrollView.scrollInProgress = false
         }
 
         scrollerMouseDown = function(buttonIndex, mouseLoc)
         {
+            print("scrollerMouseDown")
+            scrollView.scrollerMouseDown = true
+            scrollView.mainMouseDown = false
+
             if(!scrollView.disabled and scrollView.scrollYIndexMax != 0)
             {
-                scrollView.isScrollBarMouseDown = true
-
                 desiredY = -(1.0 - (mouseLoc.y / scrollView.parentSize.y)) * scrollView.scrollYHeight
                 offset = desiredY - scrollView.scrollYOffset
                 scrollView.scrollVelocity = offset * 0.3
@@ -237,10 +257,8 @@ create = function(parentView, viewLayout)
         
         scrollerMouseDragged = function(buttonIndex, mouseLoc)
         {
-            if(!scrollView.disabled and scrollView.scrollYIndexMax != 0)
+            if(!scrollView.disabled and scrollView.scrollYIndexMax != 0 and scrollView.scrollerMouseDown)
             {
-                scrollView.scrollBarScrollInProgress = true
-
                 desiredY = -(1.0 - (mouseLoc.y / scrollView.parentSize.y)) * scrollView.scrollYHeight
                 offset = desiredY - scrollView.scrollYOffset
                 scrollView.scrollVelocity = offset * 0.3
@@ -249,12 +267,8 @@ create = function(parentView, viewLayout)
 
         scrollerMouseUp = function(buttonIndex, mouseLoc)
         {
-            scrollView.isScrollBarMouseDown = false
-
-            if(!scrollView.disabled and scrollView.scrollYIndexMax != 0)
-            {
-                scrollView.scrollBarScrollInProgress = false
-            }
+            print("scrollerMouseUp")
+            scrollView.scrollerMouseDown = false
         }
 
 
@@ -266,17 +280,17 @@ create = function(parentView, viewLayout)
         scrollView.mouseDragged = mainViewMouseDragged
         scrollView.mouseUp = mainViewMouseUp
         
-        knobView.mouseDown = function(buttonIndex, mouseLoc)
-        {
-            backgroundLoc = knobView.locationRelativeToView(mouseLoc, scrollerBackgroundView)
-            scrollerMouseDown(buttonIndex, backgroundLoc)
-        }
-
-        knobView.mouseDragged = function(buttonIndex, mouseLoc) 
-        {
-            backgroundLoc = knobView.locationRelativeToView(mouseLoc, scrollerBackgroundView)
-            scrollerMouseDragged(buttonIndex, backgroundLoc)
-        }
+        #knobView.mouseDown = function(buttonIndex, mouseLoc)
+        #{
+        #    backgroundLoc = knobView.locationRelativeToView(mouseLoc, scrollerBackgroundView)
+        #    scrollerMouseDown(buttonIndex, backgroundLoc)
+        #}
+#
+        #knobView.mouseDragged = function(buttonIndex, mouseLoc) 
+        #{
+        #    backgroundLoc = knobView.locationRelativeToView(mouseLoc, scrollerBackgroundView)
+        #    scrollerMouseDragged(buttonIndex, backgroundLoc)
+        #}
 
         scrollView.mouseWheel = function(position, scrollChange)
         {
@@ -314,7 +328,6 @@ create = function(parentView, viewLayout)
                 if((!scrollView.backgroundHover) and (!scrollView.knobHover))
                 {
                     scrollView.hover = false
-                    scrollView.mouseDown = false
                     #knobView:setModel(model:modelIndexForName("ui_slider_knob"))
                     #scrollerBackgroundView:setModel(model:modelIndexForName("ui_slider_vertical_bg"))
                 }
