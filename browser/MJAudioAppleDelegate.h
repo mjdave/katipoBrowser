@@ -10,6 +10,7 @@
 @interface MJAudioAppleDelegate : NSObject
 {
     AVQueuePlayer* player;
+    double currentTrackDuration;
     bool hasUrls;
     
     id timeObserverToken;
@@ -28,6 +29,8 @@
 - (void)skipToNextTrack;
 
 - (bool)paused;
+- (double)currentTrackTime;
+- (double)currentTrackDuration;
 
 - (MPRemoteCommandHandlerStatus )remoteCommandEvent:(MPRemoteCommandEvent *)event;
 

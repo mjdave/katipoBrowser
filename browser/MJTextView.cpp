@@ -153,6 +153,7 @@ void MJTextView::createDrawables(MJRenderPass renderPass, int renderTargetCompat
 
 void MJTextView::updateDimensions()
 {
+    loadFontIfNeeded();
 	if(font)
 	{
 		double scaleToUse = renderScale;
@@ -192,6 +193,7 @@ void MJTextView::updateBuffer(GCommandBuffer* commandBuffer)
         vulkan->destroySingleBuffer(nextVertexBuffer);
     }
     nextVertices.clear();
+    loadFontIfNeeded();
 
     if(font && !text.empty())
     {
@@ -306,21 +308,7 @@ void MJTextView::setFontNameAndSize(FontNameAndSize fontNameAndSize_)
     textRenderScale = 1.0;
 
     fontNameAndSize = fontNameAndSize_;
-
-	double scaleToUse = renderScale;
-    MJFont* newFont = cache->getFont(fontNameAndSize_.name, fontNameAndSize_.size * scaleToUse, rootTable, &textRenderScale);
-
-    if(newFont != font)
-    {
-        font = newFont;
-        //updateDimensions();
-        bufferNeedsUpdating = true;
-    }
-
-	if(!newFont)
-	{
-        MJWarn("Failed to load font:%s size:%d", fontNameAndSize_.name.c_str(), (int)fontNameAndSize_.size);
-	}
+    needsToUpdateFont = true;
 }
 
 FontNameAndSize MJTextView::getFontNameAndSize() const
@@ -367,6 +355,23 @@ int MJTextView::getWrapWidth() const
     return wrapWidth;
 }
 
+void MJTextView::loadFontIfNeeded()
+{
+    if(needsToUpdateFont)
+    {
+        needsToUpdateFont = false;
+        double scaleToUse = renderScale;
+        MJFont* newFont = cache->getFont(fontNameAndSize.name, fontNameAndSize.size * scaleToUse, rootTable, &textRenderScale);
+        
+        if(newFont != font)
+        {
+            font = newFont;
+            //updateDimensions();
+            bufferNeedsUpdating = true;
+        }
+    }
+}
+
 void MJTextView::preRender(GCommandBuffer* commandBuffer, MJRenderPass renderPass, int renderTargetCompatibilityIndex, double dt, double frameLerp, double animationTimer_)
 {
     /*
@@ -401,7 +406,7 @@ void MJTextView::preRender(GCommandBuffer* commandBuffer, MJRenderPass renderPas
      */
     
     
-    
+    loadFontIfNeeded();
     if(bufferNeedsUpdating && !getHidden() && font)
     {
         updateBuffer(commandBuffer);
@@ -554,6 +559,7 @@ double MJTextView::getFontGeometryScale() const
 
 dvec4 MJTextView::getRectForCharAtIndex(int charIndex)
 {
+    loadFontIfNeeded();
 	if(font && !text.empty())
 	{
 		int charIndexToUse = charIndex;
@@ -591,6 +597,7 @@ dvec4 MJTextView::getRectForCharAtIndex(int charIndex)
 
 int MJTextView::getCharIndexForPos(dvec2 pos)
 {
+    loadFontIfNeeded();
     if(font && !text.empty())
     {
         double scaleToUse = renderScale;
@@ -641,6 +648,7 @@ void MJTextView::resetVerticalCursorMovementAnchors()
 
 int MJTextView::getCursorOffsetForVerticalCursorMovement(int currentCursorOffset, int verticalOffset)
 {
+    loadFontIfNeeded();
     if(font && !text.empty())
     {
         double scaleToUse = renderScale;

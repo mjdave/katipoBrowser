@@ -11,7 +11,8 @@ class MJDrawable;
 
 class MJTextView : public MJView {
     FontNameAndSize fontNameAndSize;
-    MJFont* font;
+    MJFont* font = nullptr;
+    bool needsToUpdateFont = false;
     int textAlignment;
 
 	MJDrawable* drawable = nullptr;
@@ -91,6 +92,7 @@ private:
 protected:
 	void updateDimensions();
     void updateBuffer(GCommandBuffer* commandBuffer);
+    void loadFontIfNeeded();
 
 	virtual void destroyDrawables();
 	virtual void createDrawables(MJRenderPass renderPass, int renderTargetCompatibilityIndex);

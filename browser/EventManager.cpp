@@ -264,18 +264,31 @@ dvec2 convertMouseLocToSDL(dvec2 inLoc, WindowInfo* windowInfo)
 		((-inLoc.y / windowInfo->halfScreenHeight) * windowInfo->halfWindowHeight) + windowInfo->halfWindowHeight);
 }
 
+
+void EventManager::setTextEntryRect(dvec2 rectPos, dvec2 rectSize, int cursorOffset)
+{
+    dvec2 sdlPos = dvec2(((rectPos.x / windowInfo->halfScreenWidth) * windowInfo->halfWindowWidth) + windowInfo->halfWindowWidth,
+                         ((-rectPos.y / windowInfo->halfScreenHeight) * windowInfo->halfWindowHeight) + windowInfo->windowHeight);
+    dvec2 sdlSize = rectSize / dvec2(windowInfo->halfScreenWidth, windowInfo->halfScreenHeight) * dvec2(windowInfo->halfWindowWidth, windowInfo->halfWindowHeight);
+    
+    SDL_Rect rect;
+    rect.x = sdlPos.x;
+    rect.y = sdlPos.y;
+    rect.w = sdlSize.x;
+    rect.h = sdlSize.y;
+    SDL_SetTextInputArea(window, &rect, cursorOffset);
+    hasSetTextRect = true;
+}
+
 void EventManager::update(float dt)
 {
-    
     if(needsToStartTextEntry)
     {
         needsToStartTextEntry = false;
-        SDL_Rect rect;
-        rect.x = 0;
-        rect.y = windowInfo->screenHeight;
-        rect.w = windowInfo->screenWidth;
-        rect.h = 20;
-        SDL_SetTextInputArea(window, &rect, 0);
+        if(!hasSetTextRect)
+        {
+            MJWarn("setTextEntryRect should be called before starting text entry.");
+        }
         
         SDL_PropertiesID props = SDL_CreateProperties();
         SDL_SetBooleanProperty(props, SDL_PROP_TEXTINPUT_AUTOCORRECT_BOOLEAN, false);
@@ -689,6 +702,49 @@ void EventManager::bindTui(TuiTable* rootTable)
             {
                 TuiParseError(callingDebugInfo, "Incorrect type");
             }
+        }
+        return TUI_NIL;
+    });
+    
+    
+    eventManagerTable->setFunction("setTextEntryRectFromView", [this](TuiTable* args, TuiRef* existingResult, TuiFunctionCallData* incomingCallData, TuiDebugInfo* callingDebugInfo) -> TuiRef* {
+        if(args->arrayObjects.size() >= 2)
+        {
+            TuiRef* viewTableRef = args->arrayObjects[0];
+            TuiRef* cursorOffsetRef = args->arrayObjects[1];
+            
+            if(viewTableRef->type() != Tui_ref_type_TABLE)
+            {
+                TuiParseError(callingDebugInfo, "Incorrect type for first arg, view");
+            }
+            if(cursorOffsetRef->type() != Tui_ref_type_NUMBER)
+            {
+                TuiParseError(callingDebugInfo, "Incorrect type for second arg, cursor offset (number)");
+            }
+            
+            MJView* textBoundsView = (MJView*)((TuiTable*)viewTableRef)->getUserData("_view");
+            
+            dvec2 bottomLeft = dvec2(0,0); //todo handle other alignment?
+            dvec2 topRight = textBoundsView->size; //todo handle other alignment?
+            
+            dvec2 windowPos = textBoundsView->locationRelativeToView(bottomLeft, mainController->mainMJView);
+            dvec2 cursorWindowPos = textBoundsView->locationRelativeToView(bottomLeft + dvec2(((TuiNumber*)viewTableRef)->value, 0), mainController->mainMJView);
+            dvec2 extentPos = textBoundsView->locationRelativeToView(topRight, mainController->mainMJView);
+            
+            /*
+             
+             #windowPos = backgroundView.localPointToWindow(vec2(0,0))
+             #cursorWindowPos = textView.localPointToWindow(localCursorOffset)
+             #extentPos = backgroundView.localPointToWindow(backgroundView.size)
+         #
+             #print("windowPos:", windowPos)
+             #print("cursorWindowPos:", cursorWindowPos)
+             #print("extentPos:", extentPos)
+             #eventManager.setTextEntryRect(windowPos, extentPos - windowPos, cursorWindowPos.x - windowPos.x)
+             */
+            
+            
+            setTextEntryRect(windowPos, extentPos - windowPos, cursorWindowPos.x - windowPos.x);
         }
         return TUI_NIL;
     });

@@ -225,8 +225,8 @@ updateCursorPosition = function(markupView)
 
     #print("textView:", textView)
     rect = textView.getRectForCharAtIndex(-1 + markupView.cursorOffset)
-    localOffset = vec2(rect.x + rect.z, rect.y)
-    offset = textView.locationRelativeToView(localOffset, markupView)
+    localCursorOffset = vec2(rect.x + rect.z, rect.y)
+    offset = textView.locationRelativeToView(localCursorOffset, markupView)
     #print("rect:", rect, " markupView.cursorOffset:", markupView.cursorOffset)
     #print("backgroundView pos:", backgroundView.pos)
     #xOffset = rect.x + rect.z + backgroundView.pos.x
@@ -240,6 +240,17 @@ updateCursorPosition = function(markupView)
     #todo handle right alignment
     #print("set cursor pos:", xOffset + 1,",",rect.y + 1,0)
     markupView.cursorView.pos = vec3(offset.x,offset.y,0)
+
+    eventManager.setTextEntryRectFromView(backgroundView, localCursorOffset.x)
+
+    #windowPos = backgroundView.localPointToWindow(vec2(0,0))
+    #cursorWindowPos = textView.localPointToWindow(localCursorOffset)
+    #extentPos = backgroundView.localPointToWindow(backgroundView.size)
+#
+    #print("windowPos:", windowPos)
+    #print("cursorWindowPos:", cursorWindowPos)
+    #print("extentPos:", extentPos)
+    #eventManager.setTextEntryRect(windowPos, extentPos - windowPos, cursorWindowPos.x - windowPos.x)
 }
 
 keyMap = {

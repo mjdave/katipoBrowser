@@ -131,13 +131,15 @@ MJImageTexture* MJCache::getTextureWithOptions(std::string name, TuiTable* rootT
 MJFont* MJCache::getOrLoadFontIfAvailableInternal(std::string name, int pointSize, TuiTable* rootTable)
 {
     std::string combinedFontName = Tui::string_format("%s%d", name.c_str(), pointSize);
-    std::string fontFilepath = getKatipoResourcePath("fonts/" + combinedFontName + ".fnt", rootTable);
+    std::string cacheKey = combinedFontName + Tui::string_format("%p", rootTable);
     
-    if(fonts.count(fontFilepath) > 0)
+    
+    if(fonts.count(cacheKey) > 0)
     {
-        return fonts[fontFilepath];
+        return fonts[cacheKey];
     }
     
+    std::string fontFilepath = getKatipoResourcePath("fonts/" + combinedFontName + ".fnt", rootTable);
     if(missingFiles.count(fontFilepath) == 0)
     {
         if(Tui::fileExistsAtPath(fontFilepath))
@@ -145,6 +147,7 @@ MJFont* MJCache::getOrLoadFontIfAvailableInternal(std::string name, int pointSiz
             std::string imageFilepath = getKatipoResourcePath("fonts/" + combinedFontName + ".png", rootTable);
             MJFont* font = new MJFont(vulkan, this, fontFilepath, imageFilepath);
             fonts[fontFilepath] = font;
+            fonts[cacheKey] = font;
             return font;
         }
         
@@ -168,6 +171,7 @@ MJFont* MJCache::getOrLoadFontIfAvailableInternal(std::string name, int pointSiz
         std::string imageFilepath = getKatipoResourcePath("app/common/fonts/" + combinedFontName + ".png", rootTable);
         MJFont* font = new MJFont(vulkan, this, fontFilepath, imageFilepath);
         fonts[fontFilepath] = font;
+        fonts[cacheKey] = font;
         return font;
     }
     

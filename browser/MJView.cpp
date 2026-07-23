@@ -150,6 +150,10 @@ void MJView::initInternals()
                 return subView->stateTable->retain();
             }
         }
+        else
+        {
+            MJError("bad args");
+        }
         return TUI_NIL;
     });
     
@@ -172,6 +176,36 @@ void MJView::initInternals()
                 MJError("bad args");
             }
         }
+        else
+        {
+            MJError("bad args");
+        }
+        return TUI_NIL;
+    });
+    
+    
+    stateTable->setFunction("localPointToWindow", [this](TuiTable* args, TuiRef* existingResult, TuiFunctionCallData* incomingCallData, TuiDebugInfo* callingDebugInfo) -> TuiRef* {
+        if(args && args->arrayObjects.size() >= 1)
+        {
+            TuiRef* locationRef = args->arrayObjects[0];
+            
+            if(locationRef->type() == Tui_ref_type_VEC2)
+            {
+                dvec2 localPointVec2 = ((TuiVec2*)locationRef)->value;
+                
+                dvec2 resultVec = localPointToWindow(dvec3(localPointVec2.x, localPointVec2.y, 0.0));
+                
+                return new TuiVec2(resultVec);
+            }
+            else
+            {
+                MJError("bad args");
+            }
+        }
+        else
+        {
+            MJError("bad args");
+        }
         return TUI_NIL;
     });
     
@@ -188,6 +222,10 @@ void MJView::initInternals()
             {
                 MJError("bad arg");
             }
+        }
+        else
+        {
+            MJError("bad args");
         }
         return TUI_NIL;
     });
@@ -1059,6 +1097,13 @@ bool MJView::containsPoint(dvec3 windowRayStart, dvec3 windowRayDirection)
 		if(localPoint.x > 0 && localPoint.x < localSize.x &&
 		   localPoint.y > 0 && localPoint.y < localSize.y)
 		{
+            if(clippingParent)
+            {
+                if(!clippingParent->containsPoint(windowRayStart, windowRayDirection))
+                {
+                    return false;
+                }
+            }
 			return true;
 		}
 		else

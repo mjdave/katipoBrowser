@@ -19,6 +19,8 @@ protected: // members
     
     TuiFunction* playingSongChangedFunction = nullptr;
     TuiFunction* playingSongPausedChangedFunction = nullptr;
+    
+    TuiTable* audioTable = nullptr; //not actually needed after all, but left here for now
 
 public: // functions
     

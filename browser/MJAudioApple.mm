@@ -113,6 +113,16 @@ void MJAudioApple::skipToNextTrack()
     [audioAppleDelegate skipToNextTrack];
 }
 
+double MJAudioApple::currentTrackTime()
+{
+    return [audioAppleDelegate currentTrackTime];
+}
+
+double MJAudioApple::currentTrackDuration()
+{
+    return [audioAppleDelegate currentTrackDuration];
+}
+
 void MJAudioApple::updatePausedState()
 {
     if(currentlyPlayingTrackInfo)

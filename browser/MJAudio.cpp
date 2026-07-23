@@ -17,6 +17,10 @@ MJAudio::MJAudio()
 
 MJAudio::~MJAudio()
 {
+    if(audioTable)
+    {
+        audioTable->release();
+    }
 }
 
 static inline std::string getKatipoResourcePath(const std::string& inPath, TuiTable* rootTable) //todo this is copied from MJCache
@@ -39,10 +43,12 @@ static inline std::string getKatipoResourcePath(const std::string& inPath, TuiTa
 
 void MJAudio::bindTui(TuiTable* rootTable)
 {
-    
-    TuiTable* audioTable = new TuiTable(rootTable);
+    if(audioTable)
+    {
+        MJError("MJAudio::bindTui must only be called once");
+    }
+    audioTable = new TuiTable(rootTable);
     rootTable->setTable("audio", audioTable);
-    audioTable->release();
     
     audioTable->onSet = [this](TuiRef* table, const std::string& key, TuiRef* value) {
         audioTableKeyChanged(key, value);
@@ -92,6 +98,25 @@ void MJAudio::bindTui(TuiTable* rootTable)
         return TUI_NIL;
     });
     
+    audioTable->setFunction("currentTrackTime", [this](TuiTable* args, TuiRef* existingResult, TuiFunctionCallData* incomingCallData, TuiDebugInfo* callingDebugInfo) -> TuiRef* {
+#ifdef __APPLE__
+        return new TuiNumber(MJAudioApple::getInstance()->currentTrackTime());
+#else
+        return new TuiNumber(MJAudioSDLMixer::getInstance()->currentTrackTime());
+#endif
+        
+        return TUI_NIL;
+    });
+    
+    audioTable->setFunction("currentTrackDuration", [this](TuiTable* args, TuiRef* existingResult, TuiFunctionCallData* incomingCallData, TuiDebugInfo* callingDebugInfo) -> TuiRef* {
+#ifdef __APPLE__
+        return new TuiNumber(MJAudioApple::getInstance()->currentTrackDuration());
+#else
+        return new TuiNumber(MJAudioSDLMixer::getInstance()->currentTrackDuration());
+#endif
+        
+        return TUI_NIL;
+    });
     
     audioTable->setFunction("next", [this](TuiTable* args, TuiRef* existingResult, TuiFunctionCallData* incomingCallData, TuiDebugInfo* callingDebugInfo) -> TuiRef* {
 #ifdef __APPLE__

@@ -125,7 +125,7 @@ bookmark = {
     type = "view"
     onParentSizeChanged = function(parentSize)
     {
-        return vec2(parentSize.x - viewTypes.scrollView.scrollBarWidth, bookMarkHeight)
+        return vec2(parentSize.x - 15.0, bookMarkHeight)
     }
 
     subviews = {

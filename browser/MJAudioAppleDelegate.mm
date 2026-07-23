@@ -29,6 +29,8 @@
     NSData* artImageData = nullptr;
     double duration = CMTimeGetSeconds([asset duration]);
     
+    currentTrackDuration = duration;
+    
     NSArray* titleItems = [AVMetadataItem metadataItemsFromArray:commonMetaData filteredByIdentifier:AVMetadataCommonIdentifierTitle];
     if([titleItems count] > 0)
     {
@@ -71,6 +73,15 @@
     }*/
 }
 
+- (double)currentTrackTime
+{
+    return CMTimeGetSeconds(player.currentTime);
+}
+
+- (double)currentTrackDuration
+{
+    return currentTrackDuration;
+}
 
 - (void)playerItemDidReachEnd:(NSNotification *)notification {
     MJLog("got playerItemDidReachEnd notifcation callback");

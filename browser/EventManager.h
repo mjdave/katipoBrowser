@@ -48,6 +48,8 @@ public:
     
     void preventMouseWarpUntilAfterNextShow();
     
+    void setTextEntryRect(dvec2 rectPos, dvec2 rectSize, int cursorOffset);
+    
     void startTextEntry();
     void stopTextEntry();
 
@@ -80,6 +82,7 @@ public:
     bool isResizingWindow = false;
     std::string currentHostID = "";
     TuiTable* currentKatipoTable = nullptr;
+    bool hasSetTextRect = false;
 
 private:
     
@@ -88,6 +91,7 @@ private:
     
     bool textEntryActive;
     bool needsToStartTextEntry;
+    vec2 textEntryStartWindowOffset;
     bool needsToFinishTextEntry;
     
     bool appHasFocus = true;

@@ -23,6 +23,8 @@ public: // members
     void play(TuiTable* urls);
     void skipToNextTrack();
     void stop();
+    double currentTrackTime();
+    double currentTrackDuration();
     
     void updateCurrentlyPlayingOSInfo(const std::string& titleString, const std::string& artistString, double trackDuration, double elapsedPlaybackTime, void* imageBytes, int imageLength);
     
