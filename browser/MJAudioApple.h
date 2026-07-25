@@ -25,6 +25,7 @@ public: // members
     void stop();
     double currentTrackTime();
     double currentTrackDuration();
+    void seekToTime(double seconds);
     
     void updateCurrentlyPlayingOSInfo(const std::string& titleString, const std::string& artistString, double trackDuration, double elapsedPlaybackTime, void* imageBytes, int imageLength);
     

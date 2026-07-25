@@ -123,6 +123,11 @@ double MJAudioApple::currentTrackDuration()
     return [audioAppleDelegate currentTrackDuration];
 }
 
+void MJAudioApple::seekToTime(double seconds)
+{
+    [audioAppleDelegate seekToTime:seconds];
+}
+
 void MJAudioApple::updatePausedState()
 {
     if(currentlyPlayingTrackInfo)

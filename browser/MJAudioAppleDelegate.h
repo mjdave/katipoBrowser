@@ -32,6 +32,8 @@
 - (double)currentTrackTime;
 - (double)currentTrackDuration;
 
+- (void)seekToTime:(double)seekTime;
+
 - (MPRemoteCommandHandlerStatus )remoteCommandEvent:(MPRemoteCommandEvent *)event;
 
 @end

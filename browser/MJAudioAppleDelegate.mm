@@ -83,6 +83,11 @@
     return currentTrackDuration;
 }
 
+- (void)seekToTime:(double)seekTime
+{
+    [player seekToTime:CMTimeMakeWithSeconds(seekTime, NSEC_PER_SEC)];
+}
+
 - (void)playerItemDidReachEnd:(NSNotification *)notification {
     MJLog("got playerItemDidReachEnd notifcation callback");
 //song reached end of playing - respond appropriately
@@ -241,15 +246,9 @@
         return MPRemoteCommandHandlerStatusSuccess;
     }
     if (event.command == cc.changePlaybackPositionCommand) {
-        /*MPChangePlaybackPositionCommandEvent *positionEvent = (MPChangePlaybackPositionCommandEvent *)event;
-        NSInteger duration = vps.mediaDuration / 1000;
-        if (duration > 0) {
-            vps.playbackPosition = positionEvent.positionTime / duration;
-            return MPRemoteCommandHandlerStatusSuccess;
-        }
-        return MPRemoteCommandHandlerStatusCommandFailed;*/
-        
-         return MPRemoteCommandHandlerStatusSuccess;
+        MPChangePlaybackPositionCommandEvent *positionEvent = (MPChangePlaybackPositionCommandEvent *)event;
+        [player seekToTime:CMTimeMakeWithSeconds(positionEvent.positionTime, 60)];
+        return MPRemoteCommandHandlerStatusSuccess;
     }
     if (event.command == cc.changeShuffleModeCommand) {
         //MPChangeShuffleModeCommandEvent *shuffleEvent = (MPChangeShuffleModeCommandEvent *)event;
