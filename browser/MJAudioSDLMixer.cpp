@@ -169,6 +169,11 @@ void MJAudioSDLMixer::playSongs(TuiTable* urls)
     currentTrack = MIX_CreateTrack(mixer);
     MIX_SetTrackStoppedCallback(currentTrack, trackFinished, this);
     currentAudio = MIX_LoadAudio_IO(mixer, stream, false, false);
+
+    Sint64 durationFrames = MIX_GetAudioDuration(currentAudio);
+    double durationMS = MIX_AudioFramesToMS(currentAudio, durationFrames);
+
+    currentTrackDuration_ = durationMS / 1000.0;
     SDL_CloseIO(stream);
 
     if (!MIX_SetTrackAudio(currentTrack, currentAudio)) {
@@ -238,4 +243,35 @@ void MJAudioSDLMixer::updateCurrentlyPlayingOSInfo(const std::string& titleStrin
 {
     //this function needs to update any OS level playback UI, eg. 'now playing' widgets/menues. on Apple this updates MPNowPlayingInfoCenter
     MJWarn("MJAudioSDLMixer::updateCurrentlyPlayingOSInfo not implemented");
+}
+
+double MJAudioSDLMixer::currentTrackTime()
+{
+    if(currentTrack)
+    {
+        Sint64 posFrame = MIX_GetTrackPlaybackPosition(currentTrack);
+        double ms = MIX_TrackFramesToMS(currentTrack, posFrame);
+        return ms / 1000.0;
+    }
+    return 0.0;
+}
+
+
+double MJAudioSDLMixer::currentTrackDuration()
+{
+    if(currentTrack)
+    {
+        return currentTrackDuration_;
+    }
+    return 0.0;
+}
+
+void MJAudioSDLMixer::seekToTime(double timeSeconds)
+{
+    if(currentTrack)
+    {
+        double ms = timeSeconds * 1000.0;
+        Sint64 posFrame = MIX_TrackMSToFrames(currentTrack, ms);
+        MIX_SetTrackPlaybackPosition(currentTrack, posFrame);
+    }
 }

@@ -27,6 +27,7 @@ public: // members
     MIX_Mixer* mixer;
     MIX_Track* currentTrack = nullptr;
     MIX_Audio* currentAudio = nullptr;
+    double currentTrackDuration_ = 0.0;
     
     std::map<std::string, MJSDLSound> sounds; //todo clean these up, maybe reference count or something
 
@@ -54,6 +55,11 @@ public: // members
     void trackFinshedCallback();
     
     void updateCurrentlyPlayingOSInfo(const std::string& titleString, const std::string& artistString, double trackDuration, double elapsedPlaybackTime, void* imageBytes, int imageLength);
+
+    double currentTrackTime();
+    double currentTrackDuration();
+
+    void seekToTime(double timeSeconds);
     
 public:
     //TuiFunction* finishedCallbackFunction = nullptr;
