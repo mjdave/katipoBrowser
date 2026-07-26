@@ -1,4 +1,4 @@
-
+keys = require("app/common/keys.tui")
 urlTextEntry = scene.getView("urlTextEntry")
 urlTextEntry.hidden = true
 
@@ -304,6 +304,7 @@ mainViewLayout = {
 siteContent = siteContentBackground.addView(mainViewLayout)
 
 
+
 init = function()
 {
     siteContentBackground.goalColor = vec4(0.0, 0.2, 0.8, 0.3)
@@ -337,6 +338,17 @@ init = function()
 }
 
 init()
+
+reloadKey = function(isDown, code, mod, isRepeat)
+{
+    if(isDown and !isRepeat and (mod == keys.modifiers.ctrl or mod == keys.modifiers.cmd))
+    {
+        init()
+    }
+}
+eventManager.addKeyEventListener(keys.keyCodes.r, reloadKey)
+
+
 
 #katipo.setBundledHostRunning("waraki", true)
 #loadInitialLink()

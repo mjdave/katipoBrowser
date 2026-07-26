@@ -128,6 +128,12 @@ void MJAudioApple::seekToTime(double seconds)
     [audioAppleDelegate seekToTime:seconds];
 }
 
+
+void MJAudioApple::setPlaybackRate(double rate)
+{
+    [audioAppleDelegate setPlaybackRate:rate];
+}
+
 void MJAudioApple::updatePausedState()
 {
     if(currentlyPlayingTrackInfo)

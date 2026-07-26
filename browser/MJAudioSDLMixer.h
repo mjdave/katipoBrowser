@@ -28,6 +28,7 @@ public: // members
     MIX_Track* currentTrack = nullptr;
     MIX_Audio* currentAudio = nullptr;
     double currentTrackDuration_ = 0.0;
+    double playbackRate = 1.0;
     
     std::map<std::string, MJSDLSound> sounds; //todo clean these up, maybe reference count or something
 
@@ -60,6 +61,7 @@ public: // members
     double currentTrackDuration();
 
     void seekToTime(double timeSeconds);
+    void setPlaybackRate(double rate);
     
 public:
     //TuiFunction* finishedCallbackFunction = nullptr;

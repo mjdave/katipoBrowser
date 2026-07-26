@@ -88,6 +88,11 @@
     [player seekToTime:CMTimeMakeWithSeconds(seekTime, NSEC_PER_SEC)];
 }
 
+- (void)setPlaybackRate:(double)rate
+{
+    [player setRate:rate];
+}
+
 - (void)playerItemDidReachEnd:(NSNotification *)notification {
     MJLog("got playerItemDidReachEnd notifcation callback");
 //song reached end of playing - respond appropriately
@@ -146,6 +151,9 @@
         {
             std::string path = ((TuiString*)urlString)->value;
             AVPlayerItem* playerItem = [[AVPlayerItem alloc] initWithURL:[NSURL fileURLWithPath:[NSString stringWithUTF8String:path.c_str()]]];//((TuiString*)urlString)->value.c_str()]]];
+            
+            playerItem.audioTimePitchAlgorithm = AVAudioTimePitchAlgorithmVarispeed;
+            
             [player insertItem:playerItem afterItem:nil];
             
             if(prevPlayerItem)

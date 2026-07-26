@@ -167,6 +167,7 @@ void MJAudioSDLMixer::playSongs(TuiTable* urls)
     }
 
     currentTrack = MIX_CreateTrack(mixer);
+    MIX_SetTrackFrequencyRatio(currentTrack, playbackRate);
     MIX_SetTrackStoppedCallback(currentTrack, trackFinished, this);
     currentAudio = MIX_LoadAudio_IO(mixer, stream, false, false);
 
@@ -217,6 +218,7 @@ void MJAudioSDLMixer::skipToNextTrack()
         }
 
         currentTrack = MIX_CreateTrack(mixer);
+        MIX_SetTrackFrequencyRatio(currentTrack, playbackRate);
         MIX_SetTrackStoppedCallback(currentTrack, trackFinished, this);
         currentAudio = MIX_LoadAudio_IO(mixer, stream, false, false);
 
@@ -273,5 +275,14 @@ void MJAudioSDLMixer::seekToTime(double timeSeconds)
         double ms = timeSeconds * 1000.0;
         Sint64 posFrame = MIX_TrackMSToFrames(currentTrack, ms);
         MIX_SetTrackPlaybackPosition(currentTrack, posFrame);
+    }
+}
+
+void MJAudioSDLMixer::setPlaybackRate(double rate)
+{
+    playbackRate = rate;
+    if(currentTrack)
+    {
+        MIX_SetTrackFrequencyRatio(currentTrack, playbackRate);
     }
 }

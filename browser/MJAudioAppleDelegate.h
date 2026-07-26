@@ -33,6 +33,7 @@
 - (double)currentTrackDuration;
 
 - (void)seekToTime:(double)seekTime;
+- (void)setPlaybackRate:(double)rate;
 
 - (MPRemoteCommandHandlerStatus )remoteCommandEvent:(MPRemoteCommandEvent *)event;
 

@@ -152,6 +152,30 @@ void MJAudio::bindTui(TuiTable* rootTable)
         return TUI_NIL;
     });
     
+    audioTable->setFunction("setPlaybackRate", [this](TuiTable* args, TuiRef* existingResult, TuiFunctionCallData* incomingCallData, TuiDebugInfo* callingDebugInfo) -> TuiRef* {
+        if(args->arrayObjects.size() >= 1)
+        {
+            TuiRef* timeNumberRef = args->arrayObjects[0];
+            if(timeNumberRef->type() == Tui_ref_type_NUMBER)
+            {
+#ifdef __APPLE__
+                MJAudioApple::getInstance()->setPlaybackRate(((TuiNumber*)timeNumberRef)->value);
+#else
+                MJAudioSDLMixer::getInstance()->setPlaybackRate(((TuiNumber*)timeNumberRef)->value);
+#endif
+            }
+            else
+            {
+                TuiParseError(callingDebugInfo, "Incorrect argument type");
+            }
+        }
+        else
+        {
+            TuiParseError(callingDebugInfo, "Missing args");
+        }
+        return TUI_NIL;
+    });
+    
     audioTable->setFunction("queueSongs", [this](TuiTable* args, TuiRef* existingResult, TuiFunctionCallData* incomingCallData, TuiDebugInfo* callingDebugInfo) -> TuiRef* {
         if(args->arrayObjects.size() >= 1)
         {

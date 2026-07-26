@@ -399,6 +399,14 @@ create = function(parentView, viewLayout)
 
         return addedView
     }
+
+    if(viewLayout.scrollViewRows)
+    {
+        for(rowItemLayout in viewLayout.scrollViewRows)
+        {
+            scrollView.addView(rowItemLayout)
+        }
+    }
     
     return scrollView
 }
