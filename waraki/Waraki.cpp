@@ -234,6 +234,33 @@ void getLocalKeys(std::string* publicKey, std::string* secretKey)
     MJLog("Generated and saved new private key:\n%s.\nPlease backup this file and keep it safe and secure!", Tui::getAbsolutePath(clientKeyPath).c_str());
 }
 
+void sdlFileOpenCallback(void *userdata, const char * const *filelist, int filter)
+{
+    TuiTable* fileListTable = nullptr;
+    
+    if(!filelist)
+    {
+         MJWarn("SDL_ShowOpenFolderDialog: An error occured:%s", SDL_GetError());
+    }
+    else if(*filelist)
+    {
+        fileListTable = new TuiTable();
+        for(int fileListIndex = 0; filelist[fileListIndex]; fileListIndex++)
+        {
+            TuiString* fileName = new TuiString(filelist[fileListIndex]);
+            fileListTable->insert(fileListIndex, fileName);
+            fileName->release();
+        }
+    }
+    
+    ((TuiFunction*)userdata)->call("sdlFileOpenCallback", fileListTable);
+    
+    if(fileListTable)
+    {
+        fileListTable->release();
+    }
+}
+
 void Waraki::init()
 {
     Katipo::baseSavePath = SDL_GetPrefPath("katipobrowser", "waraki");
@@ -309,11 +336,29 @@ void Waraki::init()
                     {
                         if(!browserTracker)
                         {
-                            browserTracker = new BrowserTracker(Katipo::getResourcePath("app/tracker.tui"));
+                            browserTracker = new BrowserTracker(Katipo::getResourcePath("tracker.tui"));
                         }
-                        BrowserHost* host = new BrowserHost(hostID, Katipo::getResourcePath("waraki-site"), Katipo::getResourcePath("app/host.tui"));
-                        browserHostsByHostID[hostID] = host;
-                        return TUI_TRUE;
+                        TuiTable* userConfiguration = nullptr;
+                        if(args->arrayObjects.size() >= 3 && args->arrayObjects[2]->type() == Tui_ref_type_TABLE)
+                        {
+                            userConfiguration = (TuiTable*)args->arrayObjects[2];
+                        }
+                        
+                        BrowserHost* host = new BrowserHost(hostID,
+                                                            Katipo::getResourcePath("waraki-site"),
+                                                            Katipo::getResourcePath("host.tui"),
+                                                            userConfiguration);
+                        
+                        if(host->loadSuccess)
+                        {
+                            browserHostsByHostID[hostID] = host;
+                            return TUI_TRUE;
+                        }
+                        else
+                        {
+                            delete host;
+                            return TUI_FALSE;
+                        }
                     }
                 }
                 else
@@ -345,8 +390,48 @@ void Waraki::init()
         return TUI_NIL;
     });
     
-    
     // START WARAKI, NEED TO PORT PROBABLY
+    
+    
+    katipoTable->setFunction("openFileDialog", [this](TuiTable* args,
+                                                TuiRef* existingResult,
+                                                TuiFunctionCallData* incomingCallData,
+                                                TuiDebugInfo* callingDebugInfo) -> TuiRef* {
+        if(args->arrayObjects.size() >= 2)
+        {
+            std::string initialPath = args->arrayObjects[0]->getStringValue();
+            TuiFunction* callback = (TuiFunction*)args->arrayObjects[1];
+            callback->retain();
+            
+            SDL_ShowOpenFileDialog(sdlFileOpenCallback,
+                                     callback,
+                  MainController::getInstance()->displayWindow,
+                                   nullptr, 0,
+                                     initialPath.c_str(),
+                  false); //allow many
+        }
+        return TUI_NIL;
+    });
+    
+    katipoTable->setFunction("openFolderDialog", [this](TuiTable* args,
+                                                TuiRef* existingResult,
+                                                TuiFunctionCallData* incomingCallData,
+                                                TuiDebugInfo* callingDebugInfo) -> TuiRef* {
+        if(args->arrayObjects.size() >= 2)
+        {
+            std::string initialPath = args->arrayObjects[0]->getStringValue();
+            TuiFunction* callback = (TuiFunction*)args->arrayObjects[1];
+            callback->retain();
+            
+            SDL_ShowOpenFolderDialog(sdlFileOpenCallback,
+                                     callback,
+                  MainController::getInstance()->displayWindow,
+                                     initialPath.c_str(),
+                  false); //allow many
+        }
+        return TUI_NIL;
+    });
+    
     
     katipoTable->setFunction("startScan", [this](TuiTable* args,
                                                 TuiRef* existingResult,
@@ -408,7 +493,24 @@ void Waraki::init()
         return TUI_NIL;
     });
     
-    
+    katipoTable->setFunction("registerAppFunction", [this](TuiTable* args,
+                                                TuiRef* existingResult,
+                                                TuiFunctionCallData* incomingCallData,
+                                                TuiDebugInfo* callingDebugInfo) -> TuiRef* {
+        if(args->arrayObjects.size() >= 2 && args->arrayObjects[0]->type() == Tui_ref_type_STRING)
+        {
+            TuiTable* registeredAppFunctionsTable = katipoTable->getTable("registeredAppFunctions");
+            if(!registeredAppFunctionsTable)
+            {
+                registeredAppFunctionsTable = new TuiTable();
+                katipoTable->setTable("registeredAppFunctions", registeredAppFunctionsTable);
+                registeredAppFunctionsTable->release();
+            }
+            registeredAppFunctionsTable->set(args->arrayObjects[0]->getStringValue(), args->arrayObjects[1]);
+        }
+        
+        return TUI_NIL;
+    });
     
     // END WARAKI
     
@@ -422,6 +524,13 @@ void Waraki::init()
             std::string hostID = args->arrayObjects[0]->getStringValue();
             std::string siteSavePath = args->arrayObjects[1]->getStringValue();
             TuiRef* publicData = args->arrayObjects[2];
+            
+            
+            if(!Tui::fileExistsAtPath(siteSavePath))
+            {
+                TuiWarn("No cached site files found at:%s", siteSavePath.c_str());
+                return TUI_FALSE;
+            }
             
             if(currentSiteView)
             {
@@ -507,6 +616,40 @@ void Waraki::init()
                             
                         }
                     }
+                    return TUI_NIL;
+                });
+                
+                
+                //this allows the site/clientSite code to call functions in the main katipoBrowser/code.tui enviornment.
+                //todo linkClicked could just use this instead
+                siteConnectionInfo.rootTable->getTable("katipo")->setFunction("callAppFunction", [this](TuiTable* args,
+                                                            TuiRef* existingResult,
+                                                            TuiFunctionCallData* incomingCallData,
+                                                            TuiDebugInfo* callingDebugInfo) -> TuiRef* {
+                    if(args->arrayObjects.size() >= 1 && args->arrayObjects[0]->type() == Tui_ref_type_STRING)
+                    {
+                        TuiTable* registeredAppFunctionsTable = katipoTable->getTable("registeredAppFunctions");
+                        if(registeredAppFunctionsTable)
+                        {
+                            TuiFunction* func = registeredAppFunctionsTable->getFunction(args->arrayObjects[0]->getStringValue());
+                            if(func)
+                            {
+                                TuiTable* functionArgs = new TuiTable();
+                                for(int i = 1; i < args->arrayObjects.size(); i++)
+                                {
+                                    functionArgs->insert(functionArgs->arrayObjects.size() - 1, args->arrayObjects[i]);
+                                }
+                                TuiRef* result = func->call(functionArgs, existingResult, incomingCallData, callingDebugInfo);
+                                functionArgs->release();
+                                return result;
+                            }
+                            else
+                            {
+                                MJWarn("attempt to call unregistered app function:%s", args->arrayObjects[0]->getStringValue().c_str());
+                            }
+                        }
+                    }
+                    
                     return TUI_NIL;
                 });
                 
@@ -611,6 +754,8 @@ void Waraki::init()
             currentSiteView->alpha = 0.0;
             currentSiteView->fadeIn();
             
+            katipoTable->setTable("siteView", siteConnectionInfo.mainView->stateTable); //todo make this available in Koru too
+            
             std::string siteMarkupPath = siteSavePath + "/index.tml";
             if(Tui::fileExistsAtPath(siteMarkupPath))
             {
@@ -661,7 +806,7 @@ void Waraki::init()
                 }
             }*/
         }
-        return TUI_NIL;
+        return TUI_TRUE;
     });
     
     //katipo.get("127.0.0.1/example", sendData, function(result){ print("got result:", result)})

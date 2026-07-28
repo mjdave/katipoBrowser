@@ -1,9 +1,9 @@
 # Welcome to Waraki
 
-If you have music files stored on this device that you would like to play and host for playing elsewhere, you can create a new waraki music library:
+If you have music files stored on this device that you would like to play here and/or host for playing elsewhere:
 
-[Create new music library]("setupButton")
+[Select music files ->]("createLibraryButton")
 
-Or you can connect to a library that has already been created:
+Or, you can connect to a library already shared by Waraki:
 
-[Connect to music library]("connectButton")
+[Connect to music library ->]("connectButton")

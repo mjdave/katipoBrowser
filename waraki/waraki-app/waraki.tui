@@ -3,8 +3,13 @@ urlTextEntry = scene.getView("urlTextEntry")
 urlTextEntry.hidden = true
 
 welcomePage = false
-setupPage = false
+createLibraryPage = false
 connectPage = false
+
+bundledHostIP = "127.0.0.1"
+bundledHostID = bundledHostIP + "/waraki"
+
+allowHosting = (platform() != "ios")
 
 windowSafeBackground = scene.getView("windowSafeBackground")
 windowSafeBackground.onParentSizeChanged = function(parentSize)
@@ -58,7 +63,7 @@ writeFile = function(siteSavePath, checksums, fileInfo)
     }
 }
 
-loadClientSite = function(siteData, hostID, url)
+loadClientSite = function(siteData, hostID, url) #only called if we have a connection, not from the cache
 {
     siteContentBackground.goalColor = vec4(0.0,0.0,0.2,0.4) #blue, we have the most recent version
 
@@ -89,6 +94,27 @@ loadClientSite = function(siteData, hostID, url)
         url = url
     }
     database.set("lastHost", hostInfo)
+
+    recentHosts = database.get("recentHosts")
+    if(recentHosts)
+    {
+        for(i,otherHostInfo in recentHosts)
+        {
+            if(otherHostInfo.hostID == hostID)
+            {
+                table.remove(recentHosts, i)
+                break
+            }
+        }
+        table.insert(recentHosts, 0, hostInfo)
+    }
+    else
+    {
+        recentHosts = {
+            hostInfo
+        }
+    }
+    database.set("recentHosts", recentHosts)
 }
 
 getCallback = function(result, hostID, url)
@@ -98,7 +124,11 @@ getCallback = function(result, hostID, url)
 
     if(result.status != "ok")
     {
-        katipo.loadSite(hostID, getClientSitePath(hostID), nil, untrustedSiteCodePermissionFunction, true) #load cache
+        cacheLoaded = katipo.loadSite(hostID, getClientSitePath(hostID), nil, untrustedSiteCodePermissionFunction, true) #load cache
+        if(!cacheLoaded)
+        {
+            runSetup()
+        }
     }
     else if(result.siteData)
     {
@@ -110,21 +140,56 @@ getCallback = function(result, hostID, url)
     }
 }
 
-setupClicked = function()
+createMusicDirectoryName = false
+
+updateCreateLibraryMarkup = function()
 {
-    welcomePage.fadeOut()
+    markup = "# Select music files directory\n\n"
 
-    if(!setupPage)
+    markup += "Please select where your music files are stored on your device. Waraki will search this directory and all sub-directories for any mp3, m4a, ogg, or flac files.\n\n"
+
+    if(createMusicDirectoryName)
     {
-        setupFilePath = file.getResourcePath("waraki-app/setup.tml")
-        markup = file.loadData(setupFilePath)
-
-        .setupPage = siteContent.getView("setupPage")
-
-        setupPage.setText(markup)
+        markup += createMusicDirectoryName + "\n\n"
+    }
+    else
+    {
+        markup += "No music directory [Select Folder->](id = 'selectLibraryFileOpenButton')\n\n"
     }
 
-    setupPage.fadeIn()
+    markup += "[<- Back](id='cancelButton')"
+
+    if(createMusicDirectoryName)
+    {
+        markup += "            [Start ->](id='okButton')"
+    }
+
+    .createLibraryPage = siteContent.getView("createLibraryPage")
+    createLibraryPage.setText(markup)
+}
+
+createLibraryClicked = function()
+{
+    if(welcomePage)
+    {
+        welcomePage.fadeOut()
+    }
+
+    if(katipo.siteView)
+    {
+        katipo.siteView.hidden = true
+    }
+
+    .createMusicDirectoryName = database.get("bundledHostMusicLibraryPath")
+    updateCreateLibraryMarkup()
+
+    createLibraryPage.fadeIn()
+}
+
+stopBundledHost = function()
+{
+    database.set("bundledHostRunning", false)
+    katipo.setBundledHostRunning(bundledHostID, false)
 }
 
 scanFoundResults = {}
@@ -135,7 +200,7 @@ scanCallback = function(status, result)
     print("got scan callback:", status)
     if(status == "error")
     {
-        thisMarkup = "# Scan failed\n" + "Something went wrong, the app may not have permission to access your local network.\n" + connectPageMarkup
+        thisMarkup = "#Scan failed\n" + "Something went wrong, the app may not have permission to access your local network.\n" + connectPageMarkup
         connectPage.setText(thisMarkup)
     }
     else if(status == "connected") #NOTE we might get this after "complete", but not before we got a "connecting"
@@ -147,13 +212,14 @@ scanCallback = function(status, result)
         for(i, ip in scanFoundResults)
         {
             buttonID = "connectButton" + i
-            thisMarkup += ip + "    [Connect->](id='" + buttonID + "')\n\n"
+            thisMarkup += ip + "    [Connect ->](id='" + buttonID + "')\n\n"
 
             clickFunction = function()
             {
                 katipo.connectToScanResult(ip)
                 hostID = ip + "/waraki"
                 checksumKey = "checksums_" + hostID
+                stopBundledHost()
                 katipo.get(hostID, database.get(checksumKey), getCallback)
                 connectPage.fadeOut()
             }
@@ -184,7 +250,15 @@ connectPageMarkup = false
 
 connectClicked = function()
 {
-    welcomePage.fadeOut()
+    if(welcomePage)
+    {
+        welcomePage.fadeOut()
+    }
+
+    if(katipo.siteView)
+    {
+        katipo.siteView.hidden = true
+    }
 
     if(!connectPage)
     {
@@ -192,6 +266,10 @@ connectClicked = function()
         .connectPageMarkup = file.loadData(filePath)
         .connectPage = siteContent.getView("connectPage")
 
+        if(!allowHosting)
+        {
+            connectPage.styles.cancelButton.hidden = true
+        }
     }
 
     .foundResult = false
@@ -205,17 +283,52 @@ connectClicked = function()
     connectPage.fadeIn()
 }
 
-setupCancelClicked = function()
+createLibraryCancelClicked = function()
 {
-    setupPage.fadeOut()
+    createLibraryPage.fadeOut()
     welcomePage.fadeIn()
 }
 
-setupOKClicked = function()
+createLibraryOKClicked = function()
 {
-    #setupPage.fadeOut()
+    createLibraryPage.fadeOut()
+    userConfiguration = {
+        musicLibraryPath = createMusicDirectoryName
+    }
+
+    running = katipo.setBundledHostRunning(bundledHostID, true, userConfiguration)
+    if(running)
+    {
+        print("started bundled host")
+        database.set("bundledHostRunning", true)
+        database.set("bundledHostMusicLibraryPath", createMusicDirectoryName)
+
+        checksumKey = "checksums_" + bundledHostID
+        katipo.get(bundledHostID, database.get(checksumKey), getCallback)
+
+    }
+    else
+    {
+        print("failed to start bundled host")
+        runSetup()
+    }
 }
 
+
+
+createLibraryOpenFileDialogClicked = function()
+{
+    folderSelectedFunction = function(selectionResult)
+    {
+        if(selectionResult and table.count(selectionResult) > 0)
+        {
+            .createMusicDirectoryName = selectionResult[0]
+        }
+        updateCreateLibraryMarkup()
+    }
+
+    katipo.openFolderDialog("/", folderSelectedFunction)
+}
 
 connectCancelClicked = function()
 {
@@ -252,25 +365,28 @@ mainViewLayout = {
             type = "markup"
             hidden = true
             styles = {
-                setupButton = {
-                    link = setupClicked
-                }
                 connectButton = {
                     link = connectClicked
+                }
+                createLibraryButton = {
+                    link = createLibraryClicked
                 }
             }
         }
 
         {
-            id = "setupPage"
+            id = "createLibraryPage"
             type = "markup"
             hidden = true
             styles = {
                 cancelButton = {
-                    link = setupCancelClicked
+                    link = createLibraryCancelClicked
                 }
                 okButton = {
-                    link = setupOKClicked
+                    link = createLibraryOKClicked
+                }
+                selectLibraryFileOpenButton = {
+                    link = createLibraryOpenFileDialogClicked
                 }
             }
         }
@@ -303,38 +419,68 @@ mainViewLayout = {
 
 siteContent = siteContentBackground.addView(mainViewLayout)
 
+runSetup = function()
+{
+    katipo.hideCurrentSite()
+
+    if(allowHosting)
+    {
+        .welcomePage = siteContent.getView("welcomePage")
+
+        welcomeFilePath = file.getResourcePath("waraki-app/welcome.tml")
+        markup = file.loadData(welcomeFilePath)
+        welcomePage.setText(markup)
+        welcomePage.fadeIn()
+    }
+    else
+    {
+        connectClicked()
+    }
+}
+
+katipo.registerAppFunction("runSetup", runSetup) #allows this to be called from the clientSite via katipo.callAppFunction
 
 
 init = function()
 {
     siteContentBackground.goalColor = vec4(0.0, 0.2, 0.8, 0.3)
 
-    welcomeFilePath = file.getResourcePath("waraki-app/welcome.tml")
-    markup = file.loadData(welcomeFilePath)
 
-    lastHost = database.get("lastHost")
-    if(lastHost)
+    bundledHostWasRunning = database.get("bundledHostRunning")
+    if(bundledHostWasRunning)
     {
-        hostID = lastHost.hostID
-        checksumKey = "checksums_" + lastHost.hostID
-        localGetCallback = function(result, hostID_bad, url) #todo haccck for host id
+        bundledHostWasRunning = katipo.setBundledHostRunning(bundledHostID, true)
+        if(bundledHostWasRunning)
         {
-            getCallback(result, hostID, url)
+            checksumKey = "checksums_" + bundledHostID
+            katipo.get(bundledHostID, database.get(checksumKey), getCallback)
         }
-
-        katipo.get(lastHost.url, database.get(checksumKey), localGetCallback)
+        else
+        {
+            database.set("bundledHostRunning", false)
+        }
     }
-    else
-    {
-        .welcomePage = siteContent.getView("welcomePage")
-
-        welcomePage.setText(markup)
-        welcomePage.fadeIn()
-    }
-
-    #markup = string.replace(markup, "you", "YOU\n")
     
-    #welcomePage.setText(markup)
+    
+    if(!bundledHostWasRunning)
+    {
+        lastHost = database.get("lastHost")
+        if(lastHost)
+        {
+            hostID = lastHost.hostID
+            checksumKey = "checksums_" + lastHost.hostID
+            localGetCallback = function(result, hostID_bad, url) #todo haccck for host id
+            {
+                getCallback(result, hostID, url)
+            }
+
+            katipo.get(lastHost.url, database.get(checksumKey), localGetCallback)
+        }
+        else
+        {
+            runSetup()
+        }
+    }
 }
 
 init()
@@ -343,12 +489,8 @@ reloadKey = function(isDown, code, mod, isRepeat)
 {
     if(isDown and !isRepeat and (mod == keys.modifiers.ctrl or mod == keys.modifiers.cmd))
     {
+        katipo.hideCurrentSite()
         init()
     }
 }
 eventManager.addKeyEventListener(keys.keyCodes.r, reloadKey)
-
-
-
-#katipo.setBundledHostRunning("waraki", true)
-#loadInitialLink()

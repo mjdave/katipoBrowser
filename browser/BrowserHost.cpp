@@ -17,7 +17,7 @@
 #include "sodium.h"
 #include "KatipoUtilities.h"
 
-BrowserHost::BrowserHost(std::string hostID, std::string basePath_, std::string hostScriptPath)
+BrowserHost::BrowserHost(std::string hostID, std::string basePath_, std::string hostScriptPath, TuiTable* userConfiguration)
 {
     basePath = basePath_;
     if(basePath.empty())
@@ -47,6 +47,11 @@ BrowserHost::BrowserHost(std::string hostID, std::string basePath_, std::string 
     katipoTable->setString("basePath", basePath);
     katipoTable->setString("sitePath", basePath);
     katipoTable->setString("privateSavePath", privateSavePath);
+    
+    if(userConfiguration)
+    {
+        katipoTable->setTable("userConfiguration", userConfiguration);
+    }
     
     
     katipoTable->setString("trackerIP", "127.0.0.1"); //todo
@@ -127,8 +132,18 @@ BrowserHost::BrowserHost(std::string hostID, std::string basePath_, std::string 
     });
     
     
-    thread = new std::thread(&BrowserHost::createThread, this);
+    scriptState = (TuiTable*)TuiRef::runScriptFile(Tui::pathByAppendingPathComponent(basePath,"code.tui"), rootTable);
     
+    if(scriptState->getBool("loadSuccess"))
+    {
+        loadSuccess = true;
+        thread = new std::thread(&BrowserHost::createThread, this);
+    }
+    else
+    {
+        needsToExit = true;
+        return;
+    }
     
 }
 
@@ -136,8 +151,11 @@ BrowserHost::BrowserHost(std::string hostID, std::string basePath_, std::string 
 BrowserHost::~BrowserHost()
 {
     needsToExit = true;
-    thread->join();
-    delete thread;
+    if(thread)
+    {
+        thread->join();
+        delete thread;
+    }
     
     rootTable->release();
     scriptState->release();
@@ -150,24 +168,32 @@ BrowserHost::~BrowserHost()
 
 void BrowserHost::createThread()
 {
-    scriptState = (TuiTable*)TuiRef::runScriptFile(Tui::pathByAppendingPathComponent(basePath,"code.tui"), rootTable);
     
     TuiFunction* startFunction = ((TuiTable*)katipoTable->get("host"))->getFunction("start");
+    TuiFunction* updateFunction = ((TuiTable*)katipoTable->get("host"))->getFunction("update");
     startFunction->call("BrowserHost::BrowserHost()->start");
     
     Timer* timer = new Timer();
-    //Timer* deltaTimer = new Timer();
+    Timer* deltaTimer = new Timer();
+    
+    TuiNumber* dtNumRef = new TuiNumber(0.0);
     
     while(1)
     {
         if(needsToExit)
         {
             delete timer;
+            delete deltaTimer;
+            dtNumRef->release();
             return;
         }
         //checkInput();
         
-        //double dt = std::clamp(deltaTimer->getDt(), 0.0, 4.0);
+        double dt = std::clamp(deltaTimer->getDt(), 0.0, 4.0);
+        
+        dtNumRef->value = dt;
+        
+        updateFunction->call("update", dtNumRef);
         
         if(trackerNetInterface)
         {
@@ -177,6 +203,8 @@ void BrowserHost::createThread()
         if(needsToExit)
         {
             delete timer;
+            delete deltaTimer;
+            dtNumRef->release();
             return;
         }
         

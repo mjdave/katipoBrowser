@@ -51,6 +51,7 @@ public:
     MJView* mainMJView = nullptr;
     MJCache* cache;
     WindowInfo* windowInfo;
+    SDL_Window * displayWindow;
 
     Vulkan* vulkan;
 	Camera* camera;
@@ -106,7 +107,6 @@ public:
     
     
 protected:
-	SDL_Window * displayWindow;
     //MJAudio* audio;
 
 	bool vsync;

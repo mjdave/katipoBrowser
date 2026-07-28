@@ -1,4 +1,14 @@
 # NOTE this is used in two places, both when there is a simple result, like an error with a message, and when displaying a basic tui markup document .tml site
+if(!viewTypes)
+{
+    viewTypes = {}
+}
+
+if(!viewTypes.markup)
+{
+    viewTypes.scrollView = require("app/common/scrollView.tui")
+    viewTypes.markup = require("app/common/markupView.tui")
+}
 
 mainView = {
     type = "view"

@@ -16,6 +16,7 @@ public:
     
     std::thread* thread = nullptr;
     bool needsToExit = false;
+    bool loadSuccess = false;
     
     DatabaseEnvironment* databaseEnvironment;
     Database* database;
@@ -26,7 +27,10 @@ public:
     TuiTable* katipoTable;
     TuiTable* scriptState;
     
-    BrowserHost(std::string hostID, std::string basePath_ = "", std::string hostScriptPath = Katipo::getResourcePath("host.tui"));
+    BrowserHost(std::string hostID,
+                std::string basePath_ = "",
+                std::string hostScriptPath = Katipo::getResourcePath("host.tui"),
+                TuiTable* userConfiguration = nullptr);
     ~BrowserHost();
     
 private:

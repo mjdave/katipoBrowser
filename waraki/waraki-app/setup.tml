@@ -1,8 +1,0 @@
-# Set up new music library
-
-Please select where your music files are stored on your device. Waraki will search this directory and all sub-directories for any mp3, m4a, ogg, or flac files.
-
-[Files->](id = "musicDirFileBrowser")
-
-
-[<-Cancel](id="cancelButton")            [OK->](id="okButton")

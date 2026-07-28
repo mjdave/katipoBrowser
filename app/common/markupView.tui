@@ -162,7 +162,7 @@ finishEditing = function(markupView, confirmChanges)
     markupView.textEntryListenerID = nil
 
     fullCaptureText = markupView.currentEditingFullCaptureText
-    print("finish editing:", fullCaptureText)
+    #print("finish editing:", fullCaptureText)
 
     if((!fullCaptureText) or string.length(fullCaptureText) == 0)
     {
@@ -524,7 +524,7 @@ addNextRowForWrapOverflow = function(markupView, style, captureItem, addedTextLe
     finishCurrentRow(markupView)
     if(addedTextLength != 0)
     {
-        print("addNextRowForWrapOverflow parser.foundText:", parser.foundText, " addedTextLength:", addedTextLength)
+        #print("addNextRowForWrapOverflow parser.foundText:", parser.foundText, " addedTextLength:", addedTextLength)
         remainingText = string.subString(parser.foundText, addedTextLength)
         
 
@@ -1154,7 +1154,7 @@ renderCapture = function(markupView, markupString, captureItemGroup, parentStyle
             parser.monospace = item.monospace
 
             localItem = item
-            print("add item view:", localItem)
+            #print("add item view:", localItem)
             addItemView(markupView, style, localItem)
 
             parser.bold = prevBold
