@@ -187,6 +187,7 @@ void Waraki::doGet(const std::string& trackerKey,
     remoteHostKeyFuncCallArgs->pushString("getSiteKey");
     remoteHostKeyFuncCallArgs->pushString(hostName);
     remoteHostKeyFuncCallArgs->push(getSiteKeyCallbackFunction);
+    
     getSiteKeyCallbackFunction->release();
     
     netInterface->callTrackerFunction(remoteHostKeyFuncCallArgs);
@@ -198,6 +199,7 @@ TuiTable* addKatipoTable(TuiTable* rootTableToAddTo)
 {
     TuiTable* katipoTableResult = new TuiTable(rootTableToAddTo);
     rootTableToAddTo->set("katipo", katipoTableResult);
+    katipoTableResult->setString("savePath", Katipo::getSavePath());
     katipoTableResult->release();
     
     return katipoTableResult;
@@ -437,14 +439,17 @@ void Waraki::init()
                                                 TuiRef* existingResult,
                                                 TuiFunctionCallData* incomingCallData,
                                                 TuiDebugInfo* callingDebugInfo) -> TuiRef* {
-        if(args->arrayObjects.size() >= 1 && args->arrayObjects[0]->type() == Tui_ref_type_FUNCTION)
+        if(args->arrayObjects.size() >= 2 && args->arrayObjects[0]->type() == Tui_ref_type_STRING && args->arrayObjects[1]->type() == Tui_ref_type_FUNCTION)
         {
             if(!scanner)
             {
-                scanner = new Scanner();
+                std::string publicKey = "";
+                std::string secretKey = "";
+                getLocalKeys(&publicKey, &secretKey);
+                scanner = new Scanner(publicKey, secretKey, katipoTable);
             }
             
-            scanner->startScan((TuiFunction*)args->arrayObjects[0]);
+            scanner->startScan(((TuiString*)args->arrayObjects[0])->value, (TuiFunction*)args->arrayObjects[1]);
             
         }
         return TUI_NIL;
@@ -455,39 +460,25 @@ void Waraki::init()
                                                 TuiRef* existingResult,
                                                 TuiFunctionCallData* incomingCallData,
                                                 TuiDebugInfo* callingDebugInfo) -> TuiRef* {
-        if(args->arrayObjects.size() >= 2 && args->arrayObjects[0]->type() == Tui_ref_type_STRING)
+        if(args->arrayObjects.size() >= 1 && args->arrayObjects[0]->type() == Tui_ref_type_STRING)
         {
             //scanner
             
-            std::string trackerURL = args->arrayObjects[0]->getStringValue();
+            std::string trackerKey = args->arrayObjects[0]->getStringValue();
             
-            ScannerConnection connection = scanner->getConnection(trackerURL); //we are now responsible for closing the connection
-            if(!connection.enetClient)
+            ScannerConnection connection = scanner->getConnection(trackerKey); //we are now responsible for closing the connection
+            if(!connection.netInterface)
             {
-                MJError("invalid url");
+                MJError("invalid connection");
                 return TUI_NIL;
             }
+            netInterfaces[trackerKey] = connection.netInterface;
             
-            std::string publicKey = "";
-            std::string secretKey = "";
-            getLocalKeys(&publicKey, &secretKey);
-        
-            std::string trackerPort = "3471";
-            std::string trackerKey = trackerURL + ":" + trackerPort;
-
-            
-            //katipoTable->set("onConnectionFailed", onConnect); //hmm
-            
-            ClientNetInterface* netInterface = new ClientNetInterface(trackerURL,
-                                                  trackerPort,
-                                                  publicKey,
-                                                  secretKey,
-                                                  connection.trackerPublicKey,
-                                                  connection.enetClient,
-                                                  connection.enetPeer);
-            netInterfaces[trackerKey] = netInterface;
-            
-            netInterface->bindTui(katipoTable);
+            if(scanner)
+            {
+                delete scanner;
+                scanner = nullptr;
+            }
             
         }
         return TUI_NIL;

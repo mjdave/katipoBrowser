@@ -197,44 +197,59 @@ foundResult = false
 
 scanCallback = function(status, result)
 {
-    print("got scan callback:", status)
     if(status == "error")
     {
         thisMarkup = "#Scan failed\n" + "Something went wrong, the app may not have permission to access your local network.\n" + connectPageMarkup
         connectPage.setText(thisMarkup)
     }
-    else if(status == "connected") #NOTE we might get this after "complete", but not before we got a "connecting"
+    else if(status == "connected") #NOTE we might get this multiple times, before complete is called finally
     {
-        .foundResult = true
-        table.insert(scanFoundResults, result)
-
-        thisMarkup = "#Waraki music library found\n\n"
-        for(i, ip in scanFoundResults)
+        print("result:", result)
+        if(result.sites and table.count(result.sites) > 0) #a tracker with no matching hosts still gives us connected callback, but no sites
         {
-            buttonID = "connectButton" + i
-            thisMarkup += ip + "    [Connect ->](id='" + buttonID + "')\n\n"
+            .foundResult = true
+            table.insert(scanFoundResults, result)
 
-            clickFunction = function()
+            thisMarkup = "#Waraki music library found\n\n"
+            buttonCount = 0
+            for(i, trackerResult in scanFoundResults)
             {
-                katipo.connectToScanResult(ip)
-                hostID = ip + "/waraki"
-                checksumKey = "checksums_" + hostID
-                stopBundledHost()
-                katipo.get(hostID, database.get(checksumKey), getCallback)
-                connectPage.fadeOut()
-            }
+                ip = trackerResult.ip
+                trackerKey = trackerResult.trackerKey
+                sites = trackerResult.sites
 
-            connectPage.styles[buttonID] = {
-                link = clickFunction
+                for(j, siteInfo in sites)
+                {
+                    buttonID = "connectButton" + buttonCount
+                    buttonCount++
+                    thisMarkup += siteInfo.title + " - " + ip + "    [Connect ->](id='" + buttonID + "')\n\n"
+
+                    clickFunction = function()
+                    {
+                        katipo.connectToScanResult(trackerKey) #this transfers the tracker connection, saves time having to reconnect with the call to katipo.get
+                        hostID = trackerKey + "/" + siteInfo.nameKey
+                        checksumKey = "checksums_" + hostID
+                        katipo.get(hostID, database.get(checksumKey), getCallback)
+                        connectPage.fadeOut()
+                    }
+
+                    connectPage.styles[buttonID] = {
+                        link = clickFunction
+                    }
+                }
             }
+            thisMarkup += connectPageMarkup
+
+            connectPage.setText(thisMarkup)
+            return true #keep the connection live
         }
-        thisMarkup += connectPageMarkup
-
-        connectPage.setText(thisMarkup)
+        else
+        {
+            return false #dispose of the connection
+        }
     }
     else if(status == "complete")
     {
-
         if(!foundResult)
         {
             thisMarkup = "#Scan complete\n\n" 
@@ -243,7 +258,7 @@ scanCallback = function(status, result)
             connectPage.setText(thisMarkup)
         }
     }
-
+    return false
 }
 
 connectPageMarkup = false
@@ -274,7 +289,8 @@ connectClicked = function()
 
     .foundResult = false
     .scanFoundResults = {}
-    katipo.startScan(scanCallback)
+    stopBundledHost()
+    katipo.startScan("waraki", scanCallback)
 
     thisMarkup = "#Searching...\n\n" 
     thisMarkup += "Waraki is scanning your local network for music libraries.\n\n"
