@@ -150,12 +150,14 @@ updateCreateLibraryMarkup = function()
 
     if(createMusicDirectoryName)
     {
-        markup += createMusicDirectoryName + "\n\n"
+        markup += createMusicDirectoryName
     }
     else
     {
-        markup += "No music directory [Select Folder->](id = 'selectLibraryFileOpenButton')\n\n"
+        markup += "No music directory"
     }
+
+    markup += " [Select Folder->](id = 'selectLibraryFileOpenButton')\n\n"
 
     markup += "[<- Back](id='cancelButton')"
 

@@ -12,3 +12,4 @@ waraki/linux/bin
 waraki/linux/build
 *~lock~
 build
+*privateKey.tuib
