@@ -60,6 +60,11 @@
         }
     }*/
     
+    if(titleString.empty())
+    {
+        titleString = Tui::fileNameFromPath(filePathsByPlayerItems[playerItem]);
+    }
+    
     
     MJAudio::getInstance()->updateCurrentlyPlayingInfo(titleString, artistString, duration, (void*)artImageData.bytes, artImageData.length);
     
@@ -143,6 +148,7 @@
         //std::map<int, std::string> urlsByQueueIndex;
         
         nextPlayerItemByPlayerItem.clear();
+        filePathsByPlayerItems.clear();
        // urlsByQueueIndex.clear();
         
         int index = 0;
@@ -151,6 +157,7 @@
         {
             std::string path = ((TuiString*)urlString)->value;
             AVPlayerItem* playerItem = [[AVPlayerItem alloc] initWithURL:[NSURL fileURLWithPath:[NSString stringWithUTF8String:path.c_str()]]];//((TuiString*)urlString)->value.c_str()]]];
+            filePathsByPlayerItems[playerItem] = path;
             
             playerItem.audioTimePitchAlgorithm = AVAudioTimePitchAlgorithmVarispeed;
             
@@ -261,6 +268,7 @@
     if (event.command == cc.changeShuffleModeCommand) {
         //MPChangeShuffleModeCommandEvent *shuffleEvent = (MPChangeShuffleModeCommandEvent *)event;
         //vps.shuffleMode = shuffleEvent.shuffleType != MPShuffleTypeOff;
+        MJLog("todo handle changeShuffleModeCommand");
         return MPRemoteCommandHandlerStatusSuccess;
     }
     if (event.command == cc.changeRepeatModeCommand) {

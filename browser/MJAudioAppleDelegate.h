@@ -18,6 +18,7 @@
     //std::map<AVPlayerItem*, int> queueIndexesByPlayerItems;
     //std::map<int, std::string> urlsByQueueIndex;
     std::map<AVPlayerItem*, AVPlayerItem*> nextPlayerItemByPlayerItem;
+    std::map<AVPlayerItem*, std::string> filePathsByPlayerItems;
 }
 
 - (id)init;

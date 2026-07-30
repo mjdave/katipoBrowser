@@ -26,14 +26,12 @@ static inline NSArray * RemoteCommandCenterCommandsToHandle(void)
                                 cc.togglePlayPauseCommand,
                                 cc.nextTrackCommand,
                                 cc.previousTrackCommand,
-                                cc.skipForwardCommand,
-                                cc.skipBackwardCommand,
-                                cc.changePlaybackRateCommand,
+                                //cc.changePlaybackRateCommand,
                                 nil];
     
         [commands addObject:cc.changePlaybackPositionCommand];
         [commands addObject:cc.changeShuffleModeCommand];
-        [commands addObject:cc.changeRepeatModeCommand];
+        //[commands addObject:cc.changeRepeatModeCommand];
     
     return [commands copy];
 }
@@ -67,38 +65,39 @@ void MJAudioApple::play(TuiTable* urls)
 {
     [audioAppleDelegate play:urls];
     MPRemoteCommandCenter *commandCenter = [MPRemoteCommandCenter sharedCommandCenter];
+    
+    /*
+     
+                                 cc.pauseCommand,
+                                 cc.playCommand,
+                                 cc.stopCommand,
+                                 cc.togglePlayPauseCommand,
+                                 cc.nextTrackCommand,
+                                 cc.previousTrackCommand,
+                                 //cc.changePlaybackRateCommand,
+                                 nil];
+     
+         [commands addObject:cc.changePlaybackPositionCommand];
+         [commands addObject:cc.changeShuffleModeCommand];
+         //[commands addObject:cc.changeRepeatModeCommand];
+     */
+    
+    commandCenter.pauseCommand.enabled = true;
+    commandCenter.playCommand.enabled = true;
+    commandCenter.stopCommand.enabled = true;
+    commandCenter.togglePlayPauseCommand.enabled = true;
 
-        /* Since the control center and lockscreen shows only either skipForward/Backward
-         * or next/previousTrack buttons but prefers skip buttons,
-         * we only enable skip buttons if we have no medialist
-         */
-       // BOOL alwaysEnableSkip = [defaults boolForKey:kVLCSettingPlaybackLockscreenSkip];
-        //BOOL enableSkip = alwaysEnableSkip || [VLCPlaybackService sharedInstance].mediaList.count <= 1;
-        commandCenter.skipForwardCommand.enabled = true;
-        commandCenter.skipBackwardCommand.enabled = true;
+    commandCenter.nextTrackCommand.enabled = true;
+    commandCenter.previousTrackCommand.enabled = true;
+    commandCenter.togglePlayPauseCommand.enabled = true;
+    commandCenter.changePlaybackPositionCommand.enabled = true;
 
-        //Enable when you want to support these
-        commandCenter.ratingCommand.enabled = NO;
-        commandCenter.likeCommand.enabled = NO;
-        commandCenter.dislikeCommand.enabled = NO;
-        commandCenter.bookmarkCommand.enabled = NO;
-        commandCenter.enableLanguageOptionCommand.enabled = NO;
-        commandCenter.disableLanguageOptionCommand.enabled = NO;
-        commandCenter.changeRepeatModeCommand.enabled = YES;
-        commandCenter.changeShuffleModeCommand.enabled = YES;
-        commandCenter.seekForwardCommand.enabled = NO;
-        commandCenter.seekBackwardCommand.enabled = NO;
+    //commandCenter.changeRepeatModeCommand.enabled = YES;
+    commandCenter.changeShuffleModeCommand.enabled = YES;
 
-        //NSNumber *forwardSkip = [defaults valueForKey:kVLCSettingPlaybackForwardSkipLength];
-        //commandCenter.skipForwardCommand.preferredIntervals = @[forwardSkip];
-        //NSNumber *backwardSkip = [defaults valueForKey:kVLCSettingPlaybackBackwardSkipLength];
-        //commandCenter.skipBackwardCommand.preferredIntervals = @[backwardSkip];
-
-        //commandCenter.changePlaybackRateCommand.supportedPlaybackRates = @[@(0.5),@(0.75),@(1.0),@(1.25),@(1.5),@(1.75),@(2.0)];
-
-        for (MPRemoteCommand *command in RemoteCommandCenterCommandsToHandle()) {
-            [command addTarget:audioAppleDelegate action:@selector(remoteCommandEvent:)];
-        }
+    for (MPRemoteCommand *command in RemoteCommandCenterCommandsToHandle()) {
+        [command addTarget:audioAppleDelegate action:@selector(remoteCommandEvent:)];
+    }
 
 }
 
