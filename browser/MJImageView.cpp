@@ -220,6 +220,17 @@ void MJImageView::loadFromTable(TuiTable* table, bool needsToLayoutSubviews, Tui
     {
         stateTable->setVec4("shaderUserData", table->getVec4("shaderUserData"));
     }
+    if(table->hasKey("additiveBlend"))
+    {
+        if(table->getBool("additiveBlend"))
+        {
+            setShaderName("drawQuadTexturedAdditiveBlend");
+        }
+        else
+        {
+            setShaderName("drawQuadTextured");
+        }
+    }
 }
 
 
@@ -230,6 +241,17 @@ void MJImageView::tableKeyChanged(const std::string& key, TuiRef* value)
     if(key == "shader")
     {
         setShaderName(stateTable->getString("shader"));
+    }
+    else if(key == "additiveBlend")
+    {
+        if(stateTable->getBool("additiveBlend"))
+        {
+            setShaderName("drawQuadTexturedAdditiveBlend");
+        }
+        else
+        {
+            setShaderName("drawQuadTextured");
+        }
     }
     else if(key == "color")
     {

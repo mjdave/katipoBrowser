@@ -366,6 +366,8 @@ void MJTextView::loadFontIfNeeded()
         if(newFont != font)
         {
             font = newFont;
+            
+            destroyDrawables();
             //updateDimensions();
             bufferNeedsUpdating = true;
         }

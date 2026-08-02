@@ -89,7 +89,7 @@ loadClientSite = function(siteData, hostID, url) #only called if we have a conne
 
     database.set(checksumKey, checksums)
 
-    hostInfo = {
+    hostInfo = { #todo should save a title too from a siteInfo somehow for display
         hostID = hostID
         url = url
     }
@@ -196,12 +196,53 @@ stopBundledHost = function()
 
 scanFoundResults = {}
 foundResult = false
+connectPageMarkup = false
+customIP = "katipobrowser.com/waraki"
+
+addRecentConnectionsMarkup = function()
+{
+    result = ""
+    recentHosts = database.get("recentHosts")
+    if(recentHosts and table.count(recentHosts) > 0)
+    {
+        result += "#Recent:\n" #todo bug, this is not a header
+        for(i,siteInfo in recentHosts)
+        {
+            if(siteInfo.hostID != bundledHostID)
+            {
+                buttonID = "recentButton" + i
+                result += "    " + siteInfo.url + "    [Connect ->](id='" + buttonID + "')\n"
+
+                clickFunction = function()
+                {
+                    hostID = siteInfo.url
+                    checksumKey = "checksums_" + hostID
+                    katipo.get(hostID, database.get(checksumKey), getCallback)
+                    connectPage.fadeOut()
+                }
+
+                connectPage.styles[buttonID] = {
+                    link = clickFunction
+                }
+
+                if(i >= 9)
+                {
+                    break
+                }
+            }
+        }
+        result += "\n"
+    }
+    return result
+}
 
 scanCallback = function(status, result)
 {
     if(status == "error")
     {
-        thisMarkup = "#Scan failed\n" + "Something went wrong, the app may not have permission to access your local network.\n" + connectPageMarkup
+        thisMarkup = "#Scan failed\n" + "Something went wrong, the app may not have permission to access your local network.\n" 
+        thisMarkup += addRecentConnectionsMarkup()
+        thisMarkup += connectPageMarkup
         connectPage.setText(thisMarkup)
     }
     else if(status == "connected") #NOTE we might get this multiple times, before complete is called finally
@@ -213,6 +254,7 @@ scanCallback = function(status, result)
             table.insert(scanFoundResults, result)
 
             thisMarkup = "#Waraki music library found\n\n"
+            thisMarkup += addRecentConnectionsMarkup()
             buttonCount = 0
             for(i, trackerResult in scanFoundResults)
             {
@@ -228,7 +270,7 @@ scanCallback = function(status, result)
 
                     clickFunction = function()
                     {
-                        katipo.connectToScanResult(trackerKey) #this transfers the tracker connection, saves time having to reconnect with the call to katipo.get
+                        katipo.connectToScanResult(ip) #this transfers the tracker connection, saves time having to reconnect with the call to katipo.get
                         hostID = trackerKey + "/" + siteInfo.nameKey
                         checksumKey = "checksums_" + hostID
                         katipo.get(hostID, database.get(checksumKey), getCallback)
@@ -256,6 +298,7 @@ scanCallback = function(status, result)
         {
             thisMarkup = "#Scan complete\n\n" 
             thisMarkup += "No Waraki music libraries found on your network.\n\n"
+            thisMarkup += addRecentConnectionsMarkup()
             thisMarkup += connectPageMarkup
             connectPage.setText(thisMarkup)
         }
@@ -263,7 +306,6 @@ scanCallback = function(status, result)
     return false
 }
 
-connectPageMarkup = false
 
 connectClicked = function()
 {
@@ -362,16 +404,23 @@ showCustomEntryLinkClicked = function()
     connectPage.reload()
 }
 
+
 customConnectButtonClicked = function()
 {
-
+    hostID = customIP
+    if(hostID)
+    {
+        checksumKey = "checksums_" + hostID
+        katipo.get(hostID, database.get(checksumKey), getCallback)
+        connectPage.fadeOut()
+    }
 }
 
-customIPTextEntryChanged = function(textValue, changesMade)
+customIPTextEntryChanged = function(text, confirmChanges)
 {
-    if(changesMade)
+    if(confirmChanges)
     {
-        print("ip changed:", textValue)
+        .customIP = customIP
     }
 }
 
@@ -482,7 +531,7 @@ init = function()
     
     if(!bundledHostWasRunning)
     {
-        lastHost = database.get("lastHost")
+        lastHost = false#database.get("lastHost")
         if(lastHost)
         {
             hostID = lastHost.hostID

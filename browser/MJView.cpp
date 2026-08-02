@@ -100,6 +100,7 @@ void MJView::initInternals()
     stateTable->setVec3("pos", baseOffset);
     stateTable->setVec2("size", size);
     stateTable->setDouble("alpha", alpha);
+    stateTable->setMat3("rotation", rotation);
     
     //todo maybe this is a bit slow to do all the time like this. meta tables needed?
     stateTable->setFunction("addView", [this](TuiTable* args, TuiRef* existingResult, TuiFunctionCallData* incomingCallData, TuiDebugInfo* callingDebugInfo) -> TuiRef* {
@@ -417,7 +418,7 @@ void MJView::setSize(dvec2 size_) //WARNING! MJTextView completely overrides thi
             if(subView->parentSizeChangedFunction)
             {
                 TuiRef* inRef = new TuiVec2(size);
-                TuiRef* sizeRef = subView->parentSizeChangedFunction->call("parentSizeChangedFunction", inRef);
+                TuiRef* sizeRef = subView->parentSizeChangedFunction->call("parentSizeChangedFunction", inRef, subView->stateTable);
                 //subView->stateTable->setVec2("size", ((TuiVec2*)sizeRef)->value);
                 if(sizeRef)
                 {
@@ -1862,7 +1863,7 @@ void MJView::loadFromTable(TuiTable* table, bool needsToLayoutSubviews, TuiTable
             
             TuiRef* inSizeRef = new TuiVec2(parentView->size);
             
-            TuiRef* sizeRef = parentSizeChangedFunction->call("parentSizeChangedFunction", inSizeRef);
+            TuiRef* sizeRef = parentSizeChangedFunction->call("parentSizeChangedFunction", inSizeRef, stateTable);
             
             if(sizeRef)
             {
@@ -1892,6 +1893,10 @@ void MJView::loadFromTable(TuiTable* table, bool needsToLayoutSubviews, TuiTable
         stateTable->setVec3("pos", table->getVec3("pos"));
     }
     
+    if(table->hasKey("rotation"))
+    {
+        stateTable->setMat3("rotation", table->getMat3("rotation"));
+    }
     
     if(table->hasKey("masksEvents"))
     {
@@ -1972,6 +1977,17 @@ void MJView::tableKeyChanged(const std::string& key, TuiRef* value)
                 break;
         }
     }
+    else if(key == "rotation")
+    {
+        switch (value->type()) {
+            case Tui_ref_type_MAT3:
+                setRotation(((TuiMat3*)value)->value);
+                break;
+            default:
+                MJError("rotation expected mat3");
+                break;
+        }
+    }
     else if(key == "size")
     {
         switch (value->type()) {
@@ -2000,7 +2016,7 @@ void MJView::tableKeyChanged(const std::string& key, TuiRef* value)
                 parentSizeChangedFunction->retain();
                 
                 TuiRef* inSizeRef = new TuiVec2(parentView->size);
-                TuiRef* sizeRef = parentSizeChangedFunction->call("parentSizeChangedFunction", inSizeRef);
+                TuiRef* sizeRef = parentSizeChangedFunction->call("parentSizeChangedFunction", inSizeRef, stateTable);
                 if(sizeRef)
                 {
                     if(sizeRef->type() == Tui_ref_type_VEC2)

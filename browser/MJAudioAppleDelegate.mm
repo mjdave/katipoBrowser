@@ -6,12 +6,33 @@
 
 @implementation MJAudioAppleDelegate
 
+#if TARGET_OS_IPHONE
+- (void) onAudioSessionEvent: (NSNotification *) notification
+{
+    //Check the type of notification, especially if you are sending multiple AVAudioSession events here
+    if ([notification.name isEqualToString:AVAudioSessionInterruptionNotification]) {
+        NSLog(@"Interruption notification received!");
+
+        //Check to see if it was a Begin interruption
+        if ([[notification.userInfo valueForKey:AVAudioSessionInterruptionTypeKey] isEqualToNumber:[NSNumber numberWithInt:AVAudioSessionInterruptionTypeBegan]]) {
+            NSLog(@"Interruption began!");
+
+        } else {
+            NSLog(@"Interruption ended!");
+            [player play];
+            //Resume your audio
+        }
+    }
+}
+#endif
 
 - (id)init
 {
 #if TARGET_OS_IPHONE
     NSError *error;
     [[AVAudioSession sharedInstance] setCategory:AVAudioSessionCategoryPlayback error:&error];
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(onAudioSessionEvent:) name:AVAudioSessionInterruptionNotification object:nil];
 #endif
     
     player = [[AVQueuePlayer alloc] init];
