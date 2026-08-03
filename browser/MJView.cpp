@@ -269,6 +269,39 @@ void MJView::initInternals()
         return TUI_NIL;
     });
     
+    //accepts either orderBack(subView) or orderBack()
+    stateTable->setFunction("orderBack", [this](TuiTable* args, TuiRef* existingResult, TuiFunctionCallData* incomingCallData, TuiDebugInfo* callingDebugInfo) -> TuiRef* {
+        if(args && args->arrayObjects.size() >= 1)
+        {
+            TuiRef* viewTableRef = args->arrayObjects[0];
+            
+            if(viewTableRef->type() == Tui_ref_type_TABLE)
+            {
+                MJView* subView = (MJView*)((TuiTable*)viewTableRef)->getUserData("_view");
+                orderBack(subView);
+            }
+            return TUI_NIL;
+        }
+        parentView->orderBack(this);
+        return TUI_NIL;
+    });
+    
+    stateTable->setFunction("orderFront", [this](TuiTable* args, TuiRef* existingResult, TuiFunctionCallData* incomingCallData, TuiDebugInfo* callingDebugInfo) -> TuiRef* {
+        if(args && args->arrayObjects.size() >= 1)
+        {
+            TuiRef* viewTableRef = args->arrayObjects[0];
+            
+            if(viewTableRef->type() == Tui_ref_type_TABLE)
+            {
+                MJView* subView = (MJView*)((TuiTable*)viewTableRef)->getUserData("_view");
+                orderFront(subView);
+            }
+            return TUI_NIL;
+        }
+        parentView->orderFront(this);
+        return TUI_NIL;
+    });
+    
 }
 
 

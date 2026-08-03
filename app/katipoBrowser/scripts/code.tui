@@ -575,17 +575,6 @@ refreshButton.click = function()
     doGet(currentURLFullLink, nil, nil)
 }
 
-reloadKey = function(isDown, code, mod, isRepeat)
-{
-    if(isDown and !isRepeat and currentURLFullLink and (mod == keys.modifiers.ctrl or mod == keys.modifiers.cmd))
-    {
-        doGet(currentURLFullLink, nil, nil)
-    }
-}
-
-#a full list of keycodes can be found in the katipo browser resources, within the file app/common/keys.tui
-eventManager.addKeyEventListener(keys.keyCodes.r, reloadKey)
-
 loadInitialLink = function()
 {
     siteContentBackground.goalColor = vec4(0.0, 0.015, 0.01, 0.6)
@@ -601,3 +590,57 @@ loadInitialLink = function()
 }
 
 loadInitialLink()
+
+
+
+reloadKey = function(isDown, code, mod, isRepeat)
+{
+    if(isDown and !isRepeat and currentURLFullLink and (mod == keys.modifiers.ctrl or mod == keys.modifiers.cmd))
+    {
+        doGet(currentURLFullLink, nil, nil)
+    }
+}
+#a full list of keycodes can be found in the katipo browser resources, within the file app/common/keys.tui
+eventManager.addKeyEventListener(keys.keyCodes.r, reloadKey)
+
+validZooms = {0.5,0.75,1.0,1.25,1.5,2.0,3.0,4.0}
+
+addKey = function(isDown, code, mod, isRepeat)
+{
+    if(isDown and !isRepeat and (mod == keys.modifiers.ctrl or mod == keys.modifiers.cmd))
+    {
+        currentZoom = 1.0 / eventManager.uiScale + 0.01
+        print("addKey key currentZoom:", currentZoom)
+        
+        for(zoom in validZooms)
+        {
+            if(zoom > currentZoom)
+            {
+                eventManager.uiScale = 1.0 / zoom
+                break
+            }
+        }
+    }
+}
+eventManager.addKeyEventListener(keys.keyCodes.equals, addKey)
+
+
+minusKey = function(isDown, code, mod, isRepeat)
+{
+    if(isDown and !isRepeat and (mod == keys.modifiers.ctrl or mod == keys.modifiers.cmd))
+    {
+        currentZoom = 1.0 / eventManager.uiScale - 0.01
+        print("minusKey key currentZoom:", currentZoom)
+        
+        prevZoom = validZooms[0]
+        for(zoom in validZooms)
+        {
+            if(zoom > currentZoom)
+            {
+                eventManager.uiScale = 1.0 / prevZoom
+                break
+            }
+        }
+    }
+}
+eventManager.addKeyEventListener(keys.keyCodes.minus, minusKey)

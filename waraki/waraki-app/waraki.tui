@@ -532,7 +532,7 @@ init = function()
     
     if(!bundledHostWasRunning)
     {
-        lastHost = false#database.get("lastHost")
+        lastHost = database.get("lastHost")
         if(lastHost)
         {
             hostID = lastHost.hostID
