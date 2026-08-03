@@ -205,13 +205,13 @@ addRecentConnectionsMarkup = function()
     recentHosts = database.get("recentHosts")
     if(recentHosts and table.count(recentHosts) > 0)
     {
-        result += "#Recent:\n" #todo bug, this is not a header
+        result += "#Stored Libraries\n\n"
         for(i,siteInfo in recentHosts)
         {
             if(siteInfo.hostID != bundledHostID)
             {
                 buttonID = "recentButton" + i
-                result += "    " + siteInfo.url + "    [Connect ->](id='" + buttonID + "')\n"
+                result += "    " + siteInfo.url + "    [Connect/Load ->](id='" + buttonID + "')\n"
 
                 clickFunction = function()
                 {
@@ -254,7 +254,6 @@ scanCallback = function(status, result)
             table.insert(scanFoundResults, result)
 
             thisMarkup = "#Waraki music library found\n\n"
-            thisMarkup += addRecentConnectionsMarkup()
             buttonCount = 0
             for(i, trackerResult in scanFoundResults)
             {
@@ -282,6 +281,8 @@ scanCallback = function(status, result)
                     }
                 }
             }
+
+            thisMarkup += addRecentConnectionsMarkup()
             thisMarkup += connectPageMarkup
 
             connectPage.setText(thisMarkup)
@@ -561,3 +562,45 @@ reloadKey = function(isDown, code, mod, isRepeat)
     }
 }
 eventManager.addKeyEventListener(keys.keyCodes.r, reloadKey)
+
+validZooms = {0.5,0.75,1.0,1.25,1.5,2.0,3.0,4.0}
+
+addKey = function(isDown, code, mod, isRepeat)
+{
+    if(isDown and !isRepeat and (mod == keys.modifiers.ctrl or mod == keys.modifiers.cmd))
+    {
+        currentZoom = 1.0 / eventManager.uiScale + 0.01
+        print("addKey key currentZoom:", currentZoom)
+        
+        for(zoom in validZooms)
+        {
+            if(zoom > currentZoom)
+            {
+                eventManager.uiScale = 1.0 / zoom
+                break
+            }
+        }
+    }
+}
+eventManager.addKeyEventListener(keys.keyCodes.equals, addKey)
+
+
+minusKey = function(isDown, code, mod, isRepeat)
+{
+    if(isDown and !isRepeat and (mod == keys.modifiers.ctrl or mod == keys.modifiers.cmd))
+    {
+        currentZoom = 1.0 / eventManager.uiScale - 0.01
+        print("minusKey key currentZoom:", currentZoom)
+        
+        prevZoom = validZooms[0]
+        for(zoom in validZooms)
+        {
+            if(zoom > currentZoom)
+            {
+                eventManager.uiScale = 1.0 / prevZoom
+                break
+            }
+        }
+    }
+}
+eventManager.addKeyEventListener(keys.keyCodes.minus, minusKey)

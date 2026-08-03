@@ -34,6 +34,16 @@ leftPaneLayout = {
                     additiveBlend = true
                     fontSize = 18
                 }
+                {
+                    id = "addAllButton"
+                    hidden = true
+                    type = "button"
+                    buttonType = "imageHueShift"
+                    path = "images/addAll.png"
+                    size = headerBackButtonSize
+                    pos = vec3(-30,0,0)
+                    alignmentX = "right"
+                }
             }
         }
         {
@@ -64,6 +74,7 @@ fileItemLayout = {
             buttonType = "color"
             additiveBlend = true
             color = vec4(0.0,0.05,0.1,0.3)
+            selectedColor = vec4(0.04,0.6,0.15,0.3)
         }
         {
             id = "fileItemTitle"
@@ -93,6 +104,7 @@ dirItemLayout = {
             buttonType = "color"
             additiveBlend = true
             color = vec4(0.0,0.05,0.1,0.3)
+            selectedColor = vec4(0.04,0.6,0.15,0.3)
         }
         {
             id = "fileItemTitle"
@@ -122,15 +134,20 @@ compareFunction = function(a,b)
     return a.fileName < b.fileName
 }
 
+reloadCurrentView = function(fileBrowserView)
+{
+    setDirectoryTree(fileBrowserView, fileBrowserView.currentFile, fileBrowserView.leftSelectedIndex, true)
+}
+
 setDirectoryTree = function(fileBrowserView, directoryTree, selectedIndex, isFromNavigation) #todo we could also create directoryTree if given a path argument. directoryTreeOrPath, and add a createDirectoryTree function
 {
     fileBrowserView.currentFile = directoryTree
     fileBrowserView.leftSelectedIndex = selectedIndex
 
-    if(onBrowserContentChange)
-    {
-        onBrowserContentChange()
-    }
+    #if(onBrowserContentChange) #moved down as we need to have valid views setup first
+    #{
+    #    onBrowserContentChange(fileBrowserView)
+    #}
 
     if(fileBrowserView.leftPaneView)
     {
@@ -247,7 +264,7 @@ setDirectoryTree = function(fileBrowserView, directoryTree, selectedIndex, isFro
 
                     if(onBrowserContentChange)
                     {
-                        onBrowserContentChange()
+                        onBrowserContentChange(fileBrowserView)
                     }
                 }
 
@@ -276,6 +293,12 @@ setDirectoryTree = function(fileBrowserView, directoryTree, selectedIndex, isFro
         #{
         #    updateRightPanel()
         #}
+    }
+
+
+    if(onBrowserContentChange)
+    {
+        onBrowserContentChange(fileBrowserView)
     }
 
 }

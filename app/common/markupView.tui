@@ -1444,6 +1444,7 @@ charFunc = function(markupView, charText, charIndex)
 lineFunc = function(markupView, lineText)
 {
     parser = markupView.parser
+    parser.onlyFoundSpace = true
     parser.isHeader = nil #anything that is closed by the line end needs to be set to nil here
 
     #print("lineText:", lineText)

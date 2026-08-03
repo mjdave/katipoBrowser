@@ -57,6 +57,8 @@ public:
 	Camera* camera;
     Database* appDatabase = nullptr;
     
+    double userUIScale = 1.0;
+    
 public:
     
     MainController();
@@ -105,6 +107,8 @@ public:
 	std::string getVulkanDeviceName() const;
 	uint32_t getVulkanDriverVersion() const;
     
+    void saveWindowInfoToDatabase();
+    
     
 protected:
     //MJAudio* audio;
@@ -129,7 +133,6 @@ protected:
 private:
 
 	void windowInfoChanged();
-    void saveWindowInfoToDatabase();
     
     void load();
     void unload();

@@ -74,7 +74,7 @@ void MainController::init(TuiTable* rootTable, Database* appDatabase_, std::stri
     SDL_DisplayID displayID = SDL_GetPrimaryDisplay();
     const SDL_DisplayMode* mode = SDL_GetCurrentDisplayMode(displayID);
 
-	int screenWidth = mode->w * 0.8;
+	int screenWidth = mode->w * 0.4;
     int screenHeight = mode->h * 0.8;
 	fovY = DEFAULT_FOVY;
     
@@ -90,6 +90,13 @@ void MainController::init(TuiTable* rootTable, Database* appDatabase_, std::stri
         {
             screenWidth = windowInfo->getDouble("w");
             screenHeight = windowInfo->getDouble("h");
+            
+            userUIScale = windowInfo->getDouble("userUIScale");
+            if(userUIScale < 0.01)
+            {
+                userUIScale = 1.0;
+            }
+            userUIScale = clamp(userUIScale, 0.25, 4.0);
             
             initialScreenX = windowInfo->getDouble("x");
             initialScreenY = windowInfo->getDouble("y");
@@ -151,7 +158,7 @@ void MainController::init(TuiTable* rootTable, Database* appDatabase_, std::stri
     windowInfo->posY = finalWindowsPosY;
 
 
-    vulkan = new Vulkan(this, displayWindow, ivec2(screenWidth * windowInfo->pixelDensity, screenHeight * windowInfo->pixelDensity), vsync);
+    vulkan = new Vulkan(this, displayWindow, vsync);
 
 	camera = new Camera(vulkan);
     
@@ -177,19 +184,16 @@ void MainController::windowInfoChanged()
 	windowInfo->projectionMatrix = projectionMatrix;
     
     
-#if TARGET_OS_IPHONE //maybe can always do this?
     double scaleToUse = windowInfo->pixelDensity;
-#else
-    double scaleToUse = 1.0;//windowInfo->screenHeight / 1080;
-#endif
+    double userScale = userUIScale;
 
     if(mainMJView)
     {
-        double windowZOffset = -(windowInfo->screenHeight * scaleToUse * 0.5 / tan(fovY * 0.5));
+        double windowZOffset = -(windowInfo->screenHeight * scaleToUse * userScale * 0.5 / tan(fovY * 0.5));
         mainMJView->setWindowZOffset(windowZOffset);
         
         mainMJView->setScale(scaleToUse);
-        mainMJView->setSize(dvec2(windowInfo->screenWidth, windowInfo->screenHeight));
+        mainMJView->setSize(dvec2(windowInfo->screenWidth, windowInfo->screenHeight) * userScale);
     }
 
 
@@ -223,6 +227,7 @@ void MainController::saveWindowInfoToDatabase()
         windowTable->setDouble("y", finalWindowsPosY);
         windowTable->setDouble("w", w);
         windowTable->setDouble("h", h);
+        windowTable->setDouble("userUIScale", userUIScale);
         appDatabase->setDataForKey(windowTable->serializeBinary(), "window");
     }
 }
@@ -369,7 +374,7 @@ void MainController::load()
     cache->pixelDensity = windowInfo->pixelDensity;
     
 	mainMJView = new MJView(windowInfo, cache);
-	mainMJView->setSize(vec2(windowInfo->screenWidth, windowInfo->screenHeight));
+	//mainMJView->setSize(vec2(windowInfo->screenWidth, windowInfo->screenHeight));
 	mainMJView->setRelativePosition(MJViewPosition(MJPositionCenter, MJPositionCenter));
 
 	windowInfoChanged();

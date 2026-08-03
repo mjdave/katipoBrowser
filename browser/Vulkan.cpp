@@ -190,7 +190,7 @@ void Vulkan::setupDebugMessenger() {
 	}
 }
 
-Vulkan::Vulkan(MainController* controller_, SDL_Window* window_, ivec2 screenSize, bool vsync_)
+Vulkan::Vulkan(MainController* controller_, SDL_Window* window_, bool vsync_)
 {
     controller = controller_;
     window = window_;

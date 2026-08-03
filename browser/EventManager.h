@@ -11,6 +11,7 @@ class MainController;
 class Timer;
 class TuiFunction;
 class TuiTable;
+class TuiRef;
 
 #define MJ_KEY_MOD_SHIFT 1
 #define MJ_KEY_MOD_CTRL 2
@@ -69,6 +70,7 @@ public:
 	int getSecondModKey();
 
 	Timer* debugTimer;
+    
 
 public:
     MainController* mainController;
@@ -118,6 +120,8 @@ private:
     int keyChangedListenerFunctionIndex = 0;
     std::map<int,TuiFunction*> anyKeyChangedListenerFunctions;
     std::map<std::string, std::map<int,std::map<int, TuiFunction*> > > keyChangedByKeyListenerFunctions;
+    
+    void eventManagerTableKeyChanged(const std::string& key, TuiRef* value);
 
     
 private:

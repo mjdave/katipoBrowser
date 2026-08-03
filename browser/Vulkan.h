@@ -136,7 +136,7 @@ public:
 	bool hasValidSwapchain = false;
 
 public:
-    Vulkan(MainController* controller_, SDL_Window* window_, ivec2 screenSize, bool vsync_);
+    Vulkan(MainController* controller_, SDL_Window* window_, bool vsync_);
     ~Vulkan();
 
     bool startRecord();

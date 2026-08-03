@@ -19,7 +19,6 @@ EventManager::EventManager()
 }
 
 
-
 static bool resizingEventWatcher(void* data, SDL_Event* event) {
     switch(event->type)
     {
@@ -34,7 +33,8 @@ static bool resizingEventWatcher(void* data, SDL_Event* event) {
             SDL_Rect rect;
             SDL_GetWindowSafeArea(EventManager::getInstance()->window, &rect);
             //MJLog("SDL_GetWindowSafeArea result in SDL_EVENT_WINDOW_RESIZED:(%d, %d, %d, %d)", rect.x, rect.y, rect.w, rect.h);
-            EventManager::getInstance()->windowSafeArea = dvec4(rect.x, rect.y, rect.w, rect.h);
+            double uiScale = MainController::getInstance()->userUIScale;
+            EventManager::getInstance()->windowSafeArea = dvec4(rect.x, rect.y, rect.w * uiScale, rect.h * uiScale);
             MainController::getInstance()->mainMJView->needsToUpdateSizeDueToWindowChange = true;
         }
             break;
@@ -43,13 +43,15 @@ static bool resizingEventWatcher(void* data, SDL_Event* event) {
             SDL_Rect rect;
             SDL_GetWindowSafeArea(EventManager::getInstance()->window, &rect);
             //MJLog("SDL_GetWindowSafeArea result in SDL_EVENT_WINDOW_SAFE_AREA_CHANGED:(%d, %d, %d, %d)", rect.x, rect.y, rect.w, rect.h);
-            EventManager::getInstance()->windowSafeArea = dvec4(rect.x, rect.y, rect.w, rect.h);
+            double uiScale = MainController::getInstance()->userUIScale;
+            EventManager::getInstance()->windowSafeArea = dvec4(rect.x, rect.y, rect.w * uiScale, rect.h * uiScale);
             MainController::getInstance()->mainMJView->needsToUpdateSizeDueToWindowChange = true;
         }
             break;
     }
   return 0;
 }
+
 
 void EventManager::init(MainController* mainController_,
 	SDL_Window* window_,
@@ -62,7 +64,7 @@ void EventManager::init(MainController* mainController_,
     SDL_Rect rect;
     SDL_GetWindowSafeArea(EventManager::getInstance()->window, &rect);
     //MJLog("init setting windowSafeArea:(%d, %d, %d, %d)", rect.x, rect.y, rect.w, rect.h);
-    EventManager::getInstance()->windowSafeArea = dvec4(rect.x, rect.y, rect.w, rect.h);
+    EventManager::getInstance()->windowSafeArea = dvec4(rect.x, rect.y, rect.w * mainController->userUIScale, rect.h * mainController->userUIScale);
     
     SDL_AddEventWatch(resizingEventWatcher, window);
     
@@ -112,6 +114,7 @@ EventManager::~EventManager()
         }
     }
 }
+
 
 int EventManager::getModKey()
 {
@@ -659,12 +662,42 @@ void EventManager::removeKeyChangedListener(int index)
     }
 }
 
+void EventManager::eventManagerTableKeyChanged(const std::string& key, TuiRef* value)
+{
+    if(key == "uiScale")
+    {
+        switch (value->type()) {
+            case Tui_ref_type_NUMBER:
+            {
+                if(mainController->userUIScale != ((TuiNumber*)value)->value)
+                {
+                    mainController->userUIScale = ((TuiNumber*)value)->value;
+                    SDL_Rect rect;
+                    SDL_GetWindowSafeArea(EventManager::getInstance()->window, &rect);
+                    EventManager::getInstance()->windowSafeArea = dvec4(rect.x, rect.y, rect.w * mainController->userUIScale, rect.h * mainController->userUIScale);
+                    MainController::getInstance()->mainMJView->needsToUpdateSizeDueToWindowChange = true;
+                    MainController::getInstance()->saveWindowInfoToDatabase();
+                }
+            }
+                break;
+            default:
+                MJError("Expected number");
+                break;
+        }
+    }
+}
 
 void EventManager::bindTui(TuiTable* rootTable)
 {
     TuiTable* eventManagerTable = new TuiTable(rootTable);
     rootTable->setTable("eventManager", eventManagerTable);
     eventManagerTable->release();
+    
+    eventManagerTable->setDouble("uiScale", mainController->userUIScale);
+    
+    eventManagerTable->onSet = [this](TuiRef* table, const std::string& key, TuiRef* value) {
+        eventManagerTableKeyChanged(key, value);
+    };
     
     eventManagerTable->setFunction("addKeyEventListener", [this](TuiTable* args, TuiRef* existingResult, TuiFunctionCallData* incomingCallData, TuiDebugInfo* callingDebugInfo) -> TuiRef* {
         if(args->arrayObjects.size() >= 2)
