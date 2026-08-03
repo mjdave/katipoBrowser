@@ -67,6 +67,8 @@
       <Command>XCOPY "$(SolutionDir)..\..\app" "$(TargetDir)app" /s /i /y &amp;
 XCOPY "$(SolutionDir)..\waraki-app" "$(TargetDir)waraki-app" /s /i /y &amp;
 XCOPY "$(SolutionDir)..\waraki-site" "$(TargetDir)waraki-site" /s /i /y &amp;
+XCOPY "$(SolutionDir)..\..\katipo\apps\katipoTracker\scripts\tracker.tui" "$(TargetDir)" /s /i /y &amp;
+XCOPY "$(SolutionDir)..\..\katipo\apps\katipoHost\scripts\host.tui" "$(TargetDir)" /s /i /y &amp;
 XCOPY "$(SolutionDir)..\..\windows\thirdPartyWindows\SDL3_mixer-3.1.2\lib\x64\*.dll" "$(TargetDir)" /s /i /y &amp;
 XCOPY "$(SolutionDir)..\..\windows\thirdPartyWindows\SDL3-3.4.0\lib\x64\*.dll" "$(TargetDir)" /s /i /y</Command>
     </PostBuildEvent>
@@ -94,6 +96,8 @@ XCOPY "$(SolutionDir)..\..\windows\thirdPartyWindows\SDL3-3.4.0\lib\x64\*.dll" "
       <Command>XCOPY "$(SolutionDir)..\..\app" "$(TargetDir)app" /s /i /y &amp;
 XCOPY "$(SolutionDir)..\waraki-app" "$(TargetDir)waraki-app" /s /i /y &amp;
 XCOPY "$(SolutionDir)..\waraki-site" "$(TargetDir)waraki-site" /s /i /y &amp;
+XCOPY "$(SolutionDir)..\..\katipo\apps\katipoTracker\scripts\tracker.tui" "$(TargetDir)" /s /i /y &amp;
+XCOPY "$(SolutionDir)..\..\katipo\apps\katipoHost\scripts\host.tui" "$(TargetDir)" /s /i /y &amp;
 XCOPY "$(SolutionDir)..\..\windows\thirdPartyWindows\SDL3_mixer-3.1.2\lib\x64\*.dll" "$(TargetDir)" /s /i /y &amp;
 XCOPY "$(SolutionDir)..\..\windows\thirdPartyWindows\SDL3-3.4.0\lib\x64\*.dll" "$(TargetDir)" /s /i /y</Command>
     </PostBuildEvent>
