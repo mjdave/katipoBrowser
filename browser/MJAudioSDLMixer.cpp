@@ -171,10 +171,6 @@ void MJAudioSDLMixer::playSongs(TuiTable* urls)
     MIX_SetTrackStoppedCallback(currentTrack, trackFinished, this);
     currentAudio = MIX_LoadAudio_IO(mixer, stream, false, false);
 
-    Sint64 durationFrames = MIX_GetAudioDuration(currentAudio);
-    double durationMS = MIX_AudioFramesToMS(currentAudio, durationFrames);
-
-    currentTrackDuration_ = durationMS / 1000.0;
     SDL_CloseIO(stream);
 
     if (!MIX_SetTrackAudio(currentTrack, currentAudio)) {
@@ -182,6 +178,11 @@ void MJAudioSDLMixer::playSongs(TuiTable* urls)
         return;
     }
 
+    Sint64 durationFrames = MIX_GetAudioDuration(currentAudio);
+    double durationMS = MIX_AudioFramesToMS(currentAudio, durationFrames);
+
+    currentTrackDuration_ = durationMS / 1000.0;
+    
     if(!MIX_PlayTrack(currentTrack, 0)) {
         MJError("Could not play track, %s", SDL_GetError()); //todo cleanup
         return;
