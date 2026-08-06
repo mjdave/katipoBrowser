@@ -104,7 +104,7 @@ public:
     bool needsToUpdateSizeDueToWindowChange = false;
 
 	dvec2 mouseDownLocalPoint;
-	bool dragDistanceAboveClickOutsideThreshold;
+	bool dragDistanceAboveClickOutsideThreshold = true;
     
     std::string idString;
     

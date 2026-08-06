@@ -567,7 +567,7 @@ void Waraki::init()
                 
                 
                 // WARAKI SPECIFIC HACKERY to allow direct local playback without having to create a cache of music files
-                if(!browserHostsByHostID.empty()) //this may not be enough in the future, but for now, we know if we are hosting, we are connecting to that host.
+                if(siteConnectionInfo.trackerKey.find("127.0.0.1") == 0)
                 {
                     BrowserHost* host = browserHostsByHostID.begin()->second; //we can only host one for now
                     std::string musicDirectoryPath = host->scriptState->getString("musicDirectoryPath");

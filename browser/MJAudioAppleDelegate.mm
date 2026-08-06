@@ -109,6 +109,15 @@
     return currentTrackDuration;
 }
 
+- (std::string)currentTrackPath
+{
+    if(player.currentItem && filePathsByPlayerItems.count(player.currentItem) != 0)
+    {
+        return filePathsByPlayerItems[player.currentItem];
+    }
+    return "";
+}
+
 - (void)seekToTime:(double)seekTime
 {
     [player seekToTime:CMTimeMakeWithSeconds(seekTime, NSEC_PER_SEC)];

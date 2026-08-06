@@ -122,6 +122,12 @@ double MJAudioApple::currentTrackDuration()
     return [audioAppleDelegate currentTrackDuration];
 }
 
+
+std::string MJAudioApple::currentTrackPath()
+{
+    return [audioAppleDelegate currentTrackPath];
+}
+
 void MJAudioApple::seekToTime(double seconds)
 {
     [audioAppleDelegate seekToTime:seconds];

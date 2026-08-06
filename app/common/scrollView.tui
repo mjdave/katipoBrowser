@@ -192,10 +192,10 @@ create = function(parentView, viewLayout)
 
         mainViewMouseDown = function(buttonIndex, mouseLoc)
         {
-            print("mainViewMouseDown:", scrollView.scrollYIndexMax, " scrollView.scrollerMouseDown:", scrollView.scrollerMouseDown)
+            #print("mainViewMouseDown:", scrollView.scrollYIndexMax, " scrollView.scrollerMouseDown:", scrollView.scrollerMouseDown)
             if(!scrollView.disabled and scrollView.scrollYIndexMax != 0 and (!scrollView.scrollerMouseDown))
             {
-            print("mainViewMouseDown b")
+            #print("mainViewMouseDown b")
                 scrollView.mainMouseDown = true
                 scrollView.lastY = mouseLoc.y
                 scrollView.startY = mouseLoc.y
@@ -220,7 +220,7 @@ create = function(parentView, viewLayout)
                         
                         if(scrollView.scrollYOffset + diff < minScroll or scrollView.scrollYOffset + diff > maxScroll)
                         {
-                            diff *= 0.5
+                            diff *= 0.1
                         }
                         
                         scrollView.scrollVelocity = diff * 2.0
@@ -233,14 +233,14 @@ create = function(parentView, viewLayout)
 
         mainViewMouseUp = function(buttonIndex, mouseLoc)
         {
-            print("mainViewMouseUp")
+            #print("mainViewMouseUp")
             scrollView.mainMouseDown = false
             scrollView.scrollInProgress = false
         }
 
         scrollerMouseDown = function(buttonIndex, mouseLoc)
         {
-            print("scrollerMouseDown")
+            #print("scrollerMouseDown")
             scrollView.scrollerMouseDown = true
             scrollView.mainMouseDown = false
 
@@ -264,7 +264,7 @@ create = function(parentView, viewLayout)
 
         scrollerMouseUp = function(buttonIndex, mouseLoc)
         {
-            print("scrollerMouseUp")
+            #print("scrollerMouseUp")
             scrollView.scrollerMouseDown = false
         }
 
@@ -299,6 +299,14 @@ create = function(parentView, viewLayout)
             elseif(scrollChange.y <= -1)
             {
                 offset = math.ceil(scrollChange.y)
+            }
+
+            minScroll = -scrollView.scrollYHeight
+            maxScroll = 0
+            
+            if(scrollView.scrollYOffset + offset < minScroll or scrollView.scrollYOffset + offset > maxScroll)
+            {
+                offset *= 0.1
             }
 
             scrollView.scrollVelocity += offset * 10.0
@@ -342,38 +350,30 @@ create = function(parentView, viewLayout)
         if(!scrollView.scrollInProgress)
         {
             absScrollVelocity = math.abs(scrollView.scrollVelocity)
-            if(absScrollVelocity > 0.1)
+            if(absScrollVelocity > 0.001)
             {
-                scrollView.scrollYOffset += scrollView.scrollVelocity
+                scrollView.scrollYOffset += scrollView.scrollVelocity * dt * 30
 
-                scrollView.scrollVelocity = scrollView.scrollVelocity * (1.0 - math.min(dt * 8, 1))
+                scrollView.scrollVelocity = scrollView.scrollVelocity * (1.0 - math.min(dt * 4, 1))
                 
                 minScroll = -scrollView.scrollYHeight
                 maxScroll = 0
                 
                 if(scrollView.scrollYOffset < minScroll)
                 {
-                    if(absScrollVelocity < 0.1)
+                    if(scrollView.scrollVelocity < 0)
                     {
-                        scrollView.scrollYOffset = minScroll
-                        scrollView.scrollVelocity = 0
+                        scrollView.scrollVelocity *= 0.5
                     }
-                    else
-                    {
-                        scrollView.scrollYOffset -= (scrollView.scrollYOffset - minScroll) * math.min(dt * 30, 1)
-                    }
+                    scrollView.scrollVelocity = (minScroll - scrollView.scrollYOffset) * 0.5
                 }
                 else if(scrollView.scrollYOffset > maxScroll)
                 {
-                    if(absScrollVelocity < 0.1)
+                    if(scrollView.scrollVelocity > 0)
                     {
-                        scrollView.scrollYOffset = maxScroll
-                        scrollView.scrollVelocity = 0
+                        scrollView.scrollVelocity *= 0.5
                     }
-                    else
-                    {
-                        scrollView.scrollYOffset -= (scrollView.scrollYOffset - maxScroll) * math.min(dt * 30, 1)
-                    }
+                    scrollView.scrollVelocity = (maxScroll - scrollView.scrollYOffset) * 0.5
                 }
             }
         }
@@ -389,6 +389,7 @@ create = function(parentView, viewLayout)
         addedView = scrollView.baseView.addView(addViewLayout)
         addedView.alignmentX = "left"
         addedView.alignmentY = "top"
+        addedView.rowIndex = table.count(scrollView.rowInfos)
         rowInfo = {
             rowView = addedView
         }
@@ -399,6 +400,23 @@ create = function(parentView, viewLayout)
 
         return addedView
     }
+
+    scrollView.moveRow = function(fromIndex, toIndex) #toIndex is after removal
+    {
+        #print("scrollView.moveRow:", fromIndex, " to:", toIndex)
+        rowInfo = scrollView.rowInfos[fromIndex]
+        table.remove(scrollView.rowInfos, fromIndex)
+        table.insert(scrollView.rowInfos, toIndex, rowInfo)
+        iStart = math.min(fromIndex, toIndex) #tui bug
+        for(i= iStart,i < table.count(scrollView.rowInfos), i++)
+        {
+            thisRowInfo = scrollView.rowInfos[i]
+            thisRowInfo.rowView.rowIndex = i
+        }
+        #print("moved rows:", scrollView.rowInfos)
+        scrollView.dirty = true
+    }
+
 
     if(viewLayout.scrollViewRows)
     {
@@ -518,49 +536,4 @@ removeAllRows = function(scrollView, startIndexOrNil) # NOTE startIndexOrNil is 
 
     scrollView.scrollYIndexMax = 0
     scrollView.dirty = true
-}
-
-removeRowAtIndex = function(scrollView, rowIndex)
-{
-    error("todo")
-    #if(rowIndex and rowIndex > 0 and rowIndex <= table.count(scrollView.rowInfos))
-    #{
-    #    viewToRemove = scrollView.rowInfos[rowIndex].rowView
-#
-    #    table.remove(scrollView.rowInfos, rowIndex)
-#
-    #    newCurrentPositionRowInfo = scrollView.rowInfos[rowIndex]
-    #    if(newCurrentPositionRowInfo)
-    #    {
-    #        aboveRowInfo = scrollView.rowInfos[rowIndex - 1]
-#
-    #        if(aboveRowInfo)
-    #        {
-    #            newCurrentPositionRowInfo.rowView.layoutParent = aboveRowInfo.rowView
-    #            newCurrentPositionRowInfo.rowView.relativePosition = ViewPosition(scrollView.contentHorizontalAlignment, MJPositionBelow)
-    #        }
-    #        else
-    #        {
-    #            newCurrentPositionRowInfo.rowView.layoutParent = scrollView.baseView
-    #            newCurrentPositionRowInfo.rowView.relativePosition = ViewPosition(scrollView.contentHorizontalAlignment, MJPositionTop)
-    #        }
-    #    }
-#
-    #    scrollView.removeView(viewToRemove)
-    #    scrollView.dirty = true
-    #}
-}
-
-removeRow = function(scrollView, rowView)
-{
-    error("todo")
-    for(rowIndex,rowInfo in scrollView.rowInfos) 
-    {
-        if(rowInfo.rowView == rowView)
-        {
-            removeRowAtIndex(scrollView, rowIndex)
-            return
-        }
-    }
-
 }

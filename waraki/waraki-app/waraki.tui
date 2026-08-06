@@ -6,7 +6,7 @@ welcomePage = false
 createLibraryPage = false
 connectPage = false
 
-bundledHostIP = "127.0.0.1"
+bundledHostIP = "127.0.0.1:3471"
 bundledHostID = bundledHostIP + "/waraki"
 
 allowHosting = (platform() != "ios")
@@ -215,9 +215,13 @@ addRecentConnectionsMarkup = function()
 
                 clickFunction = function()
                 {
-                    hostID = siteInfo.url
+                    hostID = siteInfo.hostID
                     checksumKey = "checksums_" + hostID
-                    katipo.get(hostID, database.get(checksumKey), getCallback)
+                    localGetCallback = function(result, hostID_bad, url) #todo haccck for host id
+                    {
+                        getCallback(result, hostID, url)
+                    }
+                    katipo.get(hostID, database.get(checksumKey), localGetCallback)
                     connectPage.fadeOut()
                 }
 
@@ -339,6 +343,7 @@ connectClicked = function()
 
     thisMarkup = "#Searching...\n\n" 
     thisMarkup += "Waraki is scanning your local network for music libraries.\n\n"
+    thisMarkup += addRecentConnectionsMarkup()
     thisMarkup += connectPageMarkup
     connectPage.setText(thisMarkup)
     connectPage.fadeIn()
@@ -363,6 +368,8 @@ createLibraryOKClicked = function()
         print("started bundled host")
         database.set("bundledHostRunning", true)
         database.set("bundledHostMusicLibraryPath", createMusicDirectoryName)
+
+        sleep(0.2) #todo don't block here, set a callback. This is to give the host a little time before we attempt to connect
 
         checksumKey = "checksums_" + bundledHostID
         katipo.get(bundledHostID, database.get(checksumKey), getCallback)
@@ -520,6 +527,7 @@ init = function()
         bundledHostWasRunning = katipo.setBundledHostRunning(bundledHostID, true)
         if(bundledHostWasRunning)
         {
+            sleep(0.2) #todo don't block here, set a callback. This is to give the host a little time before we attempt to connect
             checksumKey = "checksums_" + bundledHostID
             katipo.get(bundledHostID, database.get(checksumKey), getCallback)
         }
@@ -590,7 +598,6 @@ minusKey = function(isDown, code, mod, isRepeat)
     if(isDown and !isRepeat and (mod == keys.modifiers.ctrl or mod == keys.modifiers.cmd))
     {
         currentZoom = 1.0 / eventManager.uiScale - 0.01
-        print("minusKey key currentZoom:", currentZoom)
         
         prevZoom = validZooms[0]
         for(zoom in validZooms)
@@ -600,6 +607,7 @@ minusKey = function(isDown, code, mod, isRepeat)
                 eventManager.uiScale = 1.0 / prevZoom
                 break
             }
+            .prevZoom = zoom
         }
     }
 }

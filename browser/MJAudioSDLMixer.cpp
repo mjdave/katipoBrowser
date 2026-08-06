@@ -269,6 +269,15 @@ double MJAudioSDLMixer::currentTrackDuration()
     return 0.0;
 }
 
+std::string MJAudioSDLMixer::currentTrackPath()
+{
+    if(playQueue && playQueue->arrayObjects.size() > songIndex)
+    {
+        return playQueue->arrayObjects[songIndex]->getStringValue();
+    }
+    return "";
+}
+
 void MJAudioSDLMixer::seekToTime(double timeSeconds)
 {
     if(currentTrack)

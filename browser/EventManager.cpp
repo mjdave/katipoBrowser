@@ -677,6 +677,7 @@ void EventManager::eventManagerTableKeyChanged(const std::string& key, TuiRef* v
                     EventManager::getInstance()->windowSafeArea = dvec4(rect.x, rect.y, rect.w * mainController->userUIScale, rect.h * mainController->userUIScale);
                     MainController::getInstance()->mainMJView->needsToUpdateSizeDueToWindowChange = true;
                     MainController::getInstance()->saveWindowInfoToDatabase();
+                    MainController::getInstance()->mainWindowChangedSize();
                 }
             }
                 break;

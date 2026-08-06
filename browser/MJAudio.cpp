@@ -45,7 +45,7 @@ void MJAudio::bindTui(TuiTable* rootTable)
 {
     if(audioTable)
     {
-        MJError("MJAudio::bindTui must only be called once");
+        audioTable->release();
     }
     audioTable = new TuiTable(rootTable);
     rootTable->setTable("audio", audioTable);
@@ -113,6 +113,17 @@ void MJAudio::bindTui(TuiTable* rootTable)
         return new TuiNumber(MJAudioApple::getInstance()->currentTrackDuration());
 #else
         return new TuiNumber(MJAudioSDLMixer::getInstance()->currentTrackDuration());
+#endif
+        
+        return TUI_NIL;
+    });
+    
+    
+    audioTable->setFunction("currentTrackPath", [this](TuiTable* args, TuiRef* existingResult, TuiFunctionCallData* incomingCallData, TuiDebugInfo* callingDebugInfo) -> TuiRef* {
+#ifdef __APPLE__
+        return new TuiString(MJAudioApple::getInstance()->currentTrackPath());
+#else
+        return new TuiString(MJAudioSDLMixer::getInstance()->currentTrackPath());
 #endif
         
         return TUI_NIL;

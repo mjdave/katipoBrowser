@@ -32,6 +32,7 @@
 - (bool)paused;
 - (double)currentTrackTime;
 - (double)currentTrackDuration;
+- (std::string)currentTrackPath;
 
 - (void)seekToTime:(double)seekTime;
 - (void)setPlaybackRate:(double)rate;

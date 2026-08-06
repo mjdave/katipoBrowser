@@ -255,7 +255,7 @@ create = function(parentView, viewLayout)
 
     view.hoverStart = function()
     {
-        if(!view.disabled)
+        if(!view.disabled and view.click)
         {
             view.isHover = true
             updateVisuals(view)
@@ -270,7 +270,7 @@ create = function(parentView, viewLayout)
 
     view.mouseDown = function()
     {
-        if(!view.disabled)
+        if(!view.disabled and view.click)
         {
             view.mouseIsDown = true
             updateVisuals(view)
@@ -297,11 +297,18 @@ create = function(parentView, viewLayout)
 
     view.setClickFunction = function(clickFunc)
     {
-        view.click = function()
+        if(clickFunc)
         {
-            view.clickFraction = 1.0
-            createAnimationUpdateFunc(view)
-            clickFunc()
+            view.click = function()
+            {
+                view.clickFraction = 1.0
+                createAnimationUpdateFunc(view)
+                clickFunc()
+            }
+        }
+        else
+        {
+            view.click = nil
         }
     }
 

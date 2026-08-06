@@ -1234,7 +1234,7 @@ void MJView::mouseMoved3D(dvec3 windowRayStart, dvec3 windowRayDirection, bool t
 		if(!dragDistanceAboveClickOutsideThreshold)
 		{
 			double dragDistance2 = length2(localPoint - mouseDownLocalPoint);
-			if(dragDistance2 > 4.0)
+			if(dragDistance2 > 1024.0)
 			{
 				dragDistanceAboveClickOutsideThreshold = true;
                 
@@ -1256,12 +1256,47 @@ void MJView::mouseMoved3D(dvec3 windowRayStart, dvec3 windowRayDirection, bool t
 				{
 					mouseInside = true;
                     //MJLog("mouseInside:(%.4f,%.4f,%.4f)(%.4f,%.4f,%.4f) - %d", windowRayStart.x, windowRayStart.y, windowRayStart.z, windowRayDirection.x, windowRayDirection.y, windowRayDirection.z, triggeredByUIMovement);
+                    
 
 					if(hoverStartFunction)
 					{
-                        TuiRef* localPointRef = new TuiVec2(localPoint / renderScale);
-                        hoverStartFunction->call("hoverStartFunction", localPointRef);
-                        localPointRef->release();
+                        bool foundEarlierHover = false;
+                        int thisViewIndex = 0;
+                        for(int i = parentView->subviews.size() - 1; i >= 0; i--)
+                        {
+                            MJView* sibling = parentView->subviews[i];
+                            if(sibling == this)
+                            {
+                                thisViewIndex = i;
+                                break;
+                            }
+                            if(sibling->hoverStartFunction && sibling->mouseInside)
+                            {
+                                foundEarlierHover = true;
+                                mouseInside = false;
+                                break;
+                            }
+                        }
+                        
+                        if(!foundEarlierHover)
+                        {
+                            TuiRef* localPointRef = new TuiVec2(localPoint / renderScale);
+                            hoverStartFunction->call("hoverStartFunction", localPointRef);
+                            localPointRef->release();
+                            
+                            for(int i = thisViewIndex - 1; i >= 0; i--)
+                            {
+                                MJView* sibling = parentView->subviews[i];
+                                if(sibling->mouseInside)
+                                {
+                                    sibling->mouseInside = false;
+                                    if(sibling->hoverEndFunction)
+                                    {
+                                        sibling->hoverEndFunction->call("hoverEndFunction");
+                                    }
+                                }
+                            }
+                        }
 					}
 				}
 			}

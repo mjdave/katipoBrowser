@@ -23,8 +23,11 @@ public: // members
     void play(TuiTable* urls);
     void skipToNextTrack();
     void stop();
+    
     double currentTrackTime();
     double currentTrackDuration();
+    std::string currentTrackPath();
+    
     void seekToTime(double seconds);
     void setPlaybackRate(double rate);
     

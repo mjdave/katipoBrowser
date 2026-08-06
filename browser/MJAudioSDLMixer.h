@@ -59,6 +59,7 @@ public: // members
 
     double currentTrackTime();
     double currentTrackDuration();
+    std::string currentTrackPath();
 
     void seekToTime(double timeSeconds);
     void setPlaybackRate(double rate);
