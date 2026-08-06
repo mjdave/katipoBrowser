@@ -199,6 +199,11 @@ createAnimationUpdateFunc = function(view)
     {
         view.update = function(dt)
         {
+            if(view.userUpdateFunc != nil)
+            {
+                view.userUpdateFunc(dt)
+            }
+
             if(view.clickFraction != nil)
             {
                 view.clickFraction -= dt * 4.0
@@ -212,7 +217,8 @@ createAnimationUpdateFunc = function(view)
                     view.clickFraction = nil
                 }
             }
-            else
+            
+            if(view.userUpdateFunc == nil and view.clickFraction == nil)
             {
                 view.update = nil
             }
@@ -310,6 +316,12 @@ create = function(parentView, viewLayout)
         {
             view.click = nil
         }
+    }
+
+    view.setUpdate = function(updateFunc)
+    {
+        view.userUpdateFunc = updateFunc
+        createAnimationUpdateFunc(view)
     }
 
     updateVisuals(view)
