@@ -27,7 +27,7 @@ public:
     TuiTable* katipoTable;
     TuiTable* scriptState;
     
-    BrowserHost(std::string hostID,
+    BrowserHost(std::string hostDirName,
                 std::string basePath_ = "",
                 std::string hostScriptPath = Katipo::getResourcePath("host.tui"),
                 TuiTable* userConfiguration = nullptr);

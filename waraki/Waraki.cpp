@@ -327,12 +327,12 @@ void Waraki::init()
                                                 TuiDebugInfo* callingDebugInfo) -> TuiRef* {
         if(args->arrayObjects.size() >= 2)
         {
-            std::string hostID = args->arrayObjects[0]->getStringValue();
+            std::string hostDirName = args->arrayObjects[0]->getStringValue();
             bool shouldRun = args->arrayObjects[1]->boolValue();
             
-            if(!hostID.empty())
+            if(!hostDirName.empty())
             {
-                if(browserHostsByHostID.count(hostID) == 0)
+                if(browserHostsByHostID.count(hostDirName) == 0)
                 {
                     if(shouldRun)
                     {
@@ -346,14 +346,14 @@ void Waraki::init()
                             userConfiguration = (TuiTable*)args->arrayObjects[2];
                         }
                         
-                        BrowserHost* host = new BrowserHost(hostID,
+                        BrowserHost* host = new BrowserHost(hostDirName,
                                                             Katipo::getResourcePath("waraki-site"),
                                                             Katipo::getResourcePath("host.tui"),
                                                             userConfiguration);
                         
                         if(host->loadSuccess)
                         {
-                            browserHostsByHostID[hostID] = host;
+                            browserHostsByHostID[hostDirName] = host;
                             return TUI_TRUE;
                         }
                         else
@@ -367,8 +367,8 @@ void Waraki::init()
                 {
                     if(!shouldRun)
                     {
-                        delete browserHostsByHostID[hostID];
-                        browserHostsByHostID.erase(hostID);
+                        delete browserHostsByHostID[hostDirName];
+                        browserHostsByHostID.erase(hostDirName);
                         return TUI_FALSE;
                     }
                     return TUI_TRUE;

@@ -313,12 +313,12 @@ void KatipoBrowser::init()
                                                 TuiDebugInfo* callingDebugInfo) -> TuiRef* {
         if(args->arrayObjects.size() >= 2)
         {
-            std::string hostID = args->arrayObjects[0]->getStringValue();
+            std::string hostDirName = args->arrayObjects[0]->getStringValue();
             bool shouldRun = args->arrayObjects[1]->boolValue();
             
-            if(!hostID.empty())
+            if(!hostDirName.empty())
             {
-                if(browserHostsByHostID.count(hostID) == 0)
+                if(browserHostsByHostID.count(hostDirName) == 0)
                 {
                     if(shouldRun)
                     {
@@ -326,8 +326,8 @@ void KatipoBrowser::init()
                         {
                             browserTracker = new BrowserTracker();
                         }
-                        BrowserHost* host = new BrowserHost(hostID);
-                        browserHostsByHostID[hostID] = host;
+                        BrowserHost* host = new BrowserHost(hostDirName);
+                        browserHostsByHostID[hostDirName] = host;
                         return TUI_TRUE;
                     }
                 }
@@ -335,8 +335,8 @@ void KatipoBrowser::init()
                 {
                     if(!shouldRun)
                     {
-                        delete browserHostsByHostID[hostID];
-                        browserHostsByHostID.erase(hostID);
+                        delete browserHostsByHostID[hostDirName];
+                        browserHostsByHostID.erase(hostDirName);
                         return TUI_FALSE;
                     }
                     return TUI_TRUE;

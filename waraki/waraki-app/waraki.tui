@@ -6,8 +6,9 @@ welcomePage = false
 createLibraryPage = false
 connectPage = false
 
-bundledHostIP = "127.0.0.1:3471"
-bundledHostID = bundledHostIP + "/waraki"
+bundledHostDirName = "localhost/waraki"
+
+bundledHostClientURL = "127.0.0.1:3471/waraki"
 
 allowHosting = (platform() != "ios")
 
@@ -89,32 +90,38 @@ loadClientSite = function(siteData, hostID, url) #only called if we have a conne
 
     database.set(checksumKey, checksums)
 
-    hostInfo = { #todo should save a title too from a siteInfo somehow for display
-        hostID = hostID
-        url = url
-    }
-    database.set("lastHost", hostInfo)
+    print("url:", url)
+    print("bundledHostClientURL:", bundledHostClientURL)
 
-    recentHosts = database.get("recentHosts")
-    if(recentHosts)
+    if(url != bundledHostClientURL)
     {
-        for(i,otherHostInfo in recentHosts)
+        hostInfo = { #todo should save a title too from a siteInfo somehow for display
+            hostID = hostID
+            url = url
+        }
+        database.set("lastHost", hostInfo)
+
+        recentHosts = database.get("recentHosts")
+        if(recentHosts)
         {
-            if(otherHostInfo.hostID == hostID)
+            for(i,otherHostInfo in recentHosts)
             {
-                table.remove(recentHosts, i)
-                break
+                if(otherHostInfo.hostID == hostID)
+                {
+                    table.remove(recentHosts, i)
+                    break
+                }
+            }
+            table.insert(recentHosts, 0, hostInfo)
+        }
+        else
+        {
+            recentHosts = {
+                hostInfo
             }
         }
-        table.insert(recentHosts, 0, hostInfo)
+        database.set("recentHosts", recentHosts)
     }
-    else
-    {
-        recentHosts = {
-            hostInfo
-        }
-    }
-    database.set("recentHosts", recentHosts)
 }
 
 getCallback = function(result, hostID, url)
@@ -191,7 +198,7 @@ createLibraryClicked = function()
 stopBundledHost = function()
 {
     database.set("bundledHostRunning", false)
-    katipo.setBundledHostRunning(bundledHostID, false)
+    katipo.setBundledHostRunning(bundledHostDirName, false)
 }
 
 scanFoundResults = {}
@@ -208,31 +215,28 @@ addRecentConnectionsMarkup = function()
         result += "#Stored Libraries\n\n"
         for(i,siteInfo in recentHosts)
         {
-            if(siteInfo.hostID != bundledHostID)
+            buttonID = "recentButton" + i
+            result += "    " + siteInfo.url + "    [Connect/Load ->](id='" + buttonID + "')\n"
+
+            clickFunction = function()
             {
-                buttonID = "recentButton" + i
-                result += "    " + siteInfo.url + "    [Connect/Load ->](id='" + buttonID + "')\n"
-
-                clickFunction = function()
+                hostID = siteInfo.hostID
+                checksumKey = "checksums_" + hostID
+                localGetCallback = function(result, hostID_bad, url) #todo haccck for host id
                 {
-                    hostID = siteInfo.hostID
-                    checksumKey = "checksums_" + hostID
-                    localGetCallback = function(result, hostID_bad, url) #todo haccck for host id
-                    {
-                        getCallback(result, hostID, url)
-                    }
-                    katipo.get(hostID, database.get(checksumKey), localGetCallback)
-                    connectPage.fadeOut()
+                    getCallback(result, hostID, url)
                 }
+                katipo.get(hostID, database.get(checksumKey), localGetCallback)
+                connectPage.fadeOut()
+            }
 
-                connectPage.styles[buttonID] = {
-                    link = clickFunction
-                }
+            connectPage.styles[buttonID] = {
+                link = clickFunction
+            }
 
-                if(i >= 9)
-                {
-                    break
-                }
+            if(i >= 9)
+            {
+                break
             }
         }
         result += "\n"
@@ -362,7 +366,7 @@ createLibraryOKClicked = function()
         musicLibraryPath = createMusicDirectoryName
     }
 
-    running = katipo.setBundledHostRunning(bundledHostID, true, userConfiguration)
+    running = katipo.setBundledHostRunning(bundledHostDirName, true, userConfiguration)
     if(running)
     {
         print("started bundled host")
@@ -371,8 +375,8 @@ createLibraryOKClicked = function()
 
         sleep(0.2) #todo don't block here, set a callback. This is to give the host a little time before we attempt to connect
 
-        checksumKey = "checksums_" + bundledHostID
-        katipo.get(bundledHostID, database.get(checksumKey), getCallback)
+        checksumKey = "checksums_" + bundledHostClientURL
+        katipo.get(bundledHostClientURL, database.get(checksumKey), getCallback)
 
     }
     else
@@ -524,12 +528,12 @@ init = function()
     bundledHostWasRunning = database.get("bundledHostRunning")
     if(bundledHostWasRunning)
     {
-        bundledHostWasRunning = katipo.setBundledHostRunning(bundledHostID, true)
+        bundledHostWasRunning = katipo.setBundledHostRunning(bundledHostDirName, true)
         if(bundledHostWasRunning)
         {
             sleep(0.2) #todo don't block here, set a callback. This is to give the host a little time before we attempt to connect
-            checksumKey = "checksums_" + bundledHostID
-            katipo.get(bundledHostID, database.get(checksumKey), getCallback)
+            checksumKey = "checksums_" + bundledHostClientURL
+            katipo.get(bundledHostClientURL, database.get(checksumKey), getCallback)
         }
         else
         {
