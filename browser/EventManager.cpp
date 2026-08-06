@@ -366,15 +366,18 @@ void EventManager::handleEvent(SDL_Event* event)
             }
         }
         
-        if(keyChangedByKeyListenerFunctions.count(currentHostID) != 0 && keyChangedByKeyListenerFunctions[currentHostID].count(event->key.key) != 0)
+        if(currentHostID != "")
         {
-            for(auto& indexAndFunc : keyChangedByKeyListenerFunctions[currentHostID][event->key.key])
+            if(keyChangedByKeyListenerFunctions.count(currentHostID) != 0 && keyChangedByKeyListenerFunctions[currentHostID].count(event->key.key) != 0)
             {
-                TuiRef* keyRef = new TuiNumber(event->key.key);
-                TuiRef* modRef = new TuiNumber(getModKey());
-                indexAndFunc.second->call("keyChangedListenerFunction", TUI_BOOL(keyDown), keyRef, modRef, TUI_BOOL(event->key.repeat != 0));
-                keyRef->release();
-                modRef->release();
+                for(auto& indexAndFunc : keyChangedByKeyListenerFunctions[currentHostID][event->key.key])
+                {
+                    TuiRef* keyRef = new TuiNumber(event->key.key);
+                    TuiRef* modRef = new TuiNumber(getModKey());
+                    indexAndFunc.second->call("keyChangedListenerFunction", TUI_BOOL(keyDown), keyRef, modRef, TUI_BOOL(event->key.repeat != 0));
+                    keyRef->release();
+                    modRef->release();
+                }
             }
         }
         
