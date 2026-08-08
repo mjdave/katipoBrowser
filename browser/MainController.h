@@ -58,6 +58,8 @@ public:
     Database* appDatabase = nullptr;
     
     double userUIScale = 1.0;
+
+    int needsToSaveWindowTransformToDatabaseCounter = 0; //delay to avoid saving while resizing
     
 public:
     

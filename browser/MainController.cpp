@@ -235,12 +235,14 @@ void MainController::saveWindowInfoToDatabase()
 void MainController::mainWindowChangedSize()
 {
     vulkan->windowSizeChanged();
-    saveWindowInfoToDatabase();
+    needsToSaveWindowTransformToDatabaseCounter = 4;
+    //saveWindowInfoToDatabase();
 }
 
 void MainController::mainWindowChangedPosition()
 {
-    saveWindowInfoToDatabase();
+    //saveWindowInfoToDatabase();
+    needsToSaveWindowTransformToDatabaseCounter = 4;
 }
 
 void MainController::update(float dt)
@@ -250,6 +252,15 @@ void MainController::update(float dt)
     if(mainMJView)
     {
         mainMJView->update(dt);
+    }
+
+    if(needsToSaveWindowTransformToDatabaseCounter > 0)
+    {
+        needsToSaveWindowTransformToDatabaseCounter--;
+        if(needsToSaveWindowTransformToDatabaseCounter == 0)
+        {
+            saveWindowInfoToDatabase();
+        }
     }
 }
 
