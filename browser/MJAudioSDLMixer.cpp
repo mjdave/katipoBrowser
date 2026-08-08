@@ -228,6 +228,11 @@ void MJAudioSDLMixer::skipToNextTrack()
             return;
         }
 
+        Sint64 durationFrames = MIX_GetAudioDuration(currentAudio);
+        double durationMS = MIX_AudioFramesToMS(currentAudio, durationFrames);
+
+        currentTrackDuration_ = durationMS / 1000.0;
+
         if(!MIX_PlayTrack(currentTrack, 0)) {
             MJError("Could not play track, %s", SDL_GetError()); //todo cleanup
             return;
