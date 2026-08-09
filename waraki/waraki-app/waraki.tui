@@ -215,18 +215,19 @@ addRecentConnectionsMarkup = function()
         result += "#Stored Libraries\n\n"
         for(i,siteInfo in recentHosts)
         {
+            localSiteInfo = siteInfo #tui bug
             buttonID = "recentButton" + i
-            result += "    " + siteInfo.url + "    [Connect/Load ->](id='" + buttonID + "')\n"
+            result += "    " + localSiteInfo.url + "    [Connect/Load ->](id='" + buttonID + "')\n"
 
             clickFunction = function()
             {
-                hostID = siteInfo.hostID
+                hostID = localSiteInfo.hostID
                 checksumKey = "checksums_" + hostID
                 localGetCallback = function(result, hostID_bad, url) #todo haccck for host id
                 {
                     getCallback(result, hostID, url)
                 }
-                katipo.get(hostID, database.get(checksumKey), localGetCallback)
+                katipo.get(localSiteInfo.url, database.get(checksumKey), localGetCallback)
                 connectPage.fadeOut()
             }
 
@@ -432,7 +433,7 @@ customIPTextEntryChanged = function(text, confirmChanges)
 {
     if(confirmChanges)
     {
-        .customIP = customIP
+        .customIP = text
     }
 }
 

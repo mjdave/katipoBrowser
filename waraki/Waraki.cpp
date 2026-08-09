@@ -879,6 +879,12 @@ void Waraki::init()
                 }
                 else
                 {
+                    for(auto& idAndRequestInterface : netInterfaces) //we may want to keep these connections open in some cases, but for now it is cleanest to kill them
+                    {
+                        delete idAndRequestInterface.second;
+                    }
+                    netInterfaces.clear();
+                    
                     std::string publicKey = "";
                     std::string secretKey = "";
                     
