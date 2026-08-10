@@ -575,7 +575,7 @@
 					"\"$(SRCROOT)/../../thirdParty\"",
 					"\"$(SRCROOT)/../../katipo/thirdParty/libsodium/ios/lib\"",
 				);
-				MARKETING_VERSION = 0.5.0;
+				MARKETING_VERSION = 0.5.1;
 				PRODUCT_BUNDLE_IDENTIFIER = nz.ktp.waraki;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = NO;
@@ -635,7 +635,7 @@
 					"\"$(SRCROOT)/../../thirdParty\"",
 					"\"$(SRCROOT)/../../katipo/thirdParty/libsodium/ios/lib\"",
 				);
-				MARKETING_VERSION = 0.5.0;
+				MARKETING_VERSION = 0.5.1;
 				PRODUCT_BUNDLE_IDENTIFIER = nz.ktp.waraki;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = NO;
