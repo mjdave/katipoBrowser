@@ -6,7 +6,6 @@ hostedSiteManagement = false
 
 currentSiteHostID = false
 currentURLFullLink = ""
-currentURLSiteName = false
 getInProgress = false
 hostTabSelected = false # very simple tab setup for now, we either have 'browse' or 'host' selected, this is that state
 
@@ -418,7 +417,11 @@ doGet = function(url, siteNameOrNil, checksumsOrNil)
     }
 
     .currentURLFullLink = stripDefaultPortFromUrl(url)
-    .currentURLSiteName = siteNameOrNil
+    currentURLSiteName = siteNameOrNil
+    if(!siteNameOrNil)
+    {
+        currentURLSiteName = currentURLFullLink
+    }
     .getInProgress = true
     fadeSiteContent(false)
     urlTextEntry.setText(currentURLSiteName)

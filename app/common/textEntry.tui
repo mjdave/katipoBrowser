@@ -1,10 +1,3 @@
-
-#
-#
-# WARNING this file textEntry.tui is going to be removed or replaced. Use a markup view and set a textEntry function on the style instead
-#
-#
-
 keys = require("app/common/keys.tui")
 
 setText = false
@@ -28,9 +21,10 @@ create = function(parentView, viewLayout)
 
     markupViewLayout = {
         type = "markup"
-        font = viewLayout.font
+        #font = viewLayout.font
         variableHeight = true
-        fontSize = viewLayout.fontSize
+        variableWidth = true
+        #fontSize = viewLayout.fontSize
         alignmentX = viewLayout.alignmentX
         verticalAlignment = viewLayout.verticalAlignment
         #pos = vec3(xOffset,yOffset,0)
@@ -72,9 +66,17 @@ create = function(parentView, viewLayout)
         textEntryView.onTextChanged = func
     }
 
+    textEntryView.textEntryClickFunction = function()
+    {
+        textEntryView.textEntryMarkupView.callBackgroundClickFunction("textEntryStyle")
+    }
+
     entryMarkupView.styles = {
         textEntryStyle = {
+            font = viewLayout.font
+            fontSize = viewLayout.fontSize
             backgroundColor = viewLayout.backgroundColor
+            maxChars = viewLayout.maxChars
             textEntry = function(text, confirmChanges)
             {
                 if(textEntryView.onFinishedEditing)
@@ -120,11 +122,6 @@ setText = function(textEntryView, text_)
     textEntryView.text = textToUse
     
     textEntryView.textEntryMarkupView.setTextWithStyleID(textToUse, "textEntryStyle")
-}
-
-setMaxChars = function(textEntryView, maxChars)
-{
-    textEntryView.maxChars = maxChars
 }
 
 getText = function(textEntryView)

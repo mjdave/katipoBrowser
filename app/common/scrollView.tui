@@ -9,6 +9,7 @@ layoutRows = function(scrollView)
     scrollView.dirty = false
     scrollView.scrollYIndexMax = 0
     scrollView.totalHeight = 0
+    scrollView.resizeWidth = 10
     for(i=0, i < table.count(scrollView.rowInfos), i++)
     {
         rowInfo = scrollView.rowInfos[i]
@@ -29,6 +30,8 @@ layoutRows = function(scrollView)
         {
             scrollView.scrollYIndexMax = scrollView.scrollYIndexMax + 1
         }
+
+        scrollView.resizeWidth = math.max(scrollView.resizeWidth, rowInfo.rowView.size.x)
     }
 
     scrollView.scrollYHeight = 0
@@ -52,6 +55,11 @@ layoutRows = function(scrollView)
                 knobView.hidden = false
             }
         }
+    }
+
+    if(scrollView.variableWidth)
+    {
+        scrollView.size = vec2(scrollView.resizeWidth, scrollView.size.y)
     }
 }
 
@@ -322,16 +330,6 @@ create = function(parentView, viewLayout)
     scrollView.removeAllRows = function(startIndexOrNil)
     {
         removeAllRows(scrollView, startIndexOrNil)
-    }
-
-    scrollView.removeRowAtIndex = function(rowIndex)
-    {
-        removeRowAtIndex(scrollView, rowIndex)
-    }
-
-    scrollView.removeRowAtIndex = function(rowView)
-    {
-        removeRow(scrollView, rowView)
     }
 
     scrollView.layoutRows = function()

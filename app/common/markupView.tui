@@ -77,8 +77,9 @@ getViewLayout = function(incomingLayout)
 
 # each item needs both the start and end characters of the actual item, so it can then append the beforeText and afterText to the textView's value
 
-updateEditingText = function(markupView, newText)
+updateEditingText = function(markupView, newText_)
 {
+    newText = newText_ #tui bug, assign to a passed in variable = bad
     #print("updateEditingText:", newText)
     textView = markupView.currentEditingTextView
     if(!textView)
@@ -114,7 +115,23 @@ updateEditingText = function(markupView, newText)
         fullCaptureText += betweenCaptureStartAndItemStartText
     }
 
+    originalLength = string.length(fullCaptureText)
     fullCaptureText += newText
+
+    fullLength = string.length(fullCaptureText)
+    if(textView.maxChars and fullLength > textView.maxChars)
+    {
+        fullCaptureText = string.subString(fullCaptureText, 0, textView.maxChars)
+        allowedNewLength = textView.maxChars - originalLength
+        if(allowedNewLength > 0)
+        {
+            newText = string.subString(newText, 0, allowedNewLength)
+        }
+        else
+        {
+            newText = ""
+        }
+    }
 
     afterItemText = ""
     if(itemEndCharacterIndex < string.length(markupView.currentMarkupText))
@@ -132,6 +149,8 @@ updateEditingText = function(markupView, newText)
     #print("afterItemText:", afterItemText)
     #print("fullCaptureText:", fullCaptureText)
     #print("afterCaptureText:", afterCaptureText)
+
+    #print("newText:", newText)
     
     markupView.currentMarkupText = beforeItemText + newText + afterItemText
     markupView.currentEditingFullCaptureText = fullCaptureText #warning only set here for now
@@ -240,6 +259,9 @@ updateCursorPosition = function(markupView)
     #todo handle right alignment
     #print("set cursor pos:", xOffset + 1,",",rect.y + 1,0)
     markupView.cursorView.pos = vec3(offset.x,offset.y,0)
+
+    textViewHeight = textView.size.y
+    markupView.cursorView.size = vec2(math.floor(textViewHeight / 14) + 1, textViewHeight)
 
     eventManager.setTextEntryRectFromView(backgroundView, localCursorOffset.x)
 
@@ -460,6 +482,8 @@ textBackgroundViewClickFunction = function(markupView, backgroundView, mouseLoc)
             }
             
             markupView.textEntryListenerID = eventManager.setTextEntryListener(textEntry, keyChanged)
+
+            updateEditingText(markupView, markupView.editStartTextValue)
 
             if(markupView.onStartedEditing)
             {
@@ -785,6 +809,7 @@ addItemView = function(markupView, style_, captureItemOrNil)
     if(style)
     {
         backgroundLayout.id = style.id
+        #print("set style id:", backgroundLayout)
     }
 
     paddingLeft = 0
@@ -968,6 +993,10 @@ addItemView = function(markupView, style_, captureItemOrNil)
 
     textView.styleTextEntryFunction = styleTextEntryFunction
     textView.styleOnTextChangedFunction = styleOnTextChangedFunction
+    if(style)
+    {
+        textView.maxChars = style.maxChars
+    }
 
     assignCurrentlyEditingIfNeededForTextView(markupView, textView, backgroundView)
 
@@ -1120,6 +1149,8 @@ renderCapture = function(markupView, markupString, captureItemGroup, parentStyle
                 }
             }
         }
+
+        style.id = loadedValue
     }
 
     if(style and style.hidden)
@@ -1585,6 +1616,12 @@ reloadText = function(markupView)
     
     
     markupView.contentSize = vec2(parser.maxRowWidth, markupScrollView.totalHeight)
+
+    if(markupView.variableWidth)
+    {
+        markupView.size = vec2(markupView.contentSize.x, markupView.size.y)
+    }
+
     if(markupView.currentEditingTextView)
     {
         markupView.cursorView.hidden = false
@@ -1600,9 +1637,12 @@ create = function(parentView, viewLayout)
 
     markupView.cachedRows = {}
 
+    markupView.variableWidth = viewLayout.variableWidth
+
     scrollViewLayout = {
         size = viewLayout.size
         variableHeight = viewLayout.variableHeight
+        variableWidth = viewLayout.variableWidth
     }
     scrollViewLayout.type = "scrollView"
 
@@ -1661,6 +1701,21 @@ create = function(parentView, viewLayout)
         markupView.currentMarkupText = "[" + newText + "]('" + styleID + "')"
         reloadText(markupView)
     }
+
+    markupView.callBackgroundClickFunction = function(styleID)
+    {
+        if(!styleID)
+        {
+            error("markupView.callBackgroundClickFunction expected styleID")
+        }
+        backgroundView = markupView.scrollView.getView(styleID)
+        if(backgroundView)
+        {
+            #print("calling textBackgroundViewClickFunction")
+            textBackgroundViewClickFunction(markupView, backgroundView, nil)
+        }
+    }
+    
 
     markupView.onParentSizeChanged = function(parentSize) #override the scrollView one with our own
     {
