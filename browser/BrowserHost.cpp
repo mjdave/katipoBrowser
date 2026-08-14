@@ -17,6 +17,10 @@
 #include "sodium.h"
 #include "KatipoUtilities.h"
 
+#ifdef __APPLE__
+#include "MJFileUtilsApple.h"
+#endif
+
 BrowserHost::BrowserHost(std::string hostDirName, std::string basePath_, std::string hostScriptPath, TuiTable* userConfiguration)
 {
     basePath = basePath_;
@@ -131,6 +135,30 @@ BrowserHost::BrowserHost(std::string hostDirName, std::string basePath_, std::st
         return TUI_NIL;
     });
     
+    katipoTable->setFunction("createSecurityBookmarkForDirectory", [this, privateSavePath](TuiTable* args, TuiRef* existingResult, TuiFunctionCallData* incomingCallData, TuiDebugInfo* callingDebugInfo) -> TuiRef* {
+#ifdef __APPLE__
+        if(args && args->arrayObjects.size() >= 1 && args->arrayObjects[0]->type() == Tui_ref_type_STRING)
+        {
+            TuiString* directoryPath = (TuiString*)args->arrayObjects[0];
+            std::string bookmark = createSecurityBookmarkForDirectory(directoryPath->value);
+            return new TuiString(bookmark);
+        }
+#endif
+        return TUI_NIL;
+    });
+    
+    
+    katipoTable->setFunction("resolveSecurityBookmark", [this, privateSavePath](TuiTable* args, TuiRef* existingResult, TuiFunctionCallData* incomingCallData, TuiDebugInfo* callingDebugInfo) -> TuiRef* {
+#ifdef __APPLE__
+        if(args && args->arrayObjects.size() >= 1 && args->arrayObjects[0]->type() == Tui_ref_type_STRING)
+        {
+            TuiString* bookmarkData = (TuiString*)args->arrayObjects[0];
+            std::string pathResult = resolveSecurityBookmark(bookmarkData->value);
+            return new TuiString(pathResult);
+        }
+#endif
+        return TUI_NIL;
+    });
     
     scriptState = (TuiTable*)TuiRef::runScriptFile(Tui::pathByAppendingPathComponent(basePath,"code.tui"), rootTable);
     

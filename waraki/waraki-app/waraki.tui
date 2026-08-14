@@ -502,6 +502,7 @@ siteContent = siteContentBackground.addView(mainViewLayout)
 runSetup = function()
 {
     katipo.hideCurrentSite()
+    katipo.setBundledHostRunning(bundledHostDirName, false)
 
     if(allowHosting)
     {
