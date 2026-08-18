@@ -91,6 +91,19 @@ void MJImageView::setImageTexture(MJImageTexture* imageTexture_)
         {
             drawQuad->setImageTeture(imageTexture);
         }
+        
+        if(!cropImage)
+        {
+            if(parentWidthFraction > 0)
+            {
+                parentResizeFraction = dvec2(1.0, imageTexture->size.y / imageTexture->size.x);
+            }
+            else if(parentHeightFraction > 0)
+            {
+                parentResizeFraction = dvec2(imageTexture->size.x / imageTexture->size.y, 1.0);
+            }
+            parentSizeChanged(parentView->size);
+        }
     }
 }
 
@@ -216,6 +229,10 @@ void MJImageView::loadFromTable(TuiTable* table, bool needsToLayoutSubviews, Tui
     {
         stateTable->setString("path", table->getString("path"));
     }
+    if(table->hasKey("absolutePath"))
+    {
+        stateTable->setString("absolutePath", table->getString("absolutePath"));
+    }
     if(table->hasKey("shaderUserData"))
     {
         stateTable->setVec4("shaderUserData", table->getVec4("shaderUserData"));
@@ -260,6 +277,10 @@ void MJImageView::tableKeyChanged(const std::string& key, TuiRef* value)
     else if(key == "path")
     {
         setImageTexture(cache->getTexture(stateTable->getString("path"), rootTable, false, false, true));
+    }
+    else if(key == "absolutePath") //todo possible sandboxing issue
+    {
+        setImageTexture(cache->getTextureAbsolutePath(stateTable->getString("absolutePath"), rootTable, false, false, true));
     }
     else if(key == "crop")
     {

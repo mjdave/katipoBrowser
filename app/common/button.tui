@@ -307,9 +307,12 @@ create = function(parentView, viewLayout)
         {
             view.click = function()
             {
-                view.clickFraction = 1.0
-                createAnimationUpdateFunc(view)
-                clickFunc()
+                if(!view.disabled)
+                {
+                    view.clickFraction = 1.0
+                    createAnimationUpdateFunc(view)
+                    clickFunc()
+                }
             }
         }
         else

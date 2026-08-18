@@ -437,6 +437,53 @@ dvec2 MJView::getSize() const
     return size;
 }
 
+
+//if parentWidthFraction > 0, we scale at parent.x * parentResizeFraction
+//else if parentHeightFraction > 0, we scale at parent.y * parentResizeFraction
+//else scale at parentSize * parentResizeFraction, defaults to parentSize * vec2(1,1)
+
+void MJView::parentSizeChanged(dvec2 parentSize_)
+{
+    if(parentSizeChangedFunction)
+    {
+        TuiRef* inSizeRef = new TuiVec2(parentView->size);
+        TuiRef* sizeRef = parentSizeChangedFunction->call("parentSizeChangedFunction", inSizeRef, stateTable);
+        
+        if(sizeRef)
+        {
+            if(sizeRef->type() == Tui_ref_type_VEC2)
+            {
+                stateTable->setVec2("size", ((TuiVec2*)sizeRef)->value);
+                setSize(((TuiVec2*)sizeRef)->value);
+            }
+            sizeRef->release();
+        }
+        
+        inSizeRef->release();
+    }
+    else if(scaleToParentSize)
+    {
+        if(parentWidthFraction > 0)
+        {
+            double width = parentSize_.x * parentWidthFraction;
+           // stateTable->setVec2("size", dvec2(width,width)); //should be set in setSize?
+            setSize(dvec2(width,width) * parentResizeFraction);
+        }
+        else if(parentHeightFraction > 0)
+        {
+            double height = parentSize_.y * parentHeightFraction;
+            //stateTable->setVec2("size", dvec2(height,height));
+            setSize(dvec2(height,height) * parentResizeFraction);
+        }
+        else
+        {
+            dvec2 newSize = parentSize_ * parentResizeFraction;
+            //stateTable->setVec2("size", dvec2(height,height));
+            setSize(newSize);
+        }
+    }
+}
+
 void MJView::setSize(dvec2 size_) //WARNING! MJTextView completely overrides this, so changes made here should be made there
 {
 	if(!approxEqualVec2(size, size_))
@@ -448,7 +495,8 @@ void MJView::setSize(dvec2 size_) //WARNING! MJTextView completely overrides thi
         
         for(MJView* subView : subviews)
         {
-            if(subView->parentSizeChangedFunction)
+            subView->parentSizeChanged(size);
+            /*if(subView->parentSizeChangedFunction)
             {
                 TuiRef* inRef = new TuiVec2(size);
                 TuiRef* sizeRef = subView->parentSizeChangedFunction->call("parentSizeChangedFunction", inRef, subView->stateTable);
@@ -465,8 +513,8 @@ void MJView::setSize(dvec2 size_) //WARNING! MJTextView completely overrides thi
             }
             else if(subView->scaleToParentSize)
             {
-                subView->setSize(size);
-            }
+                subView->setSize(size * parentResizeFraction);
+            }*/
         }
 	}
 }
@@ -1916,6 +1964,21 @@ void MJView::loadFromTable(TuiTable* table, bool needsToLayoutSubviews, TuiTable
         relativeViewToLoadID = table->getString("layoutParentID");
     }
     
+    if(table->hasKey("userData")) //any general things to be passed through to the view
+    {
+        stateTable->set("userData", table->get("userData"));
+    }
+    
+    
+    
+    //if we set size, that wins
+    //else if we set a parentSizeFunction, that is the priority
+    //else scale with parent
+    
+    //if parentWidthFraction > 0, we scale at parent.x * parentResizeFraction
+    //else if parentHeightFraction > 0, we scale at parent.y * parentResizeFraction
+    //else scale at parentSize * parentResizeFraction, defaults to parentSize * vec2(1,1)
+    
     if(table->hasKey("size"))
     {
         scaleToParentSize = false;
@@ -1928,22 +1991,6 @@ void MJView::loadFromTable(TuiTable* table, bool needsToLayoutSubviews, TuiTable
         {
             parentSizeChangedFunction = (TuiFunction*)ref;
             parentSizeChangedFunction->retain();
-            
-            TuiRef* inSizeRef = new TuiVec2(parentView->size);
-            
-            TuiRef* sizeRef = parentSizeChangedFunction->call("parentSizeChangedFunction", inSizeRef, stateTable);
-            
-            if(sizeRef)
-            {
-                if(sizeRef->type() == Tui_ref_type_VEC2)
-                {
-                    stateTable->setVec2("size", ((TuiVec2*)sizeRef)->value);
-                    setSize(((TuiVec2*)sizeRef)->value);
-                }
-                sizeRef->release();
-            }
-            
-            inSizeRef->release();
         }
         else
         {
@@ -1953,7 +2000,45 @@ void MJView::loadFromTable(TuiTable* table, bool needsToLayoutSubviews, TuiTable
     else
     {
         scaleToParentSize = true;
-        setSize(parentView->size);
+        parentResizeFraction = dvec2(1.0,1.0);
+        
+        if(table->hasKey("parentWidthFraction"))
+        {
+            TuiRef* ref = table->objectsByStringKey["parentWidthFraction"];
+            if(ref->type() == Tui_ref_type_NUMBER)
+            {
+                parentWidthFraction = ((TuiNumber*)ref)->value;
+            }
+            else
+            {
+                MJError("Expected number");
+            }
+        }
+        else if(table->hasKey("parentHeightFraction"))
+        {
+            TuiRef* ref = table->objectsByStringKey["parentHeightFraction"];
+            if(ref->type() == Tui_ref_type_NUMBER)
+            {
+                parentHeightFraction = ((TuiNumber*)ref)->value;
+            }
+            else
+            {
+                MJError("Expected number");
+            }
+        }
+        
+        if(table->hasKey("parentSizeFraction"))
+        {
+            TuiRef* ref = table->objectsByStringKey["parentSizeFraction"];
+            if(ref->type() == Tui_ref_type_VEC2)
+            {
+                parentResizeFraction = ((TuiVec2*)ref)->value;
+            }
+            else
+            {
+                MJError("Expected vec2");
+            }
+        }
     }
     
     if(table->hasKey("pos"))
@@ -1994,6 +2079,8 @@ void MJView::loadFromTable(TuiTable* table, bool needsToLayoutSubviews, TuiTable
     }
     
     setRelativePosition(table->getString("alignmentX"), table->getString("alignmentY"));
+    
+    parentSizeChanged(parentView->size);
     
     TuiTable* subviewTable = table->getTable("subviews");
     if(subviewTable)
@@ -2083,7 +2170,7 @@ void MJView::tableKeyChanged(const std::string& key, TuiRef* value)
                 parentSizeChangedFunction = (TuiFunction*)value;
                 parentSizeChangedFunction->retain();
                 
-                TuiRef* inSizeRef = new TuiVec2(parentView->size);
+                /*TuiRef* inSizeRef = new TuiVec2(parentView->size);
                 TuiRef* sizeRef = parentSizeChangedFunction->call("parentSizeChangedFunction", inSizeRef, stateTable);
                 if(sizeRef)
                 {
@@ -2094,7 +2181,7 @@ void MJView::tableKeyChanged(const std::string& key, TuiRef* value)
                     }
                     sizeRef->release();
                 }
-                inSizeRef->release();
+                inSizeRef->release();*/
             }
                 
                 break;
@@ -2106,6 +2193,67 @@ void MJView::tableKeyChanged(const std::string& key, TuiRef* value)
                 }
                 break;
         }
+        
+        parentSizeChanged(parentView->size);
+    }
+    else if(key == "parentSizeFraction")
+    {
+        if(value->type() == Tui_ref_type_VEC2)
+        {
+            
+            if(parentSizeChangedFunction)
+            {
+                parentSizeChangedFunction->release();
+                parentSizeChangedFunction = nullptr;
+            }
+            
+            scaleToParentSize = true;
+            parentResizeFraction = ((TuiVec2*)value)->value;
+            //todo setSize(parentView->size);
+        }
+        else
+        {
+            scaleToParentSize = true;
+            parentResizeFraction = dvec2(1,1);
+        }
+        parentSizeChanged(parentView->size);
+    }
+    else if(key == "parentWidthFraction" || key == "parentHeightFraction")
+    {
+        parentWidthFraction = -1;
+        parentHeightFraction = -1;
+        
+        if(value->type() == Tui_ref_type_NUMBER)
+        {
+            if(parentSizeChangedFunction)
+            {
+                parentSizeChangedFunction->release();
+                parentSizeChangedFunction = nullptr;
+            }
+            
+            scaleToParentSize = true;
+            
+            if(key == "parentWidthFraction")
+            {
+                parentWidthFraction = ((TuiNumber*)value)->value;
+            }
+            else
+            {
+                parentHeightFraction = ((TuiNumber*)value)->value;
+            }
+        }
+        else
+        {
+            if(key == "parentWidthFraction")
+            {
+                parentWidthFraction = -1;
+            }
+            else
+            {
+                parentHeightFraction = -1;
+            }
+        }
+        parentSizeChanged(parentView->size);
     }
     else if(key == "layoutParent")
     {

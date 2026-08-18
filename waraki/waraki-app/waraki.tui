@@ -189,7 +189,7 @@ createLibraryClicked = function()
         katipo.siteView.hidden = true
     }
 
-    .createMusicDirectoryName = database.get("bundledHostMusicLibraryPath")
+    .createMusicDirectoryName = false#database.get("bundledHostMusicLibraryPath") #this is now cleared, due to macos sandboxing. Likely the user may need to select it again
     updateCreateLibraryMarkup()
 
     createLibraryPage.fadeIn()

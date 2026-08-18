@@ -134,7 +134,18 @@ public:
     std::function<void(void)> hoverEndFunction;
     std::function<void(bool)> hiddenStateChangedFunction;*/
     
+    //if we set size, that wins
+    //else if we set a parentSizeFunction, that is the priority
+    //else scale with parent
+    
+    //if parentWidthFraction > 0, we scale at parent.x * parentResizeFraction
+    //else if parentHeightFraction > 0, we scale at parent.y * parentResizeFraction
+    //else scale at parentSize * parentResizeFraction, defaults to parentSize * vec2(1,1)
+    
     TuiFunction* parentSizeChangedFunction = nullptr;
+    double parentWidthFraction = -1;
+    double parentHeightFraction = -1;
+    dvec2 parentResizeFraction = vec2(1.0,1.0);
     
     TuiFunction* hoverStartFunction = nullptr;
     TuiFunction* hoverMovedFunction = nullptr;
@@ -209,6 +220,8 @@ public:
     
     dvec2 getSize() const;
     virtual void setSize(dvec2 size_);
+    
+    virtual void parentSizeChanged(dvec2 parentSize_);
 
     double getScale() const;
     virtual void setScale(double scale_);
