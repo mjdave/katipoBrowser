@@ -73,7 +73,8 @@ public:
         std::vector<VkVertexInputBindingDescription> bindingDescriptions,
         std::vector<VkVertexInputAttributeDescription> attributeDescriptions,
         std::vector<PipelineUniform> uniforms_,
-		int renderPassVarient = 0);
+		int renderPassVarient = 0,
+        std::string fileDirPath = "app/common/");
     
 private:
 	void loadUnloadedTextures();

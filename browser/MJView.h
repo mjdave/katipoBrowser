@@ -147,6 +147,12 @@ public:
     double parentHeightFraction = -1;
     dvec2 parentResizeFraction = vec2(1.0,1.0);
     
+    bool parentOffsetFractionSet = false; //parentPosOffsetFraction offsets by a fraction of the width/height of the parent view
+    dvec2 parentOffsetFraction = dvec2(0.0,0.0);
+    
+    bool additionalOffsetFractionSet = false; //additionalOffsetFraction offsets AFTER ROTATION by a fraction of the width/height of the parent view
+    dvec2 additionalOffsetFraction = dvec2(0.0,0.0);
+    
     TuiFunction* hoverStartFunction = nullptr;
     TuiFunction* hoverMovedFunction = nullptr;
     TuiFunction* hoverEndFunction = nullptr;

@@ -11,7 +11,7 @@
 {
     AVQueuePlayer* player;
     double currentTrackDuration;
-    bool hasUrls;
+    TuiTable* currentURLs;
     
     id timeObserverToken;
     
@@ -25,6 +25,7 @@
 
 - (void)updateInfo:(AVPlayerItem*)playerItem;
 
+- (void)restartQueuePlayback;
 - (void)play:(TuiTable*)urls;
 - (void)stop;
 - (void)skipToNextTrack;

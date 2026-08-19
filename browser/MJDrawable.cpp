@@ -11,7 +11,8 @@ MJDrawable::MJDrawable(MJCache* cache_,
     int renderGroupCount_, 
     std::vector<VkVertexInputBindingDescription> bindingDescriptions_,
     std::vector<VkVertexInputAttributeDescription> attributeDescriptions_,
-	int renderPassCompatibilityIndex_)
+	int renderPassCompatibilityIndex_,
+   std::string shaderFileDirPath_)
 {
     renderGroupCount = renderGroupCount_;
     cache = cache_;
@@ -22,6 +23,7 @@ MJDrawable::MJDrawable(MJCache* cache_,
     pipelineName = pipelineName_;
     bindingDescriptions = bindingDescriptions_;
     attributeDescriptions = attributeDescriptions_;
+    shaderFileDirPath = shaderFileDirPath_;
 
 	int setsCount = 1;
 
@@ -180,7 +182,7 @@ void MJDrawable::finalize()
 
 
 
-    pipeline = cache->getPipeline(pipelineName, renderPass, bindingDescriptions, attributeDescriptions, uniforms, renderPassCompatibilityIndex);
+    pipeline = cache->getPipeline(pipelineName, renderPass, bindingDescriptions, attributeDescriptions, uniforms, renderPassCompatibilityIndex, shaderFileDirPath);
 
 	if(renderGroupCount > 0 && !descriptorArrays[0][0][0].empty())
 	{

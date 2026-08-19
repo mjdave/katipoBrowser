@@ -12,6 +12,7 @@ public:
 
     GPipeline* pipeline;
 	std::string pipelineName;
+    std::string shaderFileDirPath;
 
 	std::map<std::string, std::vector<std::vector<MJVMABuffer>>> dynamicUBOBuffers;
     
@@ -22,7 +23,8 @@ public:
         int renderGroupCount_, 
         std::vector<VkVertexInputBindingDescription> bindingDescriptions,
         std::vector<VkVertexInputAttributeDescription> attributeDescriptions,
-		int renderPassCompatibilityIndex_);
+		int renderPassCompatibilityIndex_,
+        std::string shaderFileDirPath = "app/common/");
     ~MJDrawable();
 
     void addDynamicUBO(size_t uboSize, std::string identifier, VkShaderStageFlags stageFlags);

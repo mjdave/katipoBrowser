@@ -36,6 +36,7 @@
 #endif
     
     player = [[AVQueuePlayer alloc] init];
+    
     return self;
 }
 
@@ -154,7 +155,10 @@
                                                      name:AVPlayerItemDidPlayToEndTimeNotification
                                                    object:nextItem];
     }
-    [self updateInfo:nextItem];
+    else
+    {
+        [self restartQueuePlayback];
+    }
 }
 
 - (void)sendUpdatedPausedState
@@ -167,66 +171,70 @@
     return [player timeControlStatus] == AVPlayerTimeControlStatusPaused;
 }
 
+- (void)restartQueuePlayback
+{
+    [player removeAllItems];
+    
+    //std::map<AVPlayerItem*, int> queueIndexesByPlayerItems;
+    //std::map<int, std::string> urlsByQueueIndex;
+    
+    nextPlayerItemByPlayerItem.clear();
+    filePathsByPlayerItems.clear();
+   // urlsByQueueIndex.clear();
+    
+    int index = 0;
+    AVPlayerItem* prevPlayerItem = nullptr;
+    for(TuiRef* urlString : currentURLs->arrayObjects)
+    {
+        std::string path = ((TuiString*)urlString)->value;
+        AVPlayerItem* playerItem = [[AVPlayerItem alloc] initWithURL:[NSURL fileURLWithPath:[NSString stringWithUTF8String:path.c_str()]]];//((TuiString*)urlString)->value.c_str()]]];
+        filePathsByPlayerItems[playerItem] = path;
+        
+        playerItem.audioTimePitchAlgorithm = AVAudioTimePitchAlgorithmVarispeed;
+        
+        [player insertItem:playerItem afterItem:nil];
+        
+        if(prevPlayerItem)
+        {
+            nextPlayerItemByPlayerItem[prevPlayerItem] = playerItem;
+        }
+        prevPlayerItem = playerItem;
+        
+        index++;
+    }
+    
+    player.actionAtItemEnd = AVPlayerActionAtItemEndAdvance;
+    
+    [player play];
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(playerItemDidReachEnd:)
+                                                 name:AVPlayerItemDidPlayToEndTimeNotification
+                                               object:[player currentItem]];
+    
+    
+    [self updateInfo:[player currentItem]];
+    [self sendUpdatedPausedState];
+}
 
 - (void)play:(TuiTable*)urls
 {
     if(urls)
     {
-        [player removeAllItems];
-        
-        //std::map<AVPlayerItem*, int> queueIndexesByPlayerItems;
-        //std::map<int, std::string> urlsByQueueIndex;
-        
-        nextPlayerItemByPlayerItem.clear();
-        filePathsByPlayerItems.clear();
-       // urlsByQueueIndex.clear();
-        
-        int index = 0;
-        AVPlayerItem* prevPlayerItem = nullptr;
-        for(TuiRef* urlString : urls->arrayObjects)
+        if(currentURLs)
         {
-            std::string path = ((TuiString*)urlString)->value;
-            AVPlayerItem* playerItem = [[AVPlayerItem alloc] initWithURL:[NSURL fileURLWithPath:[NSString stringWithUTF8String:path.c_str()]]];//((TuiString*)urlString)->value.c_str()]]];
-            filePathsByPlayerItems[playerItem] = path;
-            
-            playerItem.audioTimePitchAlgorithm = AVAudioTimePitchAlgorithmVarispeed;
-            
-            [player insertItem:playerItem afterItem:nil];
-            
-            if(prevPlayerItem)
-            {
-                nextPlayerItemByPlayerItem[prevPlayerItem] = playerItem;
-            }
-            prevPlayerItem = playerItem;
-            
-            index++;
-            hasUrls = true;
+            currentURLs->release();
+            currentURLs = nullptr;
         }
         
-        player.actionAtItemEnd = AVPlayerActionAtItemEndAdvance;
-        
+        if(!urls->arrayObjects.empty())
+        {
+            currentURLs = urls;
+            currentURLs->retain();
+            
+            [self restartQueuePlayback];
+        }
     }
-    
-    
-    
-    //player.volume = 1.0;
-    //player.delegate = self;
-    
-    if(hasUrls)
-    {
-        [player play];
-        
-        [[NSNotificationCenter defaultCenter] addObserver:self
-                                                 selector:@selector(playerItemDidReachEnd:)
-                                                     name:AVPlayerItemDidPlayToEndTimeNotification
-                                                   object:[player currentItem]];
-        
-        
-        [self updateInfo:[player currentItem]];
-        [self sendUpdatedPausedState];
-    }
-    //const std::string& nextUrlString = urlsByQueueIndex[0];
-    //MJAudio::getInstance()->updateCurrentlyPlayingTrackName(Tui::fileNameFromPath(nextUrlString));
 }
 
 -(void)stop

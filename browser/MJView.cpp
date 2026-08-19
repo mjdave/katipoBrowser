@@ -98,6 +98,7 @@ void MJView::initInternals()
     stateTable->setUserData("_view", this);
     
     stateTable->setVec3("pos", baseOffset);
+    stateTable->setVec3("additionalOffset", additionalOffset);
     stateTable->setVec2("size", size);
     stateTable->setDouble("alpha", alpha);
     stateTable->setMat3("rotation", rotation);
@@ -711,7 +712,7 @@ void MJView::parentHiddenChanged(bool hidden_)
 			mouseInside = false;
 			if(hoverEndFunction)
 			{
-                hoverEndFunction->call("hoverEndFunction");
+                hoverEndFunction->call("hoverEndFunction", stateTable);
 			}
 		}
 
@@ -725,7 +726,7 @@ void MJView::parentHiddenChanged(bool hidden_)
 
 	if(hiddenStateChangedFunction)
 	{
-        hiddenStateChangedFunction->call("hiddenStateChangedFunction", TUI_BOOL(hidden_));
+        hiddenStateChangedFunction->call("hiddenStateChangedFunction", TUI_BOOL(hidden_), stateTable);
 	}
 
 	std::vector<MJView*> subviewsCopy = subviews;
@@ -806,9 +807,23 @@ void MJView::updateMatrix(int sanityCheck)
 	relativeMatrix = translate(relativeMatrix, windowPosition);
 
 	relativeMatrix = relativeMatrix * dmat4(windowRotation);
+    
+    dvec3 offsetToUse = baseOffset;
+    if(parentOffsetFractionSet)
+    {
+        offsetToUse.x += parentView->size.x * parentOffsetFraction.x;
+        offsetToUse.y += parentView->size.y * parentOffsetFraction.y;
+    }
 
-    dvec3 baseOffsetToUse = baseOffset * relativeViewRenderScale + dvec3(0.0,0.0,windowZRenderOffset);
+    dvec3 baseOffsetToUse = offsetToUse * relativeViewRenderScale + dvec3(0.0,0.0,windowZRenderOffset);
 	dvec3 localOffsetToUse = dvec3(0.0);
+    
+    
+    if(additionalOffsetFractionSet)
+    {
+        localOffsetToUse.x += parentView->size.x * additionalOffsetFraction.x;
+        localOffsetToUse.y += parentView->size.y * additionalOffsetFraction.y;
+    }
     
     switch (relativePosition.h) {
         case MJPositionOuterLeft:
@@ -942,17 +957,11 @@ void MJView::update(float dt)
 
     if(updateFunction)
     {
+        TuiNumber* dtRef = new TuiNumber(dt);
         
-        TuiDebugInfo debugInfo;
-        TuiDebugInfoPush(&debugInfo, "MJView::update(dt)", 1);
-        TuiTable* args = new TuiTable(nullptr);
+        updateFunction->call("MJView::update", dtRef, stateTable);
         
-        TuiNumber* agr1Ref = new TuiNumber(dt);
-        args->arrayObjects.push_back(agr1Ref);
-        
-        updateFunction->call(args, nullptr, nullptr, &debugInfo);
-        
-        args->release();
+        dtRef->release();
         
         //updateFunction(dt);
     }
@@ -997,18 +1006,15 @@ void MJView::preRender(GCommandBuffer* commandBuffer, MJRenderPass renderPass, i
     
     if(preRenderUpdateFunction)
     {
-        TuiDebugInfo debugInfo;
-        TuiDebugInfoPush(&debugInfo, "MJView::preRender->draw(dt, frameLerp)", 1);
-        TuiTable* args = new TuiTable(nullptr);
         
-        TuiNumber* agr1Ref = new TuiNumber(dt);
-        TuiNumber* agr2Ref = new TuiNumber(frameLerp);
-        args->arrayObjects.push_back(agr1Ref);
-        args->arrayObjects.push_back(agr2Ref);
+        TuiNumber* dtRef = new TuiNumber(dt);
+        TuiNumber* frameLerpRef = new TuiNumber(frameLerp);
         
-        preRenderUpdateFunction->call(args, nullptr, nullptr, &debugInfo);
+        preRenderUpdateFunction->call("MJView::preRender->draw(dt, frameLerp)", dtRef, frameLerpRef, stateTable);
         
-        args->release();
+        dtRef->release();
+        frameLerpRef->release();
+        
     }
     
     if(needsAnimationTimerReset)
@@ -1329,7 +1335,7 @@ void MJView::mouseMoved3D(dvec3 windowRayStart, dvec3 windowRayDirection, bool t
                         if(!foundEarlierHover)
                         {
                             TuiRef* localPointRef = new TuiVec2(localPoint / renderScale);
-                            hoverStartFunction->call("hoverStartFunction", localPointRef);
+                            hoverStartFunction->call("hoverStartFunction", localPointRef, stateTable);
                             localPointRef->release();
                             
                             for(int i = thisViewIndex - 1; i >= 0; i--)
@@ -1340,7 +1346,7 @@ void MJView::mouseMoved3D(dvec3 windowRayStart, dvec3 windowRayDirection, bool t
                                     sibling->mouseInside = false;
                                     if(sibling->hoverEndFunction)
                                     {
-                                        sibling->hoverEndFunction->call("hoverEndFunction");
+                                        sibling->hoverEndFunction->call("hoverEndFunction", stateTable);
                                     }
                                 }
                             }
@@ -1353,7 +1359,7 @@ void MJView::mouseMoved3D(dvec3 windowRayStart, dvec3 windowRayDirection, bool t
 				if(hoverMovedFunction)
 				{
                     TuiRef* localPointRef = new TuiVec2(localPoint / renderScale);
-                    hoverMovedFunction->call("hoverMovedFunction", localPointRef);
+                    hoverMovedFunction->call("hoverMovedFunction", localPointRef, stateTable);
                     localPointRef->release();
 				}
 			}
@@ -1368,7 +1374,7 @@ void MJView::mouseMoved3D(dvec3 windowRayStart, dvec3 windowRayDirection, bool t
 				if(hoverEndFunction)
 				{
 					//dvec2 localPoint = windowPointToLocal(windowRayStart, windowRayDirection);
-                    hoverEndFunction->call("hoverEndFunction");
+                    hoverEndFunction->call("hoverEndFunction", stateTable);
 				}
 			}
 			for(int i = 0; i < MAX_MOUSE_BUTTONS; i++)
@@ -1393,7 +1399,7 @@ void MJView::mouseMoved3D(dvec3 windowRayStart, dvec3 windowRayDirection, bool t
                 
                 TuiRef* buttonIndexRef = new TuiNumber(i);
                 TuiRef* localPointRef = new TuiVec2(localPoint / renderScale);
-                mouseDraggedFunction->call("mouseDraggedFunction", buttonIndexRef, localPointRef);
+                mouseDraggedFunction->call("mouseDraggedFunction", buttonIndexRef, localPointRef, stateTable);
                 buttonIndexRef->release();
                 localPointRef->release();
 			}
@@ -1452,7 +1458,7 @@ void MJView::mouseDown3D(dvec3 windowRayStart, dvec3 windowRayDirection, int but
 		{
             TuiRef* buttonIndexRef = new TuiNumber(buttonIndex);
             TuiRef* localPointRef = new TuiVec2(localPoint / renderScale);
-            mouseDownFunction->call("mouseDownFunction", buttonIndexRef, localPointRef);
+            mouseDownFunction->call("mouseDownFunction", buttonIndexRef, localPointRef, stateTable);
             buttonIndexRef->release();
             localPointRef->release();
 		}
@@ -1498,7 +1504,7 @@ void MJView::mouseDown3D(dvec3 windowRayStart, dvec3 windowRayDirection, int but
                 
                 TuiRef* buttonIndexRef = new TuiNumber(buttonIndex);
                 TuiRef* localPointRef = new TuiVec2(localPoint / renderScale);
-                clickDownOutsideFunction->call("clickDownOutsideFunction", buttonIndexRef, localPointRef);
+                clickDownOutsideFunction->call("clickDownOutsideFunction", buttonIndexRef, localPointRef, stateTable);
                 buttonIndexRef->release();
                 localPointRef->release();
 			}
@@ -1525,7 +1531,7 @@ bool MJView::mouseWheel3D(dvec3 windowRayStart, dvec3 windowRayDirection, dvec2 
             TuiRef* localPointRef = new TuiVec2(localPoint / renderScale);
             TuiRef* scrollChangeRef = new TuiVec2(scrollChange);
             
-            mouseWheelFunction->call("mouseWheel3D", localPointRef, scrollChangeRef);
+            mouseWheelFunction->call("mouseWheel3D", localPointRef, scrollChangeRef, stateTable);
             scrollChangeRef->release();
             localPointRef->release();
 		}
@@ -1637,7 +1643,7 @@ void MJView::mouseUp3D(dvec3 windowRayStart, dvec3 windowRayDirection, int butto
 				{
 					dvec2 localPoint = windowPointToLocal(windowRayStart, windowRayDirection);
                     TuiRef* localPointRef = new TuiVec2(localPoint / renderScale);
-                    clickFunction->call("clickFunction", localPointRef);
+                    clickFunction->call("clickFunction", localPointRef, stateTable);
                     localPointRef->release();
                     *foundClickFunction = true;
 				}
@@ -1645,7 +1651,7 @@ void MJView::mouseUp3D(dvec3 windowRayStart, dvec3 windowRayDirection, int butto
 				{
 					dvec2 localPoint = windowPointToLocal(windowRayStart, windowRayDirection);
                     TuiRef* localPointRef = new TuiVec2(localPoint / renderScale);
-                    rightClickFunction->call("rightClickFunction", localPointRef);
+                    rightClickFunction->call("rightClickFunction", localPointRef, stateTable);
                     localPointRef->release();
                     *foundClickFunction = true;
 				}
@@ -1657,7 +1663,7 @@ void MJView::mouseUp3D(dvec3 windowRayStart, dvec3 windowRayDirection, int butto
 			dvec2 localPoint = windowPointToLocal(windowRayStart, windowRayDirection);
             TuiNumber* buttonIndexRef = new TuiNumber(buttonIndex);
             TuiVec2* localPointRef = new TuiVec2(localPoint / renderScale);
-            mouseUpFunction->call("mouseUpFunction", buttonIndexRef, localPointRef);
+            mouseUpFunction->call("mouseUpFunction", buttonIndexRef, localPointRef, stateTable);
             buttonIndexRef->release();
             localPointRef->release();
 		}
@@ -1687,7 +1693,7 @@ void MJView::mouseUp3D(dvec3 windowRayStart, dvec3 windowRayDirection, int butto
 				dvec2 localPoint = windowPointToLocal(windowRayStart, windowRayDirection);
                 TuiRef* buttonIndexRef = new TuiNumber(buttonIndex);
                 TuiRef* localPointRef = new TuiVec2(localPoint / renderScale);
-                clickOutsideFunction->call("clickOutsideFunction", buttonIndexRef, localPointRef);
+                clickOutsideFunction->call("clickOutsideFunction", buttonIndexRef, localPointRef, stateTable);
                 buttonIndexRef->release();
                 localPointRef->release();
 			}
@@ -1698,7 +1704,7 @@ void MJView::mouseUp3D(dvec3 windowRayStart, dvec3 windowRayDirection, int butto
 			dvec2 localPoint = windowPointToLocal(windowRayStart, windowRayDirection);
             TuiRef* buttonIndexRef = new TuiNumber(buttonIndex);
             TuiRef* localPointRef = new TuiVec2(localPoint / renderScale);
-            mouseUpFunction->call("mouseUpFunction", buttonIndexRef, localPointRef);
+            mouseUpFunction->call("mouseUpFunction", buttonIndexRef, localPointRef, stateTable);
             buttonIndexRef->release();
             localPointRef->release();
 		}
@@ -2046,6 +2052,21 @@ void MJView::loadFromTable(TuiTable* table, bool needsToLayoutSubviews, TuiTable
         stateTable->setVec3("pos", table->getVec3("pos"));
     }
     
+    if(table->hasKey("additionalOffset"))
+    {
+        stateTable->setVec3("additionalOffset", table->getVec3("additionalOffset"));
+    }
+    
+    
+    if(table->hasKey("parentOffsetFraction"))
+    {
+        stateTable->setVec2("parentOffsetFraction", table->getVec2("parentOffsetFraction"));
+    }
+    if(table->hasKey("additionalOffsetFraction"))
+    {
+        stateTable->setVec2("additionalOffsetFraction", table->getVec2("additionalOffsetFraction"));
+    }
+    
     if(table->hasKey("rotation"))
     {
         stateTable->setMat3("rotation", table->getMat3("rotation"));
@@ -2129,6 +2150,20 @@ void MJView::tableKeyChanged(const std::string& key, TuiRef* value)
                 break;
             default:
                 MJError("pos expected vec2 or vec3");
+                break;
+        }
+    }
+    else if(key == "additionalOffset")
+    {
+        switch (value->type()) {
+            case Tui_ref_type_VEC2:
+                setAdditionalOffset(dvec3(((TuiVec2*)value)->value, 0.0));
+                break;
+            case Tui_ref_type_VEC3:
+                setAdditionalOffset(((TuiVec3*)value)->value);
+                break;
+            default:
+                MJError("additionalOffset expected vec2 or vec3");
                 break;
         }
     }
@@ -2254,6 +2289,48 @@ void MJView::tableKeyChanged(const std::string& key, TuiRef* value)
             }
         }
         parentSizeChanged(parentView->size);
+    }
+    else if(key == "parentOffsetFraction")//parentPosOffsetFraction offsets by a fraction of the width/height of the parent view
+    {
+        if(value->type() == Tui_ref_type_VEC2)
+        {
+            parentOffsetFractionSet = true;
+            parentOffsetFraction = ((TuiVec2*)value)->value;
+            updateMatrix();
+        }
+        else if(value->type() == Tui_ref_type_NIL)
+        {
+            if(parentOffsetFractionSet)
+            {
+                parentOffsetFractionSet = false;
+                updateMatrix();
+            }
+        }
+        else
+        {
+            MJError("Expected vec2 or nil");
+        }
+    }
+    else if(key == "additionalOffsetFraction")//parentPosOffsetFraction offsets by a fraction of the width/height of the parent view
+    {
+        if(value->type() == Tui_ref_type_VEC2)
+        {
+            additionalOffsetFractionSet = true;
+            additionalOffsetFraction = ((TuiVec2*)value)->value;
+            updateMatrix();
+        }
+        else if(value->type() == Tui_ref_type_NIL)
+        {
+            if(additionalOffsetFractionSet)
+            {
+                additionalOffsetFractionSet = false;
+                updateMatrix();
+            }
+        }
+        else
+        {
+            MJError("Expected vec2 or nil");
+        }
     }
     else if(key == "layoutParent")
     {

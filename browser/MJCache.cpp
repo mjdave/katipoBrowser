@@ -242,10 +242,11 @@ GPipeline* MJCache::getPipeline(std::string name,
     std::vector<VkVertexInputBindingDescription> bindingDescriptions,
     std::vector<VkVertexInputAttributeDescription> attributeDescriptions,
     std::vector<PipelineUniform> uniforms,
-	int renderPassVarient)
+	int renderPassVarient,
+    std::string fileDirPath)
 {
-    
-    std::string key = name;
+    std::string fullShaderPath = Tui::pathByAppendingPathComponent(fileDirPath, "shaders/" + name + ".tui");
+    std::string key = fullShaderPath;
     
     if(pipelines.count(key) != 0)
     {
@@ -256,14 +257,11 @@ GPipeline* MJCache::getPipeline(std::string name,
     }
     
     //MJLog("Loading shader:%s", name.c_str());
-    std::string shaderPath = Katipo::getResourcePath("app/common/shaders/" + name + ".tui"); //todo allow sites to supply shaders
+    std::string shaderPath = Katipo::getResourcePath(fullShaderPath); //todo allow sites to supply shaders
     //MJLog("shaderPath:%s", shaderPath.c_str());
     
     TuiTable* shaderTable = (TuiTable*)TuiRef::runScriptFile(shaderPath, nullptr);
     
-    //std::string vertPathname = ((TuiString*)shaderTable->objectsByStringKey["vertPath"])->value;
-    std::string vertPathname = shaderTable->getString("vertPath");
-    std::string fragPathname = shaderTable->getString("fragPath");
     
 
     PipelineStateOptions options = PipelineStateOptions();
@@ -364,13 +362,13 @@ GPipeline* MJCache::getPipeline(std::string name,
         }
     }
     
-    delete shaderTable;
-    shaderTable = nullptr;
+    
+    std::string vertPathname = Tui::pathByAppendingPathComponent(Tui::pathByAppendingPathComponent(fileDirPath, "spv"), shaderTable->getString("vertPath"));
+    std::string fragPathname = Tui::pathByAppendingPathComponent(Tui::pathByAppendingPathComponent(fileDirPath, "spv"), shaderTable->getString("fragPath"));
 
-	std::string vertPathNameToUse = Katipo::getResourcePath("app/common/spv/" + vertPathname); //todo sites
-	std::string fragPathNameToUse = Katipo::getResourcePath("app/common/spv/" + fragPathname);
+	std::string vertPathNameToUse = Katipo::getResourcePath(vertPathname);
+	std::string fragPathNameToUse = Katipo::getResourcePath(fragPathname);
 
-	//debugTimer->getDt();
     GPipeline* pipeline = new GPipeline(vulkan,
         name,
         renderPass,
@@ -384,6 +382,11 @@ GPipeline* MJCache::getPipeline(std::string name,
 	//totalLoadTime += debugTimer->getDt();
 	//MJLog("total pipiline creation time:%dms", (int)(totalLoadTime * 1000.0));
 	pipelines[key][renderPassVarient] = pipeline;
+    
+    
+    delete shaderTable;
+    shaderTable = nullptr;
+    
     return pipeline;
 }
 
