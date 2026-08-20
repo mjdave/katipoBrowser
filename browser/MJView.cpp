@@ -809,20 +809,20 @@ void MJView::updateMatrix(int sanityCheck)
 	relativeMatrix = relativeMatrix * dmat4(windowRotation);
     
     dvec3 offsetToUse = baseOffset;
-    if(parentOffsetFractionSet)
-    {
-        offsetToUse.x += parentView->size.x * parentOffsetFraction.x;
-        offsetToUse.y += parentView->size.y * parentOffsetFraction.y;
-    }
 
-    dvec3 baseOffsetToUse = offsetToUse * relativeViewRenderScale + dvec3(0.0,0.0,windowZRenderOffset);
+    dvec3 baseOffsetToUse = baseOffset * relativeViewRenderScale + dvec3(0.0,0.0,windowZRenderOffset);
 	dvec3 localOffsetToUse = dvec3(0.0);
     
+    if(parentOffsetFractionSet)
+    {
+        baseOffsetToUse.x += parentView->size.x * parentOffsetFraction.x * parentView->renderScale;
+        baseOffsetToUse.y += parentView->size.y * parentOffsetFraction.y * parentView->renderScale;
+    }
     
     if(additionalOffsetFractionSet)
     {
-        localOffsetToUse.x += parentView->size.x * additionalOffsetFraction.x;
-        localOffsetToUse.y += parentView->size.y * additionalOffsetFraction.y;
+        localOffsetToUse.x += parentView->size.x * additionalOffsetFraction.x * parentView->renderScale;
+        localOffsetToUse.y += parentView->size.y * additionalOffsetFraction.y * parentView->renderScale;
     }
     
     switch (relativePosition.h) {

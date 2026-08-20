@@ -139,6 +139,24 @@ MJFont* MJCache::getOrLoadFontIfAvailableInternal(std::string name, int pointSiz
         return fonts[cacheKey];
     }
     
+    for(auto& searchPath : fontSearchPaths)
+    {
+        std::string fontFilepath = searchPath + combinedFontName + ".fnt";
+        if(missingFiles.count(fontFilepath) == 0)
+        {
+            if(Tui::fileExistsAtPath(fontFilepath))
+            {
+                std::string imageFilepath = searchPath + combinedFontName + ".png";
+                MJFont* font = new MJFont(vulkan, this, fontFilepath, imageFilepath);
+                fonts[fontFilepath] = font;
+                fonts[cacheKey] = font;
+                return font;
+            }
+            
+            missingFiles.insert(fontFilepath);
+        }
+    }
+    
     std::string fontFilepath = getKatipoResourcePath("fonts/" + combinedFontName + ".fnt", rootTable);
     if(missingFiles.count(fontFilepath) == 0)
     {
@@ -245,8 +263,34 @@ GPipeline* MJCache::getPipeline(std::string name,
 	int renderPassVarient,
     std::string fileDirPath)
 {
-    std::string fullShaderPath = Tui::pathByAppendingPathComponent(fileDirPath, "shaders/" + name + ".tui");
-    std::string key = fullShaderPath;
+    
+    std::string shaderPath = "";
+    std::string baseDirectoryToUse = "";
+    
+    for(auto& searchPath : shaderSearchPaths)
+    {
+        std::string shaderTestFilePath = Tui::pathByAppendingPathComponent(searchPath, "shaders/" + name + ".tui");
+        if(missingFiles.count(shaderTestFilePath) == 0)
+        {
+            if(Tui::fileExistsAtPath(shaderTestFilePath))
+            {
+                shaderPath = shaderTestFilePath;
+                baseDirectoryToUse = searchPath;
+                break;
+            }
+            
+            missingFiles.insert(shaderTestFilePath);
+        }
+    }
+    
+    if(shaderPath.empty())
+    {
+        shaderPath = Katipo::getResourcePath(Tui::pathByAppendingPathComponent(fileDirPath, "shaders/" + name + ".tui"));
+        baseDirectoryToUse = Katipo::getResourcePath(fileDirPath);
+    }
+    
+    
+    std::string key = shaderPath;
     
     if(pipelines.count(key) != 0)
     {
@@ -256,13 +300,7 @@ GPipeline* MJCache::getPipeline(std::string name,
         }
     }
     
-    //MJLog("Loading shader:%s", name.c_str());
-    std::string shaderPath = Katipo::getResourcePath(fullShaderPath); //todo allow sites to supply shaders
-    //MJLog("shaderPath:%s", shaderPath.c_str());
-    
     TuiTable* shaderTable = (TuiTable*)TuiRef::runScriptFile(shaderPath, nullptr);
-    
-    
 
     PipelineStateOptions options = PipelineStateOptions();
     
@@ -363,17 +401,14 @@ GPipeline* MJCache::getPipeline(std::string name,
     }
     
     
-    std::string vertPathname = Tui::pathByAppendingPathComponent(Tui::pathByAppendingPathComponent(fileDirPath, "spv"), shaderTable->getString("vertPath"));
-    std::string fragPathname = Tui::pathByAppendingPathComponent(Tui::pathByAppendingPathComponent(fileDirPath, "spv"), shaderTable->getString("fragPath"));
-
-	std::string vertPathNameToUse = Katipo::getResourcePath(vertPathname);
-	std::string fragPathNameToUse = Katipo::getResourcePath(fragPathname);
+    std::string vertPath = Tui::pathByAppendingPathComponent(Tui::pathByAppendingPathComponent(baseDirectoryToUse, "spv"), shaderTable->getString("vertPath"));
+    std::string fragPath = Tui::pathByAppendingPathComponent(Tui::pathByAppendingPathComponent(baseDirectoryToUse, "spv"), shaderTable->getString("fragPath"));
 
     GPipeline* pipeline = new GPipeline(vulkan,
         name,
         renderPass,
-		vertPathNameToUse,
-		fragPathNameToUse,
+                                        vertPath,
+                                        fragPath,
         bindingDescriptions,
         attributeDescriptions,
         uniforms,

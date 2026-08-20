@@ -49,6 +49,9 @@ public:
     Database* appDatabase;
 
 	Camera* camera;
+    
+    std::set<std::string> fontSearchPaths;
+    std::set<std::string> shaderSearchPaths;
 
     
 public:
