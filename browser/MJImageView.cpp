@@ -237,6 +237,14 @@ void MJImageView::loadFromTable(TuiTable* table, bool needsToLayoutSubviews, Tui
     {
         stateTable->setVec4("shaderUserData", table->getVec4("shaderUserData"));
     }
+    if(table->hasKey("texOffset"))
+    {
+        stateTable->setVec2("texOffset", table->getVec2("texOffset"));
+    }
+    if(table->hasKey("texScale"))
+    {
+        stateTable->setVec2("texScale", table->getVec2("texScale"));
+    }
     if(table->hasKey("additiveBlend"))
     {
         if(table->getBool("additiveBlend"))
@@ -285,6 +293,14 @@ void MJImageView::tableKeyChanged(const std::string& key, TuiRef* value)
     else if(key == "crop")
     {
         setCropImage(stateTable->getBool("crop"));
+    }
+    else if(key == "texOffset")
+    {
+        setImageOffset(stateTable->getVec2("texOffset"));
+    }
+    else if(key == "texScale")
+    {
+        setImageSize(stateTable->getVec2("texScale"));
     }
     else if(key == "shaderUserData")
     {

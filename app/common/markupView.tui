@@ -116,6 +116,12 @@ updateEditingText = function(markupView, newText_)
     }
 
     originalLength = string.length(fullCaptureText)
+
+    if(textView.uppercase)
+    {
+        newText = string.upper(newText)
+    }
+    
     fullCaptureText += newText
 
     fullLength = string.length(fullCaptureText)
@@ -132,6 +138,7 @@ updateEditingText = function(markupView, newText_)
             newText = ""
         }
     }
+
 
     afterItemText = ""
     if(itemEndCharacterIndex < string.length(markupView.currentMarkupText))
@@ -712,6 +719,8 @@ addItemView = function(markupView, style_, captureItemOrNil)
                 textViewLayout.color = linkColor
                 textViewLayout.font = boldFont
             }
+
+            textViewLayout.color = vec4(1,1,1,1)
             
             backgroundLayout = {
                 type = "button"
@@ -996,6 +1005,7 @@ addItemView = function(markupView, style_, captureItemOrNil)
     if(style)
     {
         textView.maxChars = style.maxChars
+        textView.uppercase = style.uppercase
     }
 
     assignCurrentlyEditingIfNeededForTextView(markupView, textView, backgroundView)

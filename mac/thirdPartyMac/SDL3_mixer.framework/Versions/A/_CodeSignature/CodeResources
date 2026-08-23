@@ -6,15 +6,27 @@
 	<dict>
 		<key>Resources/CMake/SDL3_mixerConfig.cmake</key>
 		<data>
-		cmwMvJV9Emyd6j9TPwN4pnRqAh0=
+		YD2Lv/ryEvI0e4oMhpabH3n1Rv4=
 		</data>
 		<key>Resources/CMake/SDL3_mixerConfigVersion.cmake</key>
 		<data>
-		cxUZ4JU93RTTNAj/hc1lNZXYBEA=
+		Y3v+eBFyhiAeu1CMJJXNIGxwf7E=
+		</data>
+		<key>Resources/INSTALL.md</key>
+		<data>
+		2OzsMNQWCy1o8P0E0O3H3jqfuhY=
 		</data>
 		<key>Resources/Info.plist</key>
 		<data>
-		UwITGjgIp0kqaqMEYyULcYYYGgA=
+		thiUMXAjcoxBmWXu0QgN4hALsL0=
+		</data>
+		<key>Resources/LICENSE.txt</key>
+		<data>
+		14pQ17SYtSpJMs6RfHrJ7gFhogU=
+		</data>
+		<key>Resources/README.md</key>
+		<data>
+		PVSuq7rFxY3xDLaR8u5q/SNMV1I=
 		</data>
 	</dict>
 	<key>files2</key>
@@ -23,28 +35,49 @@
 		<dict>
 			<key>hash2</key>
 			<data>
-			9EUSwPjAMhOq4buLj5fCsOHKZdmqMBrTmNtGxwSr/gE=
+			QEHktdOeB1EiBUHitGDWKlzRQ7DzGS15Lu8NjkJDZno=
 			</data>
 		</dict>
 		<key>Resources/CMake/SDL3_mixerConfig.cmake</key>
 		<dict>
 			<key>hash2</key>
 			<data>
-			3OgSc72FtO2q6LNl6ddf+MV2qHRpXM0n3t0mJw9/KKg=
+			eRR9nesHro5+Mck3CWEsDpnXOeb0Q0cOftd/CixhyaQ=
 			</data>
 		</dict>
 		<key>Resources/CMake/SDL3_mixerConfigVersion.cmake</key>
 		<dict>
 			<key>hash2</key>
 			<data>
-			a+39nqZTXp+OGYce4FdrKdRGpLtjl8iJOY2u/UdMKXE=
+			bSd60iLcAq8u+IX/UePYmBW3UGDhXmAU9sEeZ8nwe3U=
+			</data>
+		</dict>
+		<key>Resources/INSTALL.md</key>
+		<dict>
+			<key>hash2</key>
+			<data>
+			MVVfevLBkink8iCe9HVi7E78/9WpAV/Pi9h4v+q5Tc8=
 			</data>
 		</dict>
 		<key>Resources/Info.plist</key>
 		<dict>
 			<key>hash2</key>
 			<data>
-			5kQfXLiFODIz36Jf5HCeaEBEkqVmQUXGk5lQlbkzlfk=
+			9iCFLrhAw+K/cy6T49U3WQlwD2gClv8r+ig/GLByf48=
+			</data>
+		</dict>
+		<key>Resources/LICENSE.txt</key>
+		<dict>
+			<key>hash2</key>
+			<data>
+			42mX/kksSOfthzBlzDppTzjoGJoyjTcJCZ/9yaiEP0w=
+			</data>
+		</dict>
+		<key>Resources/README.md</key>
+		<dict>
+			<key>hash2</key>
+			<data>
+			gOXGqdhyrqKyq0D3Z0miCEpe6DH7VWqv4rdDpq1q7fk=
 			</data>
 		</dict>
 	</dict>

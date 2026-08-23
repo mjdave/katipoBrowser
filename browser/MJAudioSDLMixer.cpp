@@ -5,7 +5,7 @@
 #include "MJTimer.h"
 
 #include "SDL_mixer.h"
-static const SDL_AudioSpec audioSpec = {SDL_AUDIO_S16, 2, 44100};
+//static const SDL_AudioSpec audioSpec = {SDL_AUDIO_S16, 2, 44100};
 
 void trackFinished(void* userdata, MIX_Track* track)
 {
@@ -31,14 +31,14 @@ MJAudioSDLMixer::MJAudioSDLMixer()
 
 
     audioDeviceId =
-        SDL_OpenAudioDevice(SDL_AUDIO_DEVICE_DEFAULT_PLAYBACK, &audioSpec);
+        SDL_OpenAudioDevice(SDL_AUDIO_DEVICE_DEFAULT_PLAYBACK, NULL);
     if(audioDeviceId == 0) {
         SDL_Log("Could not open audio device default output %s", SDL_GetError());
         return;
     }
 
     MIX_Init();
-    mixer = MIX_CreateMixerDevice(audioDeviceId, &audioSpec);
+    mixer = MIX_CreateMixerDevice(audioDeviceId, NULL);
 
     SDL_Log("AudioPlayer ready");
 }

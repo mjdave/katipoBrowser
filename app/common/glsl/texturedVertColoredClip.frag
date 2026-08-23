@@ -13,5 +13,5 @@ void main() {
         discard;
     }
     vec4 tex = texture(texMap, fragTexCoord);
-    outColor = vec4(1.0,1.0,1.0,tex.a) * fragColor;// * vec4(1.0, 1.0,tex.a,0.5);
+    outColor = tex * fragColor;
 }
