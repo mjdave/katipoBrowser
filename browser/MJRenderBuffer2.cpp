@@ -18,26 +18,17 @@ MJRenderBuffer2::MJRenderBuffer2(Vulkan* vulkan_, size_t vertSize_, int vertCoun
     for(int i = 0; i < MJRB2_FRAMEBUFFER_COUNT; i++)
     {
         allocateBuffers(vertCount, i);
-        actualVertCounts[i] = 0;
     }
 }
 
-void MJRenderBuffer2::cleanup(std::vector<MJVMABuffer>* buffersToDestroy)
+void MJRenderBuffer2::cleanup()
 {
 	if(!cleanedUp)
 	{
 		for(int i = 0; i < MJRB2_FRAMEBUFFER_COUNT; i++)
 		{
-			if(buffersToDestroy)
-			{
-				buffersToDestroy->push_back(gpuBuffers[i]);
-				buffersToDestroy->push_back(cpuBuffers[i]);
-			}
-			else
-			{
-				vulkan->destroySingleBuffer(gpuBuffers[i]);
-				vulkan->destroySingleBuffer(cpuBuffers[i]);
-			}
+            vulkan->destroySingleBuffer(gpuBuffers[i]);
+            vulkan->destroySingleBuffer(cpuBuffers[i]);
 		}
 		cleanedUp = true;
 	}
@@ -45,7 +36,7 @@ void MJRenderBuffer2::cleanup(std::vector<MJVMABuffer>* buffersToDestroy)
 
 MJRenderBuffer2::~MJRenderBuffer2()
 {
-	cleanup(nullptr);
+	cleanup();
 }
 
 void MJRenderBuffer2::allocateBuffers(int vertCountToAllocate, int bufferIndex)
@@ -74,8 +65,6 @@ void MJRenderBuffer2::allocateBuffers(int vertCountToAllocate, int bufferIndex)
         throw std::runtime_error("failed to createVMABuffer!");
     }
 
-    allocatedSizes[bufferIndex] = vertCountToAllocate;
-
     VmaAllocationCreateInfo finalBufferAllocInfo = {};
     finalBufferAllocInfo.usage = VMA_MEMORY_USAGE_GPU_ONLY;
 	finalBufferAllocInfo.flags = VMA_ALLOCATION_CREATE_WITHIN_BUDGET_BIT;
@@ -89,68 +78,36 @@ void MJRenderBuffer2::allocateBuffers(int vertCountToAllocate, int bufferIndex)
 #endif
 
     vulkan->createVMABuffer(vertCountToAllocate * vertSize, usage | VK_BUFFER_USAGE_TRANSFER_DST_BIT, finalBufferAllocInfo, &(gpuBuffers[bufferIndex].buffer), &(gpuBuffers[bufferIndex].allocation));
+    
 }
 
-void* MJRenderBuffer2::getBuffer(int vertCount, std::vector<MJVMABuffer>* buffersToDestroy)
+void* MJRenderBuffer2::getBuffer()
 {
-    if(vertCount > allocatedSizes[writeBufferIndex])
-    {
-        int vertCountToAllocate = vertCount * 1.5;
-        //MJLog("render buffer \"%s\" resized from:%d to:%d (%p)", debugName.c_str(), allocatedSizes[writeBufferIndex], vertCountToAllocate, gpuBuffers[writeBufferIndex].buffer);
-		if(buffersToDestroy)
-		{
-			buffersToDestroy->push_back(cpuBuffers[writeBufferIndex]);
-			buffersToDestroy->push_back(gpuBuffers[writeBufferIndex]);
-		}
-
-        allocateBuffers(vertCountToAllocate, writeBufferIndex);
-    }
-
-    actualVertCounts[writeBufferIndex] = vertCount;
-
     return allocInfos[writeBufferIndex].pMappedData;
 }
 
-void MJRenderBuffer2::setZero()
+void MJRenderBuffer2::copyToGPU(VkCommandBuffer commandBuffer, int vertCount)
 {
-	actualVertCounts[writeBufferIndex] = 0;
-	readBufferIndex = writeBufferIndex;
-	writeBufferIndex = (writeBufferIndex + 1) % MJRB2_FRAMEBUFFER_COUNT;
-	valid = true;
-}
+    readBufferIndex = writeBufferIndex;
+    writeBufferIndex = (writeBufferIndex + 1) % MJRB2_FRAMEBUFFER_COUNT;
 
-void MJRenderBuffer2::copyToGPU(VkCommandBuffer commandBuffer)
-{
-
-    if(actualVertCounts[writeBufferIndex] > 0)
+    VkBufferCopy copyRegion = {};
+    copyRegion.size = vertCount * vertSize;
+    if(copyRegion.size == 0)
     {
-		readBufferIndex = writeBufferIndex;
-		writeBufferIndex = (writeBufferIndex + 1) % MJRB2_FRAMEBUFFER_COUNT;
-
-        VkBufferCopy copyRegion = {};
-        copyRegion.size = actualVertCounts[readBufferIndex] * vertSize;
-        if(copyRegion.size == 0)
-        {
-            MJLog("attempting to cpy zero bytes");
-        }
-        vkCmdCopyBuffer(commandBuffer, cpuBuffers[readBufferIndex].buffer, gpuBuffers[readBufferIndex].buffer, 1, &copyRegion);
-		valid = true;
+        MJLog("attempting to cpy zero bytes");
     }
-
+    vkCmdCopyBuffer(commandBuffer, cpuBuffers[readBufferIndex].buffer, gpuBuffers[readBufferIndex].buffer, 1, &copyRegion);
+    valid = true;
 }
 
-MJRenderBuffer2MainThreadBuffer MJRenderBuffer2::getGPUBuffer(dvec3 origin)
+MJVMABuffer MJRenderBuffer2::getGPUBuffer()
 {
-	MJRenderBuffer2MainThreadBuffer mainThreadBuffer = {};
-	mainThreadBuffer.origin = origin;
-	if(valid && actualVertCounts[readBufferIndex] > 0)
+	if(valid)
 	{
-		mainThreadBuffer.vertCount = actualVertCounts[readBufferIndex];
-		mainThreadBuffer.gpuBuffer = gpuBuffers[readBufferIndex];
+        return gpuBuffers[readBufferIndex];
 	}
-	else
-	{
-		mainThreadBuffer.vertCount = 0;
-	}
-    return mainThreadBuffer;
+    
+    return MJVMABuffer();
+    
 }

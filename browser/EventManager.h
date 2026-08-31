@@ -18,6 +18,9 @@ class TuiRef;
 #define MJ_KEY_MOD_ALT 3
 #define MJ_KEY_MOD_CMD 4
 
+struct TuiFunctionCallData;
+struct TuiDebugInfo;
+
 class EventManager {
     
 public:
@@ -64,6 +67,10 @@ public:
     void setTextEntryListener(TuiFunction* textEntryListener_, TuiFunction* listenerKeyChangedFunc_);
     void removeTextEntryListener();
     
+    int setOnEvent(const std::string& key, TuiFunction* callback);
+    void removeOnEvent(int eventID);
+    int setOnEvent(const std::string& key, std::function<TuiRef*(TuiTable* args, TuiRef* existingResult, TuiFunctionCallData* incomingCallData, TuiDebugInfo* callingDebugInfo)> value);
+    
     void bindTui(TuiTable* rootTable);
 
 	int getModKey();
@@ -76,6 +83,7 @@ public:
     MainController* mainController;
     WindowInfo* windowInfo;
     SDL_Window* window;
+    
 
 	dvec2 mouseLoc;
     
@@ -122,6 +130,9 @@ private:
     std::map<std::string, std::map<int,std::map<int, TuiFunction*> > > keyChangedByKeyListenerFunctions;
     
     void eventManagerTableKeyChanged(const std::string& key, TuiRef* value);
+    
+    int onEventIndexCounter = 0;
+    std::map<std::string, std::map<int, TuiFunction*>> onEventsByTypeByID;
 
     
 private:

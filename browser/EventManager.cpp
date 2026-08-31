@@ -113,6 +113,14 @@ EventManager::~EventManager()
             }
         }
     }
+    
+    for(auto& eventTypeAndStuff : onEventsByTypeByID)
+    {
+        for(auto& eventIDAndFunc : eventTypeAndStuff.second)
+        {
+            eventIDAndFunc.second->release();
+        }
+    }
 }
 
 
@@ -458,10 +466,61 @@ void EventManager::handleEvent(SDL_Event* event)
 
         break;
     case SDL_EVENT_MOUSE_WHEEL:
-            mainController->mouseWheel(convertSDLToMouseLoc(dvec2(event->motion.x, event->motion.y), windowInfo), dvec2(event->wheel.x, event->wheel.y));
-        //luaModule->callFunction("mouseWheel",
-            //dvec2(event->motion.x, event->motion.y), dvec2(event->wheel.x, event->wheel.y), getModKey());
+        {
+            dvec2 mouseLoc = convertSDLToMouseLoc(dvec2(event->motion.x, event->motion.y), windowInfo);
+            dvec2 wheelMotion = dvec2(event->wheel.x, event->wheel.y);
+            mainController->mouseWheel(mouseLoc, wheelMotion);
+            if(onEventsByTypeByID.count("mouseWheel") != 0)
+            {
+                for(auto& foo : onEventsByTypeByID)
+                {
+                    for(auto& bar : foo.second)
+                    {
+                        TuiVec2* value = new TuiVec2(wheelMotion);
+                        bar.second->call("mouseWheel", value);
+                        value->release();
+                    }
+                }
+            }
+        }
         break;
+        case SDL_EVENT_PINCH_BEGIN:
+        case SDL_EVENT_PINCH_UPDATE:
+        case SDL_EVENT_PINCH_END:
+        {
+            if(onEventsByTypeByID.count("pinch") != 0)
+            {
+                for(auto& foo : onEventsByTypeByID)
+                {
+                    for(auto& bar : foo.second)
+                    {
+                        TuiNumber* value = new TuiNumber(((SDL_PinchFingerEvent*)event)->scale);
+                        TuiNumber* state = new TuiNumber(0);
+                        if(event->type == SDL_EVENT_PINCH_UPDATE)
+                        {
+                            state->value = 1;
+                        }
+                        else if(event->type == SDL_EVENT_PINCH_END)
+                        {
+                            state->value = 2;
+                        }
+                        bar.second->call("pinch(begin_update_end_state_index, scale)", state, value);
+                        value->release();
+                        state->release();
+                    }
+                }
+            }
+        }
+        break;
+            
+            
+          /*  SDL_EVENT_PINCH_BEGIN      = 0x710,
+            SDL_EVENT_PINCH_UPDATE,
+            SDL_EVENT_PINCH_END,
+           
+           typedef struct SDL_PinchFingerEvent
+           float scale
+    */
             
     /*case SDL_MULTIGESTURE:
             
@@ -664,6 +723,55 @@ void EventManager::removeKeyChangedListener(int index)
         }
     }
 }
+
+int EventManager::setOnEvent(const std::string& eventType, TuiFunction* callback)
+{
+    int eventID = onEventIndexCounter;
+    onEventIndexCounter++;
+    
+    std::map<int, TuiFunction*>& eventsByID = onEventsByTypeByID[eventType];
+    
+    eventsByID[eventID] = callback;
+    callback->retain();
+    
+    return eventID;
+}
+
+int EventManager::setOnEvent(const std::string& key, std::function<TuiRef*(TuiTable* args, TuiRef* existingResult, TuiFunctionCallData* incomingCallData, TuiDebugInfo* callingDebugInfo)> value)
+{
+    TuiFunction* ref = new TuiFunction(value);
+    int eventID = setOnEvent(key, ref);
+    ref->release();
+    return eventID;
+}
+
+void EventManager::removeOnEvent(int eventID)
+{
+    for(auto& eventTypeAndStuff : onEventsByTypeByID)
+    {
+        bool found = false;
+        for(auto& eventIDAndFunc : eventTypeAndStuff.second)
+        {
+            if(eventIDAndFunc.first == eventID)
+            {
+                eventIDAndFunc.second->release();
+                eventTypeAndStuff.second.erase(eventID);
+                found = true;
+                break;
+            }
+        }
+        
+        if(found)
+        {
+            if(eventTypeAndStuff.second.empty())
+            {
+                onEventsByTypeByID.erase(eventTypeAndStuff.first);
+            }
+            break;
+        }
+    }
+}
+
 
 void EventManager::eventManagerTableKeyChanged(const std::string& key, TuiRef* value)
 {

@@ -5,12 +5,6 @@
 
 #define MJRB2_FRAMEBUFFER_COUNT 3
 
-struct MJRenderBuffer2MainThreadBuffer {
-	MJVMABuffer gpuBuffer;
-	dvec3 origin;
-	int vertCount = 0;
-};
-
 class MJRenderBuffer2
 {
 public:
@@ -19,13 +13,12 @@ public:
 	MJRenderBuffer2(Vulkan* vulkan_, size_t vertSize_, int vertCount, std::string debugName_, int usage_ = VK_BUFFER_USAGE_VERTEX_BUFFER_BIT);
     ~MJRenderBuffer2();
 
-	void cleanup(std::vector<MJVMABuffer>* buffersToDestroy);
+	void cleanup();
 
-    void* getBuffer(int vertCount, std::vector<MJVMABuffer>* buffersToDestroy);
-	MJRenderBuffer2MainThreadBuffer getGPUBuffer(dvec3 origin);
+    void* getBuffer();
+    MJVMABuffer getGPUBuffer();
 
-    void copyToGPU(VkCommandBuffer commandBuffer);
-	void setZero();
+    void copyToGPU(VkCommandBuffer commandBuffer, int vertCount);
 
 private:
     Vulkan* vulkan;
@@ -38,10 +31,8 @@ private:
     VmaAllocationInfo allocInfos[MJRB2_FRAMEBUFFER_COUNT];
     MJVMABuffer cpuBuffers[MJRB2_FRAMEBUFFER_COUNT];
     MJVMABuffer gpuBuffers[MJRB2_FRAMEBUFFER_COUNT];
-    int allocatedSizes[MJRB2_FRAMEBUFFER_COUNT];
 
     size_t vertSize;
-    int actualVertCounts[MJRB2_FRAMEBUFFER_COUNT];
 
     std::string debugName;
 	bool cleanedUp = false;
