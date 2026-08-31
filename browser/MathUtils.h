@@ -24,6 +24,10 @@
 
 using namespace glm;
 
+#ifndef M_PI
+#define M_PI 3.14159265358979323846
+#endif
+
 #define RANDOM_FLOAT() (((float)rand()) / RAND_MAX)
 #define RANDOM_DOUBLE() (((double)rand()) / RAND_MAX)
 
