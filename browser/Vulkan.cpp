@@ -1409,7 +1409,7 @@ void Vulkan::endRecord()
     submitInfo.commandBufferCount = 1;
     submitInfo.pCommandBuffers = primaryCommandBuffer->getBuffer();
 
-    VkSemaphore signalSemaphores[] = {renderFinishedSemaphores[currentFrame]};
+    VkSemaphore signalSemaphores[] = {renderFinishedSemaphores[currentRecordingImageIndex]};
     submitInfo.signalSemaphoreCount = 1;
     submitInfo.pSignalSemaphores = signalSemaphores;
 
@@ -1449,7 +1449,7 @@ void Vulkan::submit()
 	VkPresentInfoKHR presentInfo = {};
 	presentInfo.sType = VK_STRUCTURE_TYPE_PRESENT_INFO_KHR;
 
-	VkSemaphore signalSemaphores[] = {renderFinishedSemaphores[currentFrame]};
+	VkSemaphore signalSemaphores[] = {renderFinishedSemaphores[currentRecordingImageIndex]};
 
 	presentInfo.waitSemaphoreCount = 1;
 	presentInfo.pWaitSemaphores = signalSemaphores;
