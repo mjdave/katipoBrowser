@@ -2082,6 +2082,11 @@ void MJView::loadFromTable(TuiTable* table, bool needsToLayoutSubviews, TuiTable
         stateTable->setDouble("alpha", table->getDouble("alpha"));
     }
     
+    if(table->hasKey("scale"))
+    {
+        stateTable->setDouble("scale", table->getDouble("scale"));
+    }
+    
     if(table->hasKey("hidden"))
     {
         stateTable->setBool("hidden", table->getBool("hidden"));
@@ -2090,6 +2095,45 @@ void MJView::loadFromTable(TuiTable* table, bool needsToLayoutSubviews, TuiTable
     if(table->hasKey("styles"))
     {
         stateTable->set("styles", table->get("styles"));
+    }
+    
+    if(table->hasKey("update"))
+    {
+        stateTable->set("update", table->get("update"));
+    }
+    if(table->hasKey("fixedTimeUpdate"))
+    {
+        stateTable->set("fixedTimeUpdate", table->get("fixedTimeUpdate"));
+    }
+    
+    if(table->hasKey("mouseDown"))
+    {
+        stateTable->set("mouseDown", table->get("mouseDown"));
+    }
+    if(table->hasKey("mouseUp"))
+    {
+        stateTable->set("mouseUp", table->get("mouseUp"));
+    }
+    if(table->hasKey("mouseDragged"))
+    {
+        stateTable->set("mouseDragged", table->get("mouseDragged"));
+    }
+    if(table->hasKey("mouseWheel"))
+    {
+        stateTable->set("mouseWheel", table->get("mouseWheel"));
+    }
+    
+    if(table->hasKey("hoverStart"))
+    {
+        stateTable->set("hoverStart", table->get("hoverStart"));
+    }
+    if(table->hasKey("hoverMoved"))
+    {
+        stateTable->set("hoverMoved", table->get("hoverMoved"));
+    }
+    if(table->hasKey("hoverEnd"))
+    {
+        stateTable->set("hoverEnd", table->get("hoverEnd"));
     }
     
     idString = table->getString("id");
@@ -2365,6 +2409,10 @@ void MJView::tableKeyChanged(const std::string& key, TuiRef* value)
     else if(key == "alpha")
     {
         setAlpha(stateTable->getDouble("alpha"));
+    }
+    else if(key == "scale")
+    {
+        setScale(stateTable->getDouble("scale"));
     }
     else if(key == "masksEvents")
     {

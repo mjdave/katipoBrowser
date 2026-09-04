@@ -496,6 +496,7 @@ void EventManager::handleEvent(SDL_Event* event)
                     {
                         TuiNumber* value = new TuiNumber(((SDL_PinchFingerEvent*)event)->scale);
                         TuiNumber* state = new TuiNumber(0);
+                        TuiVec2* mouseLoc = new TuiVec2(convertSDLToMouseLoc(dvec2(event->motion.x, event->motion.y), windowInfo));
                         if(event->type == SDL_EVENT_PINCH_UPDATE)
                         {
                             state->value = 1;
@@ -504,9 +505,10 @@ void EventManager::handleEvent(SDL_Event* event)
                         {
                             state->value = 2;
                         }
-                        bar.second->call("pinch(begin_update_end_state_index, scale)", state, value);
+                        bar.second->call("pinch(begin_update_end_state_index, scale, centerLoc)", state, value, mouseLoc);
                         value->release();
                         state->release();
+                        mouseLoc->release();
                     }
                 }
             }

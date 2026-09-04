@@ -44,6 +44,7 @@ public:
     
     void setSizeInternal(dvec2 size_);
     virtual void setSize(dvec2 size_); //default textView.size = is treated like a max size, used for word wrap
+    virtual void setScale(double scale_);
 
     void addColoredText(std::string text_, dvec4 color);
     

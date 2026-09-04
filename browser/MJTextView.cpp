@@ -350,6 +350,17 @@ void MJTextView::setWrapWidth(int wrapWidth_)
     }
 }
 
+void MJTextView::setScale(double scale_)
+{
+    if(!approxEqual(scale_, scale))
+    {
+        bufferNeedsUpdating = true;
+        MJView::setScale(scale_);
+        setFontGeometryScale(scale_);
+    }
+    
+}
+
 int MJTextView::getWrapWidth() const
 {
     return wrapWidth;

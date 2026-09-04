@@ -160,7 +160,7 @@ GPipeline::GPipeline(Vulkan* vulkan_,
     depthStencil.stencilTestEnable = VK_FALSE;
 
     VkPipelineColorBlendAttachmentState colorBlendAttachment = {};
-    colorBlendAttachment.colorWriteMask = 0xF;
+    colorBlendAttachment.colorWriteMask = VK_COLOR_COMPONENT_FLAG_BITS_MAX_ENUM;
     switch(pipelineStateOptions.blendMode)
     {
     case MJVK_BLEND_MODE_PREMULTIPLED:
@@ -187,7 +187,7 @@ GPipeline::GPipeline(Vulkan* vulkan_,
         colorBlendAttachment.dstColorBlendFactor = VK_BLEND_FACTOR_ONE;
         colorBlendAttachment.colorBlendOp = VK_BLEND_OP_ADD;
         colorBlendAttachment.srcAlphaBlendFactor = VK_BLEND_FACTOR_ONE;
-        colorBlendAttachment.dstAlphaBlendFactor = VK_BLEND_FACTOR_ZERO;
+        colorBlendAttachment.dstAlphaBlendFactor = VK_BLEND_FACTOR_ONE; //changed from ZERO as that doesn't work
         colorBlendAttachment.alphaBlendOp = VK_BLEND_OP_ADD;
         break;
 	case MJVK_BLEND_MODE_SUBTRACTIVE:
