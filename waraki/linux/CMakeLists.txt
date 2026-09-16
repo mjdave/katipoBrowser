@@ -93,7 +93,7 @@ set(EXECUTABLE_OUTPUT_PATH ${CMAKE_BINARY_DIR})
 set(LIBRARY_OUTPUT_PATH ${CMAKE_BINARY_DIR}/lib)
 
 add_subdirectory(../../thirdParty/SDL3-3.4.0 SDL3-build EXCLUDE_FROM_ALL)
-add_subdirectory(../../thirdParty/SDL_mixer-main SDL_mixer-build EXCLUDE_FROM_ALL)
+add_subdirectory(../../thirdParty/SDL_mixer-release-3.2.4 SDL_mixer-build EXCLUDE_FROM_ALL)
 
 if ( CMAKE_COMPILER_IS_GNUCC )
     set(CMAKE_CXX_FLAGS  "${CMAKE_CXX_FLAGS} -Wno-deprecated")
@@ -108,7 +108,7 @@ include_directories(
     ../../katipo/thirdParty/tui/thirdParty/glm/glm
     ../../thirdParty/VulkanMemoryAllocator-3.2.1/include
     ../../thirdParty/SDL3-3.4.0/include/SDL3
-    ../../thirdParty/SDL_mixer-main/include/SDL3_mixer
+    ../../thirdParty/SDL_mixer-release-3.2.4/include/SDL3_mixer
     ../../thirdParty
     ../../browser
     ../

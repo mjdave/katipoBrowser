@@ -8,8 +8,12 @@ xcuserdata
 .DS_Store
 linux/bin
 linux/build
+linux/koru
+linux/koru.tar.xz
 waraki/linux/bin
 waraki/linux/build
+waraki/linux/waraki
+waraki/linux/waraki.tar.xz
 *~lock~
 build
 *privateKey.tuib
