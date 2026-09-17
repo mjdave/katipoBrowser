@@ -16,7 +16,9 @@ class MJTextureBuffer
 public:
 
 public:
-	MJTextureBuffer(Vulkan* vulkan_, ivec2 size_, std::string debugName_);
+	MJTextureBuffer(Vulkan* vulkan_, ivec2 size_, std::string debugName_,
+                    VkFilter minFilter_ = VK_FILTER_LINEAR,
+                    VkFilter magFilter_ = VK_FILTER_LINEAR);
     ~MJTextureBuffer();
 
     void* getBuffer();
@@ -31,6 +33,9 @@ private:
 
     int writeBufferIndex;
     int readBufferIndex;
+    
+    VkFilter minFilter;
+    VkFilter magFilter;
 
     VmaAllocationInfo allocInfos[MJTB_FRAMEBUFFER_COUNT];
     MJVMABuffer cpuBuffers[MJTB_FRAMEBUFFER_COUNT];

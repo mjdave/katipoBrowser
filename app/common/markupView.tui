@@ -1,3 +1,8 @@
+#global eventManager
+#global katipo
+#global scene
+#global load
+
 keys = require("app/common/keys.tui")
 
 topPaddingDefault = 10
@@ -472,12 +477,13 @@ textBackgroundViewClickFunction = function(markupView, backgroundView, mouseLoc)
                 {
                     if(markupView.cursorOffset < 0)
                     {
-                        textLength = string.length(currentEditingTextView.text)
-                        if(textLength > 0)
-                        {
-                            insertAfterPos = math.max(textLength + markupView.cursorOffset, 0)
-                            newText = stringInsert(currentEditingTextView.text, text, insertAfterPos)
-                        }
+                        #todo
+                        #textLength = string.length(currentEditingTextView.text)
+                        #if(textLength > 0)
+                        #{
+                        #    insertAfterPos = math.max(textLength + markupView.cursorOffset, 0)
+                        #    newText = stringInsert(currentEditingTextView.text, text, insertAfterPos)
+                        #}
                     }
                     else
                     {
