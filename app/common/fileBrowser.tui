@@ -262,10 +262,10 @@ setDirectoryTree = function(fileBrowserView, directoryTree, selectedIndex, isFro
                         fileBrowserView.leftSelectedIndex = i
                     }
 
-                    if(onBrowserContentChange)
-                    {
-                        onBrowserContentChange(fileBrowserView)
-                    }
+                    #if(onBrowserContentChange)
+                    #{
+                    #    onBrowserContentChange(fileBrowserView)
+                    #}
                 }
 
                 backgroundView.setClickFunction(backgroundViewClick)
@@ -279,10 +279,10 @@ setDirectoryTree = function(fileBrowserView, directoryTree, selectedIndex, isFro
             #leftPaneScrollView.insertRow(itemView)
             table.insert(fileBrowserView.leftItemViews, itemView)
 
-            if(onBrowserItemCreate)
-            {
-                onBrowserItemCreate(itemView, i)
-            }
+            #if(onBrowserItemCreate)
+            #{
+            #    onBrowserItemCreate(itemView, i)
+            #}
         }
 
         #if(fileBrowserView.leftSelectedIndex != nil)
@@ -296,10 +296,10 @@ setDirectoryTree = function(fileBrowserView, directoryTree, selectedIndex, isFro
     }
 
 
-    if(onBrowserContentChange)
-    {
-        onBrowserContentChange(fileBrowserView)
-    }
+    #if(onBrowserContentChange)
+    #{
+    #    onBrowserContentChange(fileBrowserView)
+    #}
 
 }
 

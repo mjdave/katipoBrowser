@@ -1,0 +1,4648 @@
+The target system is: Android - 1 - aarch64
+The host system is: Darwin - 25.6.0 - arm64
+Compiling the C compiler identification source file "CMakeCCompilerId.c" succeeded.
+Compiler: /Users/davidframpton/Library/Android/sdk/ndk/28.2.13676358/toolchains/llvm/prebuilt/darwin-x86_64/bin/clang 
+Build flags: -g;-DANDROID;-fdata-sections;-ffunction-sections;-funwind-tables;-fstack-protector-strong;-no-canonical-prefixes;-D_FORTIFY_SOURCE=2;-Wformat;-Werror=format-security;
+Id flags: -c;--target=aarch64-none-linux-android21 
+
+The output was:
+0
+
+
+Compilation of the C compiler identification source "CMakeCCompilerId.c" produced "CMakeCCompilerId.o"
+
+The C compiler identification is Clang, found in "/Users/davidframpton/Documents/blockheads2/katipoBrowser/waraki/android/app/.cxx/Debug/5w6r711f/arm64-v8a/CMakeFiles/3.22.1-g37088a8/CompilerIdC/CMakeCCompilerId.o"
+
+Compiling the CXX compiler identification source file "CMakeCXXCompilerId.cpp" succeeded.
+Compiler: /Users/davidframpton/Library/Android/sdk/ndk/28.2.13676358/toolchains/llvm/prebuilt/darwin-x86_64/bin/clang++ 
+Build flags: -g;-DANDROID;-fdata-sections;-ffunction-sections;-funwind-tables;-fstack-protector-strong;-no-canonical-prefixes;-D_FORTIFY_SOURCE=2;-Wformat;-Werror=format-security;;
+Id flags: -c;--target=aarch64-none-linux-android21 
+
+The output was:
+0
+
+
+Compilation of the CXX compiler identification source "CMakeCXXCompilerId.cpp" produced "CMakeCXXCompilerId.o"
+
+The CXX compiler identification is Clang, found in "/Users/davidframpton/Documents/blockheads2/katipoBrowser/waraki/android/app/.cxx/Debug/5w6r711f/arm64-v8a/CMakeFiles/3.22.1-g37088a8/CompilerIdCXX/CMakeCXXCompilerId.o"
+
+Detecting C compiler ABI info compiled with the following output:
+Change Dir: /Users/davidframpton/Documents/blockheads2/katipoBrowser/waraki/android/app/.cxx/Debug/5w6r711f/arm64-v8a/CMakeFiles/CMakeTmp
+
+Run Build Command(s):/Users/davidframpton/Library/Android/sdk/cmake/3.22.1/bin/ninja cmTC_38f15 && [1/2] Building C object CMakeFiles/cmTC_38f15.dir/CMakeCCompilerABI.c.o
+Android (13624864, +pgo, -bolt, +lto, -mlgo, based on r530567e) clang version 19.0.1 (https://android.googlesource.com/toolchain/llvm-project 97a699bf4812a18fb657c2779f5296a4ab2694d2)
+Target: aarch64-none-linux-android21
+Thread model: posix
+InstalledDir: /Users/davidframpton/Library/Android/sdk/ndk/28.2.13676358/toolchains/llvm/prebuilt/darwin-x86_64/bin
+ (in-process)
+ "/Users/davidframpton/Library/Android/sdk/ndk/28.2.13676358/toolchains/llvm/prebuilt/darwin-x86_64/bin/clang" -cc1 -triple aarch64-none-linux-android21 -emit-obj -mrelax-all -disable-free -clear-ast-before-backend -disable-llvm-verifier -discard-value-names -main-file-name CMakeCCompilerABI.c -mrelocation-model pic -pic-level 2 -pic-is-pie -mframe-pointer=non-leaf -ffp-contract=on -fno-rounding-math -mconstructor-aliases -funwind-tables=2 -target-cpu generic -target-feature +v8a -target-feature +fp-armv8 -target-feature +neon -target-feature +fix-cortex-a53-835769 -target-abi aapcs -debug-info-kind=constructor -dwarf-version=4 -debugger-tuning=gdb -fdebug-compilation-dir=/Users/davidframpton/Documents/blockheads2/katipoBrowser/waraki/android/app/.cxx/Debug/5w6r711f/arm64-v8a/CMakeFiles/CMakeTmp -v -ffunction-sections -fdata-sections -fcoverage-compilation-dir=/Users/davidframpton/Documents/blockheads2/katipoBrowser/waraki/android/app/.cxx/Debug/5w6r711f/arm64-v8a/CMakeFiles/CMakeTmp -resource-dir /Users/davidframpton/Library/Android/sdk/ndk/28.2.13676358/toolchains/llvm/prebuilt/darwin-x86_64/lib/clang/19 -dependency-file CMakeFiles/cmTC_38f15.dir/CMakeCCompilerABI.c.o.d -MT CMakeFiles/cmTC_38f15.dir/CMakeCCompilerABI.c.o -sys-header-deps -D ANDROID -D _FORTIFY_SOURCE=2 -isysroot /Users/davidframpton/Library/Android/sdk/ndk/28.2.13676358/toolchains/llvm/prebuilt/darwin-x86_64/sysroot -internal-isystem /Users/davidframpton/Library/Android/sdk/ndk/28.2.13676358/toolchains/llvm/prebuilt/darwin-x86_64/lib/clang/19/include -internal-isystem /Users/davidframpton/Library/Android/sdk/ndk/28.2.13676358/toolchains/llvm/prebuilt/darwin-x86_64/sysroot/usr/local/include -internal-externc-isystem /Users/davidframpton/Library/Android/sdk/ndk/28.2.13676358/toolchains/llvm/prebuilt/darwin-x86_64/sysroot/usr/include/aarch64-linux-android -internal-externc-isystem /Users/davidframpton/Library/Android/sdk/ndk/28.2.13676358/toolchains/llvm/prebuilt/darwin-x86_64/sysroot/include -internal-externc-isystem /Users/davidframpton/Library/Android/sdk/ndk/28.2.13676358/toolchains/llvm/prebuilt/darwin-x86_64/sysroot/usr/include -Wformat -ferror-limit 19 -femulated-tls -stack-protector 2 -fno-signed-char -fgnuc-version=4.2.1 -fskip-odr-check-in-gmf -target-feature +outline-atomics -target-feature -fmv -D__GCC_HAVE_DWARF2_CFI_ASM=1 -o CMakeFiles/cmTC_38f15.dir/CMakeCCompilerABI.c.o -x c /Users/davidframpton/Library/Android/sdk/cmake/3.22.1/share/cmake-3.22/Modules/CMakeCCompilerABI.c
+clang -cc1 version 19.0.1 based upon LLVM 19.0.1 default target x86_64-apple-darwin25.6.0
+ignoring nonexistent directory "/Users/davidframpton/Library/Android/sdk/ndk/28.2.13676358/toolchains/llvm/prebuilt/darwin-x86_64/sysroot/usr/local/include"
+ignoring nonexistent directory "/Users/davidframpton/Library/Android/sdk/ndk/28.2.13676358/toolchains/llvm/prebuilt/darwin-x86_64/sysroot/include"
+#include "..." search starts here:
+#include <...> search starts here:
+ /Users/davidframpton/Library/Android/sdk/ndk/28.2.13676358/toolchains/llvm/prebuilt/darwin-x86_64/lib/clang/19/include
+ /Users/davidframpton/Library/Android/sdk/ndk/28.2.13676358/toolchains/llvm/prebuilt/darwin-x86_64/sysroot/usr/include/aarch64-linux-android
+ /Users/davidframpton/Library/Android/sdk/ndk/28.2.13676358/toolchains/llvm/prebuilt/darwin-x86_64/sysroot/usr/include
+End of search list.
+[2/2] Linking C executable cmTC_38f15
+Android (13624864, +pgo, -bolt, +lto, -mlgo, based on r530567e) clang version 19.0.1 (https://android.googlesource.com/toolchain/llvm-project 97a699bf4812a18fb657c2779f5296a4ab2694d2)
+Target: aarch64-none-linux-android21
+Thread model: posix
+InstalledDir: /Users/davidframpton/Library/Android/sdk/ndk/28.2.13676358/toolchains/llvm/prebuilt/darwin-x86_64/bin
+ "/Users/davidframpton/Library/Android/sdk/ndk/28.2.13676358/toolchains/llvm/prebuilt/darwin-x86_64/bin/ld.lld" --sysroot=/Users/davidframpton/Library/Android/sdk/ndk/28.2.13676358/toolchains/llvm/prebuilt/darwin-x86_64/sysroot -EL --fix-cortex-a53-843419 -z now -z relro -z max-page-size=16384 --hash-style=both --eh-frame-hdr -m aarch64linux -pie -dynamic-linker /system/bin/linker64 -o cmTC_38f15 /Users/davidframpton/Library/Android/sdk/ndk/28.2.13676358/toolchains/llvm/prebuilt/darwin-x86_64/sysroot/usr/lib/aarch64-linux-android/21/crtbegin_dynamic.o -L/Users/davidframpton/Library/Android/sdk/ndk/28.2.13676358/toolchains/llvm/prebuilt/darwin-x86_64/lib/clang/19/lib/linux/aarch64 -L/Users/davidframpton/Library/Android/sdk/ndk/28.2.13676358/toolchains/llvm/prebuilt/darwin-x86_64/sysroot/usr/lib/aarch64-linux-android/21 -L/Users/davidframpton/Library/Android/sdk/ndk/28.2.13676358/toolchains/llvm/prebuilt/darwin-x86_64/sysroot/usr/lib/aarch64-linux-android -L/Users/davidframpton/Library/Android/sdk/ndk/28.2.13676358/toolchains/llvm/prebuilt/darwin-x86_64/sysroot/usr/lib --build-id=sha1 --no-rosegment --no-undefined-version --fatal-warnings --no-undefined CMakeFiles/cmTC_38f15.dir/CMakeCCompilerABI.c.o /Users/davidframpton/Library/Android/sdk/ndk/28.2.13676358/toolchains/llvm/prebuilt/darwin-x86_64/lib/clang/19/lib/linux/libclang_rt.builtins-aarch64-android.a -l:libunwind.a -ldl -lc /Users/davidframpton/Library/Android/sdk/ndk/28.2.13676358/toolchains/llvm/prebuilt/darwin-x86_64/lib/clang/19/lib/linux/libclang_rt.builtins-aarch64-android.a -l:libunwind.a -ldl /Users/davidframpton/Library/Android/sdk/ndk/28.2.13676358/toolchains/llvm/prebuilt/darwin-x86_64/sysroot/usr/lib/aarch64-linux-android/21/crtend_android.o
+
+
+
+Parsed C implicit include dir info from above output: rv=done
+  found start of include info
+  found start of implicit include info
+    add: [/Users/davidframpton/Library/Android/sdk/ndk/28.2.13676358/toolchains/llvm/prebuilt/darwin-x86_64/lib/clang/19/include]
+    add: [/Users/davidframpton/Library/Android/sdk/ndk/28.2.13676358/toolchains/llvm/prebuilt/darwin-x86_64/sysroot/usr/include/aarch64-linux-android]
+    add: [/Users/davidframpton/Library/Android/sdk/ndk/28.2.13676358/toolchains/llvm/prebuilt/darwin-x86_64/sysroot/usr/include]
+  end of search list found
+  collapse include dir [/Users/davidframpton/Library/Android/sdk/ndk/28.2.13676358/toolchains/llvm/prebuilt/darwin-x86_64/lib/clang/19/include] ==> [/Users/davidframpton/Library/Android/sdk/ndk/28.2.13676358/toolchains/llvm/prebuilt/darwin-x86_64/lib/clang/19/include]
+  collapse include dir [/Users/davidframpton/Library/Android/sdk/ndk/28.2.13676358/toolchains/llvm/prebuilt/darwin-x86_64/sysroot/usr/include/aarch64-linux-android] ==> [/Users/davidframpton/Library/Android/sdk/ndk/28.2.13676358/toolchains/llvm/prebuilt/darwin-x86_64/sysroot/usr/include/aarch64-linux-android]
+  collapse include dir [/Users/davidframpton/Library/Android/sdk/ndk/28.2.13676358/toolchains/llvm/prebuilt/darwin-x86_64/sysroot/usr/include] ==> [/Users/davidframpton/Library/Android/sdk/ndk/28.2.13676358/toolchains/llvm/prebuilt/darwin-x86_64/sysroot/usr/include]
+  implicit include dirs: [/Users/davidframpton/Library/Android/sdk/ndk/28.2.13676358/toolchains/llvm/prebuilt/darwin-x86_64/lib/clang/19/include;/Users/davidframpton/Library/Android/sdk/ndk/28.2.13676358/toolchains/llvm/prebuilt/darwin-x86_64/sysroot/usr/include/aarch64-linux-android;/Users/davidframpton/Library/Android/sdk/ndk/28.2.13676358/toolchains/llvm/prebuilt/darwin-x86_64/sysroot/usr/include]
+
+
+Parsed C implicit link information from above output:
+  link line regex: [^( *|.*[/\])(ld\.lld|CMAKE_LINK_STARTFILE-NOTFOUND|([^/\]+-)?ld|collect2)[^/\]*( |$)]
+  ignore line: [Change Dir: /Users/davidframpton/Documents/blockheads2/katipoBrowser/waraki/android/app/.cxx/Debug/5w6r711f/arm64-v8a/CMakeFiles/CMakeTmp]
+  ignore line: []
+  ignore line: [Run Build Command(s):/Users/davidframpton/Library/Android/sdk/cmake/3.22.1/bin/ninja cmTC_38f15 && [1/2] Building C object CMakeFiles/cmTC_38f15.dir/CMakeCCompilerABI.c.o]
+  ignore line: [Android (13624864  +pgo  -bolt  +lto  -mlgo  based on r530567e) clang version 19.0.1 (https://android.googlesource.com/toolchain/llvm-project 97a699bf4812a18fb657c2779f5296a4ab2694d2)]
+  ignore line: [Target: aarch64-none-linux-android21]
+  ignore line: [Thread model: posix]
+  ignore line: [InstalledDir: /Users/davidframpton/Library/Android/sdk/ndk/28.2.13676358/toolchains/llvm/prebuilt/darwin-x86_64/bin]
+  ignore line: [ (in-process)]
+  ignore line: [ "/Users/davidframpton/Library/Android/sdk/ndk/28.2.13676358/toolchains/llvm/prebuilt/darwin-x86_64/bin/clang" -cc1 -triple aarch64-none-linux-android21 -emit-obj -mrelax-all -disable-free -clear-ast-before-backend -disable-llvm-verifier -discard-value-names -main-file-name CMakeCCompilerABI.c -mrelocation-model pic -pic-level 2 -pic-is-pie -mframe-pointer=non-leaf -ffp-contract=on -fno-rounding-math -mconstructor-aliases -funwind-tables=2 -target-cpu generic -target-feature +v8a -target-feature +fp-armv8 -target-feature +neon -target-feature +fix-cortex-a53-835769 -target-abi aapcs -debug-info-kind=constructor -dwarf-version=4 -debugger-tuning=gdb -fdebug-compilation-dir=/Users/davidframpton/Documents/blockheads2/katipoBrowser/waraki/android/app/.cxx/Debug/5w6r711f/arm64-v8a/CMakeFiles/CMakeTmp -v -ffunction-sections -fdata-sections -fcoverage-compilation-dir=/Users/davidframpton/Documents/blockheads2/katipoBrowser/waraki/android/app/.cxx/Debug/5w6r711f/arm64-v8a/CMakeFiles/CMakeTmp -resource-dir /Users/davidframpton/Library/Android/sdk/ndk/28.2.13676358/toolchains/llvm/prebuilt/darwin-x86_64/lib/clang/19 -dependency-file CMakeFiles/cmTC_38f15.dir/CMakeCCompilerABI.c.o.d -MT CMakeFiles/cmTC_38f15.dir/CMakeCCompilerABI.c.o -sys-header-deps -D ANDROID -D _FORTIFY_SOURCE=2 -isysroot /Users/davidframpton/Library/Android/sdk/ndk/28.2.13676358/toolchains/llvm/prebuilt/darwin-x86_64/sysroot -internal-isystem /Users/davidframpton/Library/Android/sdk/ndk/28.2.13676358/toolchains/llvm/prebuilt/darwin-x86_64/lib/clang/19/include -internal-isystem /Users/davidframpton/Library/Android/sdk/ndk/28.2.13676358/toolchains/llvm/prebuilt/darwin-x86_64/sysroot/usr/local/include -internal-externc-isystem /Users/davidframpton/Library/Android/sdk/ndk/28.2.13676358/toolchains/llvm/prebuilt/darwin-x86_64/sysroot/usr/include/aarch64-linux-android -internal-externc-isystem /Users/davidframpton/Library/Android/sdk/ndk/28.2.13676358/toolchains/llvm/prebuilt/darwin-x86_64/sysroot/include -internal-externc-isystem /Users/davidframpton/Library/Android/sdk/ndk/28.2.13676358/toolchains/llvm/prebuilt/darwin-x86_64/sysroot/usr/include -Wformat -ferror-limit 19 -femulated-tls -stack-protector 2 -fno-signed-char -fgnuc-version=4.2.1 -fskip-odr-check-in-gmf -target-feature +outline-atomics -target-feature -fmv -D__GCC_HAVE_DWARF2_CFI_ASM=1 -o CMakeFiles/cmTC_38f15.dir/CMakeCCompilerABI.c.o -x c /Users/davidframpton/Library/Android/sdk/cmake/3.22.1/share/cmake-3.22/Modules/CMakeCCompilerABI.c]
+  ignore line: [clang -cc1 version 19.0.1 based upon LLVM 19.0.1 default target x86_64-apple-darwin25.6.0]
+  ignore line: [ignoring nonexistent directory "/Users/davidframpton/Library/Android/sdk/ndk/28.2.13676358/toolchains/llvm/prebuilt/darwin-x86_64/sysroot/usr/local/include"]
+  ignore line: [ignoring nonexistent directory "/Users/davidframpton/Library/Android/sdk/ndk/28.2.13676358/toolchains/llvm/prebuilt/darwin-x86_64/sysroot/include"]
+  ignore line: [#include "..." search starts here:]
+  ignore line: [#include <...> search starts here:]
+  ignore line: [ /Users/davidframpton/Library/Android/sdk/ndk/28.2.13676358/toolchains/llvm/prebuilt/darwin-x86_64/lib/clang/19/include]
+  ignore line: [ /Users/davidframpton/Library/Android/sdk/ndk/28.2.13676358/toolchains/llvm/prebuilt/darwin-x86_64/sysroot/usr/include/aarch64-linux-android]
+  ignore line: [ /Users/davidframpton/Library/Android/sdk/ndk/28.2.13676358/toolchains/llvm/prebuilt/darwin-x86_64/sysroot/usr/include]
+  ignore line: [End of search list.]
+  ignore line: [[2/2] Linking C executable cmTC_38f15]
+  ignore line: [Android (13624864  +pgo  -bolt  +lto  -mlgo  based on r530567e) clang version 19.0.1 (https://android.googlesource.com/toolchain/llvm-project 97a699bf4812a18fb657c2779f5296a4ab2694d2)]
+  ignore line: [Target: aarch64-none-linux-android21]
+  ignore line: [Thread model: posix]
+  ignore line: [InstalledDir: /Users/davidframpton/Library/Android/sdk/ndk/28.2.13676358/toolchains/llvm/prebuilt/darwin-x86_64/bin]
+  link line: [ "/Users/davidframpton/Library/Android/sdk/ndk/28.2.13676358/toolchains/llvm/prebuilt/darwin-x86_64/bin/ld.lld" --sysroot=/Users/davidframpton/Library/Android/sdk/ndk/28.2.13676358/toolchains/llvm/prebuilt/darwin-x86_64/sysroot -EL --fix-cortex-a53-843419 -z now -z relro -z max-page-size=16384 --hash-style=both --eh-frame-hdr -m aarch64linux -pie -dynamic-linker /system/bin/linker64 -o cmTC_38f15 /Users/davidframpton/Library/Android/sdk/ndk/28.2.13676358/toolchains/llvm/prebuilt/darwin-x86_64/sysroot/usr/lib/aarch64-linux-android/21/crtbegin_dynamic.o -L/Users/davidframpton/Library/Android/sdk/ndk/28.2.13676358/toolchains/llvm/prebuilt/darwin-x86_64/lib/clang/19/lib/linux/aarch64 -L/Users/davidframpton/Library/Android/sdk/ndk/28.2.13676358/toolchains/llvm/prebuilt/darwin-x86_64/sysroot/usr/lib/aarch64-linux-android/21 -L/Users/davidframpton/Library/Android/sdk/ndk/28.2.13676358/toolchains/llvm/prebuilt/darwin-x86_64/sysroot/usr/lib/aarch64-linux-android -L/Users/davidframpton/Library/Android/sdk/ndk/28.2.13676358/toolchains/llvm/prebuilt/darwin-x86_64/sysroot/usr/lib --build-id=sha1 --no-rosegment --no-undefined-version --fatal-warnings --no-undefined CMakeFiles/cmTC_38f15.dir/CMakeCCompilerABI.c.o /Users/davidframpton/Library/Android/sdk/ndk/28.2.13676358/toolchains/llvm/prebuilt/darwin-x86_64/lib/clang/19/lib/linux/libclang_rt.builtins-aarch64-android.a -l:libunwind.a -ldl -lc /Users/davidframpton/Library/Android/sdk/ndk/28.2.13676358/toolchains/llvm/prebuilt/darwin-x86_64/lib/clang/19/lib/linux/libclang_rt.builtins-aarch64-android.a -l:libunwind.a -ldl /Users/davidframpton/Library/Android/sdk/ndk/28.2.13676358/toolchains/llvm/prebuilt/darwin-x86_64/sysroot/usr/lib/aarch64-linux-android/21/crtend_android.o]
+    arg [/Users/davidframpton/Library/Android/sdk/ndk/28.2.13676358/toolchains/llvm/prebuilt/darwin-x86_64/bin/ld.lld] ==> ignore
+    arg [--sysroot=/Users/davidframpton/Library/Android/sdk/ndk/28.2.13676358/toolchains/llvm/prebuilt/darwin-x86_64/sysroot] ==> ignore
+    arg [-EL] ==> ignore
+    arg [--fix-cortex-a53-843419] ==> ignore
+    arg [-znow] ==> ignore
+    arg [-zrelro] ==> ignore
+    arg [-zmax-page-size=16384] ==> ignore
+    arg [--hash-style=both] ==> ignore
+    arg [--eh-frame-hdr] ==> ignore
+    arg [-m] ==> ignore
+    arg [aarch64linux] ==> ignore
+    arg [-pie] ==> ignore
+    arg [-dynamic-linker] ==> ignore
+    arg [/system/bin/linker64] ==> ignore
+    arg [-o] ==> ignore
+    arg [cmTC_38f15] ==> ignore
+    arg [/Users/davidframpton/Library/Android/sdk/ndk/28.2.13676358/toolchains/llvm/prebuilt/darwin-x86_64/sysroot/usr/lib/aarch64-linux-android/21/crtbegin_dynamic.o] ==> obj [/Users/davidframpton/Library/Android/sdk/ndk/28.2.13676358/toolchains/llvm/prebuilt/darwin-x86_64/sysroot/usr/lib/aarch64-linux-android/21/crtbegin_dynamic.o]
+    arg [-L/Users/davidframpton/Library/Android/sdk/ndk/28.2.13676358/toolchains/llvm/prebuilt/darwin-x86_64/lib/clang/19/lib/linux/aarch64] ==> dir [/Users/davidframpton/Library/Android/sdk/ndk/28.2.13676358/toolchains/llvm/prebuilt/darwin-x86_64/lib/clang/19/lib/linux/aarch64]
+    arg [-L/Users/davidframpton/Library/Android/sdk/ndk/28.2.13676358/toolchains/llvm/prebuilt/darwin-x86_64/sysroot/usr/lib/aarch64-linux-android/21] ==> dir [/Users/davidframpton/Library/Android/sdk/ndk/28.2.13676358/toolchains/llvm/prebuilt/darwin-x86_64/sysroot/usr/lib/aarch64-linux-android/21]
+    arg [-L/Users/davidframpton/Library/Android/sdk/ndk/28.2.13676358/toolchains/llvm/prebuilt/darwin-x86_64/sysroot/usr/lib/aarch64-linux-android] ==> dir [/Users/davidframpton/Library/Android/sdk/ndk/28.2.13676358/toolchains/llvm/prebuilt/darwin-x86_64/sysroot/usr/lib/aarch64-linux-android]
+    arg [-L/Users/davidframpton/Library/Android/sdk/ndk/28.2.13676358/toolchains/llvm/prebuilt/darwin-x86_64/sysroot/usr/lib] ==> dir [/Users/davidframpton/Library/Android/sdk/ndk/28.2.13676358/toolchains/llvm/prebuilt/darwin-x86_64/sysroot/usr/lib]
+    arg [--build-id=sha1] ==> ignore
+    arg [--no-rosegment] ==> ignore
+    arg [--no-undefined-version] ==> ignore
+    arg [--fatal-warnings] ==> ignore
+    arg [--no-undefined] ==> ignore
+    arg [CMakeFiles/cmTC_38f15.dir/CMakeCCompilerABI.c.o] ==> ignore
+    arg [/Users/davidframpton/Library/Android/sdk/ndk/28.2.13676358/toolchains/llvm/prebuilt/darwin-x86_64/lib/clang/19/lib/linux/libclang_rt.builtins-aarch64-android.a] ==> lib [/Users/davidframpton/Library/Android/sdk/ndk/28.2.13676358/toolchains/llvm/prebuilt/darwin-x86_64/lib/clang/19/lib/linux/libclang_rt.builtins-aarch64-android.a]
+    arg [-l:libunwind.a] ==> lib [-l:libunwind.a]
+    arg [-ldl] ==> lib [dl]
+    arg [-lc] ==> lib [c]
+    arg [/Users/davidframpton/Library/Android/sdk/ndk/28.2.13676358/toolchains/llvm/prebuilt/darwin-x86_64/lib/clang/19/lib/linux/libclang_rt.builtins-aarch64-android.a] ==> lib [/Users/davidframpton/Library/Android/sdk/ndk/28.2.13676358/toolchains/llvm/prebuilt/darwin-x86_64/lib/clang/19/lib/linux/libclang_rt.builtins-aarch64-android.a]
+    arg [-l:libunwind.a] ==> lib [-l:libunwind.a]
+    arg [-ldl] ==> lib [dl]
+    arg [/Users/davidframpton/Library/Android/sdk/ndk/28.2.13676358/toolchains/llvm/prebuilt/darwin-x86_64/sysroot/usr/lib/aarch64-linux-android/21/crtend_android.o] ==> obj [/Users/davidframpton/Library/Android/sdk/ndk/28.2.13676358/toolchains/llvm/prebuilt/darwin-x86_64/sysroot/usr/lib/aarch64-linux-android/21/crtend_android.o]
+  remove lib [/Users/davidframpton/Library/Android/sdk/ndk/28.2.13676358/toolchains/llvm/prebuilt/darwin-x86_64/lib/clang/19/lib/linux/libclang_rt.builtins-aarch64-android.a]
+  remove lib [/Users/davidframpton/Library/Android/sdk/ndk/28.2.13676358/toolchains/llvm/prebuilt/darwin-x86_64/lib/clang/19/lib/linux/libclang_rt.builtins-aarch64-android.a]
+  collapse library dir [/Users/davidframpton/Library/Android/sdk/ndk/28.2.13676358/toolchains/llvm/prebuilt/darwin-x86_64/lib/clang/19/lib/linux/aarch64] ==> [/Users/davidframpton/Library/Android/sdk/ndk/28.2.13676358/toolchains/llvm/prebuilt/darwin-x86_64/lib/clang/19/lib/linux/aarch64]
+  collapse library dir [/Users/davidframpton/Library/Android/sdk/ndk/28.2.13676358/toolchains/llvm/prebuilt/darwin-x86_64/sysroot/usr/lib/aarch64-linux-android/21] ==> [/Users/davidframpton/Library/Android/sdk/ndk/28.2.13676358/toolchains/llvm/prebuilt/darwin-x86_64/sysroot/usr/lib/aarch64-linux-android/21]
+  collapse library dir [/Users/davidframpton/Library/Android/sdk/ndk/28.2.13676358/toolchains/llvm/prebuilt/darwin-x86_64/sysroot/usr/lib/aarch64-linux-android] ==> [/Users/davidframpton/Library/Android/sdk/ndk/28.2.13676358/toolchains/llvm/prebuilt/darwin-x86_64/sysroot/usr/lib/aarch64-linux-android]
+  collapse library dir [/Users/davidframpton/Library/Android/sdk/ndk/28.2.13676358/toolchains/llvm/prebuilt/darwin-x86_64/sysroot/usr/lib] ==> [/Users/davidframpton/Library/Android/sdk/ndk/28.2.13676358/toolchains/llvm/prebuilt/darwin-x86_64/sysroot/usr/lib]
+  implicit libs: [-l:libunwind.a;dl;c;-l:libunwind.a;dl]
+  implicit objs: [/Users/davidframpton/Library/Android/sdk/ndk/28.2.13676358/toolchains/llvm/prebuilt/darwin-x86_64/sysroot/usr/lib/aarch64-linux-android/21/crtbegin_dynamic.o;/Users/davidframpton/Library/Android/sdk/ndk/28.2.13676358/toolchains/llvm/prebuilt/darwin-x86_64/sysroot/usr/lib/aarch64-linux-android/21/crtend_android.o]
+  implicit dirs: [/Users/davidframpton/Library/Android/sdk/ndk/28.2.13676358/toolchains/llvm/prebuilt/darwin-x86_64/lib/clang/19/lib/linux/aarch64;/Users/davidframpton/Library/Android/sdk/ndk/28.2.13676358/toolchains/llvm/prebuilt/darwin-x86_64/sysroot/usr/lib/aarch64-linux-android/21;/Users/davidframpton/Library/Android/sdk/ndk/28.2.13676358/toolchains/llvm/prebuilt/darwin-x86_64/sysroot/usr/lib/aarch64-linux-android;/Users/davidframpton/Library/Android/sdk/ndk/28.2.13676358/toolchains/llvm/prebuilt/darwin-x86_64/sysroot/usr/lib]
+  implicit fwks: []
+
+
+Detecting CXX compiler ABI info compiled with the following output:
+Change Dir: /Users/davidframpton/Documents/blockheads2/katipoBrowser/waraki/android/app/.cxx/Debug/5w6r711f/arm64-v8a/CMakeFiles/CMakeTmp
+
+Run Build Command(s):/Users/davidframpton/Library/Android/sdk/cmake/3.22.1/bin/ninja cmTC_4f769 && [1/2] Building CXX object CMakeFiles/cmTC_4f769.dir/CMakeCXXCompilerABI.cpp.o
+Android (13624864, +pgo, -bolt, +lto, -mlgo, based on r530567e) clang version 19.0.1 (https://android.googlesource.com/toolchain/llvm-project 97a699bf4812a18fb657c2779f5296a4ab2694d2)
+Target: aarch64-none-linux-android21
+Thread model: posix
+InstalledDir: /Users/davidframpton/Library/Android/sdk/ndk/28.2.13676358/toolchains/llvm/prebuilt/darwin-x86_64/bin
+ (in-process)
+ "/Users/davidframpton/Library/Android/sdk/ndk/28.2.13676358/toolchains/llvm/prebuilt/darwin-x86_64/bin/clang++" -cc1 -triple aarch64-none-linux-android21 -emit-obj -mrelax-all -disable-free -clear-ast-before-backend -disable-llvm-verifier -discard-value-names -main-file-name CMakeCXXCompilerABI.cpp -mrelocation-model pic -pic-level 2 -pic-is-pie -mframe-pointer=non-leaf -ffp-contract=on -fno-rounding-math -mconstructor-aliases -funwind-tables=2 -target-cpu generic -target-feature +v8a -target-feature +fp-armv8 -target-feature +neon -target-feature +fix-cortex-a53-835769 -target-abi aapcs -debug-info-kind=constructor -dwarf-version=4 -debugger-tuning=gdb -fdebug-compilation-dir=/Users/davidframpton/Documents/blockheads2/katipoBrowser/waraki/android/app/.cxx/Debug/5w6r711f/arm64-v8a/CMakeFiles/CMakeTmp -v -ffunction-sections -fdata-sections -fcoverage-compilation-dir=/Users/davidframpton/Documents/blockheads2/katipoBrowser/waraki/android/app/.cxx/Debug/5w6r711f/arm64-v8a/CMakeFiles/CMakeTmp -resource-dir /Users/davidframpton/Library/Android/sdk/ndk/28.2.13676358/toolchains/llvm/prebuilt/darwin-x86_64/lib/clang/19 -dependency-file CMakeFiles/cmTC_4f769.dir/CMakeCXXCompilerABI.cpp.o.d -MT CMakeFiles/cmTC_4f769.dir/CMakeCXXCompilerABI.cpp.o -sys-header-deps -D ANDROID -D _FORTIFY_SOURCE=2 -isysroot /Users/davidframpton/Library/Android/sdk/ndk/28.2.13676358/toolchains/llvm/prebuilt/darwin-x86_64/sysroot -internal-isystem /Users/davidframpton/Library/Android/sdk/ndk/28.2.13676358/toolchains/llvm/prebuilt/darwin-x86_64/sysroot/usr/include/c++/v1 -internal-isystem /Users/davidframpton/Library/Android/sdk/ndk/28.2.13676358/toolchains/llvm/prebuilt/darwin-x86_64/lib/clang/19/include -internal-isystem /Users/davidframpton/Library/Android/sdk/ndk/28.2.13676358/toolchains/llvm/prebuilt/darwin-x86_64/sysroot/usr/local/include -internal-externc-isystem /Users/davidframpton/Library/Android/sdk/ndk/28.2.13676358/toolchains/llvm/prebuilt/darwin-x86_64/sysroot/usr/include/aarch64-linux-android -internal-externc-isystem /Users/davidframpton/Library/Android/sdk/ndk/28.2.13676358/toolchains/llvm/prebuilt/darwin-x86_64/sysroot/include -internal-externc-isystem /Users/davidframpton/Library/Android/sdk/ndk/28.2.13676358/toolchains/llvm/prebuilt/darwin-x86_64/sysroot/usr/include -Wformat -fdeprecated-macro -ferror-limit 19 -femulated-tls -stack-protector 2 -fno-signed-char -fgnuc-version=4.2.1 -fskip-odr-check-in-gmf -fcxx-exceptions -fexceptions -target-feature +outline-atomics -target-feature -fmv -D__GCC_HAVE_DWARF2_CFI_ASM=1 -o CMakeFiles/cmTC_4f769.dir/CMakeCXXCompilerABI.cpp.o -x c++ /Users/davidframpton/Library/Android/sdk/cmake/3.22.1/share/cmake-3.22/Modules/CMakeCXXCompilerABI.cpp
+clang -cc1 version 19.0.1 based upon LLVM 19.0.1 default target x86_64-apple-darwin25.6.0
+ignoring nonexistent directory "/Users/davidframpton/Library/Android/sdk/ndk/28.2.13676358/toolchains/llvm/prebuilt/darwin-x86_64/sysroot/usr/local/include"
+ignoring nonexistent directory "/Users/davidframpton/Library/Android/sdk/ndk/28.2.13676358/toolchains/llvm/prebuilt/darwin-x86_64/sysroot/include"
+#include "..." search starts here:
+#include <...> search starts here:
+ /Users/davidframpton/Library/Android/sdk/ndk/28.2.13676358/toolchains/llvm/prebuilt/darwin-x86_64/sysroot/usr/include/c++/v1
+ /Users/davidframpton/Library/Android/sdk/ndk/28.2.13676358/toolchains/llvm/prebuilt/darwin-x86_64/lib/clang/19/include
+ /Users/davidframpton/Library/Android/sdk/ndk/28.2.13676358/toolchains/llvm/prebuilt/darwin-x86_64/sysroot/usr/include/aarch64-linux-android
+ /Users/davidframpton/Library/Android/sdk/ndk/28.2.13676358/toolchains/llvm/prebuilt/darwin-x86_64/sysroot/usr/include
+End of search list.
+[2/2] Linking CXX executable cmTC_4f769
+Android (13624864, +pgo, -bolt, +lto, -mlgo, based on r530567e) clang version 19.0.1 (https://android.googlesource.com/toolchain/llvm-project 97a699bf4812a18fb657c2779f5296a4ab2694d2)
+Target: aarch64-none-linux-android21
+Thread model: posix
+InstalledDir: /Users/davidframpton/Library/Android/sdk/ndk/28.2.13676358/toolchains/llvm/prebuilt/darwin-x86_64/bin
+ "/Users/davidframpton/Library/Android/sdk/ndk/28.2.13676358/toolchains/llvm/prebuilt/darwin-x86_64/bin/ld.lld" --sysroot=/Users/davidframpton/Library/Android/sdk/ndk/28.2.13676358/toolchains/llvm/prebuilt/darwin-x86_64/sysroot -EL --fix-cortex-a53-843419 -z now -z relro -z max-page-size=16384 --hash-style=both --eh-frame-hdr -m aarch64linux -pie -dynamic-linker /system/bin/linker64 -o cmTC_4f769 /Users/davidframpton/Library/Android/sdk/ndk/28.2.13676358/toolchains/llvm/prebuilt/darwin-x86_64/sysroot/usr/lib/aarch64-linux-android/21/crtbegin_dynamic.o -L/Users/davidframpton/Library/Android/sdk/ndk/28.2.13676358/toolchains/llvm/prebuilt/darwin-x86_64/lib/clang/19/lib/linux/aarch64 -L/Users/davidframpton/Library/Android/sdk/ndk/28.2.13676358/toolchains/llvm/prebuilt/darwin-x86_64/sysroot/usr/lib/aarch64-linux-android/21 -L/Users/davidframpton/Library/Android/sdk/ndk/28.2.13676358/toolchains/llvm/prebuilt/darwin-x86_64/sysroot/usr/lib/aarch64-linux-android -L/Users/davidframpton/Library/Android/sdk/ndk/28.2.13676358/toolchains/llvm/prebuilt/darwin-x86_64/sysroot/usr/lib --build-id=sha1 --no-rosegment --no-undefined-version --fatal-warnings --no-undefined CMakeFiles/cmTC_4f769.dir/CMakeCXXCompilerABI.cpp.o -Bstatic -lc++ -Bdynamic -lm /Users/davidframpton/Library/Android/sdk/ndk/28.2.13676358/toolchains/llvm/prebuilt/darwin-x86_64/lib/clang/19/lib/linux/libclang_rt.builtins-aarch64-android.a -l:libunwind.a -ldl -lc /Users/davidframpton/Library/Android/sdk/ndk/28.2.13676358/toolchains/llvm/prebuilt/darwin-x86_64/lib/clang/19/lib/linux/libclang_rt.builtins-aarch64-android.a -l:libunwind.a -ldl /Users/davidframpton/Library/Android/sdk/ndk/28.2.13676358/toolchains/llvm/prebuilt/darwin-x86_64/sysroot/usr/lib/aarch64-linux-android/21/crtend_android.o
+
+
+
+Parsed CXX implicit include dir info from above output: rv=done
+  found start of include info
+  found start of implicit include info
+    add: [/Users/davidframpton/Library/Android/sdk/ndk/28.2.13676358/toolchains/llvm/prebuilt/darwin-x86_64/sysroot/usr/include/c++/v1]
+    add: [/Users/davidframpton/Library/Android/sdk/ndk/28.2.13676358/toolchains/llvm/prebuilt/darwin-x86_64/lib/clang/19/include]
+    add: [/Users/davidframpton/Library/Android/sdk/ndk/28.2.13676358/toolchains/llvm/prebuilt/darwin-x86_64/sysroot/usr/include/aarch64-linux-android]
+    add: [/Users/davidframpton/Library/Android/sdk/ndk/28.2.13676358/toolchains/llvm/prebuilt/darwin-x86_64/sysroot/usr/include]
+  end of search list found
+  collapse include dir [/Users/davidframpton/Library/Android/sdk/ndk/28.2.13676358/toolchains/llvm/prebuilt/darwin-x86_64/sysroot/usr/include/c++/v1] ==> [/Users/davidframpton/Library/Android/sdk/ndk/28.2.13676358/toolchains/llvm/prebuilt/darwin-x86_64/sysroot/usr/include/c++/v1]
+  collapse include dir [/Users/davidframpton/Library/Android/sdk/ndk/28.2.13676358/toolchains/llvm/prebuilt/darwin-x86_64/lib/clang/19/include] ==> [/Users/davidframpton/Library/Android/sdk/ndk/28.2.13676358/toolchains/llvm/prebuilt/darwin-x86_64/lib/clang/19/include]
+  collapse include dir [/Users/davidframpton/Library/Android/sdk/ndk/28.2.13676358/toolchains/llvm/prebuilt/darwin-x86_64/sysroot/usr/include/aarch64-linux-android] ==> [/Users/davidframpton/Library/Android/sdk/ndk/28.2.13676358/toolchains/llvm/prebuilt/darwin-x86_64/sysroot/usr/include/aarch64-linux-android]
+  collapse include dir [/Users/davidframpton/Library/Android/sdk/ndk/28.2.13676358/toolchains/llvm/prebuilt/darwin-x86_64/sysroot/usr/include] ==> [/Users/davidframpton/Library/Android/sdk/ndk/28.2.13676358/toolchains/llvm/prebuilt/darwin-x86_64/sysroot/usr/include]
+  implicit include dirs: [/Users/davidframpton/Library/Android/sdk/ndk/28.2.13676358/toolchains/llvm/prebuilt/darwin-x86_64/sysroot/usr/include/c++/v1;/Users/davidframpton/Library/Android/sdk/ndk/28.2.13676358/toolchains/llvm/prebuilt/darwin-x86_64/lib/clang/19/include;/Users/davidframpton/Library/Android/sdk/ndk/28.2.13676358/toolchains/llvm/prebuilt/darwin-x86_64/sysroot/usr/include/aarch64-linux-android;/Users/davidframpton/Library/Android/sdk/ndk/28.2.13676358/toolchains/llvm/prebuilt/darwin-x86_64/sysroot/usr/include]
+
+
+Parsed CXX implicit link information from above output:
+  link line regex: [^( *|.*[/\])(ld\.lld|CMAKE_LINK_STARTFILE-NOTFOUND|([^/\]+-)?ld|collect2)[^/\]*( |$)]
+  ignore line: [Change Dir: /Users/davidframpton/Documents/blockheads2/katipoBrowser/waraki/android/app/.cxx/Debug/5w6r711f/arm64-v8a/CMakeFiles/CMakeTmp]
+  ignore line: []
+  ignore line: [Run Build Command(s):/Users/davidframpton/Library/Android/sdk/cmake/3.22.1/bin/ninja cmTC_4f769 && [1/2] Building CXX object CMakeFiles/cmTC_4f769.dir/CMakeCXXCompilerABI.cpp.o]
+  ignore line: [Android (13624864  +pgo  -bolt  +lto  -mlgo  based on r530567e) clang version 19.0.1 (https://android.googlesource.com/toolchain/llvm-project 97a699bf4812a18fb657c2779f5296a4ab2694d2)]
+  ignore line: [Target: aarch64-none-linux-android21]
+  ignore line: [Thread model: posix]
+  ignore line: [InstalledDir: /Users/davidframpton/Library/Android/sdk/ndk/28.2.13676358/toolchains/llvm/prebuilt/darwin-x86_64/bin]
+  ignore line: [ (in-process)]
+  ignore line: [ "/Users/davidframpton/Library/Android/sdk/ndk/28.2.13676358/toolchains/llvm/prebuilt/darwin-x86_64/bin/clang++" -cc1 -triple aarch64-none-linux-android21 -emit-obj -mrelax-all -disable-free -clear-ast-before-backend -disable-llvm-verifier -discard-value-names -main-file-name CMakeCXXCompilerABI.cpp -mrelocation-model pic -pic-level 2 -pic-is-pie -mframe-pointer=non-leaf -ffp-contract=on -fno-rounding-math -mconstructor-aliases -funwind-tables=2 -target-cpu generic -target-feature +v8a -target-feature +fp-armv8 -target-feature +neon -target-feature +fix-cortex-a53-835769 -target-abi aapcs -debug-info-kind=constructor -dwarf-version=4 -debugger-tuning=gdb -fdebug-compilation-dir=/Users/davidframpton/Documents/blockheads2/katipoBrowser/waraki/android/app/.cxx/Debug/5w6r711f/arm64-v8a/CMakeFiles/CMakeTmp -v -ffunction-sections -fdata-sections -fcoverage-compilation-dir=/Users/davidframpton/Documents/blockheads2/katipoBrowser/waraki/android/app/.cxx/Debug/5w6r711f/arm64-v8a/CMakeFiles/CMakeTmp -resource-dir /Users/davidframpton/Library/Android/sdk/ndk/28.2.13676358/toolchains/llvm/prebuilt/darwin-x86_64/lib/clang/19 -dependency-file CMakeFiles/cmTC_4f769.dir/CMakeCXXCompilerABI.cpp.o.d -MT CMakeFiles/cmTC_4f769.dir/CMakeCXXCompilerABI.cpp.o -sys-header-deps -D ANDROID -D _FORTIFY_SOURCE=2 -isysroot /Users/davidframpton/Library/Android/sdk/ndk/28.2.13676358/toolchains/llvm/prebuilt/darwin-x86_64/sysroot -internal-isystem /Users/davidframpton/Library/Android/sdk/ndk/28.2.13676358/toolchains/llvm/prebuilt/darwin-x86_64/sysroot/usr/include/c++/v1 -internal-isystem /Users/davidframpton/Library/Android/sdk/ndk/28.2.13676358/toolchains/llvm/prebuilt/darwin-x86_64/lib/clang/19/include -internal-isystem /Users/davidframpton/Library/Android/sdk/ndk/28.2.13676358/toolchains/llvm/prebuilt/darwin-x86_64/sysroot/usr/local/include -internal-externc-isystem /Users/davidframpton/Library/Android/sdk/ndk/28.2.13676358/toolchains/llvm/prebuilt/darwin-x86_64/sysroot/usr/include/aarch64-linux-android -internal-externc-isystem /Users/davidframpton/Library/Android/sdk/ndk/28.2.13676358/toolchains/llvm/prebuilt/darwin-x86_64/sysroot/include -internal-externc-isystem /Users/davidframpton/Library/Android/sdk/ndk/28.2.13676358/toolchains/llvm/prebuilt/darwin-x86_64/sysroot/usr/include -Wformat -fdeprecated-macro -ferror-limit 19 -femulated-tls -stack-protector 2 -fno-signed-char -fgnuc-version=4.2.1 -fskip-odr-check-in-gmf -fcxx-exceptions -fexceptions -target-feature +outline-atomics -target-feature -fmv -D__GCC_HAVE_DWARF2_CFI_ASM=1 -o CMakeFiles/cmTC_4f769.dir/CMakeCXXCompilerABI.cpp.o -x c++ /Users/davidframpton/Library/Android/sdk/cmake/3.22.1/share/cmake-3.22/Modules/CMakeCXXCompilerABI.cpp]
+  ignore line: [clang -cc1 version 19.0.1 based upon LLVM 19.0.1 default target x86_64-apple-darwin25.6.0]
+  ignore line: [ignoring nonexistent directory "/Users/davidframpton/Library/Android/sdk/ndk/28.2.13676358/toolchains/llvm/prebuilt/darwin-x86_64/sysroot/usr/local/include"]
+  ignore line: [ignoring nonexistent directory "/Users/davidframpton/Library/Android/sdk/ndk/28.2.13676358/toolchains/llvm/prebuilt/darwin-x86_64/sysroot/include"]
+  ignore line: [#include "..." search starts here:]
+  ignore line: [#include <...> search starts here:]
+  ignore line: [ /Users/davidframpton/Library/Android/sdk/ndk/28.2.13676358/toolchains/llvm/prebuilt/darwin-x86_64/sysroot/usr/include/c++/v1]
+  ignore line: [ /Users/davidframpton/Library/Android/sdk/ndk/28.2.13676358/toolchains/llvm/prebuilt/darwin-x86_64/lib/clang/19/include]
+  ignore line: [ /Users/davidframpton/Library/Android/sdk/ndk/28.2.13676358/toolchains/llvm/prebuilt/darwin-x86_64/sysroot/usr/include/aarch64-linux-android]
+  ignore line: [ /Users/davidframpton/Library/Android/sdk/ndk/28.2.13676358/toolchains/llvm/prebuilt/darwin-x86_64/sysroot/usr/include]
+  ignore line: [End of search list.]
+  ignore line: [[2/2] Linking CXX executable cmTC_4f769]
+  ignore line: [Android (13624864  +pgo  -bolt  +lto  -mlgo  based on r530567e) clang version 19.0.1 (https://android.googlesource.com/toolchain/llvm-project 97a699bf4812a18fb657c2779f5296a4ab2694d2)]
+  ignore line: [Target: aarch64-none-linux-android21]
+  ignore line: [Thread model: posix]
+  ignore line: [InstalledDir: /Users/davidframpton/Library/Android/sdk/ndk/28.2.13676358/toolchains/llvm/prebuilt/darwin-x86_64/bin]
+  link line: [ "/Users/davidframpton/Library/Android/sdk/ndk/28.2.13676358/toolchains/llvm/prebuilt/darwin-x86_64/bin/ld.lld" --sysroot=/Users/davidframpton/Library/Android/sdk/ndk/28.2.13676358/toolchains/llvm/prebuilt/darwin-x86_64/sysroot -EL --fix-cortex-a53-843419 -z now -z relro -z max-page-size=16384 --hash-style=both --eh-frame-hdr -m aarch64linux -pie -dynamic-linker /system/bin/linker64 -o cmTC_4f769 /Users/davidframpton/Library/Android/sdk/ndk/28.2.13676358/toolchains/llvm/prebuilt/darwin-x86_64/sysroot/usr/lib/aarch64-linux-android/21/crtbegin_dynamic.o -L/Users/davidframpton/Library/Android/sdk/ndk/28.2.13676358/toolchains/llvm/prebuilt/darwin-x86_64/lib/clang/19/lib/linux/aarch64 -L/Users/davidframpton/Library/Android/sdk/ndk/28.2.13676358/toolchains/llvm/prebuilt/darwin-x86_64/sysroot/usr/lib/aarch64-linux-android/21 -L/Users/davidframpton/Library/Android/sdk/ndk/28.2.13676358/toolchains/llvm/prebuilt/darwin-x86_64/sysroot/usr/lib/aarch64-linux-android -L/Users/davidframpton/Library/Android/sdk/ndk/28.2.13676358/toolchains/llvm/prebuilt/darwin-x86_64/sysroot/usr/lib --build-id=sha1 --no-rosegment --no-undefined-version --fatal-warnings --no-undefined CMakeFiles/cmTC_4f769.dir/CMakeCXXCompilerABI.cpp.o -Bstatic -lc++ -Bdynamic -lm /Users/davidframpton/Library/Android/sdk/ndk/28.2.13676358/toolchains/llvm/prebuilt/darwin-x86_64/lib/clang/19/lib/linux/libclang_rt.builtins-aarch64-android.a -l:libunwind.a -ldl -lc /Users/davidframpton/Library/Android/sdk/ndk/28.2.13676358/toolchains/llvm/prebuilt/darwin-x86_64/lib/clang/19/lib/linux/libclang_rt.builtins-aarch64-android.a -l:libunwind.a -ldl /Users/davidframpton/Library/Android/sdk/ndk/28.2.13676358/toolchains/llvm/prebuilt/darwin-x86_64/sysroot/usr/lib/aarch64-linux-android/21/crtend_android.o]
+    arg [/Users/davidframpton/Library/Android/sdk/ndk/28.2.13676358/toolchains/llvm/prebuilt/darwin-x86_64/bin/ld.lld] ==> ignore
+    arg [--sysroot=/Users/davidframpton/Library/Android/sdk/ndk/28.2.13676358/toolchains/llvm/prebuilt/darwin-x86_64/sysroot] ==> ignore
+    arg [-EL] ==> ignore
+    arg [--fix-cortex-a53-843419] ==> ignore
+    arg [-znow] ==> ignore
+    arg [-zrelro] ==> ignore
+    arg [-zmax-page-size=16384] ==> ignore
+    arg [--hash-style=both] ==> ignore
+    arg [--eh-frame-hdr] ==> ignore
+    arg [-m] ==> ignore
+    arg [aarch64linux] ==> ignore
+    arg [-pie] ==> ignore
+    arg [-dynamic-linker] ==> ignore
+    arg [/system/bin/linker64] ==> ignore
+    arg [-o] ==> ignore
+    arg [cmTC_4f769] ==> ignore
+    arg [/Users/davidframpton/Library/Android/sdk/ndk/28.2.13676358/toolchains/llvm/prebuilt/darwin-x86_64/sysroot/usr/lib/aarch64-linux-android/21/crtbegin_dynamic.o] ==> obj [/Users/davidframpton/Library/Android/sdk/ndk/28.2.13676358/toolchains/llvm/prebuilt/darwin-x86_64/sysroot/usr/lib/aarch64-linux-android/21/crtbegin_dynamic.o]
+    arg [-L/Users/davidframpton/Library/Android/sdk/ndk/28.2.13676358/toolchains/llvm/prebuilt/darwin-x86_64/lib/clang/19/lib/linux/aarch64] ==> dir [/Users/davidframpton/Library/Android/sdk/ndk/28.2.13676358/toolchains/llvm/prebuilt/darwin-x86_64/lib/clang/19/lib/linux/aarch64]
+    arg [-L/Users/davidframpton/Library/Android/sdk/ndk/28.2.13676358/toolchains/llvm/prebuilt/darwin-x86_64/sysroot/usr/lib/aarch64-linux-android/21] ==> dir [/Users/davidframpton/Library/Android/sdk/ndk/28.2.13676358/toolchains/llvm/prebuilt/darwin-x86_64/sysroot/usr/lib/aarch64-linux-android/21]
+    arg [-L/Users/davidframpton/Library/Android/sdk/ndk/28.2.13676358/toolchains/llvm/prebuilt/darwin-x86_64/sysroot/usr/lib/aarch64-linux-android] ==> dir [/Users/davidframpton/Library/Android/sdk/ndk/28.2.13676358/toolchains/llvm/prebuilt/darwin-x86_64/sysroot/usr/lib/aarch64-linux-android]
+    arg [-L/Users/davidframpton/Library/Android/sdk/ndk/28.2.13676358/toolchains/llvm/prebuilt/darwin-x86_64/sysroot/usr/lib] ==> dir [/Users/davidframpton/Library/Android/sdk/ndk/28.2.13676358/toolchains/llvm/prebuilt/darwin-x86_64/sysroot/usr/lib]
+    arg [--build-id=sha1] ==> ignore
+    arg [--no-rosegment] ==> ignore
+    arg [--no-undefined-version] ==> ignore
+    arg [--fatal-warnings] ==> ignore
+    arg [--no-undefined] ==> ignore
+    arg [CMakeFiles/cmTC_4f769.dir/CMakeCXXCompilerABI.cpp.o] ==> ignore
+    arg [-Bstatic] ==> search static
+    arg [-lc++] ==> lib [c++]
+    arg [-Bdynamic] ==> search dynamic
+    arg [-lm] ==> lib [m]
+    arg [/Users/davidframpton/Library/Android/sdk/ndk/28.2.13676358/toolchains/llvm/prebuilt/darwin-x86_64/lib/clang/19/lib/linux/libclang_rt.builtins-aarch64-android.a] ==> lib [/Users/davidframpton/Library/Android/sdk/ndk/28.2.13676358/toolchains/llvm/prebuilt/darwin-x86_64/lib/clang/19/lib/linux/libclang_rt.builtins-aarch64-android.a]
+    arg [-l:libunwind.a] ==> lib [-l:libunwind.a]
+    arg [-ldl] ==> lib [dl]
+    arg [-lc] ==> lib [c]
+    arg [/Users/davidframpton/Library/Android/sdk/ndk/28.2.13676358/toolchains/llvm/prebuilt/darwin-x86_64/lib/clang/19/lib/linux/libclang_rt.builtins-aarch64-android.a] ==> lib [/Users/davidframpton/Library/Android/sdk/ndk/28.2.13676358/toolchains/llvm/prebuilt/darwin-x86_64/lib/clang/19/lib/linux/libclang_rt.builtins-aarch64-android.a]
+    arg [-l:libunwind.a] ==> lib [-l:libunwind.a]
+    arg [-ldl] ==> lib [dl]
+    arg [/Users/davidframpton/Library/Android/sdk/ndk/28.2.13676358/toolchains/llvm/prebuilt/darwin-x86_64/sysroot/usr/lib/aarch64-linux-android/21/crtend_android.o] ==> obj [/Users/davidframpton/Library/Android/sdk/ndk/28.2.13676358/toolchains/llvm/prebuilt/darwin-x86_64/sysroot/usr/lib/aarch64-linux-android/21/crtend_android.o]
+  remove lib [/Users/davidframpton/Library/Android/sdk/ndk/28.2.13676358/toolchains/llvm/prebuilt/darwin-x86_64/lib/clang/19/lib/linux/libclang_rt.builtins-aarch64-android.a]
+  remove lib [/Users/davidframpton/Library/Android/sdk/ndk/28.2.13676358/toolchains/llvm/prebuilt/darwin-x86_64/lib/clang/19/lib/linux/libclang_rt.builtins-aarch64-android.a]
+  collapse library dir [/Users/davidframpton/Library/Android/sdk/ndk/28.2.13676358/toolchains/llvm/prebuilt/darwin-x86_64/lib/clang/19/lib/linux/aarch64] ==> [/Users/davidframpton/Library/Android/sdk/ndk/28.2.13676358/toolchains/llvm/prebuilt/darwin-x86_64/lib/clang/19/lib/linux/aarch64]
+  collapse library dir [/Users/davidframpton/Library/Android/sdk/ndk/28.2.13676358/toolchains/llvm/prebuilt/darwin-x86_64/sysroot/usr/lib/aarch64-linux-android/21] ==> [/Users/davidframpton/Library/Android/sdk/ndk/28.2.13676358/toolchains/llvm/prebuilt/darwin-x86_64/sysroot/usr/lib/aarch64-linux-android/21]
+  collapse library dir [/Users/davidframpton/Library/Android/sdk/ndk/28.2.13676358/toolchains/llvm/prebuilt/darwin-x86_64/sysroot/usr/lib/aarch64-linux-android] ==> [/Users/davidframpton/Library/Android/sdk/ndk/28.2.13676358/toolchains/llvm/prebuilt/darwin-x86_64/sysroot/usr/lib/aarch64-linux-android]
+  collapse library dir [/Users/davidframpton/Library/Android/sdk/ndk/28.2.13676358/toolchains/llvm/prebuilt/darwin-x86_64/sysroot/usr/lib] ==> [/Users/davidframpton/Library/Android/sdk/ndk/28.2.13676358/toolchains/llvm/prebuilt/darwin-x86_64/sysroot/usr/lib]
+  implicit libs: [c++;m;-l:libunwind.a;dl;c;-l:libunwind.a;dl]
+  implicit objs: [/Users/davidframpton/Library/Android/sdk/ndk/28.2.13676358/toolchains/llvm/prebuilt/darwin-x86_64/sysroot/usr/lib/aarch64-linux-android/21/crtbegin_dynamic.o;/Users/davidframpton/Library/Android/sdk/ndk/28.2.13676358/toolchains/llvm/prebuilt/darwin-x86_64/sysroot/usr/lib/aarch64-linux-android/21/crtend_android.o]
+  implicit dirs: [/Users/davidframpton/Library/Android/sdk/ndk/28.2.13676358/toolchains/llvm/prebuilt/darwin-x86_64/lib/clang/19/lib/linux/aarch64;/Users/davidframpton/Library/Android/sdk/ndk/28.2.13676358/toolchains/llvm/prebuilt/darwin-x86_64/sysroot/usr/lib/aarch64-linux-android/21;/Users/davidframpton/Library/Android/sdk/ndk/28.2.13676358/toolchains/llvm/prebuilt/darwin-x86_64/sysroot/usr/lib/aarch64-linux-android;/Users/davidframpton/Library/Android/sdk/ndk/28.2.13676358/toolchains/llvm/prebuilt/darwin-x86_64/sysroot/usr/lib]
+  implicit fwks: []
+
+
+Performing C SOURCE FILE Test HAVE_GCC_WALL succeeded with the following output:
+Change Dir: /Users/davidframpton/Documents/blockheads2/katipoBrowser/waraki/android/app/.cxx/Debug/5w6r711f/arm64-v8a/CMakeFiles/CMakeTmp
+
+Run Build Command(s):/Users/davidframpton/Library/Android/sdk/cmake/3.22.1/bin/ninja cmTC_5bf2a && [1/2] Building C object CMakeFiles/cmTC_5bf2a.dir/src.c.o
+[2/2] Linking C executable cmTC_5bf2a
+
+
+Source file was:
+int main(void) { return 0; }
+Performing C SOURCE FILE Test HAVE_GCC_WUNDEF succeeded with the following output:
+Change Dir: /Users/davidframpton/Documents/blockheads2/katipoBrowser/waraki/android/app/.cxx/Debug/5w6r711f/arm64-v8a/CMakeFiles/CMakeTmp
+
+Run Build Command(s):/Users/davidframpton/Library/Android/sdk/cmake/3.22.1/bin/ninja cmTC_fe753 && [1/2] Building C object CMakeFiles/cmTC_fe753.dir/src.c.o
+[2/2] Linking C executable cmTC_fe753
+
+
+Source file was:
+int main(void) { return 0; }
+Performing C SOURCE FILE Test HAVE_GCC_WFLOAT_CONVERSION succeeded with the following output:
+Change Dir: /Users/davidframpton/Documents/blockheads2/katipoBrowser/waraki/android/app/.cxx/Debug/5w6r711f/arm64-v8a/CMakeFiles/CMakeTmp
+
+Run Build Command(s):/Users/davidframpton/Library/Android/sdk/cmake/3.22.1/bin/ninja cmTC_affb0 && [1/2] Building C object CMakeFiles/cmTC_affb0.dir/src.c.o
+[2/2] Linking C executable cmTC_affb0
+
+
+Source file was:
+int main(void) { return 0; }
+Performing C SOURCE FILE Test HAVE_GCC_NO_STRICT_ALIASING succeeded with the following output:
+Change Dir: /Users/davidframpton/Documents/blockheads2/katipoBrowser/waraki/android/app/.cxx/Debug/5w6r711f/arm64-v8a/CMakeFiles/CMakeTmp
+
+Run Build Command(s):/Users/davidframpton/Library/Android/sdk/cmake/3.22.1/bin/ninja cmTC_5564e && [1/2] Building C object CMakeFiles/cmTC_5564e.dir/src.c.o
+[2/2] Linking C executable cmTC_5564e
+
+
+Source file was:
+int main(void) { return 0; }
+Performing C SOURCE FILE Test HAVE_GCC_WDOCUMENTATION succeeded with the following output:
+Change Dir: /Users/davidframpton/Documents/blockheads2/katipoBrowser/waraki/android/app/.cxx/Debug/5w6r711f/arm64-v8a/CMakeFiles/CMakeTmp
+
+Run Build Command(s):/Users/davidframpton/Library/Android/sdk/cmake/3.22.1/bin/ninja cmTC_a92e8 && [1/2] Building C object CMakeFiles/cmTC_a92e8.dir/src.c.o
+[2/2] Linking C executable cmTC_a92e8
+
+
+Source file was:
+int main(void) { return 0; }
+Performing C SOURCE FILE Test HAVE_GCC_WDOCUMENTATION_UNKNOWN_COMMAND succeeded with the following output:
+Change Dir: /Users/davidframpton/Documents/blockheads2/katipoBrowser/waraki/android/app/.cxx/Debug/5w6r711f/arm64-v8a/CMakeFiles/CMakeTmp
+
+Run Build Command(s):/Users/davidframpton/Library/Android/sdk/cmake/3.22.1/bin/ninja cmTC_48e04 && [1/2] Building C object CMakeFiles/cmTC_48e04.dir/src.c.o
+[2/2] Linking C executable cmTC_48e04
+
+
+Source file was:
+int main(void) { return 0; }
+Performing C SOURCE FILE Test HAVE_GCC_COMMENT_BLOCK_COMMANDS succeeded with the following output:
+Change Dir: /Users/davidframpton/Documents/blockheads2/katipoBrowser/waraki/android/app/.cxx/Debug/5w6r711f/arm64-v8a/CMakeFiles/CMakeTmp
+
+Run Build Command(s):/Users/davidframpton/Library/Android/sdk/cmake/3.22.1/bin/ninja cmTC_f81d8 && [1/2] Building C object CMakeFiles/cmTC_f81d8.dir/src.c.o
+[2/2] Linking C executable cmTC_f81d8
+
+
+Source file was:
+int main(void) { return 0; }
+Performing C SOURCE FILE Test HAVE_GCC_WSHADOW succeeded with the following output:
+Change Dir: /Users/davidframpton/Documents/blockheads2/katipoBrowser/waraki/android/app/.cxx/Debug/5w6r711f/arm64-v8a/CMakeFiles/CMakeTmp
+
+Run Build Command(s):/Users/davidframpton/Library/Android/sdk/cmake/3.22.1/bin/ninja cmTC_c2bb6 && [1/2] Building C object CMakeFiles/cmTC_c2bb6.dir/src.c.o
+[2/2] Linking C executable cmTC_c2bb6
+
+
+Source file was:
+int main(void) { return 0; }
+Performing C SOURCE FILE Test HAVE_GCC_WUNUSED_LOCAL_TYPEDEFS succeeded with the following output:
+Change Dir: /Users/davidframpton/Documents/blockheads2/katipoBrowser/waraki/android/app/.cxx/Debug/5w6r711f/arm64-v8a/CMakeFiles/CMakeTmp
+
+Run Build Command(s):/Users/davidframpton/Library/Android/sdk/cmake/3.22.1/bin/ninja cmTC_7f740 && [1/2] Building C object CMakeFiles/cmTC_7f740.dir/src.c.o
+[2/2] Linking C executable cmTC_7f740
+
+
+Source file was:
+int main(void) { return 0; }
+Performing C SOURCE FILE Test HAVE_GCC_WIMPLICIT_FALLTHROUGH succeeded with the following output:
+Change Dir: /Users/davidframpton/Documents/blockheads2/katipoBrowser/waraki/android/app/.cxx/Debug/5w6r711f/arm64-v8a/CMakeFiles/CMakeTmp
+
+Run Build Command(s):/Users/davidframpton/Library/Android/sdk/cmake/3.22.1/bin/ninja cmTC_2666b && [1/2] Building C object CMakeFiles/cmTC_2666b.dir/src.c.o
+[2/2] Linking C executable cmTC_2666b
+
+
+Source file was:
+int main(void) { return 0; }
+Performing C SOURCE FILE Test COMPILER_SUPPORTS_FCOLOR_DIAGNOSTICS succeeded with the following output:
+Change Dir: /Users/davidframpton/Documents/blockheads2/katipoBrowser/waraki/android/app/.cxx/Debug/5w6r711f/arm64-v8a/CMakeFiles/CMakeTmp
+
+Run Build Command(s):/Users/davidframpton/Library/Android/sdk/cmake/3.22.1/bin/ninja cmTC_a45f1 && [1/2] Building C object CMakeFiles/cmTC_a45f1.dir/src.c.o
+[2/2] Linking C executable cmTC_a45f1
+
+
+Source file was:
+int main(void) { return 0; }
+Performing C SOURCE FILE Test HAVE_WL_VERSION_SCRIPT succeeded with the following output:
+Change Dir: /Users/davidframpton/Documents/blockheads2/katipoBrowser/waraki/android/app/.cxx/Debug/5w6r711f/arm64-v8a/CMakeFiles/CMakeTmp
+
+Run Build Command(s):/Users/davidframpton/Library/Android/sdk/cmake/3.22.1/bin/ninja cmTC_13b71 && [1/2] Building C object CMakeFiles/cmTC_13b71.dir/src.c.o
+[2/2] Linking C executable cmTC_13b71
+
+
+Source file was:
+int func(void) {return 0;} int main(int argc,char*argv[]){(void)argc;(void)argv;return func();}
+Performing C SOURCE FILE Test COMPILER_SUPPORTS_GCC_ATOMICS succeeded with the following output:
+Change Dir: /Users/davidframpton/Documents/blockheads2/katipoBrowser/waraki/android/app/.cxx/Debug/5w6r711f/arm64-v8a/CMakeFiles/CMakeTmp
+
+Run Build Command(s):/Users/davidframpton/Library/Android/sdk/cmake/3.22.1/bin/ninja cmTC_0d1e5 && [1/2] Building C object CMakeFiles/cmTC_0d1e5.dir/src.c.o
+[2/2] Linking C executable cmTC_0d1e5
+
+
+Source file was:
+int main(int argc, char **argv) {
+        int a;
+        void *x, *y, *z;
+        __sync_lock_test_and_set(&a, 4);
+        __sync_lock_test_and_set(&x, y);
+        __sync_fetch_and_add(&a, 1);
+        __sync_bool_compare_and_swap(&a, 5, 10);
+        __sync_bool_compare_and_swap(&x, y, z);
+        return 0; }
+Performing C SOURCE FILE Test HAVE_GCC_FVISIBILITY succeeded with the following output:
+Change Dir: /Users/davidframpton/Documents/blockheads2/katipoBrowser/waraki/android/app/.cxx/Debug/5w6r711f/arm64-v8a/CMakeFiles/CMakeTmp
+
+Run Build Command(s):/Users/davidframpton/Library/Android/sdk/cmake/3.22.1/bin/ninja cmTC_b0832 && [1/2] Building C object CMakeFiles/cmTC_b0832.dir/src.c.o
+[2/2] Linking C executable cmTC_b0832
+
+
+Source file was:
+
+      #if !defined(__GNUC__) || __GNUC__ < 4
+      #error SDL only uses visibility attributes in GCC 4 or newer
+      #endif
+      __attribute__((visibility("default"))) int foo(void);
+      __attribute__((visibility("hidden")))  int bar(void);
+      int foo(void) { return 0; }
+      int bar(void) { return 1; }
+      int main(void) { return 0; }
+Performing C SOURCE FILE Test LINKER_SUPPORTS_WL_NO_UNDEFINED succeeded with the following output:
+Change Dir: /Users/davidframpton/Documents/blockheads2/katipoBrowser/waraki/android/app/.cxx/Debug/5w6r711f/arm64-v8a/CMakeFiles/CMakeTmp
+
+Run Build Command(s):/Users/davidframpton/Library/Android/sdk/cmake/3.22.1/bin/ninja cmTC_77234 && [1/2] Building C object CMakeFiles/cmTC_77234.dir/src.c.o
+[2/2] Linking C executable cmTC_77234
+
+
+Source file was:
+int main() { return 0; }
+Performing C SOURCE FILE Test COMPILER_SUPPORTS_ARMNEON succeeded with the following output:
+Change Dir: /Users/davidframpton/Documents/blockheads2/katipoBrowser/waraki/android/app/.cxx/Debug/5w6r711f/arm64-v8a/CMakeFiles/CMakeTmp
+
+Run Build Command(s):/Users/davidframpton/Library/Android/sdk/cmake/3.22.1/bin/ninja cmTC_a1041 && [1/2] Building C object CMakeFiles/cmTC_a1041.dir/src.c.o
+[2/2] Linking C executable cmTC_a1041
+
+
+Source file was:
+
+    #if 0
+    # if defined(__arm__) || defined(__aarch64__)
+    #  define test_enabled 1
+    # else
+    #  define test_enabled 0 /* feign success in Apple multi-arch configs */
+    # endif
+    #else                    /* test normally */
+    # define test_enabled 1
+    #endif
+    #if test_enabled
+          #include <arm_neon.h>
+      void floats_add(float *dest, float *a, float *b, unsigned size) {
+        for (; size >= 4; size -= 4, dest += 4, a += 4, b += 4) {
+          vst1q_f32(dest, vaddq_f32(vld1q_f32(a), vld1q_f32(b)));
+        }
+      }
+      int main(int argc, char *argv[]) {
+        floats_add((float*)0, (float*)0, (float*)0, 0);
+        return 0;
+      }
+    #else
+    int main(int argc, char *argv[]) {
+      (void)argc;
+      (void)argv;
+      return 0;
+    }
+    #endif
+Determining if the include file alloca.h exists passed with the following output:
+Change Dir: /Users/davidframpton/Documents/blockheads2/katipoBrowser/waraki/android/app/.cxx/Debug/5w6r711f/arm64-v8a/CMakeFiles/CMakeTmp
+
+Run Build Command(s):/Users/davidframpton/Library/Android/sdk/cmake/3.22.1/bin/ninja cmTC_97c30 && [1/2] Building C object CMakeFiles/cmTC_97c30.dir/CheckIncludeFile.c.o
+[2/2] Linking C executable cmTC_97c30
+
+
+
+Determining if the include file float.h exists passed with the following output:
+Change Dir: /Users/davidframpton/Documents/blockheads2/katipoBrowser/waraki/android/app/.cxx/Debug/5w6r711f/arm64-v8a/CMakeFiles/CMakeTmp
+
+Run Build Command(s):/Users/davidframpton/Library/Android/sdk/cmake/3.22.1/bin/ninja cmTC_1ca3d && [1/2] Building C object CMakeFiles/cmTC_1ca3d.dir/CheckIncludeFile.c.o
+[2/2] Linking C executable cmTC_1ca3d
+
+
+
+Determining if the include file iconv.h exists passed with the following output:
+Change Dir: /Users/davidframpton/Documents/blockheads2/katipoBrowser/waraki/android/app/.cxx/Debug/5w6r711f/arm64-v8a/CMakeFiles/CMakeTmp
+
+Run Build Command(s):/Users/davidframpton/Library/Android/sdk/cmake/3.22.1/bin/ninja cmTC_3f1d9 && [1/2] Building C object CMakeFiles/cmTC_3f1d9.dir/CheckIncludeFile.c.o
+[2/2] Linking C executable cmTC_3f1d9
+
+
+
+Determining if the include file inttypes.h exists passed with the following output:
+Change Dir: /Users/davidframpton/Documents/blockheads2/katipoBrowser/waraki/android/app/.cxx/Debug/5w6r711f/arm64-v8a/CMakeFiles/CMakeTmp
+
+Run Build Command(s):/Users/davidframpton/Library/Android/sdk/cmake/3.22.1/bin/ninja cmTC_f4578 && [1/2] Building C object CMakeFiles/cmTC_f4578.dir/CheckIncludeFile.c.o
+[2/2] Linking C executable cmTC_f4578
+
+
+
+Determining if the include file limits.h exists passed with the following output:
+Change Dir: /Users/davidframpton/Documents/blockheads2/katipoBrowser/waraki/android/app/.cxx/Debug/5w6r711f/arm64-v8a/CMakeFiles/CMakeTmp
+
+Run Build Command(s):/Users/davidframpton/Library/Android/sdk/cmake/3.22.1/bin/ninja cmTC_5ae7d && [1/2] Building C object CMakeFiles/cmTC_5ae7d.dir/CheckIncludeFile.c.o
+[2/2] Linking C executable cmTC_5ae7d
+
+
+
+Determining if the include file malloc.h exists passed with the following output:
+Change Dir: /Users/davidframpton/Documents/blockheads2/katipoBrowser/waraki/android/app/.cxx/Debug/5w6r711f/arm64-v8a/CMakeFiles/CMakeTmp
+
+Run Build Command(s):/Users/davidframpton/Library/Android/sdk/cmake/3.22.1/bin/ninja cmTC_8a734 && [1/2] Building C object CMakeFiles/cmTC_8a734.dir/CheckIncludeFile.c.o
+[2/2] Linking C executable cmTC_8a734
+
+
+
+Determining if the include file math.h exists passed with the following output:
+Change Dir: /Users/davidframpton/Documents/blockheads2/katipoBrowser/waraki/android/app/.cxx/Debug/5w6r711f/arm64-v8a/CMakeFiles/CMakeTmp
+
+Run Build Command(s):/Users/davidframpton/Library/Android/sdk/cmake/3.22.1/bin/ninja cmTC_0764f && [1/2] Building C object CMakeFiles/cmTC_0764f.dir/CheckIncludeFile.c.o
+[2/2] Linking C executable cmTC_0764f
+
+
+
+Determining if the include file memory.h exists passed with the following output:
+Change Dir: /Users/davidframpton/Documents/blockheads2/katipoBrowser/waraki/android/app/.cxx/Debug/5w6r711f/arm64-v8a/CMakeFiles/CMakeTmp
+
+Run Build Command(s):/Users/davidframpton/Library/Android/sdk/cmake/3.22.1/bin/ninja cmTC_86d1c && [1/2] Building C object CMakeFiles/cmTC_86d1c.dir/CheckIncludeFile.c.o
+[2/2] Linking C executable cmTC_86d1c
+
+
+
+Determining if the include file signal.h exists passed with the following output:
+Change Dir: /Users/davidframpton/Documents/blockheads2/katipoBrowser/waraki/android/app/.cxx/Debug/5w6r711f/arm64-v8a/CMakeFiles/CMakeTmp
+
+Run Build Command(s):/Users/davidframpton/Library/Android/sdk/cmake/3.22.1/bin/ninja cmTC_69ac1 && [1/2] Building C object CMakeFiles/cmTC_69ac1.dir/CheckIncludeFile.c.o
+[2/2] Linking C executable cmTC_69ac1
+
+
+
+Determining if the include file stdarg.h exists passed with the following output:
+Change Dir: /Users/davidframpton/Documents/blockheads2/katipoBrowser/waraki/android/app/.cxx/Debug/5w6r711f/arm64-v8a/CMakeFiles/CMakeTmp
+
+Run Build Command(s):/Users/davidframpton/Library/Android/sdk/cmake/3.22.1/bin/ninja cmTC_b24e4 && [1/2] Building C object CMakeFiles/cmTC_b24e4.dir/CheckIncludeFile.c.o
+[2/2] Linking C executable cmTC_b24e4
+
+
+
+Determining if the include file stdbool.h exists passed with the following output:
+Change Dir: /Users/davidframpton/Documents/blockheads2/katipoBrowser/waraki/android/app/.cxx/Debug/5w6r711f/arm64-v8a/CMakeFiles/CMakeTmp
+
+Run Build Command(s):/Users/davidframpton/Library/Android/sdk/cmake/3.22.1/bin/ninja cmTC_44569 && [1/2] Building C object CMakeFiles/cmTC_44569.dir/CheckIncludeFile.c.o
+[2/2] Linking C executable cmTC_44569
+
+
+
+Determining if the include file stddef.h exists passed with the following output:
+Change Dir: /Users/davidframpton/Documents/blockheads2/katipoBrowser/waraki/android/app/.cxx/Debug/5w6r711f/arm64-v8a/CMakeFiles/CMakeTmp
+
+Run Build Command(s):/Users/davidframpton/Library/Android/sdk/cmake/3.22.1/bin/ninja cmTC_3c014 && [1/2] Building C object CMakeFiles/cmTC_3c014.dir/CheckIncludeFile.c.o
+[2/2] Linking C executable cmTC_3c014
+
+
+
+Determining if the include file stdint.h exists passed with the following output:
+Change Dir: /Users/davidframpton/Documents/blockheads2/katipoBrowser/waraki/android/app/.cxx/Debug/5w6r711f/arm64-v8a/CMakeFiles/CMakeTmp
+
+Run Build Command(s):/Users/davidframpton/Library/Android/sdk/cmake/3.22.1/bin/ninja cmTC_b7509 && [1/2] Building C object CMakeFiles/cmTC_b7509.dir/CheckIncludeFile.c.o
+[2/2] Linking C executable cmTC_b7509
+
+
+
+Determining if the include file stdio.h exists passed with the following output:
+Change Dir: /Users/davidframpton/Documents/blockheads2/katipoBrowser/waraki/android/app/.cxx/Debug/5w6r711f/arm64-v8a/CMakeFiles/CMakeTmp
+
+Run Build Command(s):/Users/davidframpton/Library/Android/sdk/cmake/3.22.1/bin/ninja cmTC_9f904 && [1/2] Building C object CMakeFiles/cmTC_9f904.dir/CheckIncludeFile.c.o
+[2/2] Linking C executable cmTC_9f904
+
+
+
+Determining if the include file stdlib.h exists passed with the following output:
+Change Dir: /Users/davidframpton/Documents/blockheads2/katipoBrowser/waraki/android/app/.cxx/Debug/5w6r711f/arm64-v8a/CMakeFiles/CMakeTmp
+
+Run Build Command(s):/Users/davidframpton/Library/Android/sdk/cmake/3.22.1/bin/ninja cmTC_1723d && [1/2] Building C object CMakeFiles/cmTC_1723d.dir/CheckIncludeFile.c.o
+[2/2] Linking C executable cmTC_1723d
+
+
+
+Determining if the include file string.h exists passed with the following output:
+Change Dir: /Users/davidframpton/Documents/blockheads2/katipoBrowser/waraki/android/app/.cxx/Debug/5w6r711f/arm64-v8a/CMakeFiles/CMakeTmp
+
+Run Build Command(s):/Users/davidframpton/Library/Android/sdk/cmake/3.22.1/bin/ninja cmTC_3afe0 && [1/2] Building C object CMakeFiles/cmTC_3afe0.dir/CheckIncludeFile.c.o
+[2/2] Linking C executable cmTC_3afe0
+
+
+
+Determining if the include file strings.h exists passed with the following output:
+Change Dir: /Users/davidframpton/Documents/blockheads2/katipoBrowser/waraki/android/app/.cxx/Debug/5w6r711f/arm64-v8a/CMakeFiles/CMakeTmp
+
+Run Build Command(s):/Users/davidframpton/Library/Android/sdk/cmake/3.22.1/bin/ninja cmTC_ea1ac && [1/2] Building C object CMakeFiles/cmTC_ea1ac.dir/CheckIncludeFile.c.o
+[2/2] Linking C executable cmTC_ea1ac
+
+
+
+Determining if the include file sys/types.h exists passed with the following output:
+Change Dir: /Users/davidframpton/Documents/blockheads2/katipoBrowser/waraki/android/app/.cxx/Debug/5w6r711f/arm64-v8a/CMakeFiles/CMakeTmp
+
+Run Build Command(s):/Users/davidframpton/Library/Android/sdk/cmake/3.22.1/bin/ninja cmTC_d562a && [1/2] Building C object CMakeFiles/cmTC_d562a.dir/CheckIncludeFile.c.o
+[2/2] Linking C executable cmTC_d562a
+
+
+
+Determining if the include file time.h exists passed with the following output:
+Change Dir: /Users/davidframpton/Documents/blockheads2/katipoBrowser/waraki/android/app/.cxx/Debug/5w6r711f/arm64-v8a/CMakeFiles/CMakeTmp
+
+Run Build Command(s):/Users/davidframpton/Library/Android/sdk/cmake/3.22.1/bin/ninja cmTC_a635b && [1/2] Building C object CMakeFiles/cmTC_a635b.dir/CheckIncludeFile.c.o
+[2/2] Linking C executable cmTC_a635b
+
+
+
+Determining if the include file wchar.h exists passed with the following output:
+Change Dir: /Users/davidframpton/Documents/blockheads2/katipoBrowser/waraki/android/app/.cxx/Debug/5w6r711f/arm64-v8a/CMakeFiles/CMakeTmp
+
+Run Build Command(s):/Users/davidframpton/Library/Android/sdk/cmake/3.22.1/bin/ninja cmTC_793ee && [1/2] Building C object CMakeFiles/cmTC_793ee.dir/CheckIncludeFile.c.o
+[2/2] Linking C executable cmTC_793ee
+
+
+
+Determining if the function pow exists in the m passed with the following output:
+Change Dir: /Users/davidframpton/Documents/blockheads2/katipoBrowser/waraki/android/app/.cxx/Debug/5w6r711f/arm64-v8a/CMakeFiles/CMakeTmp
+
+Run Build Command(s):/Users/davidframpton/Library/Android/sdk/cmake/3.22.1/bin/ninja cmTC_dc002 && [1/2] Building C object CMakeFiles/cmTC_dc002.dir/CheckFunctionExists.c.o
+/Users/davidframpton/Library/Android/sdk/cmake/3.22.1/share/cmake-3.22/Modules/CheckFunctionExists.c:7:3: warning: incompatible redeclaration of library function 'pow' [-Wincompatible-library-redeclaration]
+    7 |   CHECK_FUNCTION_EXISTS(void);
+      |   ^
+<command line>:3:31: note: expanded from macro 'CHECK_FUNCTION_EXISTS'
+    3 | #define CHECK_FUNCTION_EXISTS pow
+      |                               ^
+/Users/davidframpton/Library/Android/sdk/cmake/3.22.1/share/cmake-3.22/Modules/CheckFunctionExists.c:7:3: note: 'pow' is a builtin with type 'double (double, double)'
+<command line>:3:31: note: expanded from macro 'CHECK_FUNCTION_EXISTS'
+    3 | #define CHECK_FUNCTION_EXISTS pow
+      |                               ^
+1 warning generated.
+[2/2] Linking C executable cmTC_dc002
+
+
+
+Determining if the abs exist passed with the following output:
+Change Dir: /Users/davidframpton/Documents/blockheads2/katipoBrowser/waraki/android/app/.cxx/Debug/5w6r711f/arm64-v8a/CMakeFiles/CMakeTmp
+
+Run Build Command(s):/Users/davidframpton/Library/Android/sdk/cmake/3.22.1/bin/ninja cmTC_c6fe6 && [1/2] Building C object CMakeFiles/cmTC_c6fe6.dir/CheckSymbolExists.c.o
+[2/2] Linking C executable cmTC_c6fe6
+
+
+File /Users/davidframpton/Documents/blockheads2/katipoBrowser/waraki/android/app/.cxx/Debug/5w6r711f/arm64-v8a/CMakeFiles/CMakeTmp/CheckSymbolExists.c:
+/* */
+#include <float.h>
+#include <iconv.h>
+#include <inttypes.h>
+#include <limits.h>
+#include <malloc.h>
+#include <math.h>
+#include <memory.h>
+#include <signal.h>
+#include <stdarg.h>
+#include <stdbool.h>
+#include <stddef.h>
+#include <stdint.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <strings.h>
+#include <sys/types.h>
+#include <time.h>
+#include <wchar.h>
+
+int main(int argc, char** argv)
+{
+  (void)argv;
+#ifndef abs
+  return ((int*)(&abs))[argc];
+#else
+  (void)argc;
+  return 0;
+#endif
+}
+Determining if the acos exist passed with the following output:
+Change Dir: /Users/davidframpton/Documents/blockheads2/katipoBrowser/waraki/android/app/.cxx/Debug/5w6r711f/arm64-v8a/CMakeFiles/CMakeTmp
+
+Run Build Command(s):/Users/davidframpton/Library/Android/sdk/cmake/3.22.1/bin/ninja cmTC_3391a && [1/2] Building C object CMakeFiles/cmTC_3391a.dir/CheckSymbolExists.c.o
+[2/2] Linking C executable cmTC_3391a
+
+
+File /Users/davidframpton/Documents/blockheads2/katipoBrowser/waraki/android/app/.cxx/Debug/5w6r711f/arm64-v8a/CMakeFiles/CMakeTmp/CheckSymbolExists.c:
+/* */
+#include <float.h>
+#include <iconv.h>
+#include <inttypes.h>
+#include <limits.h>
+#include <malloc.h>
+#include <math.h>
+#include <memory.h>
+#include <signal.h>
+#include <stdarg.h>
+#include <stdbool.h>
+#include <stddef.h>
+#include <stdint.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <strings.h>
+#include <sys/types.h>
+#include <time.h>
+#include <wchar.h>
+
+int main(int argc, char** argv)
+{
+  (void)argv;
+#ifndef acos
+  return ((int*)(&acos))[argc];
+#else
+  (void)argc;
+  return 0;
+#endif
+}
+Determining if the acosf exist passed with the following output:
+Change Dir: /Users/davidframpton/Documents/blockheads2/katipoBrowser/waraki/android/app/.cxx/Debug/5w6r711f/arm64-v8a/CMakeFiles/CMakeTmp
+
+Run Build Command(s):/Users/davidframpton/Library/Android/sdk/cmake/3.22.1/bin/ninja cmTC_a889d && [1/2] Building C object CMakeFiles/cmTC_a889d.dir/CheckSymbolExists.c.o
+[2/2] Linking C executable cmTC_a889d
+
+
+File /Users/davidframpton/Documents/blockheads2/katipoBrowser/waraki/android/app/.cxx/Debug/5w6r711f/arm64-v8a/CMakeFiles/CMakeTmp/CheckSymbolExists.c:
+/* */
+#include <float.h>
+#include <iconv.h>
+#include <inttypes.h>
+#include <limits.h>
+#include <malloc.h>
+#include <math.h>
+#include <memory.h>
+#include <signal.h>
+#include <stdarg.h>
+#include <stdbool.h>
+#include <stddef.h>
+#include <stdint.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <strings.h>
+#include <sys/types.h>
+#include <time.h>
+#include <wchar.h>
+
+int main(int argc, char** argv)
+{
+  (void)argv;
+#ifndef acosf
+  return ((int*)(&acosf))[argc];
+#else
+  (void)argc;
+  return 0;
+#endif
+}
+Determining if the asin exist passed with the following output:
+Change Dir: /Users/davidframpton/Documents/blockheads2/katipoBrowser/waraki/android/app/.cxx/Debug/5w6r711f/arm64-v8a/CMakeFiles/CMakeTmp
+
+Run Build Command(s):/Users/davidframpton/Library/Android/sdk/cmake/3.22.1/bin/ninja cmTC_55905 && [1/2] Building C object CMakeFiles/cmTC_55905.dir/CheckSymbolExists.c.o
+[2/2] Linking C executable cmTC_55905
+
+
+File /Users/davidframpton/Documents/blockheads2/katipoBrowser/waraki/android/app/.cxx/Debug/5w6r711f/arm64-v8a/CMakeFiles/CMakeTmp/CheckSymbolExists.c:
+/* */
+#include <float.h>
+#include <iconv.h>
+#include <inttypes.h>
+#include <limits.h>
+#include <malloc.h>
+#include <math.h>
+#include <memory.h>
+#include <signal.h>
+#include <stdarg.h>
+#include <stdbool.h>
+#include <stddef.h>
+#include <stdint.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <strings.h>
+#include <sys/types.h>
+#include <time.h>
+#include <wchar.h>
+
+int main(int argc, char** argv)
+{
+  (void)argv;
+#ifndef asin
+  return ((int*)(&asin))[argc];
+#else
+  (void)argc;
+  return 0;
+#endif
+}
+Determining if the asinf exist passed with the following output:
+Change Dir: /Users/davidframpton/Documents/blockheads2/katipoBrowser/waraki/android/app/.cxx/Debug/5w6r711f/arm64-v8a/CMakeFiles/CMakeTmp
+
+Run Build Command(s):/Users/davidframpton/Library/Android/sdk/cmake/3.22.1/bin/ninja cmTC_9fe34 && [1/2] Building C object CMakeFiles/cmTC_9fe34.dir/CheckSymbolExists.c.o
+[2/2] Linking C executable cmTC_9fe34
+
+
+File /Users/davidframpton/Documents/blockheads2/katipoBrowser/waraki/android/app/.cxx/Debug/5w6r711f/arm64-v8a/CMakeFiles/CMakeTmp/CheckSymbolExists.c:
+/* */
+#include <float.h>
+#include <iconv.h>
+#include <inttypes.h>
+#include <limits.h>
+#include <malloc.h>
+#include <math.h>
+#include <memory.h>
+#include <signal.h>
+#include <stdarg.h>
+#include <stdbool.h>
+#include <stddef.h>
+#include <stdint.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <strings.h>
+#include <sys/types.h>
+#include <time.h>
+#include <wchar.h>
+
+int main(int argc, char** argv)
+{
+  (void)argv;
+#ifndef asinf
+  return ((int*)(&asinf))[argc];
+#else
+  (void)argc;
+  return 0;
+#endif
+}
+Determining if the atan exist passed with the following output:
+Change Dir: /Users/davidframpton/Documents/blockheads2/katipoBrowser/waraki/android/app/.cxx/Debug/5w6r711f/arm64-v8a/CMakeFiles/CMakeTmp
+
+Run Build Command(s):/Users/davidframpton/Library/Android/sdk/cmake/3.22.1/bin/ninja cmTC_890b1 && [1/2] Building C object CMakeFiles/cmTC_890b1.dir/CheckSymbolExists.c.o
+[2/2] Linking C executable cmTC_890b1
+
+
+File /Users/davidframpton/Documents/blockheads2/katipoBrowser/waraki/android/app/.cxx/Debug/5w6r711f/arm64-v8a/CMakeFiles/CMakeTmp/CheckSymbolExists.c:
+/* */
+#include <float.h>
+#include <iconv.h>
+#include <inttypes.h>
+#include <limits.h>
+#include <malloc.h>
+#include <math.h>
+#include <memory.h>
+#include <signal.h>
+#include <stdarg.h>
+#include <stdbool.h>
+#include <stddef.h>
+#include <stdint.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <strings.h>
+#include <sys/types.h>
+#include <time.h>
+#include <wchar.h>
+
+int main(int argc, char** argv)
+{
+  (void)argv;
+#ifndef atan
+  return ((int*)(&atan))[argc];
+#else
+  (void)argc;
+  return 0;
+#endif
+}
+Determining if the atan2 exist passed with the following output:
+Change Dir: /Users/davidframpton/Documents/blockheads2/katipoBrowser/waraki/android/app/.cxx/Debug/5w6r711f/arm64-v8a/CMakeFiles/CMakeTmp
+
+Run Build Command(s):/Users/davidframpton/Library/Android/sdk/cmake/3.22.1/bin/ninja cmTC_10241 && [1/2] Building C object CMakeFiles/cmTC_10241.dir/CheckSymbolExists.c.o
+[2/2] Linking C executable cmTC_10241
+
+
+File /Users/davidframpton/Documents/blockheads2/katipoBrowser/waraki/android/app/.cxx/Debug/5w6r711f/arm64-v8a/CMakeFiles/CMakeTmp/CheckSymbolExists.c:
+/* */
+#include <float.h>
+#include <iconv.h>
+#include <inttypes.h>
+#include <limits.h>
+#include <malloc.h>
+#include <math.h>
+#include <memory.h>
+#include <signal.h>
+#include <stdarg.h>
+#include <stdbool.h>
+#include <stddef.h>
+#include <stdint.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <strings.h>
+#include <sys/types.h>
+#include <time.h>
+#include <wchar.h>
+
+int main(int argc, char** argv)
+{
+  (void)argv;
+#ifndef atan2
+  return ((int*)(&atan2))[argc];
+#else
+  (void)argc;
+  return 0;
+#endif
+}
+Determining if the atan2f exist passed with the following output:
+Change Dir: /Users/davidframpton/Documents/blockheads2/katipoBrowser/waraki/android/app/.cxx/Debug/5w6r711f/arm64-v8a/CMakeFiles/CMakeTmp
+
+Run Build Command(s):/Users/davidframpton/Library/Android/sdk/cmake/3.22.1/bin/ninja cmTC_dcec0 && [1/2] Building C object CMakeFiles/cmTC_dcec0.dir/CheckSymbolExists.c.o
+[2/2] Linking C executable cmTC_dcec0
+
+
+File /Users/davidframpton/Documents/blockheads2/katipoBrowser/waraki/android/app/.cxx/Debug/5w6r711f/arm64-v8a/CMakeFiles/CMakeTmp/CheckSymbolExists.c:
+/* */
+#include <float.h>
+#include <iconv.h>
+#include <inttypes.h>
+#include <limits.h>
+#include <malloc.h>
+#include <math.h>
+#include <memory.h>
+#include <signal.h>
+#include <stdarg.h>
+#include <stdbool.h>
+#include <stddef.h>
+#include <stdint.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <strings.h>
+#include <sys/types.h>
+#include <time.h>
+#include <wchar.h>
+
+int main(int argc, char** argv)
+{
+  (void)argv;
+#ifndef atan2f
+  return ((int*)(&atan2f))[argc];
+#else
+  (void)argc;
+  return 0;
+#endif
+}
+Determining if the atanf exist passed with the following output:
+Change Dir: /Users/davidframpton/Documents/blockheads2/katipoBrowser/waraki/android/app/.cxx/Debug/5w6r711f/arm64-v8a/CMakeFiles/CMakeTmp
+
+Run Build Command(s):/Users/davidframpton/Library/Android/sdk/cmake/3.22.1/bin/ninja cmTC_f000f && [1/2] Building C object CMakeFiles/cmTC_f000f.dir/CheckSymbolExists.c.o
+[2/2] Linking C executable cmTC_f000f
+
+
+File /Users/davidframpton/Documents/blockheads2/katipoBrowser/waraki/android/app/.cxx/Debug/5w6r711f/arm64-v8a/CMakeFiles/CMakeTmp/CheckSymbolExists.c:
+/* */
+#include <float.h>
+#include <iconv.h>
+#include <inttypes.h>
+#include <limits.h>
+#include <malloc.h>
+#include <math.h>
+#include <memory.h>
+#include <signal.h>
+#include <stdarg.h>
+#include <stdbool.h>
+#include <stddef.h>
+#include <stdint.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <strings.h>
+#include <sys/types.h>
+#include <time.h>
+#include <wchar.h>
+
+int main(int argc, char** argv)
+{
+  (void)argv;
+#ifndef atanf
+  return ((int*)(&atanf))[argc];
+#else
+  (void)argc;
+  return 0;
+#endif
+}
+Determining if the atof exist passed with the following output:
+Change Dir: /Users/davidframpton/Documents/blockheads2/katipoBrowser/waraki/android/app/.cxx/Debug/5w6r711f/arm64-v8a/CMakeFiles/CMakeTmp
+
+Run Build Command(s):/Users/davidframpton/Library/Android/sdk/cmake/3.22.1/bin/ninja cmTC_b7828 && [1/2] Building C object CMakeFiles/cmTC_b7828.dir/CheckSymbolExists.c.o
+[2/2] Linking C executable cmTC_b7828
+
+
+File /Users/davidframpton/Documents/blockheads2/katipoBrowser/waraki/android/app/.cxx/Debug/5w6r711f/arm64-v8a/CMakeFiles/CMakeTmp/CheckSymbolExists.c:
+/* */
+#include <float.h>
+#include <iconv.h>
+#include <inttypes.h>
+#include <limits.h>
+#include <malloc.h>
+#include <math.h>
+#include <memory.h>
+#include <signal.h>
+#include <stdarg.h>
+#include <stdbool.h>
+#include <stddef.h>
+#include <stdint.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <strings.h>
+#include <sys/types.h>
+#include <time.h>
+#include <wchar.h>
+
+int main(int argc, char** argv)
+{
+  (void)argv;
+#ifndef atof
+  return ((int*)(&atof))[argc];
+#else
+  (void)argc;
+  return 0;
+#endif
+}
+Determining if the atoi exist passed with the following output:
+Change Dir: /Users/davidframpton/Documents/blockheads2/katipoBrowser/waraki/android/app/.cxx/Debug/5w6r711f/arm64-v8a/CMakeFiles/CMakeTmp
+
+Run Build Command(s):/Users/davidframpton/Library/Android/sdk/cmake/3.22.1/bin/ninja cmTC_f5d66 && [1/2] Building C object CMakeFiles/cmTC_f5d66.dir/CheckSymbolExists.c.o
+[2/2] Linking C executable cmTC_f5d66
+
+
+File /Users/davidframpton/Documents/blockheads2/katipoBrowser/waraki/android/app/.cxx/Debug/5w6r711f/arm64-v8a/CMakeFiles/CMakeTmp/CheckSymbolExists.c:
+/* */
+#include <float.h>
+#include <iconv.h>
+#include <inttypes.h>
+#include <limits.h>
+#include <malloc.h>
+#include <math.h>
+#include <memory.h>
+#include <signal.h>
+#include <stdarg.h>
+#include <stdbool.h>
+#include <stddef.h>
+#include <stdint.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <strings.h>
+#include <sys/types.h>
+#include <time.h>
+#include <wchar.h>
+
+int main(int argc, char** argv)
+{
+  (void)argv;
+#ifndef atoi
+  return ((int*)(&atoi))[argc];
+#else
+  (void)argc;
+  return 0;
+#endif
+}
+Determining if the bcopy exist passed with the following output:
+Change Dir: /Users/davidframpton/Documents/blockheads2/katipoBrowser/waraki/android/app/.cxx/Debug/5w6r711f/arm64-v8a/CMakeFiles/CMakeTmp
+
+Run Build Command(s):/Users/davidframpton/Library/Android/sdk/cmake/3.22.1/bin/ninja cmTC_ed62e && [1/2] Building C object CMakeFiles/cmTC_ed62e.dir/CheckSymbolExists.c.o
+[2/2] Linking C executable cmTC_ed62e
+
+
+File /Users/davidframpton/Documents/blockheads2/katipoBrowser/waraki/android/app/.cxx/Debug/5w6r711f/arm64-v8a/CMakeFiles/CMakeTmp/CheckSymbolExists.c:
+/* */
+#include <float.h>
+#include <iconv.h>
+#include <inttypes.h>
+#include <limits.h>
+#include <malloc.h>
+#include <math.h>
+#include <memory.h>
+#include <signal.h>
+#include <stdarg.h>
+#include <stdbool.h>
+#include <stddef.h>
+#include <stdint.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <strings.h>
+#include <sys/types.h>
+#include <time.h>
+#include <wchar.h>
+
+int main(int argc, char** argv)
+{
+  (void)argv;
+#ifndef bcopy
+  return ((int*)(&bcopy))[argc];
+#else
+  (void)argc;
+  return 0;
+#endif
+}
+Determining if the ceil exist passed with the following output:
+Change Dir: /Users/davidframpton/Documents/blockheads2/katipoBrowser/waraki/android/app/.cxx/Debug/5w6r711f/arm64-v8a/CMakeFiles/CMakeTmp
+
+Run Build Command(s):/Users/davidframpton/Library/Android/sdk/cmake/3.22.1/bin/ninja cmTC_7048c && [1/2] Building C object CMakeFiles/cmTC_7048c.dir/CheckSymbolExists.c.o
+[2/2] Linking C executable cmTC_7048c
+
+
+File /Users/davidframpton/Documents/blockheads2/katipoBrowser/waraki/android/app/.cxx/Debug/5w6r711f/arm64-v8a/CMakeFiles/CMakeTmp/CheckSymbolExists.c:
+/* */
+#include <float.h>
+#include <iconv.h>
+#include <inttypes.h>
+#include <limits.h>
+#include <malloc.h>
+#include <math.h>
+#include <memory.h>
+#include <signal.h>
+#include <stdarg.h>
+#include <stdbool.h>
+#include <stddef.h>
+#include <stdint.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <strings.h>
+#include <sys/types.h>
+#include <time.h>
+#include <wchar.h>
+
+int main(int argc, char** argv)
+{
+  (void)argv;
+#ifndef ceil
+  return ((int*)(&ceil))[argc];
+#else
+  (void)argc;
+  return 0;
+#endif
+}
+Determining if the ceilf exist passed with the following output:
+Change Dir: /Users/davidframpton/Documents/blockheads2/katipoBrowser/waraki/android/app/.cxx/Debug/5w6r711f/arm64-v8a/CMakeFiles/CMakeTmp
+
+Run Build Command(s):/Users/davidframpton/Library/Android/sdk/cmake/3.22.1/bin/ninja cmTC_4d4ad && [1/2] Building C object CMakeFiles/cmTC_4d4ad.dir/CheckSymbolExists.c.o
+[2/2] Linking C executable cmTC_4d4ad
+
+
+File /Users/davidframpton/Documents/blockheads2/katipoBrowser/waraki/android/app/.cxx/Debug/5w6r711f/arm64-v8a/CMakeFiles/CMakeTmp/CheckSymbolExists.c:
+/* */
+#include <float.h>
+#include <iconv.h>
+#include <inttypes.h>
+#include <limits.h>
+#include <malloc.h>
+#include <math.h>
+#include <memory.h>
+#include <signal.h>
+#include <stdarg.h>
+#include <stdbool.h>
+#include <stddef.h>
+#include <stdint.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <strings.h>
+#include <sys/types.h>
+#include <time.h>
+#include <wchar.h>
+
+int main(int argc, char** argv)
+{
+  (void)argv;
+#ifndef ceilf
+  return ((int*)(&ceilf))[argc];
+#else
+  (void)argc;
+  return 0;
+#endif
+}
+Determining if the copysign exist passed with the following output:
+Change Dir: /Users/davidframpton/Documents/blockheads2/katipoBrowser/waraki/android/app/.cxx/Debug/5w6r711f/arm64-v8a/CMakeFiles/CMakeTmp
+
+Run Build Command(s):/Users/davidframpton/Library/Android/sdk/cmake/3.22.1/bin/ninja cmTC_2c9a4 && [1/2] Building C object CMakeFiles/cmTC_2c9a4.dir/CheckSymbolExists.c.o
+[2/2] Linking C executable cmTC_2c9a4
+
+
+File /Users/davidframpton/Documents/blockheads2/katipoBrowser/waraki/android/app/.cxx/Debug/5w6r711f/arm64-v8a/CMakeFiles/CMakeTmp/CheckSymbolExists.c:
+/* */
+#include <float.h>
+#include <iconv.h>
+#include <inttypes.h>
+#include <limits.h>
+#include <malloc.h>
+#include <math.h>
+#include <memory.h>
+#include <signal.h>
+#include <stdarg.h>
+#include <stdbool.h>
+#include <stddef.h>
+#include <stdint.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <strings.h>
+#include <sys/types.h>
+#include <time.h>
+#include <wchar.h>
+
+int main(int argc, char** argv)
+{
+  (void)argv;
+#ifndef copysign
+  return ((int*)(&copysign))[argc];
+#else
+  (void)argc;
+  return 0;
+#endif
+}
+Determining if the copysignf exist passed with the following output:
+Change Dir: /Users/davidframpton/Documents/blockheads2/katipoBrowser/waraki/android/app/.cxx/Debug/5w6r711f/arm64-v8a/CMakeFiles/CMakeTmp
+
+Run Build Command(s):/Users/davidframpton/Library/Android/sdk/cmake/3.22.1/bin/ninja cmTC_2e7ea && [1/2] Building C object CMakeFiles/cmTC_2e7ea.dir/CheckSymbolExists.c.o
+[2/2] Linking C executable cmTC_2e7ea
+
+
+File /Users/davidframpton/Documents/blockheads2/katipoBrowser/waraki/android/app/.cxx/Debug/5w6r711f/arm64-v8a/CMakeFiles/CMakeTmp/CheckSymbolExists.c:
+/* */
+#include <float.h>
+#include <iconv.h>
+#include <inttypes.h>
+#include <limits.h>
+#include <malloc.h>
+#include <math.h>
+#include <memory.h>
+#include <signal.h>
+#include <stdarg.h>
+#include <stdbool.h>
+#include <stddef.h>
+#include <stdint.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <strings.h>
+#include <sys/types.h>
+#include <time.h>
+#include <wchar.h>
+
+int main(int argc, char** argv)
+{
+  (void)argv;
+#ifndef copysignf
+  return ((int*)(&copysignf))[argc];
+#else
+  (void)argc;
+  return 0;
+#endif
+}
+Determining if the cos exist passed with the following output:
+Change Dir: /Users/davidframpton/Documents/blockheads2/katipoBrowser/waraki/android/app/.cxx/Debug/5w6r711f/arm64-v8a/CMakeFiles/CMakeTmp
+
+Run Build Command(s):/Users/davidframpton/Library/Android/sdk/cmake/3.22.1/bin/ninja cmTC_76913 && [1/2] Building C object CMakeFiles/cmTC_76913.dir/CheckSymbolExists.c.o
+[2/2] Linking C executable cmTC_76913
+
+
+File /Users/davidframpton/Documents/blockheads2/katipoBrowser/waraki/android/app/.cxx/Debug/5w6r711f/arm64-v8a/CMakeFiles/CMakeTmp/CheckSymbolExists.c:
+/* */
+#include <float.h>
+#include <iconv.h>
+#include <inttypes.h>
+#include <limits.h>
+#include <malloc.h>
+#include <math.h>
+#include <memory.h>
+#include <signal.h>
+#include <stdarg.h>
+#include <stdbool.h>
+#include <stddef.h>
+#include <stdint.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <strings.h>
+#include <sys/types.h>
+#include <time.h>
+#include <wchar.h>
+
+int main(int argc, char** argv)
+{
+  (void)argv;
+#ifndef cos
+  return ((int*)(&cos))[argc];
+#else
+  (void)argc;
+  return 0;
+#endif
+}
+Determining if the cosf exist passed with the following output:
+Change Dir: /Users/davidframpton/Documents/blockheads2/katipoBrowser/waraki/android/app/.cxx/Debug/5w6r711f/arm64-v8a/CMakeFiles/CMakeTmp
+
+Run Build Command(s):/Users/davidframpton/Library/Android/sdk/cmake/3.22.1/bin/ninja cmTC_da84e && [1/2] Building C object CMakeFiles/cmTC_da84e.dir/CheckSymbolExists.c.o
+[2/2] Linking C executable cmTC_da84e
+
+
+File /Users/davidframpton/Documents/blockheads2/katipoBrowser/waraki/android/app/.cxx/Debug/5w6r711f/arm64-v8a/CMakeFiles/CMakeTmp/CheckSymbolExists.c:
+/* */
+#include <float.h>
+#include <iconv.h>
+#include <inttypes.h>
+#include <limits.h>
+#include <malloc.h>
+#include <math.h>
+#include <memory.h>
+#include <signal.h>
+#include <stdarg.h>
+#include <stdbool.h>
+#include <stddef.h>
+#include <stdint.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <strings.h>
+#include <sys/types.h>
+#include <time.h>
+#include <wchar.h>
+
+int main(int argc, char** argv)
+{
+  (void)argv;
+#ifndef cosf
+  return ((int*)(&cosf))[argc];
+#else
+  (void)argc;
+  return 0;
+#endif
+}
+Determining if the _Exit exist passed with the following output:
+Change Dir: /Users/davidframpton/Documents/blockheads2/katipoBrowser/waraki/android/app/.cxx/Debug/5w6r711f/arm64-v8a/CMakeFiles/CMakeTmp
+
+Run Build Command(s):/Users/davidframpton/Library/Android/sdk/cmake/3.22.1/bin/ninja cmTC_1671f && [1/2] Building C object CMakeFiles/cmTC_1671f.dir/CheckSymbolExists.c.o
+[2/2] Linking C executable cmTC_1671f
+
+
+File /Users/davidframpton/Documents/blockheads2/katipoBrowser/waraki/android/app/.cxx/Debug/5w6r711f/arm64-v8a/CMakeFiles/CMakeTmp/CheckSymbolExists.c:
+/* */
+#include <float.h>
+#include <iconv.h>
+#include <inttypes.h>
+#include <limits.h>
+#include <malloc.h>
+#include <math.h>
+#include <memory.h>
+#include <signal.h>
+#include <stdarg.h>
+#include <stdbool.h>
+#include <stddef.h>
+#include <stdint.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <strings.h>
+#include <sys/types.h>
+#include <time.h>
+#include <wchar.h>
+
+int main(int argc, char** argv)
+{
+  (void)argv;
+#ifndef _Exit
+  return ((int*)(&_Exit))[argc];
+#else
+  (void)argc;
+  return 0;
+#endif
+}
+Determining if the exp exist passed with the following output:
+Change Dir: /Users/davidframpton/Documents/blockheads2/katipoBrowser/waraki/android/app/.cxx/Debug/5w6r711f/arm64-v8a/CMakeFiles/CMakeTmp
+
+Run Build Command(s):/Users/davidframpton/Library/Android/sdk/cmake/3.22.1/bin/ninja cmTC_e06cb && [1/2] Building C object CMakeFiles/cmTC_e06cb.dir/CheckSymbolExists.c.o
+[2/2] Linking C executable cmTC_e06cb
+
+
+File /Users/davidframpton/Documents/blockheads2/katipoBrowser/waraki/android/app/.cxx/Debug/5w6r711f/arm64-v8a/CMakeFiles/CMakeTmp/CheckSymbolExists.c:
+/* */
+#include <float.h>
+#include <iconv.h>
+#include <inttypes.h>
+#include <limits.h>
+#include <malloc.h>
+#include <math.h>
+#include <memory.h>
+#include <signal.h>
+#include <stdarg.h>
+#include <stdbool.h>
+#include <stddef.h>
+#include <stdint.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <strings.h>
+#include <sys/types.h>
+#include <time.h>
+#include <wchar.h>
+
+int main(int argc, char** argv)
+{
+  (void)argv;
+#ifndef exp
+  return ((int*)(&exp))[argc];
+#else
+  (void)argc;
+  return 0;
+#endif
+}
+Determining if the expf exist passed with the following output:
+Change Dir: /Users/davidframpton/Documents/blockheads2/katipoBrowser/waraki/android/app/.cxx/Debug/5w6r711f/arm64-v8a/CMakeFiles/CMakeTmp
+
+Run Build Command(s):/Users/davidframpton/Library/Android/sdk/cmake/3.22.1/bin/ninja cmTC_abed3 && [1/2] Building C object CMakeFiles/cmTC_abed3.dir/CheckSymbolExists.c.o
+[2/2] Linking C executable cmTC_abed3
+
+
+File /Users/davidframpton/Documents/blockheads2/katipoBrowser/waraki/android/app/.cxx/Debug/5w6r711f/arm64-v8a/CMakeFiles/CMakeTmp/CheckSymbolExists.c:
+/* */
+#include <float.h>
+#include <iconv.h>
+#include <inttypes.h>
+#include <limits.h>
+#include <malloc.h>
+#include <math.h>
+#include <memory.h>
+#include <signal.h>
+#include <stdarg.h>
+#include <stdbool.h>
+#include <stddef.h>
+#include <stdint.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <strings.h>
+#include <sys/types.h>
+#include <time.h>
+#include <wchar.h>
+
+int main(int argc, char** argv)
+{
+  (void)argv;
+#ifndef expf
+  return ((int*)(&expf))[argc];
+#else
+  (void)argc;
+  return 0;
+#endif
+}
+Determining if the fabs exist passed with the following output:
+Change Dir: /Users/davidframpton/Documents/blockheads2/katipoBrowser/waraki/android/app/.cxx/Debug/5w6r711f/arm64-v8a/CMakeFiles/CMakeTmp
+
+Run Build Command(s):/Users/davidframpton/Library/Android/sdk/cmake/3.22.1/bin/ninja cmTC_a2f5a && [1/2] Building C object CMakeFiles/cmTC_a2f5a.dir/CheckSymbolExists.c.o
+[2/2] Linking C executable cmTC_a2f5a
+
+
+File /Users/davidframpton/Documents/blockheads2/katipoBrowser/waraki/android/app/.cxx/Debug/5w6r711f/arm64-v8a/CMakeFiles/CMakeTmp/CheckSymbolExists.c:
+/* */
+#include <float.h>
+#include <iconv.h>
+#include <inttypes.h>
+#include <limits.h>
+#include <malloc.h>
+#include <math.h>
+#include <memory.h>
+#include <signal.h>
+#include <stdarg.h>
+#include <stdbool.h>
+#include <stddef.h>
+#include <stdint.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <strings.h>
+#include <sys/types.h>
+#include <time.h>
+#include <wchar.h>
+
+int main(int argc, char** argv)
+{
+  (void)argv;
+#ifndef fabs
+  return ((int*)(&fabs))[argc];
+#else
+  (void)argc;
+  return 0;
+#endif
+}
+Determining if the fabsf exist passed with the following output:
+Change Dir: /Users/davidframpton/Documents/blockheads2/katipoBrowser/waraki/android/app/.cxx/Debug/5w6r711f/arm64-v8a/CMakeFiles/CMakeTmp
+
+Run Build Command(s):/Users/davidframpton/Library/Android/sdk/cmake/3.22.1/bin/ninja cmTC_02c04 && [1/2] Building C object CMakeFiles/cmTC_02c04.dir/CheckSymbolExists.c.o
+[2/2] Linking C executable cmTC_02c04
+
+
+File /Users/davidframpton/Documents/blockheads2/katipoBrowser/waraki/android/app/.cxx/Debug/5w6r711f/arm64-v8a/CMakeFiles/CMakeTmp/CheckSymbolExists.c:
+/* */
+#include <float.h>
+#include <iconv.h>
+#include <inttypes.h>
+#include <limits.h>
+#include <malloc.h>
+#include <math.h>
+#include <memory.h>
+#include <signal.h>
+#include <stdarg.h>
+#include <stdbool.h>
+#include <stddef.h>
+#include <stdint.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <strings.h>
+#include <sys/types.h>
+#include <time.h>
+#include <wchar.h>
+
+int main(int argc, char** argv)
+{
+  (void)argv;
+#ifndef fabsf
+  return ((int*)(&fabsf))[argc];
+#else
+  (void)argc;
+  return 0;
+#endif
+}
+Determining if the floor exist passed with the following output:
+Change Dir: /Users/davidframpton/Documents/blockheads2/katipoBrowser/waraki/android/app/.cxx/Debug/5w6r711f/arm64-v8a/CMakeFiles/CMakeTmp
+
+Run Build Command(s):/Users/davidframpton/Library/Android/sdk/cmake/3.22.1/bin/ninja cmTC_5bfd4 && [1/2] Building C object CMakeFiles/cmTC_5bfd4.dir/CheckSymbolExists.c.o
+[2/2] Linking C executable cmTC_5bfd4
+
+
+File /Users/davidframpton/Documents/blockheads2/katipoBrowser/waraki/android/app/.cxx/Debug/5w6r711f/arm64-v8a/CMakeFiles/CMakeTmp/CheckSymbolExists.c:
+/* */
+#include <float.h>
+#include <iconv.h>
+#include <inttypes.h>
+#include <limits.h>
+#include <malloc.h>
+#include <math.h>
+#include <memory.h>
+#include <signal.h>
+#include <stdarg.h>
+#include <stdbool.h>
+#include <stddef.h>
+#include <stdint.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <strings.h>
+#include <sys/types.h>
+#include <time.h>
+#include <wchar.h>
+
+int main(int argc, char** argv)
+{
+  (void)argv;
+#ifndef floor
+  return ((int*)(&floor))[argc];
+#else
+  (void)argc;
+  return 0;
+#endif
+}
+Determining if the floorf exist passed with the following output:
+Change Dir: /Users/davidframpton/Documents/blockheads2/katipoBrowser/waraki/android/app/.cxx/Debug/5w6r711f/arm64-v8a/CMakeFiles/CMakeTmp
+
+Run Build Command(s):/Users/davidframpton/Library/Android/sdk/cmake/3.22.1/bin/ninja cmTC_73b28 && [1/2] Building C object CMakeFiles/cmTC_73b28.dir/CheckSymbolExists.c.o
+[2/2] Linking C executable cmTC_73b28
+
+
+File /Users/davidframpton/Documents/blockheads2/katipoBrowser/waraki/android/app/.cxx/Debug/5w6r711f/arm64-v8a/CMakeFiles/CMakeTmp/CheckSymbolExists.c:
+/* */
+#include <float.h>
+#include <iconv.h>
+#include <inttypes.h>
+#include <limits.h>
+#include <malloc.h>
+#include <math.h>
+#include <memory.h>
+#include <signal.h>
+#include <stdarg.h>
+#include <stdbool.h>
+#include <stddef.h>
+#include <stdint.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <strings.h>
+#include <sys/types.h>
+#include <time.h>
+#include <wchar.h>
+
+int main(int argc, char** argv)
+{
+  (void)argv;
+#ifndef floorf
+  return ((int*)(&floorf))[argc];
+#else
+  (void)argc;
+  return 0;
+#endif
+}
+Determining if the fmod exist passed with the following output:
+Change Dir: /Users/davidframpton/Documents/blockheads2/katipoBrowser/waraki/android/app/.cxx/Debug/5w6r711f/arm64-v8a/CMakeFiles/CMakeTmp
+
+Run Build Command(s):/Users/davidframpton/Library/Android/sdk/cmake/3.22.1/bin/ninja cmTC_e9253 && [1/2] Building C object CMakeFiles/cmTC_e9253.dir/CheckSymbolExists.c.o
+[2/2] Linking C executable cmTC_e9253
+
+
+File /Users/davidframpton/Documents/blockheads2/katipoBrowser/waraki/android/app/.cxx/Debug/5w6r711f/arm64-v8a/CMakeFiles/CMakeTmp/CheckSymbolExists.c:
+/* */
+#include <float.h>
+#include <iconv.h>
+#include <inttypes.h>
+#include <limits.h>
+#include <malloc.h>
+#include <math.h>
+#include <memory.h>
+#include <signal.h>
+#include <stdarg.h>
+#include <stdbool.h>
+#include <stddef.h>
+#include <stdint.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <strings.h>
+#include <sys/types.h>
+#include <time.h>
+#include <wchar.h>
+
+int main(int argc, char** argv)
+{
+  (void)argv;
+#ifndef fmod
+  return ((int*)(&fmod))[argc];
+#else
+  (void)argc;
+  return 0;
+#endif
+}
+Determining if the fmodf exist passed with the following output:
+Change Dir: /Users/davidframpton/Documents/blockheads2/katipoBrowser/waraki/android/app/.cxx/Debug/5w6r711f/arm64-v8a/CMakeFiles/CMakeTmp
+
+Run Build Command(s):/Users/davidframpton/Library/Android/sdk/cmake/3.22.1/bin/ninja cmTC_41656 && [1/2] Building C object CMakeFiles/cmTC_41656.dir/CheckSymbolExists.c.o
+[2/2] Linking C executable cmTC_41656
+
+
+File /Users/davidframpton/Documents/blockheads2/katipoBrowser/waraki/android/app/.cxx/Debug/5w6r711f/arm64-v8a/CMakeFiles/CMakeTmp/CheckSymbolExists.c:
+/* */
+#include <float.h>
+#include <iconv.h>
+#include <inttypes.h>
+#include <limits.h>
+#include <malloc.h>
+#include <math.h>
+#include <memory.h>
+#include <signal.h>
+#include <stdarg.h>
+#include <stdbool.h>
+#include <stddef.h>
+#include <stdint.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <strings.h>
+#include <sys/types.h>
+#include <time.h>
+#include <wchar.h>
+
+int main(int argc, char** argv)
+{
+  (void)argv;
+#ifndef fmodf
+  return ((int*)(&fmodf))[argc];
+#else
+  (void)argc;
+  return 0;
+#endif
+}
+Determining if the fseeko exist passed with the following output:
+Change Dir: /Users/davidframpton/Documents/blockheads2/katipoBrowser/waraki/android/app/.cxx/Debug/5w6r711f/arm64-v8a/CMakeFiles/CMakeTmp
+
+Run Build Command(s):/Users/davidframpton/Library/Android/sdk/cmake/3.22.1/bin/ninja cmTC_5d52b && [1/2] Building C object CMakeFiles/cmTC_5d52b.dir/CheckSymbolExists.c.o
+[2/2] Linking C executable cmTC_5d52b
+
+
+File /Users/davidframpton/Documents/blockheads2/katipoBrowser/waraki/android/app/.cxx/Debug/5w6r711f/arm64-v8a/CMakeFiles/CMakeTmp/CheckSymbolExists.c:
+/* */
+#include <float.h>
+#include <iconv.h>
+#include <inttypes.h>
+#include <limits.h>
+#include <malloc.h>
+#include <math.h>
+#include <memory.h>
+#include <signal.h>
+#include <stdarg.h>
+#include <stdbool.h>
+#include <stddef.h>
+#include <stdint.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <strings.h>
+#include <sys/types.h>
+#include <time.h>
+#include <wchar.h>
+
+int main(int argc, char** argv)
+{
+  (void)argv;
+#ifndef fseeko
+  return ((int*)(&fseeko))[argc];
+#else
+  (void)argc;
+  return 0;
+#endif
+}
+Determining if the getenv exist passed with the following output:
+Change Dir: /Users/davidframpton/Documents/blockheads2/katipoBrowser/waraki/android/app/.cxx/Debug/5w6r711f/arm64-v8a/CMakeFiles/CMakeTmp
+
+Run Build Command(s):/Users/davidframpton/Library/Android/sdk/cmake/3.22.1/bin/ninja cmTC_171aa && [1/2] Building C object CMakeFiles/cmTC_171aa.dir/CheckSymbolExists.c.o
+[2/2] Linking C executable cmTC_171aa
+
+
+File /Users/davidframpton/Documents/blockheads2/katipoBrowser/waraki/android/app/.cxx/Debug/5w6r711f/arm64-v8a/CMakeFiles/CMakeTmp/CheckSymbolExists.c:
+/* */
+#include <float.h>
+#include <iconv.h>
+#include <inttypes.h>
+#include <limits.h>
+#include <malloc.h>
+#include <math.h>
+#include <memory.h>
+#include <signal.h>
+#include <stdarg.h>
+#include <stdbool.h>
+#include <stddef.h>
+#include <stdint.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <strings.h>
+#include <sys/types.h>
+#include <time.h>
+#include <wchar.h>
+
+int main(int argc, char** argv)
+{
+  (void)argv;
+#ifndef getenv
+  return ((int*)(&getenv))[argc];
+#else
+  (void)argc;
+  return 0;
+#endif
+}
+Determining if the log exist passed with the following output:
+Change Dir: /Users/davidframpton/Documents/blockheads2/katipoBrowser/waraki/android/app/.cxx/Debug/5w6r711f/arm64-v8a/CMakeFiles/CMakeTmp
+
+Run Build Command(s):/Users/davidframpton/Library/Android/sdk/cmake/3.22.1/bin/ninja cmTC_ebe7f && [1/2] Building C object CMakeFiles/cmTC_ebe7f.dir/CheckSymbolExists.c.o
+[2/2] Linking C executable cmTC_ebe7f
+
+
+File /Users/davidframpton/Documents/blockheads2/katipoBrowser/waraki/android/app/.cxx/Debug/5w6r711f/arm64-v8a/CMakeFiles/CMakeTmp/CheckSymbolExists.c:
+/* */
+#include <float.h>
+#include <iconv.h>
+#include <inttypes.h>
+#include <limits.h>
+#include <malloc.h>
+#include <math.h>
+#include <memory.h>
+#include <signal.h>
+#include <stdarg.h>
+#include <stdbool.h>
+#include <stddef.h>
+#include <stdint.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <strings.h>
+#include <sys/types.h>
+#include <time.h>
+#include <wchar.h>
+
+int main(int argc, char** argv)
+{
+  (void)argv;
+#ifndef log
+  return ((int*)(&log))[argc];
+#else
+  (void)argc;
+  return 0;
+#endif
+}
+Determining if the log10 exist passed with the following output:
+Change Dir: /Users/davidframpton/Documents/blockheads2/katipoBrowser/waraki/android/app/.cxx/Debug/5w6r711f/arm64-v8a/CMakeFiles/CMakeTmp
+
+Run Build Command(s):/Users/davidframpton/Library/Android/sdk/cmake/3.22.1/bin/ninja cmTC_ce2b4 && [1/2] Building C object CMakeFiles/cmTC_ce2b4.dir/CheckSymbolExists.c.o
+[2/2] Linking C executable cmTC_ce2b4
+
+
+File /Users/davidframpton/Documents/blockheads2/katipoBrowser/waraki/android/app/.cxx/Debug/5w6r711f/arm64-v8a/CMakeFiles/CMakeTmp/CheckSymbolExists.c:
+/* */
+#include <float.h>
+#include <iconv.h>
+#include <inttypes.h>
+#include <limits.h>
+#include <malloc.h>
+#include <math.h>
+#include <memory.h>
+#include <signal.h>
+#include <stdarg.h>
+#include <stdbool.h>
+#include <stddef.h>
+#include <stdint.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <strings.h>
+#include <sys/types.h>
+#include <time.h>
+#include <wchar.h>
+
+int main(int argc, char** argv)
+{
+  (void)argv;
+#ifndef log10
+  return ((int*)(&log10))[argc];
+#else
+  (void)argc;
+  return 0;
+#endif
+}
+Determining if the log10f exist passed with the following output:
+Change Dir: /Users/davidframpton/Documents/blockheads2/katipoBrowser/waraki/android/app/.cxx/Debug/5w6r711f/arm64-v8a/CMakeFiles/CMakeTmp
+
+Run Build Command(s):/Users/davidframpton/Library/Android/sdk/cmake/3.22.1/bin/ninja cmTC_4d554 && [1/2] Building C object CMakeFiles/cmTC_4d554.dir/CheckSymbolExists.c.o
+[2/2] Linking C executable cmTC_4d554
+
+
+File /Users/davidframpton/Documents/blockheads2/katipoBrowser/waraki/android/app/.cxx/Debug/5w6r711f/arm64-v8a/CMakeFiles/CMakeTmp/CheckSymbolExists.c:
+/* */
+#include <float.h>
+#include <iconv.h>
+#include <inttypes.h>
+#include <limits.h>
+#include <malloc.h>
+#include <math.h>
+#include <memory.h>
+#include <signal.h>
+#include <stdarg.h>
+#include <stdbool.h>
+#include <stddef.h>
+#include <stdint.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <strings.h>
+#include <sys/types.h>
+#include <time.h>
+#include <wchar.h>
+
+int main(int argc, char** argv)
+{
+  (void)argv;
+#ifndef log10f
+  return ((int*)(&log10f))[argc];
+#else
+  (void)argc;
+  return 0;
+#endif
+}
+Determining if the logf exist passed with the following output:
+Change Dir: /Users/davidframpton/Documents/blockheads2/katipoBrowser/waraki/android/app/.cxx/Debug/5w6r711f/arm64-v8a/CMakeFiles/CMakeTmp
+
+Run Build Command(s):/Users/davidframpton/Library/Android/sdk/cmake/3.22.1/bin/ninja cmTC_78326 && [1/2] Building C object CMakeFiles/cmTC_78326.dir/CheckSymbolExists.c.o
+[2/2] Linking C executable cmTC_78326
+
+
+File /Users/davidframpton/Documents/blockheads2/katipoBrowser/waraki/android/app/.cxx/Debug/5w6r711f/arm64-v8a/CMakeFiles/CMakeTmp/CheckSymbolExists.c:
+/* */
+#include <float.h>
+#include <iconv.h>
+#include <inttypes.h>
+#include <limits.h>
+#include <malloc.h>
+#include <math.h>
+#include <memory.h>
+#include <signal.h>
+#include <stdarg.h>
+#include <stdbool.h>
+#include <stddef.h>
+#include <stdint.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <strings.h>
+#include <sys/types.h>
+#include <time.h>
+#include <wchar.h>
+
+int main(int argc, char** argv)
+{
+  (void)argv;
+#ifndef logf
+  return ((int*)(&logf))[argc];
+#else
+  (void)argc;
+  return 0;
+#endif
+}
+Determining if the lround exist passed with the following output:
+Change Dir: /Users/davidframpton/Documents/blockheads2/katipoBrowser/waraki/android/app/.cxx/Debug/5w6r711f/arm64-v8a/CMakeFiles/CMakeTmp
+
+Run Build Command(s):/Users/davidframpton/Library/Android/sdk/cmake/3.22.1/bin/ninja cmTC_d19cd && [1/2] Building C object CMakeFiles/cmTC_d19cd.dir/CheckSymbolExists.c.o
+[2/2] Linking C executable cmTC_d19cd
+
+
+File /Users/davidframpton/Documents/blockheads2/katipoBrowser/waraki/android/app/.cxx/Debug/5w6r711f/arm64-v8a/CMakeFiles/CMakeTmp/CheckSymbolExists.c:
+/* */
+#include <float.h>
+#include <iconv.h>
+#include <inttypes.h>
+#include <limits.h>
+#include <malloc.h>
+#include <math.h>
+#include <memory.h>
+#include <signal.h>
+#include <stdarg.h>
+#include <stdbool.h>
+#include <stddef.h>
+#include <stdint.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <strings.h>
+#include <sys/types.h>
+#include <time.h>
+#include <wchar.h>
+
+int main(int argc, char** argv)
+{
+  (void)argv;
+#ifndef lround
+  return ((int*)(&lround))[argc];
+#else
+  (void)argc;
+  return 0;
+#endif
+}
+Determining if the lroundf exist passed with the following output:
+Change Dir: /Users/davidframpton/Documents/blockheads2/katipoBrowser/waraki/android/app/.cxx/Debug/5w6r711f/arm64-v8a/CMakeFiles/CMakeTmp
+
+Run Build Command(s):/Users/davidframpton/Library/Android/sdk/cmake/3.22.1/bin/ninja cmTC_b09aa && [1/2] Building C object CMakeFiles/cmTC_b09aa.dir/CheckSymbolExists.c.o
+[2/2] Linking C executable cmTC_b09aa
+
+
+File /Users/davidframpton/Documents/blockheads2/katipoBrowser/waraki/android/app/.cxx/Debug/5w6r711f/arm64-v8a/CMakeFiles/CMakeTmp/CheckSymbolExists.c:
+/* */
+#include <float.h>
+#include <iconv.h>
+#include <inttypes.h>
+#include <limits.h>
+#include <malloc.h>
+#include <math.h>
+#include <memory.h>
+#include <signal.h>
+#include <stdarg.h>
+#include <stdbool.h>
+#include <stddef.h>
+#include <stdint.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <strings.h>
+#include <sys/types.h>
+#include <time.h>
+#include <wchar.h>
+
+int main(int argc, char** argv)
+{
+  (void)argv;
+#ifndef lroundf
+  return ((int*)(&lroundf))[argc];
+#else
+  (void)argc;
+  return 0;
+#endif
+}
+Determining if the malloc exist passed with the following output:
+Change Dir: /Users/davidframpton/Documents/blockheads2/katipoBrowser/waraki/android/app/.cxx/Debug/5w6r711f/arm64-v8a/CMakeFiles/CMakeTmp
+
+Run Build Command(s):/Users/davidframpton/Library/Android/sdk/cmake/3.22.1/bin/ninja cmTC_32b50 && [1/2] Building C object CMakeFiles/cmTC_32b50.dir/CheckSymbolExists.c.o
+[2/2] Linking C executable cmTC_32b50
+
+
+File /Users/davidframpton/Documents/blockheads2/katipoBrowser/waraki/android/app/.cxx/Debug/5w6r711f/arm64-v8a/CMakeFiles/CMakeTmp/CheckSymbolExists.c:
+/* */
+#include <float.h>
+#include <iconv.h>
+#include <inttypes.h>
+#include <limits.h>
+#include <malloc.h>
+#include <math.h>
+#include <memory.h>
+#include <signal.h>
+#include <stdarg.h>
+#include <stdbool.h>
+#include <stddef.h>
+#include <stdint.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <strings.h>
+#include <sys/types.h>
+#include <time.h>
+#include <wchar.h>
+
+int main(int argc, char** argv)
+{
+  (void)argv;
+#ifndef malloc
+  return ((int*)(&malloc))[argc];
+#else
+  (void)argc;
+  return 0;
+#endif
+}
+Determining if the memcmp exist passed with the following output:
+Change Dir: /Users/davidframpton/Documents/blockheads2/katipoBrowser/waraki/android/app/.cxx/Debug/5w6r711f/arm64-v8a/CMakeFiles/CMakeTmp
+
+Run Build Command(s):/Users/davidframpton/Library/Android/sdk/cmake/3.22.1/bin/ninja cmTC_707d7 && [1/2] Building C object CMakeFiles/cmTC_707d7.dir/CheckSymbolExists.c.o
+[2/2] Linking C executable cmTC_707d7
+
+
+File /Users/davidframpton/Documents/blockheads2/katipoBrowser/waraki/android/app/.cxx/Debug/5w6r711f/arm64-v8a/CMakeFiles/CMakeTmp/CheckSymbolExists.c:
+/* */
+#include <float.h>
+#include <iconv.h>
+#include <inttypes.h>
+#include <limits.h>
+#include <malloc.h>
+#include <math.h>
+#include <memory.h>
+#include <signal.h>
+#include <stdarg.h>
+#include <stdbool.h>
+#include <stddef.h>
+#include <stdint.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <strings.h>
+#include <sys/types.h>
+#include <time.h>
+#include <wchar.h>
+
+int main(int argc, char** argv)
+{
+  (void)argv;
+#ifndef memcmp
+  return ((int*)(&memcmp))[argc];
+#else
+  (void)argc;
+  return 0;
+#endif
+}
+Determining if the memcpy exist passed with the following output:
+Change Dir: /Users/davidframpton/Documents/blockheads2/katipoBrowser/waraki/android/app/.cxx/Debug/5w6r711f/arm64-v8a/CMakeFiles/CMakeTmp
+
+Run Build Command(s):/Users/davidframpton/Library/Android/sdk/cmake/3.22.1/bin/ninja cmTC_f39ca && [1/2] Building C object CMakeFiles/cmTC_f39ca.dir/CheckSymbolExists.c.o
+[2/2] Linking C executable cmTC_f39ca
+
+
+File /Users/davidframpton/Documents/blockheads2/katipoBrowser/waraki/android/app/.cxx/Debug/5w6r711f/arm64-v8a/CMakeFiles/CMakeTmp/CheckSymbolExists.c:
+/* */
+#include <float.h>
+#include <iconv.h>
+#include <inttypes.h>
+#include <limits.h>
+#include <malloc.h>
+#include <math.h>
+#include <memory.h>
+#include <signal.h>
+#include <stdarg.h>
+#include <stdbool.h>
+#include <stddef.h>
+#include <stdint.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <strings.h>
+#include <sys/types.h>
+#include <time.h>
+#include <wchar.h>
+
+int main(int argc, char** argv)
+{
+  (void)argv;
+#ifndef memcpy
+  return ((int*)(&memcpy))[argc];
+#else
+  (void)argc;
+  return 0;
+#endif
+}
+Determining if the memmove exist passed with the following output:
+Change Dir: /Users/davidframpton/Documents/blockheads2/katipoBrowser/waraki/android/app/.cxx/Debug/5w6r711f/arm64-v8a/CMakeFiles/CMakeTmp
+
+Run Build Command(s):/Users/davidframpton/Library/Android/sdk/cmake/3.22.1/bin/ninja cmTC_d37e9 && [1/2] Building C object CMakeFiles/cmTC_d37e9.dir/CheckSymbolExists.c.o
+[2/2] Linking C executable cmTC_d37e9
+
+
+File /Users/davidframpton/Documents/blockheads2/katipoBrowser/waraki/android/app/.cxx/Debug/5w6r711f/arm64-v8a/CMakeFiles/CMakeTmp/CheckSymbolExists.c:
+/* */
+#include <float.h>
+#include <iconv.h>
+#include <inttypes.h>
+#include <limits.h>
+#include <malloc.h>
+#include <math.h>
+#include <memory.h>
+#include <signal.h>
+#include <stdarg.h>
+#include <stdbool.h>
+#include <stddef.h>
+#include <stdint.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <strings.h>
+#include <sys/types.h>
+#include <time.h>
+#include <wchar.h>
+
+int main(int argc, char** argv)
+{
+  (void)argv;
+#ifndef memmove
+  return ((int*)(&memmove))[argc];
+#else
+  (void)argc;
+  return 0;
+#endif
+}
+Determining if the memset exist passed with the following output:
+Change Dir: /Users/davidframpton/Documents/blockheads2/katipoBrowser/waraki/android/app/.cxx/Debug/5w6r711f/arm64-v8a/CMakeFiles/CMakeTmp
+
+Run Build Command(s):/Users/davidframpton/Library/Android/sdk/cmake/3.22.1/bin/ninja cmTC_73167 && [1/2] Building C object CMakeFiles/cmTC_73167.dir/CheckSymbolExists.c.o
+[2/2] Linking C executable cmTC_73167
+
+
+File /Users/davidframpton/Documents/blockheads2/katipoBrowser/waraki/android/app/.cxx/Debug/5w6r711f/arm64-v8a/CMakeFiles/CMakeTmp/CheckSymbolExists.c:
+/* */
+#include <float.h>
+#include <iconv.h>
+#include <inttypes.h>
+#include <limits.h>
+#include <malloc.h>
+#include <math.h>
+#include <memory.h>
+#include <signal.h>
+#include <stdarg.h>
+#include <stdbool.h>
+#include <stddef.h>
+#include <stdint.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <strings.h>
+#include <sys/types.h>
+#include <time.h>
+#include <wchar.h>
+
+int main(int argc, char** argv)
+{
+  (void)argv;
+#ifndef memset
+  return ((int*)(&memset))[argc];
+#else
+  (void)argc;
+  return 0;
+#endif
+}
+Determining if the modf exist passed with the following output:
+Change Dir: /Users/davidframpton/Documents/blockheads2/katipoBrowser/waraki/android/app/.cxx/Debug/5w6r711f/arm64-v8a/CMakeFiles/CMakeTmp
+
+Run Build Command(s):/Users/davidframpton/Library/Android/sdk/cmake/3.22.1/bin/ninja cmTC_c3378 && [1/2] Building C object CMakeFiles/cmTC_c3378.dir/CheckSymbolExists.c.o
+[2/2] Linking C executable cmTC_c3378
+
+
+File /Users/davidframpton/Documents/blockheads2/katipoBrowser/waraki/android/app/.cxx/Debug/5w6r711f/arm64-v8a/CMakeFiles/CMakeTmp/CheckSymbolExists.c:
+/* */
+#include <float.h>
+#include <iconv.h>
+#include <inttypes.h>
+#include <limits.h>
+#include <malloc.h>
+#include <math.h>
+#include <memory.h>
+#include <signal.h>
+#include <stdarg.h>
+#include <stdbool.h>
+#include <stddef.h>
+#include <stdint.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <strings.h>
+#include <sys/types.h>
+#include <time.h>
+#include <wchar.h>
+
+int main(int argc, char** argv)
+{
+  (void)argv;
+#ifndef modf
+  return ((int*)(&modf))[argc];
+#else
+  (void)argc;
+  return 0;
+#endif
+}
+Determining if the modff exist passed with the following output:
+Change Dir: /Users/davidframpton/Documents/blockheads2/katipoBrowser/waraki/android/app/.cxx/Debug/5w6r711f/arm64-v8a/CMakeFiles/CMakeTmp
+
+Run Build Command(s):/Users/davidframpton/Library/Android/sdk/cmake/3.22.1/bin/ninja cmTC_226d1 && [1/2] Building C object CMakeFiles/cmTC_226d1.dir/CheckSymbolExists.c.o
+[2/2] Linking C executable cmTC_226d1
+
+
+File /Users/davidframpton/Documents/blockheads2/katipoBrowser/waraki/android/app/.cxx/Debug/5w6r711f/arm64-v8a/CMakeFiles/CMakeTmp/CheckSymbolExists.c:
+/* */
+#include <float.h>
+#include <iconv.h>
+#include <inttypes.h>
+#include <limits.h>
+#include <malloc.h>
+#include <math.h>
+#include <memory.h>
+#include <signal.h>
+#include <stdarg.h>
+#include <stdbool.h>
+#include <stddef.h>
+#include <stdint.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <strings.h>
+#include <sys/types.h>
+#include <time.h>
+#include <wchar.h>
+
+int main(int argc, char** argv)
+{
+  (void)argv;
+#ifndef modff
+  return ((int*)(&modff))[argc];
+#else
+  (void)argc;
+  return 0;
+#endif
+}
+Determining if the pow exist passed with the following output:
+Change Dir: /Users/davidframpton/Documents/blockheads2/katipoBrowser/waraki/android/app/.cxx/Debug/5w6r711f/arm64-v8a/CMakeFiles/CMakeTmp
+
+Run Build Command(s):/Users/davidframpton/Library/Android/sdk/cmake/3.22.1/bin/ninja cmTC_34c44 && [1/2] Building C object CMakeFiles/cmTC_34c44.dir/CheckSymbolExists.c.o
+[2/2] Linking C executable cmTC_34c44
+
+
+File /Users/davidframpton/Documents/blockheads2/katipoBrowser/waraki/android/app/.cxx/Debug/5w6r711f/arm64-v8a/CMakeFiles/CMakeTmp/CheckSymbolExists.c:
+/* */
+#include <float.h>
+#include <iconv.h>
+#include <inttypes.h>
+#include <limits.h>
+#include <malloc.h>
+#include <math.h>
+#include <memory.h>
+#include <signal.h>
+#include <stdarg.h>
+#include <stdbool.h>
+#include <stddef.h>
+#include <stdint.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <strings.h>
+#include <sys/types.h>
+#include <time.h>
+#include <wchar.h>
+
+int main(int argc, char** argv)
+{
+  (void)argv;
+#ifndef pow
+  return ((int*)(&pow))[argc];
+#else
+  (void)argc;
+  return 0;
+#endif
+}
+Determining if the powf exist passed with the following output:
+Change Dir: /Users/davidframpton/Documents/blockheads2/katipoBrowser/waraki/android/app/.cxx/Debug/5w6r711f/arm64-v8a/CMakeFiles/CMakeTmp
+
+Run Build Command(s):/Users/davidframpton/Library/Android/sdk/cmake/3.22.1/bin/ninja cmTC_3481e && [1/2] Building C object CMakeFiles/cmTC_3481e.dir/CheckSymbolExists.c.o
+[2/2] Linking C executable cmTC_3481e
+
+
+File /Users/davidframpton/Documents/blockheads2/katipoBrowser/waraki/android/app/.cxx/Debug/5w6r711f/arm64-v8a/CMakeFiles/CMakeTmp/CheckSymbolExists.c:
+/* */
+#include <float.h>
+#include <iconv.h>
+#include <inttypes.h>
+#include <limits.h>
+#include <malloc.h>
+#include <math.h>
+#include <memory.h>
+#include <signal.h>
+#include <stdarg.h>
+#include <stdbool.h>
+#include <stddef.h>
+#include <stdint.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <strings.h>
+#include <sys/types.h>
+#include <time.h>
+#include <wchar.h>
+
+int main(int argc, char** argv)
+{
+  (void)argv;
+#ifndef powf
+  return ((int*)(&powf))[argc];
+#else
+  (void)argc;
+  return 0;
+#endif
+}
+Determining if the putenv exist passed with the following output:
+Change Dir: /Users/davidframpton/Documents/blockheads2/katipoBrowser/waraki/android/app/.cxx/Debug/5w6r711f/arm64-v8a/CMakeFiles/CMakeTmp
+
+Run Build Command(s):/Users/davidframpton/Library/Android/sdk/cmake/3.22.1/bin/ninja cmTC_392db && [1/2] Building C object CMakeFiles/cmTC_392db.dir/CheckSymbolExists.c.o
+[2/2] Linking C executable cmTC_392db
+
+
+File /Users/davidframpton/Documents/blockheads2/katipoBrowser/waraki/android/app/.cxx/Debug/5w6r711f/arm64-v8a/CMakeFiles/CMakeTmp/CheckSymbolExists.c:
+/* */
+#include <float.h>
+#include <iconv.h>
+#include <inttypes.h>
+#include <limits.h>
+#include <malloc.h>
+#include <math.h>
+#include <memory.h>
+#include <signal.h>
+#include <stdarg.h>
+#include <stdbool.h>
+#include <stddef.h>
+#include <stdint.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <strings.h>
+#include <sys/types.h>
+#include <time.h>
+#include <wchar.h>
+
+int main(int argc, char** argv)
+{
+  (void)argv;
+#ifndef putenv
+  return ((int*)(&putenv))[argc];
+#else
+  (void)argc;
+  return 0;
+#endif
+}
+Determining if the round exist passed with the following output:
+Change Dir: /Users/davidframpton/Documents/blockheads2/katipoBrowser/waraki/android/app/.cxx/Debug/5w6r711f/arm64-v8a/CMakeFiles/CMakeTmp
+
+Run Build Command(s):/Users/davidframpton/Library/Android/sdk/cmake/3.22.1/bin/ninja cmTC_c6bd6 && [1/2] Building C object CMakeFiles/cmTC_c6bd6.dir/CheckSymbolExists.c.o
+[2/2] Linking C executable cmTC_c6bd6
+
+
+File /Users/davidframpton/Documents/blockheads2/katipoBrowser/waraki/android/app/.cxx/Debug/5w6r711f/arm64-v8a/CMakeFiles/CMakeTmp/CheckSymbolExists.c:
+/* */
+#include <float.h>
+#include <iconv.h>
+#include <inttypes.h>
+#include <limits.h>
+#include <malloc.h>
+#include <math.h>
+#include <memory.h>
+#include <signal.h>
+#include <stdarg.h>
+#include <stdbool.h>
+#include <stddef.h>
+#include <stdint.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <strings.h>
+#include <sys/types.h>
+#include <time.h>
+#include <wchar.h>
+
+int main(int argc, char** argv)
+{
+  (void)argv;
+#ifndef round
+  return ((int*)(&round))[argc];
+#else
+  (void)argc;
+  return 0;
+#endif
+}
+Determining if the roundf exist passed with the following output:
+Change Dir: /Users/davidframpton/Documents/blockheads2/katipoBrowser/waraki/android/app/.cxx/Debug/5w6r711f/arm64-v8a/CMakeFiles/CMakeTmp
+
+Run Build Command(s):/Users/davidframpton/Library/Android/sdk/cmake/3.22.1/bin/ninja cmTC_825e8 && [1/2] Building C object CMakeFiles/cmTC_825e8.dir/CheckSymbolExists.c.o
+[2/2] Linking C executable cmTC_825e8
+
+
+File /Users/davidframpton/Documents/blockheads2/katipoBrowser/waraki/android/app/.cxx/Debug/5w6r711f/arm64-v8a/CMakeFiles/CMakeTmp/CheckSymbolExists.c:
+/* */
+#include <float.h>
+#include <iconv.h>
+#include <inttypes.h>
+#include <limits.h>
+#include <malloc.h>
+#include <math.h>
+#include <memory.h>
+#include <signal.h>
+#include <stdarg.h>
+#include <stdbool.h>
+#include <stddef.h>
+#include <stdint.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <strings.h>
+#include <sys/types.h>
+#include <time.h>
+#include <wchar.h>
+
+int main(int argc, char** argv)
+{
+  (void)argv;
+#ifndef roundf
+  return ((int*)(&roundf))[argc];
+#else
+  (void)argc;
+  return 0;
+#endif
+}
+Determining if the scalbn exist passed with the following output:
+Change Dir: /Users/davidframpton/Documents/blockheads2/katipoBrowser/waraki/android/app/.cxx/Debug/5w6r711f/arm64-v8a/CMakeFiles/CMakeTmp
+
+Run Build Command(s):/Users/davidframpton/Library/Android/sdk/cmake/3.22.1/bin/ninja cmTC_e8a7c && [1/2] Building C object CMakeFiles/cmTC_e8a7c.dir/CheckSymbolExists.c.o
+[2/2] Linking C executable cmTC_e8a7c
+
+
+File /Users/davidframpton/Documents/blockheads2/katipoBrowser/waraki/android/app/.cxx/Debug/5w6r711f/arm64-v8a/CMakeFiles/CMakeTmp/CheckSymbolExists.c:
+/* */
+#include <float.h>
+#include <iconv.h>
+#include <inttypes.h>
+#include <limits.h>
+#include <malloc.h>
+#include <math.h>
+#include <memory.h>
+#include <signal.h>
+#include <stdarg.h>
+#include <stdbool.h>
+#include <stddef.h>
+#include <stdint.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <strings.h>
+#include <sys/types.h>
+#include <time.h>
+#include <wchar.h>
+
+int main(int argc, char** argv)
+{
+  (void)argv;
+#ifndef scalbn
+  return ((int*)(&scalbn))[argc];
+#else
+  (void)argc;
+  return 0;
+#endif
+}
+Determining if the scalbnf exist passed with the following output:
+Change Dir: /Users/davidframpton/Documents/blockheads2/katipoBrowser/waraki/android/app/.cxx/Debug/5w6r711f/arm64-v8a/CMakeFiles/CMakeTmp
+
+Run Build Command(s):/Users/davidframpton/Library/Android/sdk/cmake/3.22.1/bin/ninja cmTC_c28c6 && [1/2] Building C object CMakeFiles/cmTC_c28c6.dir/CheckSymbolExists.c.o
+[2/2] Linking C executable cmTC_c28c6
+
+
+File /Users/davidframpton/Documents/blockheads2/katipoBrowser/waraki/android/app/.cxx/Debug/5w6r711f/arm64-v8a/CMakeFiles/CMakeTmp/CheckSymbolExists.c:
+/* */
+#include <float.h>
+#include <iconv.h>
+#include <inttypes.h>
+#include <limits.h>
+#include <malloc.h>
+#include <math.h>
+#include <memory.h>
+#include <signal.h>
+#include <stdarg.h>
+#include <stdbool.h>
+#include <stddef.h>
+#include <stdint.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <strings.h>
+#include <sys/types.h>
+#include <time.h>
+#include <wchar.h>
+
+int main(int argc, char** argv)
+{
+  (void)argv;
+#ifndef scalbnf
+  return ((int*)(&scalbnf))[argc];
+#else
+  (void)argc;
+  return 0;
+#endif
+}
+Determining if the setenv exist passed with the following output:
+Change Dir: /Users/davidframpton/Documents/blockheads2/katipoBrowser/waraki/android/app/.cxx/Debug/5w6r711f/arm64-v8a/CMakeFiles/CMakeTmp
+
+Run Build Command(s):/Users/davidframpton/Library/Android/sdk/cmake/3.22.1/bin/ninja cmTC_7713c && [1/2] Building C object CMakeFiles/cmTC_7713c.dir/CheckSymbolExists.c.o
+[2/2] Linking C executable cmTC_7713c
+
+
+File /Users/davidframpton/Documents/blockheads2/katipoBrowser/waraki/android/app/.cxx/Debug/5w6r711f/arm64-v8a/CMakeFiles/CMakeTmp/CheckSymbolExists.c:
+/* */
+#include <float.h>
+#include <iconv.h>
+#include <inttypes.h>
+#include <limits.h>
+#include <malloc.h>
+#include <math.h>
+#include <memory.h>
+#include <signal.h>
+#include <stdarg.h>
+#include <stdbool.h>
+#include <stddef.h>
+#include <stdint.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <strings.h>
+#include <sys/types.h>
+#include <time.h>
+#include <wchar.h>
+
+int main(int argc, char** argv)
+{
+  (void)argv;
+#ifndef setenv
+  return ((int*)(&setenv))[argc];
+#else
+  (void)argc;
+  return 0;
+#endif
+}
+Determining if the sin exist passed with the following output:
+Change Dir: /Users/davidframpton/Documents/blockheads2/katipoBrowser/waraki/android/app/.cxx/Debug/5w6r711f/arm64-v8a/CMakeFiles/CMakeTmp
+
+Run Build Command(s):/Users/davidframpton/Library/Android/sdk/cmake/3.22.1/bin/ninja cmTC_e65fc && [1/2] Building C object CMakeFiles/cmTC_e65fc.dir/CheckSymbolExists.c.o
+[2/2] Linking C executable cmTC_e65fc
+
+
+File /Users/davidframpton/Documents/blockheads2/katipoBrowser/waraki/android/app/.cxx/Debug/5w6r711f/arm64-v8a/CMakeFiles/CMakeTmp/CheckSymbolExists.c:
+/* */
+#include <float.h>
+#include <iconv.h>
+#include <inttypes.h>
+#include <limits.h>
+#include <malloc.h>
+#include <math.h>
+#include <memory.h>
+#include <signal.h>
+#include <stdarg.h>
+#include <stdbool.h>
+#include <stddef.h>
+#include <stdint.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <strings.h>
+#include <sys/types.h>
+#include <time.h>
+#include <wchar.h>
+
+int main(int argc, char** argv)
+{
+  (void)argv;
+#ifndef sin
+  return ((int*)(&sin))[argc];
+#else
+  (void)argc;
+  return 0;
+#endif
+}
+Determining if the sinf exist passed with the following output:
+Change Dir: /Users/davidframpton/Documents/blockheads2/katipoBrowser/waraki/android/app/.cxx/Debug/5w6r711f/arm64-v8a/CMakeFiles/CMakeTmp
+
+Run Build Command(s):/Users/davidframpton/Library/Android/sdk/cmake/3.22.1/bin/ninja cmTC_7e249 && [1/2] Building C object CMakeFiles/cmTC_7e249.dir/CheckSymbolExists.c.o
+[2/2] Linking C executable cmTC_7e249
+
+
+File /Users/davidframpton/Documents/blockheads2/katipoBrowser/waraki/android/app/.cxx/Debug/5w6r711f/arm64-v8a/CMakeFiles/CMakeTmp/CheckSymbolExists.c:
+/* */
+#include <float.h>
+#include <iconv.h>
+#include <inttypes.h>
+#include <limits.h>
+#include <malloc.h>
+#include <math.h>
+#include <memory.h>
+#include <signal.h>
+#include <stdarg.h>
+#include <stdbool.h>
+#include <stddef.h>
+#include <stdint.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <strings.h>
+#include <sys/types.h>
+#include <time.h>
+#include <wchar.h>
+
+int main(int argc, char** argv)
+{
+  (void)argv;
+#ifndef sinf
+  return ((int*)(&sinf))[argc];
+#else
+  (void)argc;
+  return 0;
+#endif
+}
+Determining if the sqrt exist passed with the following output:
+Change Dir: /Users/davidframpton/Documents/blockheads2/katipoBrowser/waraki/android/app/.cxx/Debug/5w6r711f/arm64-v8a/CMakeFiles/CMakeTmp
+
+Run Build Command(s):/Users/davidframpton/Library/Android/sdk/cmake/3.22.1/bin/ninja cmTC_f05fa && [1/2] Building C object CMakeFiles/cmTC_f05fa.dir/CheckSymbolExists.c.o
+[2/2] Linking C executable cmTC_f05fa
+
+
+File /Users/davidframpton/Documents/blockheads2/katipoBrowser/waraki/android/app/.cxx/Debug/5w6r711f/arm64-v8a/CMakeFiles/CMakeTmp/CheckSymbolExists.c:
+/* */
+#include <float.h>
+#include <iconv.h>
+#include <inttypes.h>
+#include <limits.h>
+#include <malloc.h>
+#include <math.h>
+#include <memory.h>
+#include <signal.h>
+#include <stdarg.h>
+#include <stdbool.h>
+#include <stddef.h>
+#include <stdint.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <strings.h>
+#include <sys/types.h>
+#include <time.h>
+#include <wchar.h>
+
+int main(int argc, char** argv)
+{
+  (void)argv;
+#ifndef sqrt
+  return ((int*)(&sqrt))[argc];
+#else
+  (void)argc;
+  return 0;
+#endif
+}
+Determining if the sqrtf exist passed with the following output:
+Change Dir: /Users/davidframpton/Documents/blockheads2/katipoBrowser/waraki/android/app/.cxx/Debug/5w6r711f/arm64-v8a/CMakeFiles/CMakeTmp
+
+Run Build Command(s):/Users/davidframpton/Library/Android/sdk/cmake/3.22.1/bin/ninja cmTC_65f63 && [1/2] Building C object CMakeFiles/cmTC_65f63.dir/CheckSymbolExists.c.o
+[2/2] Linking C executable cmTC_65f63
+
+
+File /Users/davidframpton/Documents/blockheads2/katipoBrowser/waraki/android/app/.cxx/Debug/5w6r711f/arm64-v8a/CMakeFiles/CMakeTmp/CheckSymbolExists.c:
+/* */
+#include <float.h>
+#include <iconv.h>
+#include <inttypes.h>
+#include <limits.h>
+#include <malloc.h>
+#include <math.h>
+#include <memory.h>
+#include <signal.h>
+#include <stdarg.h>
+#include <stdbool.h>
+#include <stddef.h>
+#include <stdint.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <strings.h>
+#include <sys/types.h>
+#include <time.h>
+#include <wchar.h>
+
+int main(int argc, char** argv)
+{
+  (void)argv;
+#ifndef sqrtf
+  return ((int*)(&sqrtf))[argc];
+#else
+  (void)argc;
+  return 0;
+#endif
+}
+Determining if the sscanf exist passed with the following output:
+Change Dir: /Users/davidframpton/Documents/blockheads2/katipoBrowser/waraki/android/app/.cxx/Debug/5w6r711f/arm64-v8a/CMakeFiles/CMakeTmp
+
+Run Build Command(s):/Users/davidframpton/Library/Android/sdk/cmake/3.22.1/bin/ninja cmTC_39c40 && [1/2] Building C object CMakeFiles/cmTC_39c40.dir/CheckSymbolExists.c.o
+[2/2] Linking C executable cmTC_39c40
+
+
+File /Users/davidframpton/Documents/blockheads2/katipoBrowser/waraki/android/app/.cxx/Debug/5w6r711f/arm64-v8a/CMakeFiles/CMakeTmp/CheckSymbolExists.c:
+/* */
+#include <float.h>
+#include <iconv.h>
+#include <inttypes.h>
+#include <limits.h>
+#include <malloc.h>
+#include <math.h>
+#include <memory.h>
+#include <signal.h>
+#include <stdarg.h>
+#include <stdbool.h>
+#include <stddef.h>
+#include <stdint.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <strings.h>
+#include <sys/types.h>
+#include <time.h>
+#include <wchar.h>
+
+int main(int argc, char** argv)
+{
+  (void)argv;
+#ifndef sscanf
+  return ((int*)(&sscanf))[argc];
+#else
+  (void)argc;
+  return 0;
+#endif
+}
+Determining if the strchr exist passed with the following output:
+Change Dir: /Users/davidframpton/Documents/blockheads2/katipoBrowser/waraki/android/app/.cxx/Debug/5w6r711f/arm64-v8a/CMakeFiles/CMakeTmp
+
+Run Build Command(s):/Users/davidframpton/Library/Android/sdk/cmake/3.22.1/bin/ninja cmTC_a43e8 && [1/2] Building C object CMakeFiles/cmTC_a43e8.dir/CheckSymbolExists.c.o
+[2/2] Linking C executable cmTC_a43e8
+
+
+File /Users/davidframpton/Documents/blockheads2/katipoBrowser/waraki/android/app/.cxx/Debug/5w6r711f/arm64-v8a/CMakeFiles/CMakeTmp/CheckSymbolExists.c:
+/* */
+#include <float.h>
+#include <iconv.h>
+#include <inttypes.h>
+#include <limits.h>
+#include <malloc.h>
+#include <math.h>
+#include <memory.h>
+#include <signal.h>
+#include <stdarg.h>
+#include <stdbool.h>
+#include <stddef.h>
+#include <stdint.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <strings.h>
+#include <sys/types.h>
+#include <time.h>
+#include <wchar.h>
+
+int main(int argc, char** argv)
+{
+  (void)argv;
+#ifndef strchr
+  return ((int*)(&strchr))[argc];
+#else
+  (void)argc;
+  return 0;
+#endif
+}
+Determining if the strcmp exist passed with the following output:
+Change Dir: /Users/davidframpton/Documents/blockheads2/katipoBrowser/waraki/android/app/.cxx/Debug/5w6r711f/arm64-v8a/CMakeFiles/CMakeTmp
+
+Run Build Command(s):/Users/davidframpton/Library/Android/sdk/cmake/3.22.1/bin/ninja cmTC_5fc63 && [1/2] Building C object CMakeFiles/cmTC_5fc63.dir/CheckSymbolExists.c.o
+[2/2] Linking C executable cmTC_5fc63
+
+
+File /Users/davidframpton/Documents/blockheads2/katipoBrowser/waraki/android/app/.cxx/Debug/5w6r711f/arm64-v8a/CMakeFiles/CMakeTmp/CheckSymbolExists.c:
+/* */
+#include <float.h>
+#include <iconv.h>
+#include <inttypes.h>
+#include <limits.h>
+#include <malloc.h>
+#include <math.h>
+#include <memory.h>
+#include <signal.h>
+#include <stdarg.h>
+#include <stdbool.h>
+#include <stddef.h>
+#include <stdint.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <strings.h>
+#include <sys/types.h>
+#include <time.h>
+#include <wchar.h>
+
+int main(int argc, char** argv)
+{
+  (void)argv;
+#ifndef strcmp
+  return ((int*)(&strcmp))[argc];
+#else
+  (void)argc;
+  return 0;
+#endif
+}
+Determining if the strlcat exist passed with the following output:
+Change Dir: /Users/davidframpton/Documents/blockheads2/katipoBrowser/waraki/android/app/.cxx/Debug/5w6r711f/arm64-v8a/CMakeFiles/CMakeTmp
+
+Run Build Command(s):/Users/davidframpton/Library/Android/sdk/cmake/3.22.1/bin/ninja cmTC_fb83c && [1/2] Building C object CMakeFiles/cmTC_fb83c.dir/CheckSymbolExists.c.o
+[2/2] Linking C executable cmTC_fb83c
+
+
+File /Users/davidframpton/Documents/blockheads2/katipoBrowser/waraki/android/app/.cxx/Debug/5w6r711f/arm64-v8a/CMakeFiles/CMakeTmp/CheckSymbolExists.c:
+/* */
+#include <float.h>
+#include <iconv.h>
+#include <inttypes.h>
+#include <limits.h>
+#include <malloc.h>
+#include <math.h>
+#include <memory.h>
+#include <signal.h>
+#include <stdarg.h>
+#include <stdbool.h>
+#include <stddef.h>
+#include <stdint.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <strings.h>
+#include <sys/types.h>
+#include <time.h>
+#include <wchar.h>
+
+int main(int argc, char** argv)
+{
+  (void)argv;
+#ifndef strlcat
+  return ((int*)(&strlcat))[argc];
+#else
+  (void)argc;
+  return 0;
+#endif
+}
+Determining if the strlcpy exist passed with the following output:
+Change Dir: /Users/davidframpton/Documents/blockheads2/katipoBrowser/waraki/android/app/.cxx/Debug/5w6r711f/arm64-v8a/CMakeFiles/CMakeTmp
+
+Run Build Command(s):/Users/davidframpton/Library/Android/sdk/cmake/3.22.1/bin/ninja cmTC_b3538 && [1/2] Building C object CMakeFiles/cmTC_b3538.dir/CheckSymbolExists.c.o
+[2/2] Linking C executable cmTC_b3538
+
+
+File /Users/davidframpton/Documents/blockheads2/katipoBrowser/waraki/android/app/.cxx/Debug/5w6r711f/arm64-v8a/CMakeFiles/CMakeTmp/CheckSymbolExists.c:
+/* */
+#include <float.h>
+#include <iconv.h>
+#include <inttypes.h>
+#include <limits.h>
+#include <malloc.h>
+#include <math.h>
+#include <memory.h>
+#include <signal.h>
+#include <stdarg.h>
+#include <stdbool.h>
+#include <stddef.h>
+#include <stdint.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <strings.h>
+#include <sys/types.h>
+#include <time.h>
+#include <wchar.h>
+
+int main(int argc, char** argv)
+{
+  (void)argv;
+#ifndef strlcpy
+  return ((int*)(&strlcpy))[argc];
+#else
+  (void)argc;
+  return 0;
+#endif
+}
+Determining if the strlen exist passed with the following output:
+Change Dir: /Users/davidframpton/Documents/blockheads2/katipoBrowser/waraki/android/app/.cxx/Debug/5w6r711f/arm64-v8a/CMakeFiles/CMakeTmp
+
+Run Build Command(s):/Users/davidframpton/Library/Android/sdk/cmake/3.22.1/bin/ninja cmTC_7d2bd && [1/2] Building C object CMakeFiles/cmTC_7d2bd.dir/CheckSymbolExists.c.o
+[2/2] Linking C executable cmTC_7d2bd
+
+
+File /Users/davidframpton/Documents/blockheads2/katipoBrowser/waraki/android/app/.cxx/Debug/5w6r711f/arm64-v8a/CMakeFiles/CMakeTmp/CheckSymbolExists.c:
+/* */
+#include <float.h>
+#include <iconv.h>
+#include <inttypes.h>
+#include <limits.h>
+#include <malloc.h>
+#include <math.h>
+#include <memory.h>
+#include <signal.h>
+#include <stdarg.h>
+#include <stdbool.h>
+#include <stddef.h>
+#include <stdint.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <strings.h>
+#include <sys/types.h>
+#include <time.h>
+#include <wchar.h>
+
+int main(int argc, char** argv)
+{
+  (void)argv;
+#ifndef strlen
+  return ((int*)(&strlen))[argc];
+#else
+  (void)argc;
+  return 0;
+#endif
+}
+Determining if the strncmp exist passed with the following output:
+Change Dir: /Users/davidframpton/Documents/blockheads2/katipoBrowser/waraki/android/app/.cxx/Debug/5w6r711f/arm64-v8a/CMakeFiles/CMakeTmp
+
+Run Build Command(s):/Users/davidframpton/Library/Android/sdk/cmake/3.22.1/bin/ninja cmTC_b812a && [1/2] Building C object CMakeFiles/cmTC_b812a.dir/CheckSymbolExists.c.o
+[2/2] Linking C executable cmTC_b812a
+
+
+File /Users/davidframpton/Documents/blockheads2/katipoBrowser/waraki/android/app/.cxx/Debug/5w6r711f/arm64-v8a/CMakeFiles/CMakeTmp/CheckSymbolExists.c:
+/* */
+#include <float.h>
+#include <iconv.h>
+#include <inttypes.h>
+#include <limits.h>
+#include <malloc.h>
+#include <math.h>
+#include <memory.h>
+#include <signal.h>
+#include <stdarg.h>
+#include <stdbool.h>
+#include <stddef.h>
+#include <stdint.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <strings.h>
+#include <sys/types.h>
+#include <time.h>
+#include <wchar.h>
+
+int main(int argc, char** argv)
+{
+  (void)argv;
+#ifndef strncmp
+  return ((int*)(&strncmp))[argc];
+#else
+  (void)argc;
+  return 0;
+#endif
+}
+Determining if the strnlen exist passed with the following output:
+Change Dir: /Users/davidframpton/Documents/blockheads2/katipoBrowser/waraki/android/app/.cxx/Debug/5w6r711f/arm64-v8a/CMakeFiles/CMakeTmp
+
+Run Build Command(s):/Users/davidframpton/Library/Android/sdk/cmake/3.22.1/bin/ninja cmTC_7f64a && [1/2] Building C object CMakeFiles/cmTC_7f64a.dir/CheckSymbolExists.c.o
+[2/2] Linking C executable cmTC_7f64a
+
+
+File /Users/davidframpton/Documents/blockheads2/katipoBrowser/waraki/android/app/.cxx/Debug/5w6r711f/arm64-v8a/CMakeFiles/CMakeTmp/CheckSymbolExists.c:
+/* */
+#include <float.h>
+#include <iconv.h>
+#include <inttypes.h>
+#include <limits.h>
+#include <malloc.h>
+#include <math.h>
+#include <memory.h>
+#include <signal.h>
+#include <stdarg.h>
+#include <stdbool.h>
+#include <stddef.h>
+#include <stdint.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <strings.h>
+#include <sys/types.h>
+#include <time.h>
+#include <wchar.h>
+
+int main(int argc, char** argv)
+{
+  (void)argv;
+#ifndef strnlen
+  return ((int*)(&strnlen))[argc];
+#else
+  (void)argc;
+  return 0;
+#endif
+}
+Determining if the strpbrk exist passed with the following output:
+Change Dir: /Users/davidframpton/Documents/blockheads2/katipoBrowser/waraki/android/app/.cxx/Debug/5w6r711f/arm64-v8a/CMakeFiles/CMakeTmp
+
+Run Build Command(s):/Users/davidframpton/Library/Android/sdk/cmake/3.22.1/bin/ninja cmTC_8d9cc && [1/2] Building C object CMakeFiles/cmTC_8d9cc.dir/CheckSymbolExists.c.o
+[2/2] Linking C executable cmTC_8d9cc
+
+
+File /Users/davidframpton/Documents/blockheads2/katipoBrowser/waraki/android/app/.cxx/Debug/5w6r711f/arm64-v8a/CMakeFiles/CMakeTmp/CheckSymbolExists.c:
+/* */
+#include <float.h>
+#include <iconv.h>
+#include <inttypes.h>
+#include <limits.h>
+#include <malloc.h>
+#include <math.h>
+#include <memory.h>
+#include <signal.h>
+#include <stdarg.h>
+#include <stdbool.h>
+#include <stddef.h>
+#include <stdint.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <strings.h>
+#include <sys/types.h>
+#include <time.h>
+#include <wchar.h>
+
+int main(int argc, char** argv)
+{
+  (void)argv;
+#ifndef strpbrk
+  return ((int*)(&strpbrk))[argc];
+#else
+  (void)argc;
+  return 0;
+#endif
+}
+Determining if the strrchr exist passed with the following output:
+Change Dir: /Users/davidframpton/Documents/blockheads2/katipoBrowser/waraki/android/app/.cxx/Debug/5w6r711f/arm64-v8a/CMakeFiles/CMakeTmp
+
+Run Build Command(s):/Users/davidframpton/Library/Android/sdk/cmake/3.22.1/bin/ninja cmTC_434ab && [1/2] Building C object CMakeFiles/cmTC_434ab.dir/CheckSymbolExists.c.o
+[2/2] Linking C executable cmTC_434ab
+
+
+File /Users/davidframpton/Documents/blockheads2/katipoBrowser/waraki/android/app/.cxx/Debug/5w6r711f/arm64-v8a/CMakeFiles/CMakeTmp/CheckSymbolExists.c:
+/* */
+#include <float.h>
+#include <iconv.h>
+#include <inttypes.h>
+#include <limits.h>
+#include <malloc.h>
+#include <math.h>
+#include <memory.h>
+#include <signal.h>
+#include <stdarg.h>
+#include <stdbool.h>
+#include <stddef.h>
+#include <stdint.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <strings.h>
+#include <sys/types.h>
+#include <time.h>
+#include <wchar.h>
+
+int main(int argc, char** argv)
+{
+  (void)argv;
+#ifndef strrchr
+  return ((int*)(&strrchr))[argc];
+#else
+  (void)argc;
+  return 0;
+#endif
+}
+Determining if the strstr exist passed with the following output:
+Change Dir: /Users/davidframpton/Documents/blockheads2/katipoBrowser/waraki/android/app/.cxx/Debug/5w6r711f/arm64-v8a/CMakeFiles/CMakeTmp
+
+Run Build Command(s):/Users/davidframpton/Library/Android/sdk/cmake/3.22.1/bin/ninja cmTC_f634e && [1/2] Building C object CMakeFiles/cmTC_f634e.dir/CheckSymbolExists.c.o
+[2/2] Linking C executable cmTC_f634e
+
+
+File /Users/davidframpton/Documents/blockheads2/katipoBrowser/waraki/android/app/.cxx/Debug/5w6r711f/arm64-v8a/CMakeFiles/CMakeTmp/CheckSymbolExists.c:
+/* */
+#include <float.h>
+#include <iconv.h>
+#include <inttypes.h>
+#include <limits.h>
+#include <malloc.h>
+#include <math.h>
+#include <memory.h>
+#include <signal.h>
+#include <stdarg.h>
+#include <stdbool.h>
+#include <stddef.h>
+#include <stdint.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <strings.h>
+#include <sys/types.h>
+#include <time.h>
+#include <wchar.h>
+
+int main(int argc, char** argv)
+{
+  (void)argv;
+#ifndef strstr
+  return ((int*)(&strstr))[argc];
+#else
+  (void)argc;
+  return 0;
+#endif
+}
+Determining if the strtod exist passed with the following output:
+Change Dir: /Users/davidframpton/Documents/blockheads2/katipoBrowser/waraki/android/app/.cxx/Debug/5w6r711f/arm64-v8a/CMakeFiles/CMakeTmp
+
+Run Build Command(s):/Users/davidframpton/Library/Android/sdk/cmake/3.22.1/bin/ninja cmTC_3e174 && [1/2] Building C object CMakeFiles/cmTC_3e174.dir/CheckSymbolExists.c.o
+[2/2] Linking C executable cmTC_3e174
+
+
+File /Users/davidframpton/Documents/blockheads2/katipoBrowser/waraki/android/app/.cxx/Debug/5w6r711f/arm64-v8a/CMakeFiles/CMakeTmp/CheckSymbolExists.c:
+/* */
+#include <float.h>
+#include <iconv.h>
+#include <inttypes.h>
+#include <limits.h>
+#include <malloc.h>
+#include <math.h>
+#include <memory.h>
+#include <signal.h>
+#include <stdarg.h>
+#include <stdbool.h>
+#include <stddef.h>
+#include <stdint.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <strings.h>
+#include <sys/types.h>
+#include <time.h>
+#include <wchar.h>
+
+int main(int argc, char** argv)
+{
+  (void)argv;
+#ifndef strtod
+  return ((int*)(&strtod))[argc];
+#else
+  (void)argc;
+  return 0;
+#endif
+}
+Determining if the strtok_r exist passed with the following output:
+Change Dir: /Users/davidframpton/Documents/blockheads2/katipoBrowser/waraki/android/app/.cxx/Debug/5w6r711f/arm64-v8a/CMakeFiles/CMakeTmp
+
+Run Build Command(s):/Users/davidframpton/Library/Android/sdk/cmake/3.22.1/bin/ninja cmTC_77add && [1/2] Building C object CMakeFiles/cmTC_77add.dir/CheckSymbolExists.c.o
+[2/2] Linking C executable cmTC_77add
+
+
+File /Users/davidframpton/Documents/blockheads2/katipoBrowser/waraki/android/app/.cxx/Debug/5w6r711f/arm64-v8a/CMakeFiles/CMakeTmp/CheckSymbolExists.c:
+/* */
+#include <float.h>
+#include <iconv.h>
+#include <inttypes.h>
+#include <limits.h>
+#include <malloc.h>
+#include <math.h>
+#include <memory.h>
+#include <signal.h>
+#include <stdarg.h>
+#include <stdbool.h>
+#include <stddef.h>
+#include <stdint.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <strings.h>
+#include <sys/types.h>
+#include <time.h>
+#include <wchar.h>
+
+int main(int argc, char** argv)
+{
+  (void)argv;
+#ifndef strtok_r
+  return ((int*)(&strtok_r))[argc];
+#else
+  (void)argc;
+  return 0;
+#endif
+}
+Determining if the strtol exist passed with the following output:
+Change Dir: /Users/davidframpton/Documents/blockheads2/katipoBrowser/waraki/android/app/.cxx/Debug/5w6r711f/arm64-v8a/CMakeFiles/CMakeTmp
+
+Run Build Command(s):/Users/davidframpton/Library/Android/sdk/cmake/3.22.1/bin/ninja cmTC_792fd && [1/2] Building C object CMakeFiles/cmTC_792fd.dir/CheckSymbolExists.c.o
+[2/2] Linking C executable cmTC_792fd
+
+
+File /Users/davidframpton/Documents/blockheads2/katipoBrowser/waraki/android/app/.cxx/Debug/5w6r711f/arm64-v8a/CMakeFiles/CMakeTmp/CheckSymbolExists.c:
+/* */
+#include <float.h>
+#include <iconv.h>
+#include <inttypes.h>
+#include <limits.h>
+#include <malloc.h>
+#include <math.h>
+#include <memory.h>
+#include <signal.h>
+#include <stdarg.h>
+#include <stdbool.h>
+#include <stddef.h>
+#include <stdint.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <strings.h>
+#include <sys/types.h>
+#include <time.h>
+#include <wchar.h>
+
+int main(int argc, char** argv)
+{
+  (void)argv;
+#ifndef strtol
+  return ((int*)(&strtol))[argc];
+#else
+  (void)argc;
+  return 0;
+#endif
+}
+Determining if the strtoll exist passed with the following output:
+Change Dir: /Users/davidframpton/Documents/blockheads2/katipoBrowser/waraki/android/app/.cxx/Debug/5w6r711f/arm64-v8a/CMakeFiles/CMakeTmp
+
+Run Build Command(s):/Users/davidframpton/Library/Android/sdk/cmake/3.22.1/bin/ninja cmTC_78ead && [1/2] Building C object CMakeFiles/cmTC_78ead.dir/CheckSymbolExists.c.o
+[2/2] Linking C executable cmTC_78ead
+
+
+File /Users/davidframpton/Documents/blockheads2/katipoBrowser/waraki/android/app/.cxx/Debug/5w6r711f/arm64-v8a/CMakeFiles/CMakeTmp/CheckSymbolExists.c:
+/* */
+#include <float.h>
+#include <iconv.h>
+#include <inttypes.h>
+#include <limits.h>
+#include <malloc.h>
+#include <math.h>
+#include <memory.h>
+#include <signal.h>
+#include <stdarg.h>
+#include <stdbool.h>
+#include <stddef.h>
+#include <stdint.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <strings.h>
+#include <sys/types.h>
+#include <time.h>
+#include <wchar.h>
+
+int main(int argc, char** argv)
+{
+  (void)argv;
+#ifndef strtoll
+  return ((int*)(&strtoll))[argc];
+#else
+  (void)argc;
+  return 0;
+#endif
+}
+Determining if the strtoul exist passed with the following output:
+Change Dir: /Users/davidframpton/Documents/blockheads2/katipoBrowser/waraki/android/app/.cxx/Debug/5w6r711f/arm64-v8a/CMakeFiles/CMakeTmp
+
+Run Build Command(s):/Users/davidframpton/Library/Android/sdk/cmake/3.22.1/bin/ninja cmTC_28ae8 && [1/2] Building C object CMakeFiles/cmTC_28ae8.dir/CheckSymbolExists.c.o
+[2/2] Linking C executable cmTC_28ae8
+
+
+File /Users/davidframpton/Documents/blockheads2/katipoBrowser/waraki/android/app/.cxx/Debug/5w6r711f/arm64-v8a/CMakeFiles/CMakeTmp/CheckSymbolExists.c:
+/* */
+#include <float.h>
+#include <iconv.h>
+#include <inttypes.h>
+#include <limits.h>
+#include <malloc.h>
+#include <math.h>
+#include <memory.h>
+#include <signal.h>
+#include <stdarg.h>
+#include <stdbool.h>
+#include <stddef.h>
+#include <stdint.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <strings.h>
+#include <sys/types.h>
+#include <time.h>
+#include <wchar.h>
+
+int main(int argc, char** argv)
+{
+  (void)argv;
+#ifndef strtoul
+  return ((int*)(&strtoul))[argc];
+#else
+  (void)argc;
+  return 0;
+#endif
+}
+Determining if the strtoull exist passed with the following output:
+Change Dir: /Users/davidframpton/Documents/blockheads2/katipoBrowser/waraki/android/app/.cxx/Debug/5w6r711f/arm64-v8a/CMakeFiles/CMakeTmp
+
+Run Build Command(s):/Users/davidframpton/Library/Android/sdk/cmake/3.22.1/bin/ninja cmTC_7365f && [1/2] Building C object CMakeFiles/cmTC_7365f.dir/CheckSymbolExists.c.o
+[2/2] Linking C executable cmTC_7365f
+
+
+File /Users/davidframpton/Documents/blockheads2/katipoBrowser/waraki/android/app/.cxx/Debug/5w6r711f/arm64-v8a/CMakeFiles/CMakeTmp/CheckSymbolExists.c:
+/* */
+#include <float.h>
+#include <iconv.h>
+#include <inttypes.h>
+#include <limits.h>
+#include <malloc.h>
+#include <math.h>
+#include <memory.h>
+#include <signal.h>
+#include <stdarg.h>
+#include <stdbool.h>
+#include <stddef.h>
+#include <stdint.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <strings.h>
+#include <sys/types.h>
+#include <time.h>
+#include <wchar.h>
+
+int main(int argc, char** argv)
+{
+  (void)argv;
+#ifndef strtoull
+  return ((int*)(&strtoull))[argc];
+#else
+  (void)argc;
+  return 0;
+#endif
+}
+Determining if the tan exist passed with the following output:
+Change Dir: /Users/davidframpton/Documents/blockheads2/katipoBrowser/waraki/android/app/.cxx/Debug/5w6r711f/arm64-v8a/CMakeFiles/CMakeTmp
+
+Run Build Command(s):/Users/davidframpton/Library/Android/sdk/cmake/3.22.1/bin/ninja cmTC_4a9a3 && [1/2] Building C object CMakeFiles/cmTC_4a9a3.dir/CheckSymbolExists.c.o
+[2/2] Linking C executable cmTC_4a9a3
+
+
+File /Users/davidframpton/Documents/blockheads2/katipoBrowser/waraki/android/app/.cxx/Debug/5w6r711f/arm64-v8a/CMakeFiles/CMakeTmp/CheckSymbolExists.c:
+/* */
+#include <float.h>
+#include <iconv.h>
+#include <inttypes.h>
+#include <limits.h>
+#include <malloc.h>
+#include <math.h>
+#include <memory.h>
+#include <signal.h>
+#include <stdarg.h>
+#include <stdbool.h>
+#include <stddef.h>
+#include <stdint.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <strings.h>
+#include <sys/types.h>
+#include <time.h>
+#include <wchar.h>
+
+int main(int argc, char** argv)
+{
+  (void)argv;
+#ifndef tan
+  return ((int*)(&tan))[argc];
+#else
+  (void)argc;
+  return 0;
+#endif
+}
+Determining if the tanf exist passed with the following output:
+Change Dir: /Users/davidframpton/Documents/blockheads2/katipoBrowser/waraki/android/app/.cxx/Debug/5w6r711f/arm64-v8a/CMakeFiles/CMakeTmp
+
+Run Build Command(s):/Users/davidframpton/Library/Android/sdk/cmake/3.22.1/bin/ninja cmTC_712c1 && [1/2] Building C object CMakeFiles/cmTC_712c1.dir/CheckSymbolExists.c.o
+[2/2] Linking C executable cmTC_712c1
+
+
+File /Users/davidframpton/Documents/blockheads2/katipoBrowser/waraki/android/app/.cxx/Debug/5w6r711f/arm64-v8a/CMakeFiles/CMakeTmp/CheckSymbolExists.c:
+/* */
+#include <float.h>
+#include <iconv.h>
+#include <inttypes.h>
+#include <limits.h>
+#include <malloc.h>
+#include <math.h>
+#include <memory.h>
+#include <signal.h>
+#include <stdarg.h>
+#include <stdbool.h>
+#include <stddef.h>
+#include <stdint.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <strings.h>
+#include <sys/types.h>
+#include <time.h>
+#include <wchar.h>
+
+int main(int argc, char** argv)
+{
+  (void)argv;
+#ifndef tanf
+  return ((int*)(&tanf))[argc];
+#else
+  (void)argc;
+  return 0;
+#endif
+}
+Determining if the trunc exist passed with the following output:
+Change Dir: /Users/davidframpton/Documents/blockheads2/katipoBrowser/waraki/android/app/.cxx/Debug/5w6r711f/arm64-v8a/CMakeFiles/CMakeTmp
+
+Run Build Command(s):/Users/davidframpton/Library/Android/sdk/cmake/3.22.1/bin/ninja cmTC_e8dc3 && [1/2] Building C object CMakeFiles/cmTC_e8dc3.dir/CheckSymbolExists.c.o
+[2/2] Linking C executable cmTC_e8dc3
+
+
+File /Users/davidframpton/Documents/blockheads2/katipoBrowser/waraki/android/app/.cxx/Debug/5w6r711f/arm64-v8a/CMakeFiles/CMakeTmp/CheckSymbolExists.c:
+/* */
+#include <float.h>
+#include <iconv.h>
+#include <inttypes.h>
+#include <limits.h>
+#include <malloc.h>
+#include <math.h>
+#include <memory.h>
+#include <signal.h>
+#include <stdarg.h>
+#include <stdbool.h>
+#include <stddef.h>
+#include <stdint.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <strings.h>
+#include <sys/types.h>
+#include <time.h>
+#include <wchar.h>
+
+int main(int argc, char** argv)
+{
+  (void)argv;
+#ifndef trunc
+  return ((int*)(&trunc))[argc];
+#else
+  (void)argc;
+  return 0;
+#endif
+}
+Determining if the truncf exist passed with the following output:
+Change Dir: /Users/davidframpton/Documents/blockheads2/katipoBrowser/waraki/android/app/.cxx/Debug/5w6r711f/arm64-v8a/CMakeFiles/CMakeTmp
+
+Run Build Command(s):/Users/davidframpton/Library/Android/sdk/cmake/3.22.1/bin/ninja cmTC_45879 && [1/2] Building C object CMakeFiles/cmTC_45879.dir/CheckSymbolExists.c.o
+[2/2] Linking C executable cmTC_45879
+
+
+File /Users/davidframpton/Documents/blockheads2/katipoBrowser/waraki/android/app/.cxx/Debug/5w6r711f/arm64-v8a/CMakeFiles/CMakeTmp/CheckSymbolExists.c:
+/* */
+#include <float.h>
+#include <iconv.h>
+#include <inttypes.h>
+#include <limits.h>
+#include <malloc.h>
+#include <math.h>
+#include <memory.h>
+#include <signal.h>
+#include <stdarg.h>
+#include <stdbool.h>
+#include <stddef.h>
+#include <stdint.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <strings.h>
+#include <sys/types.h>
+#include <time.h>
+#include <wchar.h>
+
+int main(int argc, char** argv)
+{
+  (void)argv;
+#ifndef truncf
+  return ((int*)(&truncf))[argc];
+#else
+  (void)argc;
+  return 0;
+#endif
+}
+Determining if the unsetenv exist passed with the following output:
+Change Dir: /Users/davidframpton/Documents/blockheads2/katipoBrowser/waraki/android/app/.cxx/Debug/5w6r711f/arm64-v8a/CMakeFiles/CMakeTmp
+
+Run Build Command(s):/Users/davidframpton/Library/Android/sdk/cmake/3.22.1/bin/ninja cmTC_364bf && [1/2] Building C object CMakeFiles/cmTC_364bf.dir/CheckSymbolExists.c.o
+[2/2] Linking C executable cmTC_364bf
+
+
+File /Users/davidframpton/Documents/blockheads2/katipoBrowser/waraki/android/app/.cxx/Debug/5w6r711f/arm64-v8a/CMakeFiles/CMakeTmp/CheckSymbolExists.c:
+/* */
+#include <float.h>
+#include <iconv.h>
+#include <inttypes.h>
+#include <limits.h>
+#include <malloc.h>
+#include <math.h>
+#include <memory.h>
+#include <signal.h>
+#include <stdarg.h>
+#include <stdbool.h>
+#include <stddef.h>
+#include <stdint.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <strings.h>
+#include <sys/types.h>
+#include <time.h>
+#include <wchar.h>
+
+int main(int argc, char** argv)
+{
+  (void)argv;
+#ifndef unsetenv
+  return ((int*)(&unsetenv))[argc];
+#else
+  (void)argc;
+  return 0;
+#endif
+}
+Determining if the vsnprintf exist passed with the following output:
+Change Dir: /Users/davidframpton/Documents/blockheads2/katipoBrowser/waraki/android/app/.cxx/Debug/5w6r711f/arm64-v8a/CMakeFiles/CMakeTmp
+
+Run Build Command(s):/Users/davidframpton/Library/Android/sdk/cmake/3.22.1/bin/ninja cmTC_6d57a && [1/2] Building C object CMakeFiles/cmTC_6d57a.dir/CheckSymbolExists.c.o
+[2/2] Linking C executable cmTC_6d57a
+
+
+File /Users/davidframpton/Documents/blockheads2/katipoBrowser/waraki/android/app/.cxx/Debug/5w6r711f/arm64-v8a/CMakeFiles/CMakeTmp/CheckSymbolExists.c:
+/* */
+#include <float.h>
+#include <iconv.h>
+#include <inttypes.h>
+#include <limits.h>
+#include <malloc.h>
+#include <math.h>
+#include <memory.h>
+#include <signal.h>
+#include <stdarg.h>
+#include <stdbool.h>
+#include <stddef.h>
+#include <stdint.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <strings.h>
+#include <sys/types.h>
+#include <time.h>
+#include <wchar.h>
+
+int main(int argc, char** argv)
+{
+  (void)argv;
+#ifndef vsnprintf
+  return ((int*)(&vsnprintf))[argc];
+#else
+  (void)argc;
+  return 0;
+#endif
+}
+Determining if the vsscanf exist passed with the following output:
+Change Dir: /Users/davidframpton/Documents/blockheads2/katipoBrowser/waraki/android/app/.cxx/Debug/5w6r711f/arm64-v8a/CMakeFiles/CMakeTmp
+
+Run Build Command(s):/Users/davidframpton/Library/Android/sdk/cmake/3.22.1/bin/ninja cmTC_aa75d && [1/2] Building C object CMakeFiles/cmTC_aa75d.dir/CheckSymbolExists.c.o
+[2/2] Linking C executable cmTC_aa75d
+
+
+File /Users/davidframpton/Documents/blockheads2/katipoBrowser/waraki/android/app/.cxx/Debug/5w6r711f/arm64-v8a/CMakeFiles/CMakeTmp/CheckSymbolExists.c:
+/* */
+#include <float.h>
+#include <iconv.h>
+#include <inttypes.h>
+#include <limits.h>
+#include <malloc.h>
+#include <math.h>
+#include <memory.h>
+#include <signal.h>
+#include <stdarg.h>
+#include <stdbool.h>
+#include <stddef.h>
+#include <stdint.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <strings.h>
+#include <sys/types.h>
+#include <time.h>
+#include <wchar.h>
+
+int main(int argc, char** argv)
+{
+  (void)argv;
+#ifndef vsscanf
+  return ((int*)(&vsscanf))[argc];
+#else
+  (void)argc;
+  return 0;
+#endif
+}
+Determining if the wcsnlen exist passed with the following output:
+Change Dir: /Users/davidframpton/Documents/blockheads2/katipoBrowser/waraki/android/app/.cxx/Debug/5w6r711f/arm64-v8a/CMakeFiles/CMakeTmp
+
+Run Build Command(s):/Users/davidframpton/Library/Android/sdk/cmake/3.22.1/bin/ninja cmTC_404bb && [1/2] Building C object CMakeFiles/cmTC_404bb.dir/CheckSymbolExists.c.o
+[2/2] Linking C executable cmTC_404bb
+
+
+File /Users/davidframpton/Documents/blockheads2/katipoBrowser/waraki/android/app/.cxx/Debug/5w6r711f/arm64-v8a/CMakeFiles/CMakeTmp/CheckSymbolExists.c:
+/* */
+#include <float.h>
+#include <iconv.h>
+#include <inttypes.h>
+#include <limits.h>
+#include <malloc.h>
+#include <math.h>
+#include <memory.h>
+#include <signal.h>
+#include <stdarg.h>
+#include <stdbool.h>
+#include <stddef.h>
+#include <stdint.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <strings.h>
+#include <sys/types.h>
+#include <time.h>
+#include <wchar.h>
+
+int main(int argc, char** argv)
+{
+  (void)argv;
+#ifndef wcsnlen
+  return ((int*)(&wcsnlen))[argc];
+#else
+  (void)argc;
+  return 0;
+#endif
+}
+Determining if the wcscmp exist passed with the following output:
+Change Dir: /Users/davidframpton/Documents/blockheads2/katipoBrowser/waraki/android/app/.cxx/Debug/5w6r711f/arm64-v8a/CMakeFiles/CMakeTmp
+
+Run Build Command(s):/Users/davidframpton/Library/Android/sdk/cmake/3.22.1/bin/ninja cmTC_ebb39 && [1/2] Building C object CMakeFiles/cmTC_ebb39.dir/CheckSymbolExists.c.o
+[2/2] Linking C executable cmTC_ebb39
+
+
+File /Users/davidframpton/Documents/blockheads2/katipoBrowser/waraki/android/app/.cxx/Debug/5w6r711f/arm64-v8a/CMakeFiles/CMakeTmp/CheckSymbolExists.c:
+/* */
+#include <float.h>
+#include <iconv.h>
+#include <inttypes.h>
+#include <limits.h>
+#include <malloc.h>
+#include <math.h>
+#include <memory.h>
+#include <signal.h>
+#include <stdarg.h>
+#include <stdbool.h>
+#include <stddef.h>
+#include <stdint.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <strings.h>
+#include <sys/types.h>
+#include <time.h>
+#include <wchar.h>
+
+int main(int argc, char** argv)
+{
+  (void)argv;
+#ifndef wcscmp
+  return ((int*)(&wcscmp))[argc];
+#else
+  (void)argc;
+  return 0;
+#endif
+}
+Determining if the wcsdup exist passed with the following output:
+Change Dir: /Users/davidframpton/Documents/blockheads2/katipoBrowser/waraki/android/app/.cxx/Debug/5w6r711f/arm64-v8a/CMakeFiles/CMakeTmp
+
+Run Build Command(s):/Users/davidframpton/Library/Android/sdk/cmake/3.22.1/bin/ninja cmTC_9d633 && [1/2] Building C object CMakeFiles/cmTC_9d633.dir/CheckSymbolExists.c.o
+[2/2] Linking C executable cmTC_9d633
+
+
+File /Users/davidframpton/Documents/blockheads2/katipoBrowser/waraki/android/app/.cxx/Debug/5w6r711f/arm64-v8a/CMakeFiles/CMakeTmp/CheckSymbolExists.c:
+/* */
+#include <float.h>
+#include <iconv.h>
+#include <inttypes.h>
+#include <limits.h>
+#include <malloc.h>
+#include <math.h>
+#include <memory.h>
+#include <signal.h>
+#include <stdarg.h>
+#include <stdbool.h>
+#include <stddef.h>
+#include <stdint.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <strings.h>
+#include <sys/types.h>
+#include <time.h>
+#include <wchar.h>
+
+int main(int argc, char** argv)
+{
+  (void)argv;
+#ifndef wcsdup
+  return ((int*)(&wcsdup))[argc];
+#else
+  (void)argc;
+  return 0;
+#endif
+}
+Determining if the wcslcat exist passed with the following output:
+Change Dir: /Users/davidframpton/Documents/blockheads2/katipoBrowser/waraki/android/app/.cxx/Debug/5w6r711f/arm64-v8a/CMakeFiles/CMakeTmp
+
+Run Build Command(s):/Users/davidframpton/Library/Android/sdk/cmake/3.22.1/bin/ninja cmTC_bb195 && [1/2] Building C object CMakeFiles/cmTC_bb195.dir/CheckSymbolExists.c.o
+[2/2] Linking C executable cmTC_bb195
+
+
+File /Users/davidframpton/Documents/blockheads2/katipoBrowser/waraki/android/app/.cxx/Debug/5w6r711f/arm64-v8a/CMakeFiles/CMakeTmp/CheckSymbolExists.c:
+/* */
+#include <float.h>
+#include <iconv.h>
+#include <inttypes.h>
+#include <limits.h>
+#include <malloc.h>
+#include <math.h>
+#include <memory.h>
+#include <signal.h>
+#include <stdarg.h>
+#include <stdbool.h>
+#include <stddef.h>
+#include <stdint.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <strings.h>
+#include <sys/types.h>
+#include <time.h>
+#include <wchar.h>
+
+int main(int argc, char** argv)
+{
+  (void)argv;
+#ifndef wcslcat
+  return ((int*)(&wcslcat))[argc];
+#else
+  (void)argc;
+  return 0;
+#endif
+}
+Determining if the wcslcpy exist passed with the following output:
+Change Dir: /Users/davidframpton/Documents/blockheads2/katipoBrowser/waraki/android/app/.cxx/Debug/5w6r711f/arm64-v8a/CMakeFiles/CMakeTmp
+
+Run Build Command(s):/Users/davidframpton/Library/Android/sdk/cmake/3.22.1/bin/ninja cmTC_99378 && [1/2] Building C object CMakeFiles/cmTC_99378.dir/CheckSymbolExists.c.o
+[2/2] Linking C executable cmTC_99378
+
+
+File /Users/davidframpton/Documents/blockheads2/katipoBrowser/waraki/android/app/.cxx/Debug/5w6r711f/arm64-v8a/CMakeFiles/CMakeTmp/CheckSymbolExists.c:
+/* */
+#include <float.h>
+#include <iconv.h>
+#include <inttypes.h>
+#include <limits.h>
+#include <malloc.h>
+#include <math.h>
+#include <memory.h>
+#include <signal.h>
+#include <stdarg.h>
+#include <stdbool.h>
+#include <stddef.h>
+#include <stdint.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <strings.h>
+#include <sys/types.h>
+#include <time.h>
+#include <wchar.h>
+
+int main(int argc, char** argv)
+{
+  (void)argv;
+#ifndef wcslcpy
+  return ((int*)(&wcslcpy))[argc];
+#else
+  (void)argc;
+  return 0;
+#endif
+}
+Determining if the wcslen exist passed with the following output:
+Change Dir: /Users/davidframpton/Documents/blockheads2/katipoBrowser/waraki/android/app/.cxx/Debug/5w6r711f/arm64-v8a/CMakeFiles/CMakeTmp
+
+Run Build Command(s):/Users/davidframpton/Library/Android/sdk/cmake/3.22.1/bin/ninja cmTC_c3b43 && [1/2] Building C object CMakeFiles/cmTC_c3b43.dir/CheckSymbolExists.c.o
+[2/2] Linking C executable cmTC_c3b43
+
+
+File /Users/davidframpton/Documents/blockheads2/katipoBrowser/waraki/android/app/.cxx/Debug/5w6r711f/arm64-v8a/CMakeFiles/CMakeTmp/CheckSymbolExists.c:
+/* */
+#include <float.h>
+#include <iconv.h>
+#include <inttypes.h>
+#include <limits.h>
+#include <malloc.h>
+#include <math.h>
+#include <memory.h>
+#include <signal.h>
+#include <stdarg.h>
+#include <stdbool.h>
+#include <stddef.h>
+#include <stdint.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <strings.h>
+#include <sys/types.h>
+#include <time.h>
+#include <wchar.h>
+
+int main(int argc, char** argv)
+{
+  (void)argv;
+#ifndef wcslen
+  return ((int*)(&wcslen))[argc];
+#else
+  (void)argc;
+  return 0;
+#endif
+}
+Determining if the wcsncmp exist passed with the following output:
+Change Dir: /Users/davidframpton/Documents/blockheads2/katipoBrowser/waraki/android/app/.cxx/Debug/5w6r711f/arm64-v8a/CMakeFiles/CMakeTmp
+
+Run Build Command(s):/Users/davidframpton/Library/Android/sdk/cmake/3.22.1/bin/ninja cmTC_966a1 && [1/2] Building C object CMakeFiles/cmTC_966a1.dir/CheckSymbolExists.c.o
+[2/2] Linking C executable cmTC_966a1
+
+
+File /Users/davidframpton/Documents/blockheads2/katipoBrowser/waraki/android/app/.cxx/Debug/5w6r711f/arm64-v8a/CMakeFiles/CMakeTmp/CheckSymbolExists.c:
+/* */
+#include <float.h>
+#include <iconv.h>
+#include <inttypes.h>
+#include <limits.h>
+#include <malloc.h>
+#include <math.h>
+#include <memory.h>
+#include <signal.h>
+#include <stdarg.h>
+#include <stdbool.h>
+#include <stddef.h>
+#include <stdint.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <strings.h>
+#include <sys/types.h>
+#include <time.h>
+#include <wchar.h>
+
+int main(int argc, char** argv)
+{
+  (void)argv;
+#ifndef wcsncmp
+  return ((int*)(&wcsncmp))[argc];
+#else
+  (void)argc;
+  return 0;
+#endif
+}
+Determining if the wcsstr exist passed with the following output:
+Change Dir: /Users/davidframpton/Documents/blockheads2/katipoBrowser/waraki/android/app/.cxx/Debug/5w6r711f/arm64-v8a/CMakeFiles/CMakeTmp
+
+Run Build Command(s):/Users/davidframpton/Library/Android/sdk/cmake/3.22.1/bin/ninja cmTC_6a676 && [1/2] Building C object CMakeFiles/cmTC_6a676.dir/CheckSymbolExists.c.o
+[2/2] Linking C executable cmTC_6a676
+
+
+File /Users/davidframpton/Documents/blockheads2/katipoBrowser/waraki/android/app/.cxx/Debug/5w6r711f/arm64-v8a/CMakeFiles/CMakeTmp/CheckSymbolExists.c:
+/* */
+#include <float.h>
+#include <iconv.h>
+#include <inttypes.h>
+#include <limits.h>
+#include <malloc.h>
+#include <math.h>
+#include <memory.h>
+#include <signal.h>
+#include <stdarg.h>
+#include <stdbool.h>
+#include <stddef.h>
+#include <stdint.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <strings.h>
+#include <sys/types.h>
+#include <time.h>
+#include <wchar.h>
+
+int main(int argc, char** argv)
+{
+  (void)argv;
+#ifndef wcsstr
+  return ((int*)(&wcsstr))[argc];
+#else
+  (void)argc;
+  return 0;
+#endif
+}
+Determining if the wcstol exist passed with the following output:
+Change Dir: /Users/davidframpton/Documents/blockheads2/katipoBrowser/waraki/android/app/.cxx/Debug/5w6r711f/arm64-v8a/CMakeFiles/CMakeTmp
+
+Run Build Command(s):/Users/davidframpton/Library/Android/sdk/cmake/3.22.1/bin/ninja cmTC_93d09 && [1/2] Building C object CMakeFiles/cmTC_93d09.dir/CheckSymbolExists.c.o
+[2/2] Linking C executable cmTC_93d09
+
+
+File /Users/davidframpton/Documents/blockheads2/katipoBrowser/waraki/android/app/.cxx/Debug/5w6r711f/arm64-v8a/CMakeFiles/CMakeTmp/CheckSymbolExists.c:
+/* */
+#include <float.h>
+#include <iconv.h>
+#include <inttypes.h>
+#include <limits.h>
+#include <malloc.h>
+#include <math.h>
+#include <memory.h>
+#include <signal.h>
+#include <stdarg.h>
+#include <stdbool.h>
+#include <stddef.h>
+#include <stdint.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <strings.h>
+#include <sys/types.h>
+#include <time.h>
+#include <wchar.h>
+
+int main(int argc, char** argv)
+{
+  (void)argv;
+#ifndef wcstol
+  return ((int*)(&wcstol))[argc];
+#else
+  (void)argc;
+  return 0;
+#endif
+}
+Determining if the strcasestr exist passed with the following output:
+Change Dir: /Users/davidframpton/Documents/blockheads2/katipoBrowser/waraki/android/app/.cxx/Debug/5w6r711f/arm64-v8a/CMakeFiles/CMakeTmp
+
+Run Build Command(s):/Users/davidframpton/Library/Android/sdk/cmake/3.22.1/bin/ninja cmTC_32647 && [1/2] Building C object CMakeFiles/cmTC_32647.dir/CheckSymbolExists.c.o
+[2/2] Linking C executable cmTC_32647
+
+
+File /Users/davidframpton/Documents/blockheads2/katipoBrowser/waraki/android/app/.cxx/Debug/5w6r711f/arm64-v8a/CMakeFiles/CMakeTmp/CheckSymbolExists.c:
+/* */
+#include <float.h>
+#include <iconv.h>
+#include <inttypes.h>
+#include <limits.h>
+#include <malloc.h>
+#include <math.h>
+#include <memory.h>
+#include <signal.h>
+#include <stdarg.h>
+#include <stdbool.h>
+#include <stddef.h>
+#include <stdint.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <strings.h>
+#include <sys/types.h>
+#include <time.h>
+#include <wchar.h>
+
+int main(int argc, char** argv)
+{
+  (void)argv;
+#ifndef strcasestr
+  return ((int*)(&strcasestr))[argc];
+#else
+  (void)argc;
+  return 0;
+#endif
+}
+Performing C SOURCE FILE Test LIBC_HAS_ISINF succeeded with the following output:
+Change Dir: /Users/davidframpton/Documents/blockheads2/katipoBrowser/waraki/android/app/.cxx/Debug/5w6r711f/arm64-v8a/CMakeFiles/CMakeTmp
+
+Run Build Command(s):/Users/davidframpton/Library/Android/sdk/cmake/3.22.1/bin/ninja cmTC_b32a7 && [1/2] Building C object CMakeFiles/cmTC_b32a7.dir/src.c.o
+[2/2] Linking C executable cmTC_b32a7
+
+
+Source file was:
+
+        #include <math.h>
+        int main() {
+          double d = 3.14159;
+          return isinf(d);
+        }
+      
+Performing C SOURCE FILE Test LIBC_ISINF_HANDLES_FLOAT succeeded with the following output:
+Change Dir: /Users/davidframpton/Documents/blockheads2/katipoBrowser/waraki/android/app/.cxx/Debug/5w6r711f/arm64-v8a/CMakeFiles/CMakeTmp
+
+Run Build Command(s):/Users/davidframpton/Library/Android/sdk/cmake/3.22.1/bin/ninja cmTC_bcd30 && [1/2] Building C object CMakeFiles/cmTC_bcd30.dir/src.c.o
+[2/2] Linking C executable cmTC_bcd30
+
+
+Source file was:
+
+      #include <math.h>
+      int main() {
+        float f = 3.14159f;
+        return isinf(f);
+      }
+    
+Performing C SOURCE FILE Test LIBC_HAS_ISINFF succeeded with the following output:
+Change Dir: /Users/davidframpton/Documents/blockheads2/katipoBrowser/waraki/android/app/.cxx/Debug/5w6r711f/arm64-v8a/CMakeFiles/CMakeTmp
+
+Run Build Command(s):/Users/davidframpton/Library/Android/sdk/cmake/3.22.1/bin/ninja cmTC_d2193 && [1/2] Building C object CMakeFiles/cmTC_d2193.dir/src.c.o
+[2/2] Linking C executable cmTC_d2193
+
+
+Source file was:
+
+      #include <math.h>
+      int main() {
+        float f = 3.14159f;
+        return isinff(f);
+      }
+    
+Performing C SOURCE FILE Test LIBC_HAS_ISNAN succeeded with the following output:
+Change Dir: /Users/davidframpton/Documents/blockheads2/katipoBrowser/waraki/android/app/.cxx/Debug/5w6r711f/arm64-v8a/CMakeFiles/CMakeTmp
+
+Run Build Command(s):/Users/davidframpton/Library/Android/sdk/cmake/3.22.1/bin/ninja cmTC_073dd && [1/2] Building C object CMakeFiles/cmTC_073dd.dir/src.c.o
+[2/2] Linking C executable cmTC_073dd
+
+
+Source file was:
+
+        #include <math.h>
+        int main() {
+          double d = 3.14159;
+          return isnan(d);
+        }
+      
+Performing C SOURCE FILE Test LIBC_ISNAN_HANDLES_FLOAT succeeded with the following output:
+Change Dir: /Users/davidframpton/Documents/blockheads2/katipoBrowser/waraki/android/app/.cxx/Debug/5w6r711f/arm64-v8a/CMakeFiles/CMakeTmp
+
+Run Build Command(s):/Users/davidframpton/Library/Android/sdk/cmake/3.22.1/bin/ninja cmTC_5bb7b && [1/2] Building C object CMakeFiles/cmTC_5bb7b.dir/src.c.o
+[2/2] Linking C executable cmTC_5bb7b
+
+
+Source file was:
+
+      #include <math.h>
+      int main() {
+        float f = 3.14159f;
+        return isnan(f);
+      }
+    
+Performing C SOURCE FILE Test LIBC_HAS_ISNANF succeeded with the following output:
+Change Dir: /Users/davidframpton/Documents/blockheads2/katipoBrowser/waraki/android/app/.cxx/Debug/5w6r711f/arm64-v8a/CMakeFiles/CMakeTmp
+
+Run Build Command(s):/Users/davidframpton/Library/Android/sdk/cmake/3.22.1/bin/ninja cmTC_01b0e && [1/2] Building C object CMakeFiles/cmTC_01b0e.dir/src.c.o
+[2/2] Linking C executable cmTC_01b0e
+
+
+Source file was:
+
+      #include <math.h>
+      int main() {
+        float f = 3.14159f;
+        return isnanf(f);
+      }
+    
+Determining if the fdatasync exist passed with the following output:
+Change Dir: /Users/davidframpton/Documents/blockheads2/katipoBrowser/waraki/android/app/.cxx/Debug/5w6r711f/arm64-v8a/CMakeFiles/CMakeTmp
+
+Run Build Command(s):/Users/davidframpton/Library/Android/sdk/cmake/3.22.1/bin/ninja cmTC_70bd1 && [1/2] Building C object CMakeFiles/cmTC_70bd1.dir/CheckSymbolExists.c.o
+[2/2] Linking C executable cmTC_70bd1
+
+
+File /Users/davidframpton/Documents/blockheads2/katipoBrowser/waraki/android/app/.cxx/Debug/5w6r711f/arm64-v8a/CMakeFiles/CMakeTmp/CheckSymbolExists.c:
+/* */
+#include <unistd.h>
+
+int main(int argc, char** argv)
+{
+  (void)argv;
+#ifndef fdatasync
+  return ((int*)(&fdatasync))[argc];
+#else
+  (void)argc;
+  return 0;
+#endif
+}
+Determining if the gethostname exist passed with the following output:
+Change Dir: /Users/davidframpton/Documents/blockheads2/katipoBrowser/waraki/android/app/.cxx/Debug/5w6r711f/arm64-v8a/CMakeFiles/CMakeTmp
+
+Run Build Command(s):/Users/davidframpton/Library/Android/sdk/cmake/3.22.1/bin/ninja cmTC_82404 && [1/2] Building C object CMakeFiles/cmTC_82404.dir/CheckSymbolExists.c.o
+[2/2] Linking C executable cmTC_82404
+
+
+File /Users/davidframpton/Documents/blockheads2/katipoBrowser/waraki/android/app/.cxx/Debug/5w6r711f/arm64-v8a/CMakeFiles/CMakeTmp/CheckSymbolExists.c:
+/* */
+#include <unistd.h>
+
+int main(int argc, char** argv)
+{
+  (void)argv;
+#ifndef gethostname
+  return ((int*)(&gethostname))[argc];
+#else
+  (void)argc;
+  return 0;
+#endif
+}
+Determining if the getpagesize exist passed with the following output:
+Change Dir: /Users/davidframpton/Documents/blockheads2/katipoBrowser/waraki/android/app/.cxx/Debug/5w6r711f/arm64-v8a/CMakeFiles/CMakeTmp
+
+Run Build Command(s):/Users/davidframpton/Library/Android/sdk/cmake/3.22.1/bin/ninja cmTC_e654d && [1/2] Building C object CMakeFiles/cmTC_e654d.dir/CheckSymbolExists.c.o
+[2/2] Linking C executable cmTC_e654d
+
+
+File /Users/davidframpton/Documents/blockheads2/katipoBrowser/waraki/android/app/.cxx/Debug/5w6r711f/arm64-v8a/CMakeFiles/CMakeTmp/CheckSymbolExists.c:
+/* */
+#include <unistd.h>
+
+int main(int argc, char** argv)
+{
+  (void)argv;
+#ifndef getpagesize
+  return ((int*)(&getpagesize))[argc];
+#else
+  (void)argc;
+  return 0;
+#endif
+}
+Determining if the getresgid exist passed with the following output:
+Change Dir: /Users/davidframpton/Documents/blockheads2/katipoBrowser/waraki/android/app/.cxx/Debug/5w6r711f/arm64-v8a/CMakeFiles/CMakeTmp
+
+Run Build Command(s):/Users/davidframpton/Library/Android/sdk/cmake/3.22.1/bin/ninja cmTC_bd8f8 && [1/2] Building C object CMakeFiles/cmTC_bd8f8.dir/CheckSymbolExists.c.o
+[2/2] Linking C executable cmTC_bd8f8
+
+
+File /Users/davidframpton/Documents/blockheads2/katipoBrowser/waraki/android/app/.cxx/Debug/5w6r711f/arm64-v8a/CMakeFiles/CMakeTmp/CheckSymbolExists.c:
+/* */
+#include <unistd.h>
+
+int main(int argc, char** argv)
+{
+  (void)argv;
+#ifndef getresgid
+  return ((int*)(&getresgid))[argc];
+#else
+  (void)argc;
+  return 0;
+#endif
+}
+Determining if the getresuid exist passed with the following output:
+Change Dir: /Users/davidframpton/Documents/blockheads2/katipoBrowser/waraki/android/app/.cxx/Debug/5w6r711f/arm64-v8a/CMakeFiles/CMakeTmp
+
+Run Build Command(s):/Users/davidframpton/Library/Android/sdk/cmake/3.22.1/bin/ninja cmTC_def0a && [1/2] Building C object CMakeFiles/cmTC_def0a.dir/CheckSymbolExists.c.o
+[2/2] Linking C executable cmTC_def0a
+
+
+File /Users/davidframpton/Documents/blockheads2/katipoBrowser/waraki/android/app/.cxx/Debug/5w6r711f/arm64-v8a/CMakeFiles/CMakeTmp/CheckSymbolExists.c:
+/* */
+#include <unistd.h>
+
+int main(int argc, char** argv)
+{
+  (void)argv;
+#ifndef getresuid
+  return ((int*)(&getresuid))[argc];
+#else
+  (void)argc;
+  return 0;
+#endif
+}
+Determining if the sigaction exist passed with the following output:
+Change Dir: /Users/davidframpton/Documents/blockheads2/katipoBrowser/waraki/android/app/.cxx/Debug/5w6r711f/arm64-v8a/CMakeFiles/CMakeTmp
+
+Run Build Command(s):/Users/davidframpton/Library/Android/sdk/cmake/3.22.1/bin/ninja cmTC_be8a0 && [1/2] Building C object CMakeFiles/cmTC_be8a0.dir/CheckSymbolExists.c.o
+[2/2] Linking C executable cmTC_be8a0
+
+
+File /Users/davidframpton/Documents/blockheads2/katipoBrowser/waraki/android/app/.cxx/Debug/5w6r711f/arm64-v8a/CMakeFiles/CMakeTmp/CheckSymbolExists.c:
+/* */
+#include <signal.h>
+
+int main(int argc, char** argv)
+{
+  (void)argv;
+#ifndef sigaction
+  return ((int*)(&sigaction))[argc];
+#else
+  (void)argc;
+  return 0;
+#endif
+}
+Determining if the setjmp exist passed with the following output:
+Change Dir: /Users/davidframpton/Documents/blockheads2/katipoBrowser/waraki/android/app/.cxx/Debug/5w6r711f/arm64-v8a/CMakeFiles/CMakeTmp
+
+Run Build Command(s):/Users/davidframpton/Library/Android/sdk/cmake/3.22.1/bin/ninja cmTC_49033 && [1/2] Building C object CMakeFiles/cmTC_49033.dir/CheckSymbolExists.c.o
+[2/2] Linking C executable cmTC_49033
+
+
+File /Users/davidframpton/Documents/blockheads2/katipoBrowser/waraki/android/app/.cxx/Debug/5w6r711f/arm64-v8a/CMakeFiles/CMakeTmp/CheckSymbolExists.c:
+/* */
+#include <setjmp.h>
+
+int main(int argc, char** argv)
+{
+  (void)argv;
+#ifndef setjmp
+  return ((int*)(&setjmp))[argc];
+#else
+  (void)argc;
+  return 0;
+#endif
+}
+Determining if the nanosleep exist passed with the following output:
+Change Dir: /Users/davidframpton/Documents/blockheads2/katipoBrowser/waraki/android/app/.cxx/Debug/5w6r711f/arm64-v8a/CMakeFiles/CMakeTmp
+
+Run Build Command(s):/Users/davidframpton/Library/Android/sdk/cmake/3.22.1/bin/ninja cmTC_14306 && [1/2] Building C object CMakeFiles/cmTC_14306.dir/CheckSymbolExists.c.o
+[2/2] Linking C executable cmTC_14306
+
+
+File /Users/davidframpton/Documents/blockheads2/katipoBrowser/waraki/android/app/.cxx/Debug/5w6r711f/arm64-v8a/CMakeFiles/CMakeTmp/CheckSymbolExists.c:
+/* */
+#include <time.h>
+
+int main(int argc, char** argv)
+{
+  (void)argv;
+#ifndef nanosleep
+  return ((int*)(&nanosleep))[argc];
+#else
+  (void)argc;
+  return 0;
+#endif
+}
+Determining if the gmtime_r exist passed with the following output:
+Change Dir: /Users/davidframpton/Documents/blockheads2/katipoBrowser/waraki/android/app/.cxx/Debug/5w6r711f/arm64-v8a/CMakeFiles/CMakeTmp
+
+Run Build Command(s):/Users/davidframpton/Library/Android/sdk/cmake/3.22.1/bin/ninja cmTC_418b5 && [1/2] Building C object CMakeFiles/cmTC_418b5.dir/CheckSymbolExists.c.o
+[2/2] Linking C executable cmTC_418b5
+
+
+File /Users/davidframpton/Documents/blockheads2/katipoBrowser/waraki/android/app/.cxx/Debug/5w6r711f/arm64-v8a/CMakeFiles/CMakeTmp/CheckSymbolExists.c:
+/* */
+#include <time.h>
+
+int main(int argc, char** argv)
+{
+  (void)argv;
+#ifndef gmtime_r
+  return ((int*)(&gmtime_r))[argc];
+#else
+  (void)argc;
+  return 0;
+#endif
+}
+Determining if the localtime_r exist passed with the following output:
+Change Dir: /Users/davidframpton/Documents/blockheads2/katipoBrowser/waraki/android/app/.cxx/Debug/5w6r711f/arm64-v8a/CMakeFiles/CMakeTmp
+
+Run Build Command(s):/Users/davidframpton/Library/Android/sdk/cmake/3.22.1/bin/ninja cmTC_95ac6 && [1/2] Building C object CMakeFiles/cmTC_95ac6.dir/CheckSymbolExists.c.o
+[2/2] Linking C executable cmTC_95ac6
+
+
+File /Users/davidframpton/Documents/blockheads2/katipoBrowser/waraki/android/app/.cxx/Debug/5w6r711f/arm64-v8a/CMakeFiles/CMakeTmp/CheckSymbolExists.c:
+/* */
+#include <time.h>
+
+int main(int argc, char** argv)
+{
+  (void)argv;
+#ifndef localtime_r
+  return ((int*)(&localtime_r))[argc];
+#else
+  (void)argc;
+  return 0;
+#endif
+}
+Determining if the sysconf exist passed with the following output:
+Change Dir: /Users/davidframpton/Documents/blockheads2/katipoBrowser/waraki/android/app/.cxx/Debug/5w6r711f/arm64-v8a/CMakeFiles/CMakeTmp
+
+Run Build Command(s):/Users/davidframpton/Library/Android/sdk/cmake/3.22.1/bin/ninja cmTC_3c1fb && [1/2] Building C object CMakeFiles/cmTC_3c1fb.dir/CheckSymbolExists.c.o
+[2/2] Linking C executable cmTC_3c1fb
+
+
+File /Users/davidframpton/Documents/blockheads2/katipoBrowser/waraki/android/app/.cxx/Debug/5w6r711f/arm64-v8a/CMakeFiles/CMakeTmp/CheckSymbolExists.c:
+/* */
+#include <unistd.h>
+
+int main(int argc, char** argv)
+{
+  (void)argv;
+#ifndef sysconf
+  return ((int*)(&sysconf))[argc];
+#else
+  (void)argc;
+  return 0;
+#endif
+}
+Determining if the getauxval exist passed with the following output:
+Change Dir: /Users/davidframpton/Documents/blockheads2/katipoBrowser/waraki/android/app/.cxx/Debug/5w6r711f/arm64-v8a/CMakeFiles/CMakeTmp
+
+Run Build Command(s):/Users/davidframpton/Library/Android/sdk/cmake/3.22.1/bin/ninja cmTC_26e9d && [1/2] Building C object CMakeFiles/cmTC_26e9d.dir/CheckSymbolExists.c.o
+[2/2] Linking C executable cmTC_26e9d
+
+
+File /Users/davidframpton/Documents/blockheads2/katipoBrowser/waraki/android/app/.cxx/Debug/5w6r711f/arm64-v8a/CMakeFiles/CMakeTmp/CheckSymbolExists.c:
+/* */
+#include <sys/auxv.h>
+
+int main(int argc, char** argv)
+{
+  (void)argv;
+#ifndef getauxval
+  return ((int*)(&getauxval))[argc];
+#else
+  (void)argc;
+  return 0;
+#endif
+}
+Determining if the ppoll exist passed with the following output:
+Change Dir: /Users/davidframpton/Documents/blockheads2/katipoBrowser/waraki/android/app/.cxx/Debug/5w6r711f/arm64-v8a/CMakeFiles/CMakeTmp
+
+Run Build Command(s):/Users/davidframpton/Library/Android/sdk/cmake/3.22.1/bin/ninja cmTC_9cbf8 && [1/2] Building C object CMakeFiles/cmTC_9cbf8.dir/CheckSymbolExists.c.o
+[2/2] Linking C executable cmTC_9cbf8
+
+
+File /Users/davidframpton/Documents/blockheads2/katipoBrowser/waraki/android/app/.cxx/Debug/5w6r711f/arm64-v8a/CMakeFiles/CMakeTmp/CheckSymbolExists.c:
+/* */
+#include <poll.h>
+
+int main(int argc, char** argv)
+{
+  (void)argv;
+#ifndef ppoll
+  return ((int*)(&ppoll))[argc];
+#else
+  (void)argc;
+  return 0;
+#endif
+}
+Determining if the posix_fallocate exist passed with the following output:
+Change Dir: /Users/davidframpton/Documents/blockheads2/katipoBrowser/waraki/android/app/.cxx/Debug/5w6r711f/arm64-v8a/CMakeFiles/CMakeTmp
+
+Run Build Command(s):/Users/davidframpton/Library/Android/sdk/cmake/3.22.1/bin/ninja cmTC_95e8d && [1/2] Building C object CMakeFiles/cmTC_95e8d.dir/CheckSymbolExists.c.o
+[2/2] Linking C executable cmTC_95e8d
+
+
+File /Users/davidframpton/Documents/blockheads2/katipoBrowser/waraki/android/app/.cxx/Debug/5w6r711f/arm64-v8a/CMakeFiles/CMakeTmp/CheckSymbolExists.c:
+/* */
+#include <fcntl.h>
+
+int main(int argc, char** argv)
+{
+  (void)argv;
+#ifndef posix_fallocate
+  return ((int*)(&posix_fallocate))[argc];
+#else
+  (void)argc;
+  return 0;
+#endif
+}
+Performing C SOURCE FILE Test HAVE_SA_SIGACTION succeeded with the following output:
+Change Dir: /Users/davidframpton/Documents/blockheads2/katipoBrowser/waraki/android/app/.cxx/Debug/5w6r711f/arm64-v8a/CMakeFiles/CMakeTmp
+
+Run Build Command(s):/Users/davidframpton/Library/Android/sdk/cmake/3.22.1/bin/ninja cmTC_22666 && [1/2] Building C object CMakeFiles/cmTC_22666.dir/src.c.o
+[2/2] Linking C executable cmTC_22666
+
+
+Source file was:
+
+#include <signal.h>
+
+int main()
+{
+  (void)sizeof(((struct sigaction *)0)->sa_sigaction);
+  return 0;
+}
+
+Performing C SOURCE FILE Test HAVE_ST_MTIM succeeded with the following output:
+Change Dir: /Users/davidframpton/Documents/blockheads2/katipoBrowser/waraki/android/app/.cxx/Debug/5w6r711f/arm64-v8a/CMakeFiles/CMakeTmp
+
+Run Build Command(s):/Users/davidframpton/Library/Android/sdk/cmake/3.22.1/bin/ninja cmTC_e9434 && [1/2] Building C object CMakeFiles/cmTC_e9434.dir/src.c.o
+[2/2] Linking C executable cmTC_e9434
+
+
+Source file was:
+
+#include <sys/stat.h>
+
+int main()
+{
+  (void)sizeof(((struct stat *)0)->st_mtim);
+  return 0;
+}
+
+Determining if the dlopen exist passed with the following output:
+Change Dir: /Users/davidframpton/Documents/blockheads2/katipoBrowser/waraki/android/app/.cxx/Debug/5w6r711f/arm64-v8a/CMakeFiles/CMakeTmp
+
+Run Build Command(s):/Users/davidframpton/Library/Android/sdk/cmake/3.22.1/bin/ninja cmTC_9657a && [1/2] Building C object CMakeFiles/cmTC_9657a.dir/CheckSymbolExists.c.o
+[2/2] Linking C executable cmTC_9657a
+
+
+File /Users/davidframpton/Documents/blockheads2/katipoBrowser/waraki/android/app/.cxx/Debug/5w6r711f/arm64-v8a/CMakeFiles/CMakeTmp/CheckSymbolExists.c:
+/* */
+#include <dlfcn.h>
+
+int main(int argc, char** argv)
+{
+  (void)argv;
+#ifndef dlopen
+  return ((int*)(&dlopen))[argc];
+#else
+  (void)argc;
+  return 0;
+#endif
+}
+Performing C SOURCE FILE Test HAVE_O_CLOEXEC succeeded with the following output:
+Change Dir: /Users/davidframpton/Documents/blockheads2/katipoBrowser/waraki/android/app/.cxx/Debug/5w6r711f/arm64-v8a/CMakeFiles/CMakeTmp
+
+Run Build Command(s):/Users/davidframpton/Library/Android/sdk/cmake/3.22.1/bin/ninja cmTC_fb41a && [1/2] Building C object CMakeFiles/cmTC_fb41a.dir/src.c.o
+[2/2] Linking C executable cmTC_fb41a
+
+
+Source file was:
+
+    #include <fcntl.h>
+    int flag = O_CLOEXEC;
+    int main(int argc, char **argv) { return 0; }
+Performing C SOURCE FILE Test VULKAN_PASSED_ANDROID_CHECKS succeeded with the following output:
+Change Dir: /Users/davidframpton/Documents/blockheads2/katipoBrowser/waraki/android/app/.cxx/Debug/5w6r711f/arm64-v8a/CMakeFiles/CMakeTmp
+
+Run Build Command(s):/Users/davidframpton/Library/Android/sdk/cmake/3.22.1/bin/ninja cmTC_a6ff4 && [1/2] Building C object CMakeFiles/cmTC_a6ff4.dir/src.c.o
+[2/2] Linking C executable cmTC_a6ff4
+
+
+Source file was:
+
+      #if defined(__ARM_ARCH) && __ARM_ARCH < 7
+      #error Vulkan doesn't work on this configuration
+      #endif
+      int main(int argc, char **argv) { return 0; }
+      
+Performing C SOURCE FILE Test HAVE_PTHREADS succeeded with the following output:
+Change Dir: /Users/davidframpton/Documents/blockheads2/katipoBrowser/waraki/android/app/.cxx/Debug/5w6r711f/arm64-v8a/CMakeFiles/CMakeTmp
+
+Run Build Command(s):/Users/davidframpton/Library/Android/sdk/cmake/3.22.1/bin/ninja cmTC_e190a && [1/2] Building C object CMakeFiles/cmTC_e190a.dir/src.c.o
+[2/2] Linking C executable cmTC_e190a
+
+
+Source file was:
+
+        #include <pthread.h>
+        int main(int argc, char** argv) {
+          pthread_attr_t type;
+          pthread_attr_init(&type);
+          return 0;
+        }
+Performing C SOURCE FILE Test HAVE_RECURSIVE_MUTEXES succeeded with the following output:
+Change Dir: /Users/davidframpton/Documents/blockheads2/katipoBrowser/waraki/android/app/.cxx/Debug/5w6r711f/arm64-v8a/CMakeFiles/CMakeTmp
+
+Run Build Command(s):/Users/davidframpton/Library/Android/sdk/cmake/3.22.1/bin/ninja cmTC_792cc && [1/2] Building C object CMakeFiles/cmTC_792cc.dir/src.c.o
+[2/2] Linking C executable cmTC_792cc
+
+
+Source file was:
+
+        #include <pthread.h>
+        int main(int argc, char **argv) {
+          pthread_mutexattr_t attr;
+          pthread_mutexattr_settype(&attr, PTHREAD_MUTEX_RECURSIVE);
+          return 0;
+        }
+Performing C SOURCE FILE Test HAVE_PTHREADS_SEM succeeded with the following output:
+Change Dir: /Users/davidframpton/Documents/blockheads2/katipoBrowser/waraki/android/app/.cxx/Debug/5w6r711f/arm64-v8a/CMakeFiles/CMakeTmp
+
+Run Build Command(s):/Users/davidframpton/Library/Android/sdk/cmake/3.22.1/bin/ninja cmTC_0d496 && [1/2] Building C object CMakeFiles/cmTC_0d496.dir/src.c.o
+[2/2] Linking C executable cmTC_0d496
+
+
+Source file was:
+#include <pthread.h>
+                                 #include <semaphore.h>
+                                 int main(int argc, char **argv) { return 0; }
+Performing C SOURCE FILE Test COMPILER_HAS_SEM_TIMEDWAIT succeeded with the following output:
+Change Dir: /Users/davidframpton/Documents/blockheads2/katipoBrowser/waraki/android/app/.cxx/Debug/5w6r711f/arm64-v8a/CMakeFiles/CMakeTmp
+
+Run Build Command(s):/Users/davidframpton/Library/Android/sdk/cmake/3.22.1/bin/ninja cmTC_db990 && [1/2] Building C object CMakeFiles/cmTC_db990.dir/src.c.o
+/Users/davidframpton/Documents/blockheads2/katipoBrowser/waraki/android/app/.cxx/Debug/5w6r711f/arm64-v8a/CMakeFiles/CMakeTmp/src.c:5:33: warning: null passed to a callee that requires a non-null argument [-Wnonnull]
+    5 |                   sem_timedwait(NULL, NULL);
+      |                                 ^~~~
+/Users/davidframpton/Library/Android/sdk/ndk/28.2.13676358/toolchains/llvm/prebuilt/darwin-x86_64/lib/clang/19/include/__stddef_null.h:26:14: note: expanded from macro 'NULL'
+   26 | #define NULL ((void*)0)
+      |              ^~~~~~~~~~
+/Users/davidframpton/Documents/blockheads2/katipoBrowser/waraki/android/app/.cxx/Debug/5w6r711f/arm64-v8a/CMakeFiles/CMakeTmp/src.c:5:39: warning: null passed to a callee that requires a non-null argument [-Wnonnull]
+    5 |                   sem_timedwait(NULL, NULL);
+      |                                       ^~~~
+/Users/davidframpton/Library/Android/sdk/ndk/28.2.13676358/toolchains/llvm/prebuilt/darwin-x86_64/lib/clang/19/include/__stddef_null.h:26:14: note: expanded from macro 'NULL'
+   26 | #define NULL ((void*)0)
+      |              ^~~~~~~~~~
+2 warnings generated.
+[2/2] Linking C executable cmTC_db990
+
+
+Source file was:
+
+              #include <pthread.h>
+              #include <semaphore.h>
+              int main(int argc, char **argv) {
+                  sem_timedwait(NULL, NULL);
+                  return 0;
+              }
+Determining if the include file pthread.h exists passed with the following output:
+Change Dir: /Users/davidframpton/Documents/blockheads2/katipoBrowser/waraki/android/app/.cxx/Debug/5w6r711f/arm64-v8a/CMakeFiles/CMakeTmp
+
+Run Build Command(s):/Users/davidframpton/Library/Android/sdk/cmake/3.22.1/bin/ninja cmTC_5b05f && [1/2] Building C object CMakeFiles/cmTC_5b05f.dir/CheckIncludeFile.c.o
+[2/2] Linking C executable cmTC_5b05f
+
+
+
+Performing C SOURCE FILE Test HAVE_PTHREAD_SETNAME_NP succeeded with the following output:
+Change Dir: /Users/davidframpton/Documents/blockheads2/katipoBrowser/waraki/android/app/.cxx/Debug/5w6r711f/arm64-v8a/CMakeFiles/CMakeTmp
+
+Run Build Command(s):/Users/davidframpton/Library/Android/sdk/cmake/3.22.1/bin/ninja cmTC_739b4 && [1/2] Building C object CMakeFiles/cmTC_739b4.dir/src.c.o
+[2/2] Linking C executable cmTC_739b4
+
+
+Source file was:
+
+            #include <pthread.h>
+            int main(int argc, char **argv) {
+              #ifdef __APPLE__
+              pthread_setname_np("");
+              #else
+              pthread_setname_np(pthread_self(),"");
+              #endif
+              return 0;
+            }
+Performing C SOURCE FILE Test LINKER_SUPPORTS_VERSION_SCRIPT succeeded with the following output:
+Change Dir: /Users/davidframpton/Documents/blockheads2/katipoBrowser/waraki/android/app/.cxx/Debug/5w6r711f/arm64-v8a/CMakeFiles/CMakeTmp
+
+Run Build Command(s):/Users/davidframpton/Library/Android/sdk/cmake/3.22.1/bin/ninja cmTC_0f195 && [1/2] Building C object CMakeFiles/cmTC_0f195.dir/src.c.o
+[2/2] Linking C executable cmTC_0f195
+
+
+Source file was:
+int func(void) {return 0;} int main(int argc,char*argv[]){(void)argc;(void)argv;return func();}
+Performing C SOURCE FILE Test HAVE_WL_NO_UNDEFINED succeeded with the following output:
+Change Dir: /Users/davidframpton/Documents/blockheads2/katipoBrowser/waraki/android/app/.cxx/Debug/5w6r711f/arm64-v8a/CMakeFiles/CMakeTmp
+
+Run Build Command(s):/Users/davidframpton/Library/Android/sdk/cmake/3.22.1/bin/ninja cmTC_8c674 && [1/2] Building C object CMakeFiles/cmTC_8c674.dir/src.c.o
+[2/2] Linking C executable cmTC_8c674
+
+
+Source file was:
+int main() { return 0; }
+Determining if the include file pthread.h exists passed with the following output:
+Change Dir: /Users/davidframpton/Documents/blockheads2/katipoBrowser/waraki/android/app/.cxx/Debug/5w6r711f/arm64-v8a/CMakeFiles/CMakeTmp
+
+Run Build Command(s):/Users/davidframpton/Library/Android/sdk/cmake/3.22.1/bin/ninja cmTC_2c064 && [1/2] Building C object CMakeFiles/cmTC_2c064.dir/CheckIncludeFile.c.o
+[2/2] Linking C executable cmTC_2c064
+
+
+

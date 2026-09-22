@@ -9,6 +9,9 @@
 
 std::string createSecurityBookmarkForDirectory(std::string path)
 {
+#if TARGET_OS_IPHONE
+    return "";
+#else
     if(path.empty())
     {
         return "";
@@ -33,11 +36,15 @@ std::string createSecurityBookmarkForDirectory(std::string path)
     NSString *base64 = [bookmarkData base64EncodedStringWithOptions:0];
 
     return [base64 UTF8String];
+#endif
 }
 
 
 std::string resolveSecurityBookmark(std::string bookmarkData)
 {
+#if TARGET_OS_IPHONE
+    return "";
+#else
     if(bookmarkData.empty())
     {
         return "";
@@ -76,4 +83,5 @@ std::string resolveSecurityBookmark(std::string bookmarkData)
     }
 
     return [[resolvedURL path] UTF8String];
+#endif
 }

@@ -1,0 +1,832 @@
+{
+	"artifacts" : 
+	[
+		{
+			"path" : "/Users/davidframpton/Documents/blockheads2/katipoBrowser/waraki/android/app/build/intermediates/cxx/Debug/g4q5z506/obj/arm64-v8a/libwaraki.so"
+		}
+	],
+	"backtrace" : 1,
+	"backtraceGraph" : 
+	{
+		"commands" : 
+		[
+			"add_library",
+			"target_link_libraries",
+			"include_directories"
+		],
+		"files" : 
+		[
+			"src/CMakeLists.txt"
+		],
+		"nodes" : 
+		[
+			{
+				"file" : 0
+			},
+			{
+				"command" : 0,
+				"file" : 0,
+				"line" : 35,
+				"parent" : 0
+			},
+			{
+				"command" : 1,
+				"file" : 0,
+				"line" : 108,
+				"parent" : 0
+			},
+			{
+				"command" : 1,
+				"file" : 0,
+				"line" : 107,
+				"parent" : 0
+			},
+			{
+				"command" : 1,
+				"file" : 0,
+				"line" : 105,
+				"parent" : 0
+			},
+			{
+				"command" : 2,
+				"file" : 0,
+				"line" : 18,
+				"parent" : 0
+			}
+		]
+	},
+	"compileGroups" : 
+	[
+		{
+			"compileCommandFragments" : 
+			[
+				{
+					"fragment" : "-g -DANDROID -fdata-sections -ffunction-sections -funwind-tables -fstack-protector-strong -no-canonical-prefixes -D_FORTIFY_SOURCE=2 -Wformat -Werror=format-security   -fno-limit-debug-info  -fPIC"
+				},
+				{
+					"backtrace" : 4,
+					"fragment" : "-pthread"
+				}
+			],
+			"defines" : 
+			[
+				{
+					"define" : "waraki_EXPORTS"
+				}
+			],
+			"includes" : 
+			[
+				{
+					"backtrace" : 5,
+					"path" : "/Users/davidframpton/Documents/blockheads2/katipoBrowser/waraki/android/app/jni/src/../../../../../katipo/core"
+				},
+				{
+					"backtrace" : 5,
+					"path" : "/Users/davidframpton/Documents/blockheads2/katipoBrowser/waraki/android/app/jni/src/../../../../../katipo/thirdParty/tui/source"
+				},
+				{
+					"backtrace" : 5,
+					"path" : "/Users/davidframpton/Documents/blockheads2/katipoBrowser/waraki/android/app/jni/src/../../../../../katipo/thirdParty/enet-1.3.18/include"
+				},
+				{
+					"backtrace" : 5,
+					"path" : "/Users/davidframpton/Documents/blockheads2/katipoBrowser/waraki/android/app/jni/src/../../../../../katipo/thirdParty/liblmdb"
+				},
+				{
+					"backtrace" : 5,
+					"path" : "/Users/davidframpton/Documents/blockheads2/katipoBrowser/waraki/android/app/jni/src/../../../../../katipo/thirdParty/glm"
+				},
+				{
+					"backtrace" : 5,
+					"path" : "/Users/davidframpton/Documents/blockheads2/katipoBrowser/waraki/android/app/jni/src/../../../../../katipo/thirdParty/tui/thirdParty/glm/glm"
+				},
+				{
+					"backtrace" : 5,
+					"path" : "/Users/davidframpton/Documents/blockheads2/katipoBrowser/waraki/android/app/jni/src/../../../../../thirdParty/VulkanMemoryAllocator-3.2.1/include"
+				},
+				{
+					"backtrace" : 5,
+					"path" : "/Users/davidframpton/Documents/blockheads2/katipoBrowser/waraki/android/app/jni/src/../../../../../thirdParty/SDL3-3.4.0/include/SDL3"
+				},
+				{
+					"backtrace" : 5,
+					"path" : "/Users/davidframpton/Documents/blockheads2/katipoBrowser/waraki/android/app/jni/src/../../../../../thirdParty/SDL_mixer-release-3.2.4/include/SDL3_mixer"
+				},
+				{
+					"backtrace" : 5,
+					"path" : "/Users/davidframpton/Documents/blockheads2/katipoBrowser/waraki/android/app/jni/src/../../../../../thirdParty"
+				},
+				{
+					"backtrace" : 5,
+					"path" : "/Users/davidframpton/Documents/blockheads2/katipoBrowser/waraki/android/app/jni/src/../../../../../browser"
+				},
+				{
+					"backtrace" : 5,
+					"path" : "/Users/davidframpton/Documents/blockheads2/katipoBrowser/waraki/android/app/jni/src/../../../.."
+				},
+				{
+					"backtrace" : 5,
+					"path" : "/Users/davidframpton/Documents/blockheads2/katipoBrowser/waraki/android/app/jni/src/../../../../../thirdParty/utfcpp-3.2.1/source"
+				},
+				{
+					"backtrace" : 5,
+					"path" : "/include"
+				},
+				{
+					"backtrace" : 3,
+					"path" : "/Users/davidframpton/Documents/blockheads2/katipoBrowser/waraki/android/app/.cxx/Debug/g4q5z506/arm64-v8a/SDL3-build/include-revision"
+				},
+				{
+					"backtrace" : 3,
+					"path" : "/Users/davidframpton/Documents/blockheads2/katipoBrowser/thirdParty/SDL3-3.4.0/include"
+				},
+				{
+					"backtrace" : 2,
+					"path" : "/Users/davidframpton/Documents/blockheads2/katipoBrowser/thirdParty/SDL_mixer/include"
+				}
+			],
+			"language" : "CXX",
+			"sourceIndexes" : 
+			[
+				0,
+				1,
+				2,
+				3,
+				4,
+				5,
+				6,
+				7,
+				8,
+				9,
+				10,
+				11,
+				12,
+				13,
+				14,
+				15,
+				16,
+				17,
+				18,
+				19,
+				20,
+				21,
+				22,
+				23,
+				24,
+				25,
+				26,
+				27,
+				28,
+				29,
+				30,
+				31,
+				32,
+				33,
+				34,
+				35,
+				36,
+				37,
+				38,
+				39,
+				40,
+				41,
+				42,
+				43,
+				44,
+				45,
+				56,
+				57,
+				58,
+				59,
+				60,
+				61,
+				62,
+				63
+			],
+			"sysroot" : 
+			{
+				"path" : "/Users/davidframpton/Library/Android/sdk/ndk/30.0.16248370/toolchains/llvm/prebuilt/darwin-x86_64/sysroot"
+			}
+		},
+		{
+			"compileCommandFragments" : 
+			[
+				{
+					"fragment" : "-g -DANDROID -fdata-sections -ffunction-sections -funwind-tables -fstack-protector-strong -no-canonical-prefixes -D_FORTIFY_SOURCE=2 -Wformat -Werror=format-security  -fno-limit-debug-info  -fPIC"
+				},
+				{
+					"backtrace" : 4,
+					"fragment" : "-pthread"
+				}
+			],
+			"defines" : 
+			[
+				{
+					"define" : "waraki_EXPORTS"
+				}
+			],
+			"includes" : 
+			[
+				{
+					"backtrace" : 5,
+					"path" : "/Users/davidframpton/Documents/blockheads2/katipoBrowser/waraki/android/app/jni/src/../../../../../katipo/core"
+				},
+				{
+					"backtrace" : 5,
+					"path" : "/Users/davidframpton/Documents/blockheads2/katipoBrowser/waraki/android/app/jni/src/../../../../../katipo/thirdParty/tui/source"
+				},
+				{
+					"backtrace" : 5,
+					"path" : "/Users/davidframpton/Documents/blockheads2/katipoBrowser/waraki/android/app/jni/src/../../../../../katipo/thirdParty/enet-1.3.18/include"
+				},
+				{
+					"backtrace" : 5,
+					"path" : "/Users/davidframpton/Documents/blockheads2/katipoBrowser/waraki/android/app/jni/src/../../../../../katipo/thirdParty/liblmdb"
+				},
+				{
+					"backtrace" : 5,
+					"path" : "/Users/davidframpton/Documents/blockheads2/katipoBrowser/waraki/android/app/jni/src/../../../../../katipo/thirdParty/glm"
+				},
+				{
+					"backtrace" : 5,
+					"path" : "/Users/davidframpton/Documents/blockheads2/katipoBrowser/waraki/android/app/jni/src/../../../../../katipo/thirdParty/tui/thirdParty/glm/glm"
+				},
+				{
+					"backtrace" : 5,
+					"path" : "/Users/davidframpton/Documents/blockheads2/katipoBrowser/waraki/android/app/jni/src/../../../../../thirdParty/VulkanMemoryAllocator-3.2.1/include"
+				},
+				{
+					"backtrace" : 5,
+					"path" : "/Users/davidframpton/Documents/blockheads2/katipoBrowser/waraki/android/app/jni/src/../../../../../thirdParty/SDL3-3.4.0/include/SDL3"
+				},
+				{
+					"backtrace" : 5,
+					"path" : "/Users/davidframpton/Documents/blockheads2/katipoBrowser/waraki/android/app/jni/src/../../../../../thirdParty/SDL_mixer-release-3.2.4/include/SDL3_mixer"
+				},
+				{
+					"backtrace" : 5,
+					"path" : "/Users/davidframpton/Documents/blockheads2/katipoBrowser/waraki/android/app/jni/src/../../../../../thirdParty"
+				},
+				{
+					"backtrace" : 5,
+					"path" : "/Users/davidframpton/Documents/blockheads2/katipoBrowser/waraki/android/app/jni/src/../../../../../browser"
+				},
+				{
+					"backtrace" : 5,
+					"path" : "/Users/davidframpton/Documents/blockheads2/katipoBrowser/waraki/android/app/jni/src/../../../.."
+				},
+				{
+					"backtrace" : 5,
+					"path" : "/Users/davidframpton/Documents/blockheads2/katipoBrowser/waraki/android/app/jni/src/../../../../../thirdParty/utfcpp-3.2.1/source"
+				},
+				{
+					"backtrace" : 5,
+					"path" : "/include"
+				},
+				{
+					"backtrace" : 3,
+					"path" : "/Users/davidframpton/Documents/blockheads2/katipoBrowser/waraki/android/app/.cxx/Debug/g4q5z506/arm64-v8a/SDL3-build/include-revision"
+				},
+				{
+					"backtrace" : 3,
+					"path" : "/Users/davidframpton/Documents/blockheads2/katipoBrowser/thirdParty/SDL3-3.4.0/include"
+				},
+				{
+					"backtrace" : 2,
+					"path" : "/Users/davidframpton/Documents/blockheads2/katipoBrowser/thirdParty/SDL_mixer/include"
+				}
+			],
+			"language" : "C",
+			"sourceIndexes" : 
+			[
+				46,
+				47,
+				48,
+				49,
+				50,
+				51,
+				52,
+				53,
+				54,
+				55
+			],
+			"sysroot" : 
+			{
+				"path" : "/Users/davidframpton/Library/Android/sdk/ndk/30.0.16248370/toolchains/llvm/prebuilt/darwin-x86_64/sysroot"
+			}
+		}
+	],
+	"dependencies" : 
+	[
+		{
+			"backtrace" : 3,
+			"id" : "SDL3-shared::@edf024ffa2e77522bfe7"
+		},
+		{
+			"backtrace" : 2,
+			"id" : "SDL3_mixer-shared::@2b1bf2ff897979c1e14d"
+		}
+	],
+	"id" : "waraki::@145eef247bfb46b6828c",
+	"link" : 
+	{
+		"commandFragments" : 
+		[
+			{
+				"fragment" : "-static-libstdc++ -Wl,--build-id=sha1 -Wl,--no-rosegment -Wl,--no-undefined-version -Wl,--fatal-warnings -Wl,--no-undefined -Qunused-arguments",
+				"role" : "flags"
+			},
+			{
+				"backtrace" : 2,
+				"fragment" : "/Users/davidframpton/Documents/blockheads2/katipoBrowser/waraki/android/app/build/intermediates/cxx/Debug/g4q5z506/obj/arm64-v8a/libSDL3_mixer.so",
+				"role" : "libraries"
+			},
+			{
+				"fragment" : "-pthread",
+				"role" : "libraries"
+			},
+			{
+				"backtrace" : 3,
+				"fragment" : "/Users/davidframpton/Documents/blockheads2/katipoBrowser/waraki/android/app/build/intermediates/cxx/Debug/g4q5z506/obj/arm64-v8a/libSDL3.so",
+				"role" : "libraries"
+			},
+			{
+				"fragment" : "-latomic -lm",
+				"role" : "libraries"
+			}
+		],
+		"language" : "CXX",
+		"sysroot" : 
+		{
+			"path" : "/Users/davidframpton/Library/Android/sdk/ndk/30.0.16248370/toolchains/llvm/prebuilt/darwin-x86_64/sysroot"
+		}
+	},
+	"name" : "waraki",
+	"nameOnDisk" : "libwaraki.so",
+	"paths" : 
+	{
+		"build" : "src",
+		"source" : "src"
+	},
+	"sourceGroups" : 
+	[
+		{
+			"name" : "Source Files",
+			"sourceIndexes" : 
+			[
+				0,
+				1,
+				2,
+				3,
+				4,
+				5,
+				6,
+				7,
+				8,
+				9,
+				10,
+				11,
+				12,
+				13,
+				14,
+				15,
+				16,
+				17,
+				18,
+				19,
+				20,
+				21,
+				22,
+				23,
+				24,
+				25,
+				26,
+				27,
+				28,
+				29,
+				30,
+				31,
+				32,
+				33,
+				34,
+				35,
+				36,
+				37,
+				38,
+				39,
+				40,
+				41,
+				42,
+				43,
+				44,
+				45,
+				46,
+				47,
+				48,
+				49,
+				50,
+				51,
+				52,
+				53,
+				54,
+				55,
+				56,
+				57,
+				58,
+				59,
+				60,
+				61,
+				62,
+				63
+			]
+		}
+	],
+	"sources" : 
+	[
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "src/main.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "/Users/davidframpton/Documents/blockheads2/katipoBrowser/browser/Camera.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "/Users/davidframpton/Documents/blockheads2/katipoBrowser/browser/BrowserHost.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "/Users/davidframpton/Documents/blockheads2/katipoBrowser/browser/BrowserTracker.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "/Users/davidframpton/Documents/blockheads2/katipoBrowser/browser/EventManager.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "/Users/davidframpton/Documents/blockheads2/katipoBrowser/browser/GCommandBuffer.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "/Users/davidframpton/Documents/blockheads2/katipoBrowser/browser/GPipeline.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "/Users/davidframpton/Documents/blockheads2/katipoBrowser/browser/KatipoUtilities.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "/Users/davidframpton/Documents/blockheads2/katipoBrowser/browser/MainController.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "/Users/davidframpton/Documents/blockheads2/katipoBrowser/browser/MathUtils.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "/Users/davidframpton/Documents/blockheads2/katipoBrowser/browser/MJAudio.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "/Users/davidframpton/Documents/blockheads2/katipoBrowser/browser/MJAudioSDLMixer.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "/Users/davidframpton/Documents/blockheads2/katipoBrowser/browser/MJCache.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "/Users/davidframpton/Documents/blockheads2/katipoBrowser/browser/MJColorView.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "/Users/davidframpton/Documents/blockheads2/katipoBrowser/browser/MJDataTexture.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "/Users/davidframpton/Documents/blockheads2/katipoBrowser/browser/MJDrawable.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "/Users/davidframpton/Documents/blockheads2/katipoBrowser/browser/MJDrawQuad.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "/Users/davidframpton/Documents/blockheads2/katipoBrowser/browser/MJFont.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "/Users/davidframpton/Documents/blockheads2/katipoBrowser/browser/MJImageTexture.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "/Users/davidframpton/Documents/blockheads2/katipoBrowser/browser/MJImageView.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "/Users/davidframpton/Documents/blockheads2/katipoBrowser/browser/MJRawImageTexture.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "/Users/davidframpton/Documents/blockheads2/katipoBrowser/browser/MJRawImageTexture3D.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "/Users/davidframpton/Documents/blockheads2/katipoBrowser/browser/MJRenderBuffer2.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "/Users/davidframpton/Documents/blockheads2/katipoBrowser/browser/MJRenderBufferIndexed2.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "/Users/davidframpton/Documents/blockheads2/katipoBrowser/browser/MJRenderTarget.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "/Users/davidframpton/Documents/blockheads2/katipoBrowser/browser/MJRenderTarget3D.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "/Users/davidframpton/Documents/blockheads2/katipoBrowser/browser/MJRenderTargetAccumulation.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "/Users/davidframpton/Documents/blockheads2/katipoBrowser/browser/MJRenderTargetShadow.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "/Users/davidframpton/Documents/blockheads2/katipoBrowser/browser/MJRenderTargetSSAO.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "/Users/davidframpton/Documents/blockheads2/katipoBrowser/browser/MJStaticRenderBuffer.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "/Users/davidframpton/Documents/blockheads2/katipoBrowser/browser/MJStaticRenderBuffer2.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "/Users/davidframpton/Documents/blockheads2/katipoBrowser/browser/MJTextView.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "/Users/davidframpton/Documents/blockheads2/katipoBrowser/browser/MJTimer.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "/Users/davidframpton/Documents/blockheads2/katipoBrowser/browser/MJView.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "/Users/davidframpton/Documents/blockheads2/katipoBrowser/browser/Noise3DFast.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "/Users/davidframpton/Documents/blockheads2/katipoBrowser/browser/Vulkan.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "/Users/davidframpton/Documents/blockheads2/katipoBrowser/browser/VulkanMemoryThread.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "/Users/davidframpton/Documents/blockheads2/katipoBrowser/katipo/core/ClientNetInterface.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "/Users/davidframpton/Documents/blockheads2/katipoBrowser/katipo/core/Database.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "/Users/davidframpton/Documents/blockheads2/katipoBrowser/katipo/core/DatabaseEnvironment.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "/Users/davidframpton/Documents/blockheads2/katipoBrowser/katipo/core/NetServerClient.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "/Users/davidframpton/Documents/blockheads2/katipoBrowser/katipo/core/Server.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "/Users/davidframpton/Documents/blockheads2/katipoBrowser/katipo/core/ServerNetInterface.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "/Users/davidframpton/Documents/blockheads2/katipoBrowser/katipo/core/Timer.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "/Users/davidframpton/Documents/blockheads2/katipoBrowser/katipo/core/Tracker.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "/Users/davidframpton/Documents/blockheads2/katipoBrowser/katipo/core/Scanner.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 1,
+			"path" : "/Users/davidframpton/Documents/blockheads2/katipoBrowser/katipo/thirdParty/enet-1.3.18/callbacks.c",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 1,
+			"path" : "/Users/davidframpton/Documents/blockheads2/katipoBrowser/katipo/thirdParty/enet-1.3.18/compress.c",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 1,
+			"path" : "/Users/davidframpton/Documents/blockheads2/katipoBrowser/katipo/thirdParty/enet-1.3.18/host.c",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 1,
+			"path" : "/Users/davidframpton/Documents/blockheads2/katipoBrowser/katipo/thirdParty/enet-1.3.18/list.c",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 1,
+			"path" : "/Users/davidframpton/Documents/blockheads2/katipoBrowser/katipo/thirdParty/enet-1.3.18/packet.c",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 1,
+			"path" : "/Users/davidframpton/Documents/blockheads2/katipoBrowser/katipo/thirdParty/enet-1.3.18/peer.c",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 1,
+			"path" : "/Users/davidframpton/Documents/blockheads2/katipoBrowser/katipo/thirdParty/enet-1.3.18/protocol.c",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 1,
+			"path" : "/Users/davidframpton/Documents/blockheads2/katipoBrowser/katipo/thirdParty/enet-1.3.18/unix.c",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 1,
+			"path" : "/Users/davidframpton/Documents/blockheads2/katipoBrowser/katipo/thirdParty/liblmdb/mdb.c",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 1,
+			"path" : "/Users/davidframpton/Documents/blockheads2/katipoBrowser/katipo/thirdParty/liblmdb/midl.c",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "/Users/davidframpton/Documents/blockheads2/katipoBrowser/katipo/thirdParty/tui/source/TuiBuiltInFunctions.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "/Users/davidframpton/Documents/blockheads2/katipoBrowser/katipo/thirdParty/tui/source/TuiFileUtils.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "/Users/davidframpton/Documents/blockheads2/katipoBrowser/katipo/thirdParty/tui/source/TuiFunction.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "/Users/davidframpton/Documents/blockheads2/katipoBrowser/katipo/thirdParty/tui/source/TuiRef.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "/Users/davidframpton/Documents/blockheads2/katipoBrowser/katipo/thirdParty/tui/source/TuiSha1.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "/Users/davidframpton/Documents/blockheads2/katipoBrowser/katipo/thirdParty/tui/source/TuiTable.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "/Users/davidframpton/Documents/blockheads2/katipoBrowser/thirdParty/MurmurHash3.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "/Users/davidframpton/Documents/blockheads2/katipoBrowser/waraki/Waraki.cpp",
+			"sourceGroupIndex" : 0
+		}
+	],
+	"type" : "SHARED_LIBRARY"
+}

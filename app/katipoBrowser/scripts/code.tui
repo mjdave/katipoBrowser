@@ -1,3 +1,7 @@
+#global database
+#global scene
+#global eventManager
+#global katipo
 
 keys = require("app/common/keys.tui")
 

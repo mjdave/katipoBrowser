@@ -206,6 +206,8 @@ foundResult = false
 connectPageMarkup = false
 customIP = "katipobrowser.com/waraki"
 
+
+
 addRecentConnectionsMarkup = function()
 {
     result = ""

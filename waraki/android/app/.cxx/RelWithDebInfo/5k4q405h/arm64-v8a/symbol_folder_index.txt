@@ -1,0 +1,1 @@
+/Users/davidframpton/Documents/blockheads2/katipoBrowser/waraki/android/app/build/intermediates/cxx/RelWithDebInfo/5k4q405h/obj/arm64-v8a

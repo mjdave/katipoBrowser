@@ -1,0 +1,582 @@
+{
+	"artifacts" : 
+	[
+		{
+			"path" : "/Users/davidframpton/Documents/blockheads2/katipoBrowser/waraki/android/app/build/intermediates/cxx/Debug/6y6q4d60/obj/arm64-v8a/libSDL3_mixer.so"
+		}
+	],
+	"backtrace" : 1,
+	"backtraceGraph" : 
+	{
+		"commands" : 
+		[
+			"add_library",
+			"target_link_options",
+			"sdl_target_link_option_version_file",
+			"sdl_target_link_options_no_undefined",
+			"target_link_libraries",
+			"target_compile_options",
+			"sdl_add_warning_options",
+			"target_compile_definitions",
+			"target_include_directories",
+			"target_sources"
+		],
+		"files" : 
+		[
+			"/Users/davidframpton/Documents/blockheads2/katipoBrowser/thirdParty/SDL_mixer/CMakeLists.txt",
+			"/Users/davidframpton/Documents/blockheads2/katipoBrowser/thirdParty/SDL_mixer/cmake/PrivateSdlFunctions.cmake"
+		],
+		"nodes" : 
+		[
+			{
+				"file" : 0
+			},
+			{
+				"command" : 0,
+				"file" : 0,
+				"line" : 222,
+				"parent" : 0
+			},
+			{
+				"command" : 2,
+				"file" : 0,
+				"line" : 290,
+				"parent" : 0
+			},
+			{
+				"command" : 1,
+				"file" : 1,
+				"line" : 304,
+				"parent" : 2
+			},
+			{
+				"command" : 3,
+				"file" : 0,
+				"line" : 330,
+				"parent" : 0
+			},
+			{
+				"command" : 1,
+				"file" : 1,
+				"line" : 295,
+				"parent" : 4
+			},
+			{
+				"command" : 4,
+				"file" : 0,
+				"line" : 272,
+				"parent" : 0
+			},
+			{
+				"command" : 6,
+				"file" : 0,
+				"line" : 274,
+				"parent" : 0
+			},
+			{
+				"command" : 5,
+				"file" : 1,
+				"line" : 318,
+				"parent" : 7
+			},
+			{
+				"command" : 7,
+				"file" : 0,
+				"line" : 262,
+				"parent" : 0
+			},
+			{
+				"command" : 7,
+				"file" : 0,
+				"line" : 1014,
+				"parent" : 0
+			},
+			{
+				"command" : 7,
+				"file" : 0,
+				"line" : 1028,
+				"parent" : 0
+			},
+			{
+				"command" : 7,
+				"file" : 0,
+				"line" : 658,
+				"parent" : 0
+			},
+			{
+				"command" : 7,
+				"file" : 0,
+				"line" : 983,
+				"parent" : 0
+			},
+			{
+				"command" : 7,
+				"file" : 0,
+				"line" : 845,
+				"parent" : 0
+			},
+			{
+				"command" : 7,
+				"file" : 0,
+				"line" : 446,
+				"parent" : 0
+			},
+			{
+				"command" : 7,
+				"file" : 0,
+				"line" : 1021,
+				"parent" : 0
+			},
+			{
+				"command" : 7,
+				"file" : 0,
+				"line" : 1007,
+				"parent" : 0
+			},
+			{
+				"command" : 8,
+				"file" : 0,
+				"line" : 254,
+				"parent" : 0
+			},
+			{
+				"command" : 8,
+				"file" : 0,
+				"line" : 269,
+				"parent" : 0
+			},
+			{
+				"command" : 9,
+				"file" : 0,
+				"line" : 984,
+				"parent" : 0
+			}
+		]
+	},
+	"compileGroups" : 
+	[
+		{
+			"compileCommandFragments" : 
+			[
+				{
+					"fragment" : "-g -DANDROID -fdata-sections -ffunction-sections -funwind-tables -fstack-protector-strong -no-canonical-prefixes -D_FORTIFY_SOURCE=2 -Wformat -Werror=format-security  -fno-limit-debug-info  -fPIC -fvisibility=hidden"
+				},
+				{
+					"backtrace" : 8,
+					"fragment" : "-Wall"
+				},
+				{
+					"backtrace" : 8,
+					"fragment" : "-Wextra"
+				},
+				{
+					"backtrace" : 8,
+					"fragment" : "-Wno-unused-parameter"
+				}
+			],
+			"defines" : 
+			[
+				{
+					"backtrace" : 9,
+					"define" : "BUILD_SDL"
+				},
+				{
+					"backtrace" : 10,
+					"define" : "DECODER_AIFF"
+				},
+				{
+					"backtrace" : 11,
+					"define" : "DECODER_AU"
+				},
+				{
+					"backtrace" : 12,
+					"define" : "DECODER_FLAC_DRFLAC"
+				},
+				{
+					"backtrace" : 13,
+					"define" : "DECODER_MIDI_TIMIDITY"
+				},
+				{
+					"backtrace" : 14,
+					"define" : "DECODER_MP3_DRMP3"
+				},
+				{
+					"backtrace" : 15,
+					"define" : "DECODER_OGGVORBIS_STB"
+				},
+				{
+					"backtrace" : 16,
+					"define" : "DECODER_VOC"
+				},
+				{
+					"backtrace" : 17,
+					"define" : "DECODER_WAV"
+				},
+				{
+					"define" : "DLL_EXPORT"
+				},
+				{
+					"backtrace" : 9,
+					"define" : "SDL_BUILD_MAJOR_VERSION=3"
+				},
+				{
+					"backtrace" : 9,
+					"define" : "SDL_BUILD_MICRO_VERSION=0"
+				},
+				{
+					"backtrace" : 9,
+					"define" : "SDL_BUILD_MINOR_VERSION=3"
+				}
+			],
+			"includes" : 
+			[
+				{
+					"backtrace" : 18,
+					"path" : "/Users/davidframpton/Documents/blockheads2/katipoBrowser/thirdParty/SDL_mixer/include"
+				},
+				{
+					"backtrace" : 18,
+					"path" : "/Users/davidframpton/Documents/blockheads2/katipoBrowser/thirdParty/SDL_mixer/src"
+				},
+				{
+					"backtrace" : 18,
+					"path" : "/Users/davidframpton/Documents/blockheads2/katipoBrowser/thirdParty/SDL_mixer/src/codecs"
+				},
+				{
+					"backtrace" : 19,
+					"path" : "/Users/davidframpton/Documents/blockheads2/katipoBrowser/waraki/android/app/.cxx/Debug/6y6q4d60/arm64-v8a/SDL3-build/include-revision"
+				},
+				{
+					"backtrace" : 19,
+					"path" : "/Users/davidframpton/Documents/blockheads2/katipoBrowser/thirdParty/SDL3-3.4.0/include"
+				}
+			],
+			"language" : "C",
+			"sourceIndexes" : 
+			[
+				0,
+				1,
+				2,
+				3,
+				4,
+				5,
+				6,
+				7,
+				8,
+				9,
+				10,
+				11,
+				12,
+				13,
+				14,
+				15,
+				16,
+				17,
+				18,
+				19,
+				20,
+				21,
+				22,
+				23,
+				24,
+				25,
+				26,
+				27,
+				28,
+				29,
+				30,
+				31
+			],
+			"sysroot" : 
+			{
+				"path" : "/Users/davidframpton/Library/Android/sdk/ndk/28.2.13676358/toolchains/llvm/prebuilt/darwin-x86_64/sysroot"
+			}
+		}
+	],
+	"dependencies" : 
+	[
+		{
+			"backtrace" : 6,
+			"id" : "SDL3-shared::@edf024ffa2e77522bfe7"
+		}
+	],
+	"id" : "SDL3_mixer-shared::@2b1bf2ff897979c1e14d",
+	"link" : 
+	{
+		"commandFragments" : 
+		[
+			{
+				"fragment" : "-static-libstdc++ -Wl,--build-id=sha1 -Wl,--no-rosegment -Wl,--no-undefined-version -Wl,--fatal-warnings -Wl,--no-undefined -Qunused-arguments",
+				"role" : "flags"
+			},
+			{
+				"backtrace" : 3,
+				"fragment" : "-Wl,--version-script=/Users/davidframpton/Documents/blockheads2/katipoBrowser/thirdParty/SDL_mixer/src/SDL_mixer.sym",
+				"role" : "flags"
+			},
+			{
+				"backtrace" : 5,
+				"fragment" : "-Wl,--no-undefined",
+				"role" : "flags"
+			},
+			{
+				"backtrace" : 6,
+				"fragment" : "/Users/davidframpton/Documents/blockheads2/katipoBrowser/waraki/android/app/build/intermediates/cxx/Debug/6y6q4d60/obj/arm64-v8a/libSDL3.so",
+				"role" : "libraries"
+			},
+			{
+				"fragment" : "-latomic -lm",
+				"role" : "libraries"
+			}
+		],
+		"language" : "C",
+		"sysroot" : 
+		{
+			"path" : "/Users/davidframpton/Library/Android/sdk/ndk/28.2.13676358/toolchains/llvm/prebuilt/darwin-x86_64/sysroot"
+		}
+	},
+	"name" : "SDL3_mixer-shared",
+	"nameOnDisk" : "libSDL3_mixer.so",
+	"paths" : 
+	{
+		"build" : "SDL_mixer-build",
+		"source" : "/Users/davidframpton/Documents/blockheads2/katipoBrowser/thirdParty/SDL_mixer"
+	},
+	"sourceGroups" : 
+	[
+		{
+			"name" : "Source Files",
+			"sourceIndexes" : 
+			[
+				0,
+				1,
+				2,
+				3,
+				4,
+				5,
+				6,
+				7,
+				8,
+				9,
+				10,
+				11,
+				12,
+				13,
+				14,
+				15,
+				16,
+				17,
+				18,
+				19,
+				20,
+				21,
+				22,
+				23,
+				24,
+				25,
+				26,
+				27,
+				28,
+				29,
+				30,
+				31
+			]
+		}
+	],
+	"sources" : 
+	[
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "/Users/davidframpton/Documents/blockheads2/katipoBrowser/thirdParty/SDL_mixer/src/SDL_mixer.c",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "/Users/davidframpton/Documents/blockheads2/katipoBrowser/thirdParty/SDL_mixer/src/SDL_mixer_metadata_tags.c",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "/Users/davidframpton/Documents/blockheads2/katipoBrowser/thirdParty/SDL_mixer/src/SDL_mixer_spatialization.c",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "/Users/davidframpton/Documents/blockheads2/katipoBrowser/thirdParty/SDL_mixer/src/decoder_aiff.c",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "/Users/davidframpton/Documents/blockheads2/katipoBrowser/thirdParty/SDL_mixer/src/decoder_au.c",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "/Users/davidframpton/Documents/blockheads2/katipoBrowser/thirdParty/SDL_mixer/src/decoder_drflac.c",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "/Users/davidframpton/Documents/blockheads2/katipoBrowser/thirdParty/SDL_mixer/src/decoder_drmp3.c",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "/Users/davidframpton/Documents/blockheads2/katipoBrowser/thirdParty/SDL_mixer/src/decoder_flac.c",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "/Users/davidframpton/Documents/blockheads2/katipoBrowser/thirdParty/SDL_mixer/src/decoder_fluidsynth.c",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "/Users/davidframpton/Documents/blockheads2/katipoBrowser/thirdParty/SDL_mixer/src/decoder_gme.c",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "/Users/davidframpton/Documents/blockheads2/katipoBrowser/thirdParty/SDL_mixer/src/decoder_mpg123.c",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "/Users/davidframpton/Documents/blockheads2/katipoBrowser/thirdParty/SDL_mixer/src/decoder_opus.c",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "/Users/davidframpton/Documents/blockheads2/katipoBrowser/thirdParty/SDL_mixer/src/decoder_raw.c",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "/Users/davidframpton/Documents/blockheads2/katipoBrowser/thirdParty/SDL_mixer/src/decoder_sinewave.c",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "/Users/davidframpton/Documents/blockheads2/katipoBrowser/thirdParty/SDL_mixer/src/decoder_stb_vorbis.c",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "/Users/davidframpton/Documents/blockheads2/katipoBrowser/thirdParty/SDL_mixer/src/decoder_timidity.c",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "/Users/davidframpton/Documents/blockheads2/katipoBrowser/thirdParty/SDL_mixer/src/decoder_voc.c",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "/Users/davidframpton/Documents/blockheads2/katipoBrowser/thirdParty/SDL_mixer/src/decoder_vorbis.c",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "/Users/davidframpton/Documents/blockheads2/katipoBrowser/thirdParty/SDL_mixer/src/decoder_wav.c",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "/Users/davidframpton/Documents/blockheads2/katipoBrowser/thirdParty/SDL_mixer/src/decoder_wavpack.c",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "/Users/davidframpton/Documents/blockheads2/katipoBrowser/thirdParty/SDL_mixer/src/decoder_xmp.c",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 20,
+			"compileGroupIndex" : 0,
+			"path" : "/Users/davidframpton/Documents/blockheads2/katipoBrowser/thirdParty/SDL_mixer/src/timidity/common.c",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 20,
+			"compileGroupIndex" : 0,
+			"path" : "/Users/davidframpton/Documents/blockheads2/katipoBrowser/thirdParty/SDL_mixer/src/timidity/instrum.c",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 20,
+			"compileGroupIndex" : 0,
+			"path" : "/Users/davidframpton/Documents/blockheads2/katipoBrowser/thirdParty/SDL_mixer/src/timidity/mix.c",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 20,
+			"compileGroupIndex" : 0,
+			"path" : "/Users/davidframpton/Documents/blockheads2/katipoBrowser/thirdParty/SDL_mixer/src/timidity/output.c",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 20,
+			"compileGroupIndex" : 0,
+			"path" : "/Users/davidframpton/Documents/blockheads2/katipoBrowser/thirdParty/SDL_mixer/src/timidity/playmidi.c",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 20,
+			"compileGroupIndex" : 0,
+			"path" : "/Users/davidframpton/Documents/blockheads2/katipoBrowser/thirdParty/SDL_mixer/src/timidity/readmidi.c",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 20,
+			"compileGroupIndex" : 0,
+			"path" : "/Users/davidframpton/Documents/blockheads2/katipoBrowser/thirdParty/SDL_mixer/src/timidity/resample.c",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 20,
+			"compileGroupIndex" : 0,
+			"path" : "/Users/davidframpton/Documents/blockheads2/katipoBrowser/thirdParty/SDL_mixer/src/timidity/readsbk.c",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 20,
+			"compileGroupIndex" : 0,
+			"path" : "/Users/davidframpton/Documents/blockheads2/katipoBrowser/thirdParty/SDL_mixer/src/timidity/sndfont.c",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 20,
+			"compileGroupIndex" : 0,
+			"path" : "/Users/davidframpton/Documents/blockheads2/katipoBrowser/thirdParty/SDL_mixer/src/timidity/tables.c",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 20,
+			"compileGroupIndex" : 0,
+			"path" : "/Users/davidframpton/Documents/blockheads2/katipoBrowser/thirdParty/SDL_mixer/src/timidity/timidity.c",
+			"sourceGroupIndex" : 0
+		}
+	],
+	"type" : "SHARED_LIBRARY"
+}

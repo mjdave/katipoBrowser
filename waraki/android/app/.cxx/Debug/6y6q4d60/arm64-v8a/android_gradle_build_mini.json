@@ -1,0 +1,60 @@
+{
+  "buildFiles": [
+    "/Users/davidframpton/Documents/blockheads2/katipoBrowser/thirdParty/SDL3-3.4.0/CMakeLists.txt",
+    "/Users/davidframpton/Documents/blockheads2/katipoBrowser/thirdParty/SDL_mixer/CMakeLists.txt",
+    "/Users/davidframpton/Documents/blockheads2/katipoBrowser/waraki/android/app/jni/CMakeLists.txt",
+    "/Users/davidframpton/Documents/blockheads2/katipoBrowser/waraki/android/app/jni/src/CMakeLists.txt"
+  ],
+  "cleanCommandsComponents": [
+    [
+      "/Users/davidframpton/Library/Android/sdk/cmake/3.22.1/bin/ninja",
+      "-C",
+      "/Users/davidframpton/Documents/blockheads2/katipoBrowser/waraki/android/app/.cxx/Debug/6y6q4d60/arm64-v8a",
+      "clean"
+    ]
+  ],
+  "buildTargetsCommandComponents": [
+    "/Users/davidframpton/Library/Android/sdk/cmake/3.22.1/bin/ninja",
+    "-C",
+    "/Users/davidframpton/Documents/blockheads2/katipoBrowser/waraki/android/app/.cxx/Debug/6y6q4d60/arm64-v8a",
+    "{LIST_OF_TARGETS_TO_BUILD}"
+  ],
+  "libraries": {
+    "main::@145eef247bfb46b6828c": {
+      "artifactName": "main",
+      "abi": "arm64-v8a",
+      "output": "/Users/davidframpton/Documents/blockheads2/katipoBrowser/waraki/android/app/build/intermediates/cxx/Debug/6y6q4d60/obj/arm64-v8a/libmain.so",
+      "runtimeFiles": [
+        "/Users/davidframpton/.gradle/caches/8.14.5/transforms/7195b0afba4f41b4bca0427dacc781e1/transformed/libsodium-1.0.20.2/prefab/modules/sodium/libs/android.arm64-v8a/libsodium.so",
+        "/Users/davidframpton/Documents/blockheads2/katipoBrowser/waraki/android/app/build/intermediates/cxx/Debug/6y6q4d60/obj/arm64-v8a/libSDL3_mixer.so",
+        "/Users/davidframpton/Documents/blockheads2/katipoBrowser/waraki/android/app/build/intermediates/cxx/Debug/6y6q4d60/obj/arm64-v8a/libSDL3.so"
+      ]
+    },
+    "SDL3-shared::@edf024ffa2e77522bfe7": {
+      "artifactName": "SDL3-shared",
+      "abi": "arm64-v8a",
+      "output": "/Users/davidframpton/Documents/blockheads2/katipoBrowser/waraki/android/app/build/intermediates/cxx/Debug/6y6q4d60/obj/arm64-v8a/libSDL3.so",
+      "runtimeFiles": []
+    },
+    "SDL_uclibc::@edf024ffa2e77522bfe7": {
+      "artifactName": "SDL_uclibc",
+      "abi": "arm64-v8a",
+      "output": "/Users/davidframpton/Documents/blockheads2/katipoBrowser/waraki/android/app/.cxx/Debug/6y6q4d60/arm64-v8a/SDL3-build/libSDL_uclibc.a",
+      "runtimeFiles": []
+    },
+    "SDL3_test::@edf024ffa2e77522bfe7": {
+      "artifactName": "SDL3_test",
+      "abi": "arm64-v8a",
+      "output": "/Users/davidframpton/Documents/blockheads2/katipoBrowser/waraki/android/app/.cxx/Debug/6y6q4d60/arm64-v8a/SDL3-build/libSDL3_test.a",
+      "runtimeFiles": []
+    },
+    "SDL3_mixer-shared::@2b1bf2ff897979c1e14d": {
+      "artifactName": "SDL3_mixer-shared",
+      "abi": "arm64-v8a",
+      "output": "/Users/davidframpton/Documents/blockheads2/katipoBrowser/waraki/android/app/build/intermediates/cxx/Debug/6y6q4d60/obj/arm64-v8a/libSDL3_mixer.so",
+      "runtimeFiles": [
+        "/Users/davidframpton/Documents/blockheads2/katipoBrowser/waraki/android/app/build/intermediates/cxx/Debug/6y6q4d60/obj/arm64-v8a/libSDL3.so"
+      ]
+    }
+  }
+}
