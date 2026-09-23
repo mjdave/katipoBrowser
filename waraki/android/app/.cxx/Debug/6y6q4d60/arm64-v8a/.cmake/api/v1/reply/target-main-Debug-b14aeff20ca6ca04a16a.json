@@ -154,12 +154,12 @@
 				},
 				{
 					"backtrace" : 4,
-					"path" : "/Users/davidframpton/Documents/blockheads2/katipoBrowser/thirdParty/SDL_mixer/include"
+					"path" : "/Users/davidframpton/Documents/blockheads2/katipoBrowser/thirdParty/SDL_mixer-release-3.2.4/include"
 				},
 				{
 					"backtrace" : 3,
 					"isSystem" : true,
-					"path" : "/Users/davidframpton/.gradle/caches/8.14.5/transforms/7195b0afba4f41b4bca0427dacc781e1/transformed/libsodium-1.0.20.2/prefab/modules/sodium/libs/android.arm64-v8a/include"
+					"path" : "/Users/davidframpton/.gradle/caches/8.14.5/transforms/77bba0e2eac1449df8e50e3dbfc23bca/transformed/libsodium-1.0.22.0/prefab/modules/sodium/libs/android.arm64-v8a/include"
 				}
 			],
 			"language" : "CXX",
@@ -310,12 +310,12 @@
 				},
 				{
 					"backtrace" : 4,
-					"path" : "/Users/davidframpton/Documents/blockheads2/katipoBrowser/thirdParty/SDL_mixer/include"
+					"path" : "/Users/davidframpton/Documents/blockheads2/katipoBrowser/thirdParty/SDL_mixer-release-3.2.4/include"
 				},
 				{
 					"backtrace" : 3,
 					"isSystem" : true,
-					"path" : "/Users/davidframpton/.gradle/caches/8.14.5/transforms/7195b0afba4f41b4bca0427dacc781e1/transformed/libsodium-1.0.20.2/prefab/modules/sodium/libs/android.arm64-v8a/include"
+					"path" : "/Users/davidframpton/.gradle/caches/8.14.5/transforms/77bba0e2eac1449df8e50e3dbfc23bca/transformed/libsodium-1.0.22.0/prefab/modules/sodium/libs/android.arm64-v8a/include"
 				}
 			],
 			"language" : "C",
@@ -365,7 +365,7 @@
 			},
 			{
 				"backtrace" : 3,
-				"fragment" : "/Users/davidframpton/.gradle/caches/8.14.5/transforms/7195b0afba4f41b4bca0427dacc781e1/transformed/libsodium-1.0.20.2/prefab/modules/sodium/libs/android.arm64-v8a/libsodium.so",
+				"fragment" : "/Users/davidframpton/.gradle/caches/8.14.5/transforms/77bba0e2eac1449df8e50e3dbfc23bca/transformed/libsodium-1.0.22.0/prefab/modules/sodium/libs/android.arm64-v8a/libsodium.so",
 				"role" : "libraries"
 			},
 			{

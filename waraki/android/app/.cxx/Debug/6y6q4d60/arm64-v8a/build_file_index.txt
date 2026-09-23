@@ -1,4 +1,4 @@
 /Users/davidframpton/Documents/blockheads2/katipoBrowser/thirdParty/SDL3-3.4.0/CMakeLists.txt
-/Users/davidframpton/Documents/blockheads2/katipoBrowser/thirdParty/SDL_mixer/CMakeLists.txt
+/Users/davidframpton/Documents/blockheads2/katipoBrowser/thirdParty/SDL_mixer-release-3.2.4/CMakeLists.txt
 /Users/davidframpton/Documents/blockheads2/katipoBrowser/waraki/android/app/jni/CMakeLists.txt
 /Users/davidframpton/Documents/blockheads2/katipoBrowser/waraki/android/app/jni/src/CMakeLists.txt

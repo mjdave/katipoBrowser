@@ -39,14 +39,14 @@
 				},
 				{
 					"build" : "SDL_mixer-build",
-					"jsonFile" : "directory-SDL_mixer-build-Debug-4cd91d3dc2c97fd3f3ab.json",
+					"jsonFile" : "directory-SDL_mixer-build-Debug-cb93b6eb8cc5d7475b3c.json",
 					"minimumCMakeVersion" : 
 					{
 						"string" : "3.16"
 					},
 					"parentIndex" : 0,
 					"projectIndex" : 2,
-					"source" : "/Users/davidframpton/Documents/blockheads2/katipoBrowser/thirdParty/SDL_mixer",
+					"source" : "/Users/davidframpton/Documents/blockheads2/katipoBrowser/thirdParty/SDL_mixer-release-3.2.4",
 					"targetIndexes" : 
 					[
 						1
@@ -135,7 +135,7 @@
 				{
 					"directoryIndex" : 2,
 					"id" : "SDL3_mixer-shared::@2b1bf2ff897979c1e14d",
-					"jsonFile" : "target-SDL3_mixer-shared-Debug-cbb137f662d03d6194f8.json",
+					"jsonFile" : "target-SDL3_mixer-shared-Debug-35720c8f6d9df3b60a70.json",
 					"name" : "SDL3_mixer-shared",
 					"projectIndex" : 2
 				},
@@ -156,7 +156,7 @@
 				{
 					"directoryIndex" : 3,
 					"id" : "main::@145eef247bfb46b6828c",
-					"jsonFile" : "target-main-Debug-9d50b2a209fad8c81037.json",
+					"jsonFile" : "target-main-Debug-b14aeff20ca6ca04a16a.json",
 					"name" : "main",
 					"projectIndex" : 3
 				}

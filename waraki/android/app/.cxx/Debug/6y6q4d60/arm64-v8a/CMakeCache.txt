@@ -302,8 +302,8 @@ CMAKE_SYSTEM_NAME:UNINITIALIZED=Android
 //No help, variable specified on the command line.
 CMAKE_SYSTEM_VERSION:UNINITIALIZED=24
 
-//The CMake toolchain file
-CMAKE_TOOLCHAIN_FILE:FILEPATH=/Users/davidframpton/Library/Android/sdk/ndk/28.2.13676358/build/cmake/android.toolchain.cmake
+//No help, variable specified on the command line.
+CMAKE_TOOLCHAIN_FILE:UNINITIALIZED=/Users/davidframpton/Library/Android/sdk/ndk/28.2.13676358/build/cmake/android.toolchain.cmake
 
 //If this value is on, makefiles will be generated without the
 // .SILENT directive, and all commands will be echoed to the console
@@ -465,7 +465,7 @@ SDL3_mixer_BINARY_DIR:STATIC=/Users/davidframpton/Documents/blockheads2/katipoBr
 SDL3_mixer_IS_TOP_LEVEL:STATIC=OFF
 
 //Value Computed by CMake
-SDL3_mixer_SOURCE_DIR:STATIC=/Users/davidframpton/Documents/blockheads2/katipoBrowser/thirdParty/SDL_mixer
+SDL3_mixer_SOURCE_DIR:STATIC=/Users/davidframpton/Documents/blockheads2/katipoBrowser/thirdParty/SDL_mixer-release-3.2.4
 
 //Enable AIFF audio
 SDLMIXER_AIFF:BOOL=ON

@@ -7,7 +7,7 @@ project(GAME)
 set(SDLMIXER_VENDORED OFF)
 
 add_subdirectory(../../../../thirdParty/SDL3-3.4.0 SDL3-build EXCLUDE_FROM_ALL)
-add_subdirectory(../../../../thirdParty/SDL_mixer SDL_mixer-build EXCLUDE_FROM_ALL)
+add_subdirectory(../../../../thirdParty/SDL_mixer-release-3.2.4 SDL_mixer-build EXCLUDE_FROM_ALL)
 
 # Compilation of companion libraries
 #add_subdirectory(SDL_image)

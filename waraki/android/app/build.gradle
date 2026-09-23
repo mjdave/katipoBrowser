@@ -73,5 +73,5 @@ android {
 
 dependencies {
     implementation fileTree(include: ['*.jar'], dir: 'libs')
-    implementation fileTree(dir:'../../../katipo/thirdParty/libsodium', include:['libsodium-1.0.20.2.aar'])
+    implementation fileTree(dir:'../../../katipo/thirdParty/libsodium', include:['libsodium-1.0.22.0.aar'])
 }

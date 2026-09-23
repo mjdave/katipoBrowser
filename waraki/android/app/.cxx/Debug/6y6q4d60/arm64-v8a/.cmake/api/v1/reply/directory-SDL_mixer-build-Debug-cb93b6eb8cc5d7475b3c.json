@@ -9,6 +9,6 @@
 	"paths" : 
 	{
 		"build" : "SDL_mixer-build",
-		"source" : "/Users/davidframpton/Documents/blockheads2/katipoBrowser/thirdParty/SDL_mixer"
+		"source" : "/Users/davidframpton/Documents/blockheads2/katipoBrowser/thirdParty/SDL_mixer-release-3.2.4"
 	}
 }

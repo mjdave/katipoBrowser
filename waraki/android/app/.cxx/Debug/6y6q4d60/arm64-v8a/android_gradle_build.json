@@ -1,7 +1,7 @@
 {
   "buildFiles": [
     "/Users/davidframpton/Documents/blockheads2/katipoBrowser/thirdParty/SDL3-3.4.0/CMakeLists.txt",
-    "/Users/davidframpton/Documents/blockheads2/katipoBrowser/thirdParty/SDL_mixer/CMakeLists.txt",
+    "/Users/davidframpton/Documents/blockheads2/katipoBrowser/thirdParty/SDL_mixer-release-3.2.4/CMakeLists.txt",
     "/Users/davidframpton/Documents/blockheads2/katipoBrowser/waraki/android/app/jni/CMakeLists.txt",
     "/Users/davidframpton/Documents/blockheads2/katipoBrowser/waraki/android/app/jni/src/CMakeLists.txt"
   ],
@@ -54,7 +54,7 @@
       "artifactName": "main",
       "output": "/Users/davidframpton/Documents/blockheads2/katipoBrowser/waraki/android/app/build/intermediates/cxx/Debug/6y6q4d60/obj/arm64-v8a/libmain.so",
       "runtimeFiles": [
-        "/Users/davidframpton/.gradle/caches/8.14.5/transforms/7195b0afba4f41b4bca0427dacc781e1/transformed/libsodium-1.0.20.2/prefab/modules/sodium/libs/android.arm64-v8a/libsodium.so",
+        "/Users/davidframpton/.gradle/caches/8.14.5/transforms/77bba0e2eac1449df8e50e3dbfc23bca/transformed/libsodium-1.0.22.0/prefab/modules/sodium/libs/android.arm64-v8a/libsodium.so",
         "/Users/davidframpton/Documents/blockheads2/katipoBrowser/waraki/android/app/build/intermediates/cxx/Debug/6y6q4d60/obj/arm64-v8a/libSDL3_mixer.so",
         "/Users/davidframpton/Documents/blockheads2/katipoBrowser/waraki/android/app/build/intermediates/cxx/Debug/6y6q4d60/obj/arm64-v8a/libSDL3.so"
       ]

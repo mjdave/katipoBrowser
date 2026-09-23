@@ -250,22 +250,6 @@
 			"value" : "/Users/davidframpton/Library/Android/sdk/cmake/3.22.1/bin/ctest"
 		},
 		{
-			"name" : "CMAKE_CXX_COMPILER",
-			"properties" : 
-			[
-				{
-					"name" : "ADVANCED",
-					"value" : "1"
-				},
-				{
-					"name" : "HELPSTRING",
-					"value" : "(This variable does not exist and should not be used)"
-				}
-			],
-			"type" : "UNINITIALIZED",
-			"value" : ""
-		},
-		{
 			"name" : "CMAKE_CXX_COMPILER_AR",
 			"properties" : 
 			[
@@ -392,22 +376,6 @@
 			],
 			"type" : "STRING",
 			"value" : "-latomic -lm"
-		},
-		{
-			"name" : "CMAKE_C_COMPILER",
-			"properties" : 
-			[
-				{
-					"name" : "ADVANCED",
-					"value" : "1"
-				},
-				{
-					"name" : "HELPSTRING",
-					"value" : "(This variable does not exist and should not be used)"
-				}
-			],
-			"type" : "UNINITIALIZED",
-			"value" : ""
 		},
 		{
 			"name" : "CMAKE_C_COMPILER_AR",
@@ -1639,10 +1607,10 @@
 			[
 				{
 					"name" : "HELPSTRING",
-					"value" : "The CMake toolchain file"
+					"value" : "No help, variable specified on the command line."
 				}
 			],
-			"type" : "FILEPATH",
+			"type" : "UNINITIALIZED",
 			"value" : "/Users/davidframpton/Library/Android/sdk/ndk/28.2.13676358/build/cmake/android.toolchain.cmake"
 		},
 		{
@@ -6731,7 +6699,7 @@
 				}
 			],
 			"type" : "STATIC",
-			"value" : "/Users/davidframpton/Documents/blockheads2/katipoBrowser/thirdParty/SDL_mixer"
+			"value" : "/Users/davidframpton/Documents/blockheads2/katipoBrowser/thirdParty/SDL_mixer-release-3.2.4"
 		},
 		{
 			"name" : "SDLMIXER_AIFF",

@@ -23,8 +23,8 @@
 		],
 		"files" : 
 		[
-			"/Users/davidframpton/Documents/blockheads2/katipoBrowser/thirdParty/SDL_mixer/CMakeLists.txt",
-			"/Users/davidframpton/Documents/blockheads2/katipoBrowser/thirdParty/SDL_mixer/cmake/PrivateSdlFunctions.cmake"
+			"/Users/davidframpton/Documents/blockheads2/katipoBrowser/thirdParty/SDL_mixer-release-3.2.4/CMakeLists.txt",
+			"/Users/davidframpton/Documents/blockheads2/katipoBrowser/thirdParty/SDL_mixer-release-3.2.4/cmake/PrivateSdlFunctions.cmake"
 		],
 		"nodes" : 
 		[
@@ -88,49 +88,49 @@
 			{
 				"command" : 7,
 				"file" : 0,
-				"line" : 1014,
+				"line" : 979,
 				"parent" : 0
 			},
 			{
 				"command" : 7,
 				"file" : 0,
-				"line" : 1028,
+				"line" : 993,
 				"parent" : 0
 			},
 			{
 				"command" : 7,
 				"file" : 0,
-				"line" : 658,
+				"line" : 653,
 				"parent" : 0
 			},
 			{
 				"command" : 7,
 				"file" : 0,
-				"line" : 983,
+				"line" : 950,
 				"parent" : 0
 			},
 			{
 				"command" : 7,
 				"file" : 0,
-				"line" : 845,
+				"line" : 836,
 				"parent" : 0
 			},
 			{
 				"command" : 7,
 				"file" : 0,
-				"line" : 446,
+				"line" : 444,
 				"parent" : 0
 			},
 			{
 				"command" : 7,
 				"file" : 0,
-				"line" : 1021,
+				"line" : 986,
 				"parent" : 0
 			},
 			{
 				"command" : 7,
 				"file" : 0,
-				"line" : 1007,
+				"line" : 972,
 				"parent" : 0
 			},
 			{
@@ -148,7 +148,7 @@
 			{
 				"command" : 9,
 				"file" : 0,
-				"line" : 984,
+				"line" : 951,
 				"parent" : 0
 			}
 		]
@@ -221,26 +221,26 @@
 				},
 				{
 					"backtrace" : 9,
-					"define" : "SDL_BUILD_MICRO_VERSION=0"
+					"define" : "SDL_BUILD_MICRO_VERSION=4"
 				},
 				{
 					"backtrace" : 9,
-					"define" : "SDL_BUILD_MINOR_VERSION=3"
+					"define" : "SDL_BUILD_MINOR_VERSION=2"
 				}
 			],
 			"includes" : 
 			[
 				{
 					"backtrace" : 18,
-					"path" : "/Users/davidframpton/Documents/blockheads2/katipoBrowser/thirdParty/SDL_mixer/include"
+					"path" : "/Users/davidframpton/Documents/blockheads2/katipoBrowser/thirdParty/SDL_mixer-release-3.2.4/include"
 				},
 				{
 					"backtrace" : 18,
-					"path" : "/Users/davidframpton/Documents/blockheads2/katipoBrowser/thirdParty/SDL_mixer/src"
+					"path" : "/Users/davidframpton/Documents/blockheads2/katipoBrowser/thirdParty/SDL_mixer-release-3.2.4/src"
 				},
 				{
 					"backtrace" : 18,
-					"path" : "/Users/davidframpton/Documents/blockheads2/katipoBrowser/thirdParty/SDL_mixer/src/codecs"
+					"path" : "/Users/davidframpton/Documents/blockheads2/katipoBrowser/thirdParty/SDL_mixer-release-3.2.4/src/codecs"
 				},
 				{
 					"backtrace" : 19,
@@ -283,9 +283,7 @@
 				26,
 				27,
 				28,
-				29,
-				30,
-				31
+				29
 			],
 			"sysroot" : 
 			{
@@ -311,7 +309,7 @@
 			},
 			{
 				"backtrace" : 3,
-				"fragment" : "-Wl,--version-script=/Users/davidframpton/Documents/blockheads2/katipoBrowser/thirdParty/SDL_mixer/src/SDL_mixer.sym",
+				"fragment" : "-Wl,--version-script=/Users/davidframpton/Documents/blockheads2/katipoBrowser/thirdParty/SDL_mixer-release-3.2.4/src/SDL_mixer.sym",
 				"role" : "flags"
 			},
 			{
@@ -340,7 +338,7 @@
 	"paths" : 
 	{
 		"build" : "SDL_mixer-build",
-		"source" : "/Users/davidframpton/Documents/blockheads2/katipoBrowser/thirdParty/SDL_mixer"
+		"source" : "/Users/davidframpton/Documents/blockheads2/katipoBrowser/thirdParty/SDL_mixer-release-3.2.4"
 	},
 	"sourceGroups" : 
 	[
@@ -377,9 +375,7 @@
 				26,
 				27,
 				28,
-				29,
-				30,
-				31
+				29
 			]
 		}
 	],
@@ -388,193 +384,181 @@
 		{
 			"backtrace" : 1,
 			"compileGroupIndex" : 0,
-			"path" : "/Users/davidframpton/Documents/blockheads2/katipoBrowser/thirdParty/SDL_mixer/src/SDL_mixer.c",
+			"path" : "/Users/davidframpton/Documents/blockheads2/katipoBrowser/thirdParty/SDL_mixer-release-3.2.4/src/SDL_mixer.c",
 			"sourceGroupIndex" : 0
 		},
 		{
 			"backtrace" : 1,
 			"compileGroupIndex" : 0,
-			"path" : "/Users/davidframpton/Documents/blockheads2/katipoBrowser/thirdParty/SDL_mixer/src/SDL_mixer_metadata_tags.c",
+			"path" : "/Users/davidframpton/Documents/blockheads2/katipoBrowser/thirdParty/SDL_mixer-release-3.2.4/src/SDL_mixer_metadata_tags.c",
 			"sourceGroupIndex" : 0
 		},
 		{
 			"backtrace" : 1,
 			"compileGroupIndex" : 0,
-			"path" : "/Users/davidframpton/Documents/blockheads2/katipoBrowser/thirdParty/SDL_mixer/src/SDL_mixer_spatialization.c",
+			"path" : "/Users/davidframpton/Documents/blockheads2/katipoBrowser/thirdParty/SDL_mixer-release-3.2.4/src/SDL_mixer_spatialization.c",
 			"sourceGroupIndex" : 0
 		},
 		{
 			"backtrace" : 1,
 			"compileGroupIndex" : 0,
-			"path" : "/Users/davidframpton/Documents/blockheads2/katipoBrowser/thirdParty/SDL_mixer/src/decoder_aiff.c",
+			"path" : "/Users/davidframpton/Documents/blockheads2/katipoBrowser/thirdParty/SDL_mixer-release-3.2.4/src/decoder_aiff.c",
 			"sourceGroupIndex" : 0
 		},
 		{
 			"backtrace" : 1,
 			"compileGroupIndex" : 0,
-			"path" : "/Users/davidframpton/Documents/blockheads2/katipoBrowser/thirdParty/SDL_mixer/src/decoder_au.c",
+			"path" : "/Users/davidframpton/Documents/blockheads2/katipoBrowser/thirdParty/SDL_mixer-release-3.2.4/src/decoder_au.c",
 			"sourceGroupIndex" : 0
 		},
 		{
 			"backtrace" : 1,
 			"compileGroupIndex" : 0,
-			"path" : "/Users/davidframpton/Documents/blockheads2/katipoBrowser/thirdParty/SDL_mixer/src/decoder_drflac.c",
+			"path" : "/Users/davidframpton/Documents/blockheads2/katipoBrowser/thirdParty/SDL_mixer-release-3.2.4/src/decoder_drflac.c",
 			"sourceGroupIndex" : 0
 		},
 		{
 			"backtrace" : 1,
 			"compileGroupIndex" : 0,
-			"path" : "/Users/davidframpton/Documents/blockheads2/katipoBrowser/thirdParty/SDL_mixer/src/decoder_drmp3.c",
+			"path" : "/Users/davidframpton/Documents/blockheads2/katipoBrowser/thirdParty/SDL_mixer-release-3.2.4/src/decoder_drmp3.c",
 			"sourceGroupIndex" : 0
 		},
 		{
 			"backtrace" : 1,
 			"compileGroupIndex" : 0,
-			"path" : "/Users/davidframpton/Documents/blockheads2/katipoBrowser/thirdParty/SDL_mixer/src/decoder_flac.c",
+			"path" : "/Users/davidframpton/Documents/blockheads2/katipoBrowser/thirdParty/SDL_mixer-release-3.2.4/src/decoder_flac.c",
 			"sourceGroupIndex" : 0
 		},
 		{
 			"backtrace" : 1,
 			"compileGroupIndex" : 0,
-			"path" : "/Users/davidframpton/Documents/blockheads2/katipoBrowser/thirdParty/SDL_mixer/src/decoder_fluidsynth.c",
+			"path" : "/Users/davidframpton/Documents/blockheads2/katipoBrowser/thirdParty/SDL_mixer-release-3.2.4/src/decoder_fluidsynth.c",
 			"sourceGroupIndex" : 0
 		},
 		{
 			"backtrace" : 1,
 			"compileGroupIndex" : 0,
-			"path" : "/Users/davidframpton/Documents/blockheads2/katipoBrowser/thirdParty/SDL_mixer/src/decoder_gme.c",
+			"path" : "/Users/davidframpton/Documents/blockheads2/katipoBrowser/thirdParty/SDL_mixer-release-3.2.4/src/decoder_gme.c",
 			"sourceGroupIndex" : 0
 		},
 		{
 			"backtrace" : 1,
 			"compileGroupIndex" : 0,
-			"path" : "/Users/davidframpton/Documents/blockheads2/katipoBrowser/thirdParty/SDL_mixer/src/decoder_mpg123.c",
+			"path" : "/Users/davidframpton/Documents/blockheads2/katipoBrowser/thirdParty/SDL_mixer-release-3.2.4/src/decoder_mpg123.c",
 			"sourceGroupIndex" : 0
 		},
 		{
 			"backtrace" : 1,
 			"compileGroupIndex" : 0,
-			"path" : "/Users/davidframpton/Documents/blockheads2/katipoBrowser/thirdParty/SDL_mixer/src/decoder_opus.c",
+			"path" : "/Users/davidframpton/Documents/blockheads2/katipoBrowser/thirdParty/SDL_mixer-release-3.2.4/src/decoder_opus.c",
 			"sourceGroupIndex" : 0
 		},
 		{
 			"backtrace" : 1,
 			"compileGroupIndex" : 0,
-			"path" : "/Users/davidframpton/Documents/blockheads2/katipoBrowser/thirdParty/SDL_mixer/src/decoder_raw.c",
+			"path" : "/Users/davidframpton/Documents/blockheads2/katipoBrowser/thirdParty/SDL_mixer-release-3.2.4/src/decoder_raw.c",
 			"sourceGroupIndex" : 0
 		},
 		{
 			"backtrace" : 1,
 			"compileGroupIndex" : 0,
-			"path" : "/Users/davidframpton/Documents/blockheads2/katipoBrowser/thirdParty/SDL_mixer/src/decoder_sinewave.c",
+			"path" : "/Users/davidframpton/Documents/blockheads2/katipoBrowser/thirdParty/SDL_mixer-release-3.2.4/src/decoder_sinewave.c",
 			"sourceGroupIndex" : 0
 		},
 		{
 			"backtrace" : 1,
 			"compileGroupIndex" : 0,
-			"path" : "/Users/davidframpton/Documents/blockheads2/katipoBrowser/thirdParty/SDL_mixer/src/decoder_stb_vorbis.c",
+			"path" : "/Users/davidframpton/Documents/blockheads2/katipoBrowser/thirdParty/SDL_mixer-release-3.2.4/src/decoder_stb_vorbis.c",
 			"sourceGroupIndex" : 0
 		},
 		{
 			"backtrace" : 1,
 			"compileGroupIndex" : 0,
-			"path" : "/Users/davidframpton/Documents/blockheads2/katipoBrowser/thirdParty/SDL_mixer/src/decoder_timidity.c",
+			"path" : "/Users/davidframpton/Documents/blockheads2/katipoBrowser/thirdParty/SDL_mixer-release-3.2.4/src/decoder_timidity.c",
 			"sourceGroupIndex" : 0
 		},
 		{
 			"backtrace" : 1,
 			"compileGroupIndex" : 0,
-			"path" : "/Users/davidframpton/Documents/blockheads2/katipoBrowser/thirdParty/SDL_mixer/src/decoder_voc.c",
+			"path" : "/Users/davidframpton/Documents/blockheads2/katipoBrowser/thirdParty/SDL_mixer-release-3.2.4/src/decoder_voc.c",
 			"sourceGroupIndex" : 0
 		},
 		{
 			"backtrace" : 1,
 			"compileGroupIndex" : 0,
-			"path" : "/Users/davidframpton/Documents/blockheads2/katipoBrowser/thirdParty/SDL_mixer/src/decoder_vorbis.c",
+			"path" : "/Users/davidframpton/Documents/blockheads2/katipoBrowser/thirdParty/SDL_mixer-release-3.2.4/src/decoder_vorbis.c",
 			"sourceGroupIndex" : 0
 		},
 		{
 			"backtrace" : 1,
 			"compileGroupIndex" : 0,
-			"path" : "/Users/davidframpton/Documents/blockheads2/katipoBrowser/thirdParty/SDL_mixer/src/decoder_wav.c",
+			"path" : "/Users/davidframpton/Documents/blockheads2/katipoBrowser/thirdParty/SDL_mixer-release-3.2.4/src/decoder_wav.c",
 			"sourceGroupIndex" : 0
 		},
 		{
 			"backtrace" : 1,
 			"compileGroupIndex" : 0,
-			"path" : "/Users/davidframpton/Documents/blockheads2/katipoBrowser/thirdParty/SDL_mixer/src/decoder_wavpack.c",
+			"path" : "/Users/davidframpton/Documents/blockheads2/katipoBrowser/thirdParty/SDL_mixer-release-3.2.4/src/decoder_wavpack.c",
 			"sourceGroupIndex" : 0
 		},
 		{
 			"backtrace" : 1,
 			"compileGroupIndex" : 0,
-			"path" : "/Users/davidframpton/Documents/blockheads2/katipoBrowser/thirdParty/SDL_mixer/src/decoder_xmp.c",
+			"path" : "/Users/davidframpton/Documents/blockheads2/katipoBrowser/thirdParty/SDL_mixer-release-3.2.4/src/decoder_xmp.c",
 			"sourceGroupIndex" : 0
 		},
 		{
 			"backtrace" : 20,
 			"compileGroupIndex" : 0,
-			"path" : "/Users/davidframpton/Documents/blockheads2/katipoBrowser/thirdParty/SDL_mixer/src/timidity/common.c",
+			"path" : "/Users/davidframpton/Documents/blockheads2/katipoBrowser/thirdParty/SDL_mixer-release-3.2.4/src/timidity/common.c",
 			"sourceGroupIndex" : 0
 		},
 		{
 			"backtrace" : 20,
 			"compileGroupIndex" : 0,
-			"path" : "/Users/davidframpton/Documents/blockheads2/katipoBrowser/thirdParty/SDL_mixer/src/timidity/instrum.c",
+			"path" : "/Users/davidframpton/Documents/blockheads2/katipoBrowser/thirdParty/SDL_mixer-release-3.2.4/src/timidity/instrum.c",
 			"sourceGroupIndex" : 0
 		},
 		{
 			"backtrace" : 20,
 			"compileGroupIndex" : 0,
-			"path" : "/Users/davidframpton/Documents/blockheads2/katipoBrowser/thirdParty/SDL_mixer/src/timidity/mix.c",
+			"path" : "/Users/davidframpton/Documents/blockheads2/katipoBrowser/thirdParty/SDL_mixer-release-3.2.4/src/timidity/mix.c",
 			"sourceGroupIndex" : 0
 		},
 		{
 			"backtrace" : 20,
 			"compileGroupIndex" : 0,
-			"path" : "/Users/davidframpton/Documents/blockheads2/katipoBrowser/thirdParty/SDL_mixer/src/timidity/output.c",
+			"path" : "/Users/davidframpton/Documents/blockheads2/katipoBrowser/thirdParty/SDL_mixer-release-3.2.4/src/timidity/output.c",
 			"sourceGroupIndex" : 0
 		},
 		{
 			"backtrace" : 20,
 			"compileGroupIndex" : 0,
-			"path" : "/Users/davidframpton/Documents/blockheads2/katipoBrowser/thirdParty/SDL_mixer/src/timidity/playmidi.c",
+			"path" : "/Users/davidframpton/Documents/blockheads2/katipoBrowser/thirdParty/SDL_mixer-release-3.2.4/src/timidity/playmidi.c",
 			"sourceGroupIndex" : 0
 		},
 		{
 			"backtrace" : 20,
 			"compileGroupIndex" : 0,
-			"path" : "/Users/davidframpton/Documents/blockheads2/katipoBrowser/thirdParty/SDL_mixer/src/timidity/readmidi.c",
+			"path" : "/Users/davidframpton/Documents/blockheads2/katipoBrowser/thirdParty/SDL_mixer-release-3.2.4/src/timidity/readmidi.c",
 			"sourceGroupIndex" : 0
 		},
 		{
 			"backtrace" : 20,
 			"compileGroupIndex" : 0,
-			"path" : "/Users/davidframpton/Documents/blockheads2/katipoBrowser/thirdParty/SDL_mixer/src/timidity/resample.c",
+			"path" : "/Users/davidframpton/Documents/blockheads2/katipoBrowser/thirdParty/SDL_mixer-release-3.2.4/src/timidity/resample.c",
 			"sourceGroupIndex" : 0
 		},
 		{
 			"backtrace" : 20,
 			"compileGroupIndex" : 0,
-			"path" : "/Users/davidframpton/Documents/blockheads2/katipoBrowser/thirdParty/SDL_mixer/src/timidity/readsbk.c",
+			"path" : "/Users/davidframpton/Documents/blockheads2/katipoBrowser/thirdParty/SDL_mixer-release-3.2.4/src/timidity/tables.c",
 			"sourceGroupIndex" : 0
 		},
 		{
 			"backtrace" : 20,
 			"compileGroupIndex" : 0,
-			"path" : "/Users/davidframpton/Documents/blockheads2/katipoBrowser/thirdParty/SDL_mixer/src/timidity/sndfont.c",
-			"sourceGroupIndex" : 0
-		},
-		{
-			"backtrace" : 20,
-			"compileGroupIndex" : 0,
-			"path" : "/Users/davidframpton/Documents/blockheads2/katipoBrowser/thirdParty/SDL_mixer/src/timidity/tables.c",
-			"sourceGroupIndex" : 0
-		},
-		{
-			"backtrace" : 20,
-			"compileGroupIndex" : 0,
-			"path" : "/Users/davidframpton/Documents/blockheads2/katipoBrowser/thirdParty/SDL_mixer/src/timidity/timidity.c",
+			"path" : "/Users/davidframpton/Documents/blockheads2/katipoBrowser/thirdParty/SDL_mixer-release-3.2.4/src/timidity/timidity.c",
 			"sourceGroupIndex" : 0
 		}
 	],
