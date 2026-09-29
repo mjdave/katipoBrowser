@@ -373,10 +373,6 @@ GPipeline* MJCache::getPipeline(std::string name,
         {
             options.cullMode = MJVK_CULL_BACK;
         }
-        else if(luaString == "testAndMask")
-        {
-            options.cullMode = MJVK_DEPTH_TEST_AND_MASK;
-        }
     }
     
     if(shaderTable->hasKey("topology"))

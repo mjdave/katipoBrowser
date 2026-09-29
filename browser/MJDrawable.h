@@ -23,7 +23,7 @@ public:
         int renderGroupCount_, 
         std::vector<VkVertexInputBindingDescription> bindingDescriptions,
         std::vector<VkVertexInputAttributeDescription> attributeDescriptions,
-		int renderPassCompatibilityIndex_,
+		int renderPassCompatibilityIndex_, //A unique pipeline is used for each. This only needs to be unique for each type of render target. So the main output is 0. Render to RGBA8 texture pass 1. For some unusual eg. floating point render target, assign your own unique ID. This hack needs a better solution.
         std::string shaderFileDirPath = "app/common/");
     ~MJDrawable();
 

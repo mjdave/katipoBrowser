@@ -28,8 +28,8 @@ using namespace glm;
 #define M_PI 3.14159265358979323846
 #endif
 
-#define RANDOM_FLOAT() (((float)rand()) / RAND_MAX)
-#define RANDOM_DOUBLE() (((double)rand()) / RAND_MAX)
+//#define Tui::random() (((float)rand()) / RAND_MAX)
+//#define RANDOM_DOUBLE() (((double)rand()) / RAND_MAX)
 
 #if !defined(MIN)
 #define MIN(__a,__b)	( (__a) < (__b) ? (__a) : (__b) )
