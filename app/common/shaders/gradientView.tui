@@ -1,0 +1,5 @@
+vertPath = "gradientView.vert.spv"
+fragPath = "gradientView.frag.spv"
+blendMode = "premultiplied"
+depth = "disabled"
+cull = "disabled"

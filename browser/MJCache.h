@@ -32,6 +32,7 @@ class MJCache {
     std::map<std::string, MJImageTexture*> textures;
     std::map<std::string, MJFont*> fonts;
     
+    
     int modelIndexCounter = 0;
 	std::map<std::string, std::map<int, GPipeline*>> pipelines;
 
@@ -51,6 +52,7 @@ public:
 	Camera* camera;
     
     std::set<std::string> fontSearchPaths;
+    std::map<std::string, dvec2> fontOffsets;
     std::set<std::string> shaderSearchPaths;
 
     

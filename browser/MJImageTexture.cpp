@@ -87,11 +87,6 @@ MJImageTexture::MJImageTexture(Vulkan* vulkan_, std::string pathname_, MJImageTe
 
 	size.x = sizei.x = texWidth;
 	size.y = sizei.y = texHeight;
-    
-    if(texWidth < 20)
-    {
-        MJLog("hmm");
-    }
 
 	VkDeviceSize imageSize = texWidth * texHeight * 4;
 

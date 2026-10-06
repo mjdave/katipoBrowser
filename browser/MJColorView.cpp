@@ -203,6 +203,10 @@ void MJColorView::loadFromTable(TuiTable* table, bool needsToLayoutSubviews, Tui
     {
         stateTable->setVec4("shaderUserData", table->getVec4("shaderUserData"));
     }
+    if(table->hasKey("shaderUserDataB"))
+    {
+        stateTable->setVec4("shaderUserDataB", table->getVec4("shaderUserDataB"));
+    }
 }
 
 
@@ -232,5 +236,9 @@ void MJColorView::tableKeyChanged(const std::string& key, TuiRef* value)
     else if(key == "shaderUserData")
     {
         shaderUniformA = stateTable->getVec4("shaderUserData");
+    }
+    else if(key == "shaderUserDataB")
+    {
+        shaderUniformB = stateTable->getVec4("shaderUserDataB");
     }
 }

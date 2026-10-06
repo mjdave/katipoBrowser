@@ -519,12 +519,12 @@ void MJTextView::updateUBOs(float parentAlpha, dvec3 camPos, dvec3 viewPos)
 
 		dmat4 offsetMatrix = translate(combinedRenderMatrix, dvec3(textRenderOffset.x, textRenderOffset.y, 0.0));
 
-		if(!isWorldView && approxEqual(fontGeometryScale, 1.0))
+		/*if(!isWorldView && approxEqual(fontGeometryScale, 1.0))
 		{
 			offsetMatrix[3][0] = offsetMatrix[3][0] - fract(offsetMatrix[3][0]);
 			offsetMatrix[3][1] = offsetMatrix[3][1] - fract(offsetMatrix[3][1]);
 			offsetMatrix[3][2] = offsetMatrix[3][2] - fract(offsetMatrix[3][2]);
-		}
+		}*/
 
 		dmat4 mvpMatrix = offsetMatrix;
 

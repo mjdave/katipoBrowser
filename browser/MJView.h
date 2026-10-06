@@ -287,7 +287,7 @@ public:
 
 	virtual bool visibleUIContainsPointIncludingSubViews3D(dvec3 windowRayStart, dvec3 windowRayDirection);
 	virtual void mouseMoved3D(dvec3 windowRayStart, dvec3 windowRayDirection, bool triggeredByUIMovement);
-	virtual void mouseDown3D(dvec3 windowRayStart, dvec3 windowRayDirection, int buttonIndex);
+	virtual bool mouseDown3D(dvec3 windowRayStart, dvec3 windowRayDirection, int buttonIndex);
 	virtual void mouseUp3D(dvec3 windowRayStart, dvec3 windowRayDirection, int buttonIndex, bool* foundClickFunction);
 	virtual bool mouseWheel3D(dvec3 windowRayStart, dvec3 windowRayDirection, dvec2 scrollChange);
 

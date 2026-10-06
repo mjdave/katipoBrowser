@@ -147,7 +147,7 @@ MJFont* MJCache::getOrLoadFontIfAvailableInternal(std::string name, int pointSiz
             if(Tui::fileExistsAtPath(fontFilepath))
             {
                 std::string imageFilepath = searchPath + combinedFontName + ".png";
-                MJFont* font = new MJFont(vulkan, this, fontFilepath, imageFilepath);
+                MJFont* font = new MJFont(vulkan, this, fontFilepath, imageFilepath, fontOffsets[name]);
                 fonts[fontFilepath] = font;
                 fonts[cacheKey] = font;
                 return font;
@@ -163,7 +163,7 @@ MJFont* MJCache::getOrLoadFontIfAvailableInternal(std::string name, int pointSiz
         if(Tui::fileExistsAtPath(fontFilepath))
         {
             std::string imageFilepath = getKatipoResourcePath("fonts/" + combinedFontName + ".png", rootTable);
-            MJFont* font = new MJFont(vulkan, this, fontFilepath, imageFilepath);
+            MJFont* font = new MJFont(vulkan, this, fontFilepath, imageFilepath, fontOffsets[name]);
             fonts[fontFilepath] = font;
             fonts[cacheKey] = font;
             return font;
@@ -187,7 +187,7 @@ MJFont* MJCache::getOrLoadFontIfAvailableInternal(std::string name, int pointSiz
     if(Tui::fileExistsAtPath(fontFilepath))
     {
         std::string imageFilepath = getKatipoResourcePath("app/common/fonts/" + combinedFontName + ".png", rootTable);
-        MJFont* font = new MJFont(vulkan, this, fontFilepath, imageFilepath);
+        MJFont* font = new MJFont(vulkan, this, fontFilepath, imageFilepath, fontOffsets[name]);
         fonts[fontFilepath] = font;
         fonts[cacheKey] = font;
         return font;

@@ -1435,20 +1435,47 @@ void MJView::mouseMoved(dvec2 mousePos)
 	mouseMoved3D(dvec3(mousePos.x, mousePos.y, 100.0), dvec3(0.0,0.0,-1.0), false);
 }
 
-void MJView::mouseDown3D(dvec3 windowRayStart, dvec3 windowRayDirection, int buttonIndex)
+bool MJView::mouseDown3D(dvec3 windowRayStart, dvec3 windowRayDirection, int buttonIndex)
 {
 	if(hidden || invalidated)
 	{
-		return;
+		return false;
 	}
+    
+    
+    std::vector<MJView*> subviewsCopy = subviews;
+
+    //bool insideAnySubview = false;
+
+    for(int i = ((int)subviewsCopy.size()) - 1; i >=0; i--)
+    {
+        MJView* subView = subviewsCopy[i];
+        //bool insideSubview = subView->mouseDown3D(windowRayStart, windowRayDirection, obstructed || insideAnySubview, buttonIndex);
+        bool captured = subView->mouseDown3D(windowRayStart, windowRayDirection, buttonIndex); //todo obstructed is buggy, this needs reworking for 3D, disabled is fine for 2D.
+
+        if(invalidated)
+        {
+            return false;
+        }
+        
+        if(captured)
+        {
+            return true;
+        }
+
+        //insideAnySubview = insideAnySubview || insideSubview;
+    }
+    
 
 
-	bool containsPointInView = containsPoint(windowRayStart, windowRayDirection);
+    bool containsPointInView = containsPoint(windowRayStart, windowRayDirection);
 
 
-	dvec2 localPoint = windowPointToLocal(windowRayStart, windowRayDirection);
-	mouseDownLocalPoint = localPoint;
-	dragDistanceAboveClickOutsideThreshold = false;
+    dvec2 localPoint = windowPointToLocal(windowRayStart, windowRayDirection);
+    mouseDownLocalPoint = localPoint;
+    dragDistanceAboveClickOutsideThreshold = false;
+    
+    bool captured = false;
 
 	if(containsPointInView)
 	{
@@ -1458,7 +1485,11 @@ void MJView::mouseDown3D(dvec3 windowRayStart, dvec3 windowRayDirection, int but
 		{
             TuiRef* buttonIndexRef = new TuiNumber(buttonIndex);
             TuiRef* localPointRef = new TuiVec2(localPoint / renderScale);
-            mouseDownFunction->call("mouseDownFunction", buttonIndexRef, localPointRef, stateTable);
+            TuiRef* result = mouseDownFunction->call("mouseDownFunction", buttonIndexRef, localPointRef, stateTable);
+            if(result && result->boolValue())
+            {
+                captured = true;
+            }
             buttonIndexRef->release();
             localPointRef->release();
 		}
@@ -1468,31 +1499,14 @@ void MJView::mouseDown3D(dvec3 windowRayStart, dvec3 windowRayDirection, int but
 		mouseDownWasInside[buttonIndex] = false;
 		sendClickEventOnMouseUpInside[buttonIndex] = false;
 	}
+    
 	if(invalidated)
 	{
-		return;
+		return captured;
 	}
 
 	receivedMouseDown[buttonIndex] = true;
 
-	std::vector<MJView*> subviewsCopy = subviews;
-
-	//bool insideAnySubview = false;
-
-	for(int i = ((int)subviewsCopy.size()) - 1; i >=0; i--)
-	{
-		MJView* subView = subviewsCopy[i];
-		//bool insideSubview = subView->mouseDown3D(windowRayStart, windowRayDirection, obstructed || insideAnySubview, buttonIndex);
-        subView->mouseDown3D(windowRayStart, windowRayDirection, buttonIndex); //todo obstructed is buggy, this needs reworking for 3D, disabled is fine for 2D.
-
-		if(invalidated)
-		{
-			return;
-		}
-
-
-		//insideAnySubview = insideAnySubview || insideSubview;
-	}
 
 	//if(!inside)
 	{
@@ -1510,6 +1524,8 @@ void MJView::mouseDown3D(dvec3 windowRayStart, dvec3 windowRayDirection, int but
 			}
 		}
 	}
+    
+    return captured;
 }
 
 bool MJView::mouseWheel3D(dvec3 windowRayStart, dvec3 windowRayDirection, dvec2 scrollChange)
