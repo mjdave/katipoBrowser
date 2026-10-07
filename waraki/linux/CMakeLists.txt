@@ -128,7 +128,8 @@ elseif(WIN32)
     include_directories(../../katipo/thirdParty/libsodium/windows/include)
     #target_link_libraries(waraki ${CMAKE_SOURCE_DIR}/../../katipo/thirdParty/libsodium/windows/lib/libsodium.a) #hmm
 elseif(CMAKE_SYSTEM_PROCESSOR MATCHES "arm64" OR CMAKE_SYSTEM_PROCESSOR MATCHES "aarch64")
-    #todo
+    include_directories(../../katipo/thirdParty/libsodium/pi/include)
+    target_link_libraries(waraki ${CMAKE_SOURCE_DIR}/../../katipo/thirdParty/libsodium/pi/lib/libsodium.a)
 else()
     include_directories(../../katipo/thirdParty/libsodium/linux/include)
     target_link_libraries(waraki ${CMAKE_SOURCE_DIR}/../../katipo/thirdParty/libsodium/linux/lib/libsodium.a)
