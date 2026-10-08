@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.7)
 
-project(katipoBrowser VERSION 0.3)
+project(koru VERSION 0.3)
 
 set(CMAKE_BUILD_TYPE RelWithDebInfo)
 
@@ -117,25 +117,25 @@ include_directories(
 
 find_library(Vulkan_LIBRARY NAMES vulkan HINTS "$ENV{VULKAN_SDK}/lib" REQUIRED)
 
-add_executable(katipoBrowser ${SOURCES})
+add_executable(koru ${SOURCES})
 
 if(APPLE)
     include_directories(../katipo/thirdParty/libsodium/macos/include)
-    target_link_libraries(katipoBrowser ${CMAKE_SOURCE_DIR}/../katipo/thirdParty/libsodium/macos/lib/libsodium.a)
+    target_link_libraries(koru ${CMAKE_SOURCE_DIR}/../katipo/thirdParty/libsodium/macos/lib/libsodium.a)
 elseif(WIN32)
     include_directories(../katipo/thirdParty/libsodium/windows/include)
-    #target_link_libraries(katipoBrowser ${CMAKE_SOURCE_DIR}/../katipo/thirdParty/libsodium/windows/lib/libsodium.a) #hmm
+    #target_link_libraries(koru ${CMAKE_SOURCE_DIR}/../katipo/thirdParty/libsodium/windows/lib/libsodium.a) #hmm
 elseif(CMAKE_SYSTEM_PROCESSOR MATCHES "arm64" OR CMAKE_SYSTEM_PROCESSOR MATCHES "aarch64")
     include_directories(../katipo/thirdParty/libsodium/pi/include)
-    target_link_libraries(katipoBrowser ${CMAKE_SOURCE_DIR}/../katipo/thirdParty/libsodium/pi/lib/libsodium.a)
+    target_link_libraries(koru ${CMAKE_SOURCE_DIR}/../katipo/thirdParty/libsodium/pi/lib/libsodium.a)
 else()
     include_directories(../katipo/thirdParty/libsodium/linux/include)
-    target_link_libraries(katipoBrowser ${CMAKE_SOURCE_DIR}/../katipo/thirdParty/libsodium/linux/lib/libsodium.a)
+    target_link_libraries(koru ${CMAKE_SOURCE_DIR}/../katipo/thirdParty/libsodium/linux/lib/libsodium.a)
 endif()
 
-target_link_libraries(katipoBrowser Threads::Threads)
-target_link_libraries(katipoBrowser ${Vulkan_LIBRARY})
-target_link_libraries(katipoBrowser SDL3::SDL3)
-target_link_libraries(katipoBrowser SDL3_mixer::SDL3_mixer)
+target_link_libraries(koru Threads::Threads)
+target_link_libraries(koru ${Vulkan_LIBRARY})
+target_link_libraries(koru SDL3::SDL3)
+target_link_libraries(koru SDL3_mixer::SDL3_mixer)
 
 set (CMAKE_CXX_LINK_EXECUTABLE "${CMAKE_CXX_LINK_EXECUTABLE} -ldl")
