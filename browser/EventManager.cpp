@@ -814,18 +814,21 @@ void EventManager::bindTui(TuiTable* rootTable)
     };
     
     eventManagerTable->setFunction("addKeyEventListener", [this](TuiTable* args, TuiRef* existingResult, TuiFunctionCallData* incomingCallData, TuiDebugInfo* callingDebugInfo) -> TuiRef* {
-        if(args->arrayObjects.size() >= 2)
+        if(args->arrayObjects.size() >= 1)
         {
-            TuiRef* keyCodeRef = args->arrayObjects[0];
-            TuiRef* funcRef = args->arrayObjects[1];
-            if(keyCodeRef->type() == Tui_ref_type_NUMBER && funcRef->type() == Tui_ref_type_FUNCTION)
+            if(args->arrayObjects.size() >= 2 && args->arrayObjects[0]->type() == Tui_ref_type_NUMBER && args->arrayObjects[1]->type() == Tui_ref_type_FUNCTION)
             {
-                int result = addSpecificKeyChangedListener(((TuiNumber*)keyCodeRef)->value, (TuiFunction*)funcRef);
+                int result = addSpecificKeyChangedListener(((TuiNumber*)args->arrayObjects[0])->value, (TuiFunction*)args->arrayObjects[1]);
+                return new TuiNumber(result);
+            }
+            else if(args->arrayObjects.size() >= 1 && args->arrayObjects[0]->type() == Tui_ref_type_FUNCTION)
+            {
+                int result = addAnyKeyChangedListener((TuiFunction*)args->arrayObjects[0]);
                 return new TuiNumber(result);
             }
             else
             {
-                TuiParseError(callingDebugInfo, "Incorrect types passed to function. expected number, function");
+                TuiParseError(callingDebugInfo, "Incorrect types passed to addKeyEventListener:%s", args->getDebugStringValue().c_str());
             }
         }
         return TUI_NIL;

@@ -311,7 +311,7 @@ create = function(parentView, viewLayout)
                 {
                     view.clickFraction = 1.0
                     createAnimationUpdateFunc(view)
-                    clickFunc()
+                    clickFunc(view)
                 }
             }
         }

@@ -2065,7 +2065,20 @@ void MJView::loadFromTable(TuiTable* table, bool needsToLayoutSubviews, TuiTable
     
     if(table->hasKey("pos"))
     {
-        stateTable->setVec3("pos", table->getVec3("pos"));
+        TuiRef* value = table->get("pos");
+        if(value->type() == Tui_ref_type_VEC3)
+        {
+            stateTable->setVec3("pos", (((TuiVec3*)value)->value));
+        }
+        else if(value->type() == Tui_ref_type_VEC2)
+        {
+            dvec3 vec3Value = dvec3(((TuiVec2*)value)->value, 0);
+            stateTable->setVec3("pos", vec3Value);
+        }
+        else
+        {
+            stateTable->setVec3("pos", dvec3(0,0,0));
+        }
     }
     
     if(table->hasKey("additionalOffset"))
