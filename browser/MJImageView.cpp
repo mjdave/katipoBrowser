@@ -200,7 +200,7 @@ void MJImageView::setCropImage(bool cropImage_) //todo recalc this if cropImage 
 
 std::string MJImageView::getDescription()
 {
-    std::string result = Tui::string_format("MJImageView %p (%.2f,%.2f) - (%s)\nsubviews:\n", (void*)this, size.x, size.y, (imageTexture ? imageTexture->pathname.c_str() : "null"));
+    std::string result = tui::string_format("MJImageView %p (%.2f,%.2f) - (%s)\nsubviews:\n", (void*)this, size.x, size.y, (imageTexture ? imageTexture->pathname.c_str() : "null"));
     for(MJView* subView : subviews)
     {
         result = result + subView->getDescription();
@@ -209,7 +209,7 @@ std::string MJImageView::getDescription()
 }
 
 
-void MJImageView::loadFromTable(TuiTable* table, bool needsToLayoutSubviews, TuiTable* rootTableOrNil)
+void MJImageView::loadFromTable(const tui::table& table, bool needsToLayoutSubviews, const tui::table& rootTableOrNil)
 {
     MJView::loadFromTable(table, needsToLayoutSubviews, rootTableOrNil);
     
@@ -259,7 +259,7 @@ void MJImageView::loadFromTable(TuiTable* table, bool needsToLayoutSubviews, Tui
 }
 
 
-void MJImageView::tableKeyChanged(const std::string& key, TuiRef* value)
+void MJImageView::tableKeyChanged(const std::string& key, const tui::ref& value)
 {
     MJView::tableKeyChanged(key, value);
     
@@ -288,7 +288,7 @@ void MJImageView::tableKeyChanged(const std::string& key, TuiRef* value)
     }
     else if(key == "absolutePath") //todo possible sandboxing issue
     {
-        setImageTexture(cache->getTextureAbsolutePath(stateTable->getString("absolutePath"), rootTable, false, false, true));
+        setImageTexture(cache->getTextureAbsolutePath(stateTable->getString("absolutePath"), false, false, true));
     }
     else if(key == "crop")
     {

@@ -31,33 +31,33 @@ MJTextView::MJTextView(MJView* parentView_)
     wrapWidth = 0;
     
     //todo this is probably a bit slow to do all the time like this. meta tables needed
-    stateTable->setFunction("getRectForCharAtIndex", [this](TuiTable* args, TuiRef* existingResult, TuiFunctionCallData* incomingCallData, TuiDebugInfo* callingDebugInfo) -> TuiRef* {
+    stateTable->setFunction("getRectForCharAtIndex", [this](const tui::table& args, const tui::ref& existingResult, TuiFunctionCallData* incomingCallData, TuiDebugInfo* callingDebugInfo) -> tui::ref {
         if(args->arrayObjects.size() >= 1)
         {
-            TuiRef* indexRef = args->arrayObjects[0];
-            if(indexRef->type() == Tui_ref_type_NUMBER)
+            tui::ref indexRef = args->arrayObjects[0];
+            if(indexRef->isNumber())
             {
-                dvec4 rect = getRectForCharAtIndex(((TuiNumber*)indexRef)->value);
-                return new TuiVec4(rect);
+                dvec4 rect = getRectForCharAtIndex(indexRef->getNumberValue());
+                return tui::newVec4(rect);
             }
         }
         return nullptr;
     });
     
-    stateTable->setFunction("resetVerticalCursorMovementAnchors", [this](TuiTable* args, TuiRef* existingResult, TuiFunctionCallData* incomingCallData, TuiDebugInfo* callingDebugInfo) -> TuiRef* {
+    stateTable->setFunction("resetVerticalCursorMovementAnchors", [this](const tui::table& args, const tui::ref& existingResult, TuiFunctionCallData* incomingCallData, TuiDebugInfo* callingDebugInfo) -> tui::ref {
         resetVerticalCursorMovementAnchors();
         return TUI_NIL;
     });
     
-    stateTable->setFunction("getCursorOffsetForVerticalCursorMovement", [this](TuiTable* args, TuiRef* existingResult, TuiFunctionCallData* incomingCallData, TuiDebugInfo* callingDebugInfo) -> TuiRef* {
+    stateTable->setFunction("getCursorOffsetForVerticalCursorMovement", [this](const tui::table& args, const tui::ref& existingResult, TuiFunctionCallData* incomingCallData, TuiDebugInfo* callingDebugInfo) -> tui::ref {
         if(args->arrayObjects.size() >= 2)
         {
-            TuiRef* currentCursorOffsetRef = args->arrayObjects[0];
-            TuiRef* verticalOffsetRef = args->arrayObjects[1];
-            if(currentCursorOffsetRef->type() == Tui_ref_type_NUMBER && verticalOffsetRef->type() == Tui_ref_type_NUMBER)
+            tui::ref currentCursorOffsetRef = args->arrayObjects[0];
+            tui::ref verticalOffsetRef = args->arrayObjects[1];
+            if(currentCursorOffsetRef->isNumber() && verticalOffsetRef->isNumber())
             {
-                int result = getCursorOffsetForVerticalCursorMovement(((TuiNumber*)currentCursorOffsetRef)->value, ((TuiNumber*)verticalOffsetRef)->value);
-                return new TuiNumber(result);
+                int result = getCursorOffsetForVerticalCursorMovement(currentCursorOffsetRef->getNumberValue(), verticalOffsetRef->getNumberValue());
+                return tui::newNumber(result);
             }
             else
             {
@@ -166,11 +166,11 @@ void MJTextView::updateDimensions()
         {
             if(wrapClampCharIndex == 0)
             {
-                ((TuiString*)stateTable->objectsByStringKey["text"])->value = "";
+                (tui::toString(stateTable->objectsByStringKey["text"]))->value = "";
             }
             else
             {
-                ((TuiString*)stateTable->objectsByStringKey["text"])->value = textString.substr(0, wrapClampCharIndex);
+                (tui::toString(stateTable->objectsByStringKey["text"]))->value = textString.substr(0, wrapClampCharIndex);
             }
         }
 
@@ -255,17 +255,14 @@ void MJTextView::setSizeInternal(dvec2 size_)
     {
         if(subView->parentSizeChangedFunction)
         {
-            TuiRef* inRef = new TuiVec2(size);
-            TuiRef* sizeRef = subView->parentSizeChangedFunction->call("parentSizeChangedFunction", inRef);
+            tui::ref sizeRef = subView->parentSizeChangedFunction->call("parentSizeChangedFunction", tui::newVec2(size));
             if(sizeRef)
             {
                 if(sizeRef->type() == Tui_ref_type_VEC2)
                 {
-                    subView->setSize(((TuiVec2*)sizeRef)->value);
+                    subView->setSize(tui::toVec2(sizeRef)->value);
                 }
-                sizeRef->release();
             }
-            inRef->release();
         }
     }
 }
@@ -453,7 +450,7 @@ void MJTextView::preRender(GCommandBuffer* commandBuffer, MJRenderPass renderPas
         
         if(stateTable->hasKey("size"))
         {
-            TuiRef* ref = stateTable->objectsByStringKey["size"];
+            tui::ref ref = stateTable->objectsByStringKey["size"];
             switch (ref->type()) {
                 case Tui_ref_type_VEC2:
                     setSize(((TuiVec2*)ref)->value);
@@ -645,7 +642,7 @@ bool MJTextView::getAdditiveBlend() const
 
 std::string MJTextView::getDescription()
 {
-    std::string result = Tui::string_format("MJTextView %p (%.2f,%.2f) - (%s)\nsubviews:\n", (void*)this, size.x, size.y, textString.c_str());
+    std::string result = tui::string_format("MJTextView %p (%.2f,%.2f) - (%s)\nsubviews:\n", (void*)this, size.x, size.y, textString.c_str());
     for(MJView* subView : subviews)
     {
         result = result + subView->getDescription();
@@ -700,7 +697,7 @@ int MJTextView::getCursorOffsetForVerticalCursorMovement(int currentCursorOffset
 }
 
 
-void MJTextView::loadFromTable(TuiTable* table, bool needsToLayoutSubviews, TuiTable* rootTableOrNil)
+void MJTextView::loadFromTable(const tui::table& table, bool needsToLayoutSubviews, const tui::table& rootTableOrNil)
 {
     MJView::loadFromTable(table, needsToLayoutSubviews, rootTableOrNil);
     
@@ -753,7 +750,7 @@ void MJTextView::loadFromTable(TuiTable* table, bool needsToLayoutSubviews, TuiT
 }
 
 
-void MJTextView::tableKeyChanged(const std::string& key, TuiRef* value)
+void MJTextView::tableKeyChanged(const std::string& key, const tui::ref& value)
 {
     MJView::tableKeyChanged(key, value);
     

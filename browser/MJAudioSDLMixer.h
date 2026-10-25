@@ -2,6 +2,7 @@
 #ifndef MJAudioSDLMixer_h
 #define MJAudioSDLMixer_h
 
+#include "TuiScript.h"
 #include "MathUtils.h"
 #include "SDL.h"
 
@@ -9,8 +10,6 @@
 #include <vector>
 #include <string>
 
-class TuiFunction;
-class TuiTable;
 struct MIX_Mixer;
 struct MIX_Track;
 struct MIX_Audio;
@@ -32,7 +31,7 @@ public: // members
     
     std::map<std::string, MJSDLSound> sounds; //todo clean these up, maybe reference count or something
 
-    TuiTable* playQueue = nullptr;
+    tui::table playQueue = nullptr;
     uint32_t songIndex = 0;
 
     static MJAudioSDLMixer* getInstance() {
@@ -49,7 +48,7 @@ public: // members
     
     void playSound(const std::string& soundURL, double volume = 1.0, double pitch = 1.0); //for one shot sounds, play simulaneous over music
     
-    void playSongs(TuiTable* urls); //for a queue of songs
+    void playSongs(const tui::table& urls); //for a queue of songs
     void skipToNextTrack();
     void stop();
 
@@ -65,7 +64,7 @@ public: // members
     void setPlaybackRate(double rate);
     
 public:
-    //TuiFunction* finishedCallbackFunction = nullptr;
+    //tui::function finishedCallbackFunction = nullptr;
     
 public:
    // void audioPlayerDidFinishPlaying(bool success);

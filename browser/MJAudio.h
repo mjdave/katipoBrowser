@@ -17,10 +17,10 @@ public: // members
     
 protected: // members
     
-    TuiFunction* playingSongChangedFunction = nullptr;
-    TuiFunction* playingSongPausedChangedFunction = nullptr;
+    tui::function playingSongChangedFunction = nullptr;
+    tui::function playingSongPausedChangedFunction = nullptr;
     
-    TuiTable* audioTable = nullptr; //not actually needed after all, but left here for now
+    tui::table audioTable = nullptr; //not actually needed after all, but left here for now
 
 public: // functions
     
@@ -33,8 +33,8 @@ public: // functions
     MJAudio();
     ~MJAudio();
     
-    void bindTui(TuiTable* rootTable);
-    void audioTableKeyChanged(const std::string& key, TuiRef* value);
+    void bindTui(const tui::table& rootTable);
+    void audioTableKeyChanged(const std::string& key, const tui::ref& value);
     void updateCurrentlyPlayingInfo(const std::string& titleString, const std::string& artistString, double duration, void* imageBytes, int imageLength);
     void updatePausedState(bool pauseSate);
     

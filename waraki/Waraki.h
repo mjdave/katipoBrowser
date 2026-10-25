@@ -9,9 +9,6 @@
 
 class MainController;
 class MJView;
-class TuiRef;
-class TuiFunction;
-class TuiTable;
 class ClientNetInterface;
 class DatabaseEnvironment;
 class Database;
@@ -21,10 +18,10 @@ class BrowserTracker;
 
 struct SiteConnectionInfo {
     MJView* mainView = nullptr;
-    TuiTable* rootTable = nullptr;
-    TuiTable* katipoTable = nullptr;
-    TuiTable* scriptState = nullptr;
-    TuiRef* publicData = nullptr;
+    tui::table rootTable = nullptr;
+    tui::table katipoTable = nullptr;
+    tui::table scriptState = nullptr;
+    tui::ref publicData = nullptr;
     std::string trackerKey;
     std::string hostName;
     std::map<std::string, bool> checkedResourceFiles;
@@ -33,9 +30,9 @@ struct SiteConnectionInfo {
 class Waraki {
 public:
     MJView* mainView;
-    TuiTable* rootTable;
-    TuiTable* scriptState;
-    TuiTable* katipoTable;
+    tui::table rootTable;
+    tui::table scriptState;
+    tui::table katipoTable;
     
     DatabaseEnvironment* appDatabaseEnvironment;
     Database* appDatabase;
@@ -70,7 +67,7 @@ private:
                const std::string& hostID,
                const std::string& remoteURL,
                const std::string& hostName,
-               TuiTable* args);
+               const tui::table& args);
 
 private:
 

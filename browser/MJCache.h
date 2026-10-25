@@ -5,6 +5,7 @@
 #include <map>
 #include <string>
 
+#include "TuiScript.h"
 #include "MJImageTexture.h"
 #include "MJFont.h"
 
@@ -14,7 +15,6 @@
 class Database;
 class Camera;
 class MJDataTexture;
-class TuiTable;
 
 struct DrawQuadDescriptorSets {
     VkDescriptorPool descriptorPool;
@@ -64,12 +64,12 @@ public:
 	void recordStarted(VkCommandBuffer commandBuffer_);
 	void recordEnded();
 
-	MJImageTexture* getTextureWithOptions(std::string name, TuiTable* rootTable, MJImageTextureOptions options, std::string alphaChannel_ = "", bool disableCache = false);
+	MJImageTexture* getTextureWithOptions(std::string name, const tui::table& rootTable, MJImageTextureOptions options, std::string alphaChannel_ = "", bool disableCache = false);
 	MJImageTexture* getTextureAbsolutePathWithOptions(std::string name, MJImageTextureOptions options, std::string alphaChannel_ = "", bool disableCache = false);
-    MJImageTexture* getTexture(std::string name, TuiTable* rootTable, bool repeat = false, bool loadFlipped = false, bool mipmap_ = false, bool disableCache = false);
+    MJImageTexture* getTexture(std::string name, const tui::table& rootTable, bool repeat = false, bool loadFlipped = false, bool mipmap_ = false, bool disableCache = false);
 	MJImageTexture* getTextureAbsolutePath(std::string path, bool repeat = false, bool loadFlipped = false, bool mipmap_ = false, bool disableCache = false);
     
-    MJFont* getFont(std::string name, int pointSize, TuiTable* rootTable, double* resultScale);
+    MJFont* getFont(std::string name, int pointSize, const tui::table& rootTable, double* resultScale);
 
 	std::vector<MJVMABuffer> getCameraBuffer();
 
@@ -83,7 +83,7 @@ public:
     
 private:
 	void loadUnloadedTextures();
-    MJFont* getOrLoadFontIfAvailableInternal(std::string name, int pointSize, TuiTable* rootTable);
+    MJFont* getOrLoadFontIfAvailableInternal(std::string name, int pointSize, const tui::table& rootTable);
 
 };
 

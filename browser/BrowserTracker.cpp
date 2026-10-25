@@ -41,7 +41,7 @@
 
 /*
 
- std::string basePath = Tui::pathByRemovingLastPathComponent(argv[0]);
+ std::string basePath = tui::pathByRemovingLastPathComponent(argv[0]);
  katipoTable->setString("basePath", basePath);
  
  tracker = new Tracker(katipoTable);
@@ -56,15 +56,13 @@ BrowserTracker::BrowserTracker(std::string trackerScriptPath)
     //std::string basePath = Katipo::getSavePath("tracker/"); //will be needed
     //katipoTable->setString("basePath", basePath);
     
-    rootTable = Tui::initRootTable(); //todo this should optionally use a safe root table, probably by default
+    rootTable = tui::initRootTable(); //todo this should optionally use a safe root table, probably by default
     
-    katipoTable = new TuiTable(rootTable);
+    katipoTable = tui::newTable(rootTable);
     rootTable->set("katipo", katipoTable);
-    katipoTable->release();
     
-    TuiTable* trackerScriptState = (TuiTable*)TuiRef::runScriptFile(trackerScriptPath, rootTable);
+    tui::table trackerScriptState = tui::toTable(TuiRef::runScriptFile(trackerScriptPath, rootTable));
     katipoTable->set("tracker", trackerScriptState);
-    trackerScriptState->release();
     
     
     katipoTable->setString("version", KATIPO_VERSION);
@@ -83,7 +81,7 @@ BrowserTracker::BrowserTracker(std::string trackerScriptPath)
     
     tracker = new Tracker(katipoTable);
     
-    TuiRef* success = katipoTable->getFunction("init")->call("BrowserTracker::BrowserTracker()->katipo.init()");
+    tui::ref success = katipoTable->getFunction("init")->call("BrowserTracker::BrowserTracker()->katipo.init()");
     if(!success || !success->boolValue())
     {
         TuiError("Failed to initialize tracker.");
@@ -114,8 +112,6 @@ BrowserTracker::BrowserTracker(std::string trackerScriptPath)
 BrowserTracker::~BrowserTracker()
 {
     delete tracker;
-    rootTable->release();
-    scriptState->release();
     //delete database;
     //delete databaseEnvironment;
 }

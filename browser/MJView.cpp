@@ -14,7 +14,7 @@
 #include "MJTextView.h"
 #include "MJImageView.h"
 
-MJView* MJView::loadUnknownViewFromTable(TuiTable* subViewTable, MJView* parentView, bool needsToLayoutSubviews, TuiTable* rootTableOrNil) //static
+MJView* MJView::loadUnknownViewFromTable(const tui::table& subViewTable, MJView* parentView, bool needsToLayoutSubviews, const tui::table& rootTableOrNil) //static
 {
     const std::string& viewTypeString = subViewTable->getString("type");
     if(viewTypeString == "color")
@@ -43,20 +43,20 @@ MJView* MJView::loadUnknownViewFromTable(TuiTable* subViewTable, MJView* parentV
     }
     else
     {
-        TuiTable* sceneTable = parentView->rootTable->getTable("scene");
+        tui::table sceneTable = parentView->rootTable->getTable("scene");
         if(sceneTable)
         {
-            TuiTable* additionalViewTypes = sceneTable->getTable("viewTypes");
+            tui::table additionalViewTypes = sceneTable->getTable("viewTypes");
             if(additionalViewTypes)
             {
-                TuiTable* viewCode = additionalViewTypes->getTable(viewTypeString);
+                tui::table viewCode = additionalViewTypes->getTable(viewTypeString);
                 if(viewCode)
                 {
-                    TuiFunction* createFunction = viewCode->getFunction("create");
+                    tui::function createFunction = viewCode->getFunction("create");
                     if(createFunction)
                     {
-                        TuiRef* result = createFunction->call("loadUnknownViewFromTable", parentView->stateTable, subViewTable);
-                        MJView* resultView = (MJView*)((TuiTable*)result)->getUserData("_view");
+                        tui::ref result = createFunction->call("loadUnknownViewFromTable", parentView->stateTable, subViewTable);
+                        MJView* resultView = (MJView*)tui::toTable(result)->getUserData("_view");
                         return resultView;
                     }
                 }
@@ -91,8 +91,8 @@ void MJView::initInternals()
         receivedMouseDown[i] = false;
     }
     
-    stateTable = new TuiTable(nullptr);
-    stateTable->onSet = [this](TuiRef* table, const std::string& key, TuiRef* value) {
+    stateTable = tui::newTable();
+    stateTable->onSet = [this](const tui::ref& table, const std::string& key, const tui::ref& value) {
         tableKeyChanged(key, value);
     };
     stateTable->setUserData("_view", this);
@@ -104,28 +104,28 @@ void MJView::initInternals()
     stateTable->setMat3("rotation", rotation);
     
     //todo maybe this is a bit slow to do all the time like this. meta tables needed?
-    stateTable->setFunction("addView", [this](TuiTable* args, TuiRef* existingResult, TuiFunctionCallData* incomingCallData, TuiDebugInfo* callingDebugInfo) -> TuiRef* {
+    stateTable->setFunction("addView", [this](const tui::table& args, const tui::ref& existingResult, TuiFunctionCallData* incomingCallData, TuiDebugInfo* callingDebugInfo) -> tui::ref {
         if(args && args->arrayObjects.size() >= 1)
         {
-            TuiRef* viewTableRef = args->arrayObjects[0];
+            tui::ref viewTableRef = args->arrayObjects[0];
             if(viewTableRef->type() == Tui_ref_type_TABLE)
             {
-                MJView* result = MJView::loadUnknownViewFromTable((TuiTable*)viewTableRef, this, true, rootTable);
+                MJView* result = MJView::loadUnknownViewFromTable(tui::toTable(viewTableRef), this, true, rootTable);
                 if(result)
                 {
-                    return result->stateTable->retain();
+                    return result->stateTable;
                 }
             }
         }
         return TUI_NIL;
     });
-    stateTable->setFunction("removeView", [this](TuiTable* args, TuiRef* existingResult, TuiFunctionCallData* incomingCallData, TuiDebugInfo* callingDebugInfo) -> TuiRef* {
+    stateTable->setFunction("removeView", [this](const tui::table& args, const tui::ref& existingResult, TuiFunctionCallData* incomingCallData, TuiDebugInfo* callingDebugInfo) -> tui::ref {
         if(args && args->arrayObjects.size() >= 1)
         {
-            TuiRef* viewTableRef = args->arrayObjects[0];
+            tui::ref viewTableRef = args->arrayObjects[0];
             if(viewTableRef->type() == Tui_ref_type_TABLE)
             {
-                MJView* viewToRemove = (MJView*)((TuiTable*)viewTableRef)->getUserData("_view");
+                MJView* viewToRemove = (MJView*)(tui::toTable(viewTableRef))->getUserData("_view");
                 if(!viewToRemove)
                 {
                     MJError("no _view ptr found");
@@ -137,19 +137,19 @@ void MJView::initInternals()
         return TUI_NIL;
     });
     
-    stateTable->setFunction("getView", [this](TuiTable* args, TuiRef* existingResult, TuiFunctionCallData* incomingCallData, TuiDebugInfo* callingDebugInfo) -> TuiRef* {
+    stateTable->setFunction("getView", [this](const tui::table& args, const tui::ref& existingResult, TuiFunctionCallData* incomingCallData, TuiDebugInfo* callingDebugInfo) -> tui::ref {
         if(args && args->arrayObjects.size() >= 1)
         {
-            TuiRef* viewNameRef = args->arrayObjects[0];
+            tui::ref viewNameRef = args->arrayObjects[0];
             if(viewNameRef->type() == Tui_ref_type_STRING)
             {
-                MJView* subView = getSubViewWithID(((TuiString*)viewNameRef)->value);
+                MJView* subView = getSubViewWithID(viewNameRef->getStringValue());
                 if(!subView)
                 {
                     //MJWarn("no subView named:%s", ((TuiString*)viewNameRef)->value.c_str());
                     return TUI_NIL;
                 }
-                return subView->stateTable->retain();
+                return subView->stateTable;
             }
         }
         else
@@ -159,19 +159,19 @@ void MJView::initInternals()
         return TUI_NIL;
     });
     
-    stateTable->setFunction("locationRelativeToView", [this](TuiTable* args, TuiRef* existingResult, TuiFunctionCallData* incomingCallData, TuiDebugInfo* callingDebugInfo) -> TuiRef* {
+    stateTable->setFunction("locationRelativeToView", [this](const tui::table& args, const tui::ref& existingResult, TuiFunctionCallData* incomingCallData, TuiDebugInfo* callingDebugInfo) -> tui::ref {
         if(args && args->arrayObjects.size() >= 2)
         {
-            TuiRef* locationRef = args->arrayObjects[0];
-            TuiRef* viewTableRef = args->arrayObjects[1];
+            tui::ref locationRef = args->arrayObjects[0];
+            tui::ref viewTableRef = args->arrayObjects[1];
             
             if(locationRef->type() == Tui_ref_type_VEC2 && viewTableRef->type() == Tui_ref_type_TABLE)
             {
-                MJView* relativeToView = (MJView*)((TuiTable*)viewTableRef)->getUserData("_view");
+                MJView* relativeToView = (MJView*)tui::toTable(viewTableRef)->getUserData("_view");
                 
-                dvec2 resultVec = locationRelativeToView(((TuiVec2*)locationRef)->value, relativeToView);
+                dvec2 resultVec = locationRelativeToView(tui::toVec2(locationRef)->value, relativeToView);
                 
-                return new TuiVec2(resultVec);
+                return tui::newVec2(resultVec);
             }
             else
             {
@@ -186,18 +186,18 @@ void MJView::initInternals()
     });
     
     
-    stateTable->setFunction("localPointToWindow", [this](TuiTable* args, TuiRef* existingResult, TuiFunctionCallData* incomingCallData, TuiDebugInfo* callingDebugInfo) -> TuiRef* {
+    stateTable->setFunction("localPointToWindow", [this](const tui::table& args, const tui::ref& existingResult, TuiFunctionCallData* incomingCallData, TuiDebugInfo* callingDebugInfo) -> tui::ref {
         if(args && args->arrayObjects.size() >= 1)
         {
-            TuiRef* locationRef = args->arrayObjects[0];
+            tui::ref locationRef = args->arrayObjects[0];
             
             if(locationRef->type() == Tui_ref_type_VEC2)
             {
-                dvec2 localPointVec2 = ((TuiVec2*)locationRef)->value;
+                dvec2 localPointVec2 = tui::toVec2(locationRef)->value;
                 
                 dvec2 resultVec = localPointToWindow(dvec3(localPointVec2.x, localPointVec2.y, 0.0));
                 
-                return new TuiVec2(resultVec);
+                return tui::newVec2(resultVec);
             }
             else
             {
@@ -211,19 +211,10 @@ void MJView::initInternals()
         return TUI_NIL;
     });
     
-    stateTable->setFunction("setClipChildren", [this](TuiTable* args, TuiRef* existingResult, TuiFunctionCallData* incomingCallData, TuiDebugInfo* callingDebugInfo) -> TuiRef* {
+    stateTable->setFunction("setClipChildren", [this](const tui::table& args, const tui::ref& existingResult, TuiFunctionCallData* incomingCallData, TuiDebugInfo* callingDebugInfo) -> tui::ref {
         if(args && args->arrayObjects.size() >= 1)
         {
-            TuiRef* boolRef = args->arrayObjects[0];
-            
-            if(boolRef->type() == Tui_ref_type_BOOL)
-            {
-                setClipChildren(((TuiBool*)boolRef)->value);
-            }
-            else
-            {
-                MJError("bad arg");
-            }
+            setClipChildren(args->arrayObjects[0]->boolValue());
         }
         else
         {
@@ -232,15 +223,15 @@ void MJView::initInternals()
         return TUI_NIL;
     });
     
-    stateTable->setFunction("fadeIn", [this](TuiTable* args, TuiRef* existingResult, TuiFunctionCallData* incomingCallData, TuiDebugInfo* callingDebugInfo) -> TuiRef* {
+    stateTable->setFunction("fadeIn", [this](const tui::table& args, const tui::ref& existingResult, TuiFunctionCallData* incomingCallData, TuiDebugInfo* callingDebugInfo) -> tui::ref {
         double duration = 0.125;
         if(args && args->arrayObjects.size() >= 1)
         {
-            TuiRef* numberRef = args->arrayObjects[0];
+            tui::ref numberRef = args->arrayObjects[0];
             
-            if(numberRef->type() == Tui_ref_type_NUMBER)
+            if(numberRef->isNumber())
             {
-                duration = (((TuiNumber*)numberRef)->value);
+                duration = numberRef->getNumberValue();
             }
             else
             {
@@ -251,15 +242,15 @@ void MJView::initInternals()
         return TUI_NIL;
     });
     
-    stateTable->setFunction("fadeOut", [this](TuiTable* args, TuiRef* existingResult, TuiFunctionCallData* incomingCallData, TuiDebugInfo* callingDebugInfo) -> TuiRef* {
+    stateTable->setFunction("fadeOut", [this](const tui::table& args, const tui::ref& existingResult, TuiFunctionCallData* incomingCallData, TuiDebugInfo* callingDebugInfo) -> tui::ref {
         double duration = 0.125;
         if(args && args->arrayObjects.size() >= 1)
         {
-            TuiRef* numberRef = args->arrayObjects[0];
+            tui::ref numberRef = args->arrayObjects[0];
             
-            if(numberRef->type() == Tui_ref_type_NUMBER)
+            if(numberRef->isNumber())
             {
-                duration = (((TuiNumber*)numberRef)->value);
+                duration = numberRef->getNumberValue();
             }
             else
             {
@@ -271,14 +262,14 @@ void MJView::initInternals()
     });
     
     //accepts either orderBack(subView) or orderBack()
-    stateTable->setFunction("orderBack", [this](TuiTable* args, TuiRef* existingResult, TuiFunctionCallData* incomingCallData, TuiDebugInfo* callingDebugInfo) -> TuiRef* {
+    stateTable->setFunction("orderBack", [this](const tui::table& args, const tui::ref& existingResult, TuiFunctionCallData* incomingCallData, TuiDebugInfo* callingDebugInfo) -> tui::ref {
         if(args && args->arrayObjects.size() >= 1)
         {
-            TuiRef* viewTableRef = args->arrayObjects[0];
+            tui::ref viewTableRef = args->arrayObjects[0];
             
             if(viewTableRef->type() == Tui_ref_type_TABLE)
             {
-                MJView* subView = (MJView*)((TuiTable*)viewTableRef)->getUserData("_view");
+                MJView* subView = (MJView*)tui::toTable(viewTableRef)->getUserData("_view");
                 orderBack(subView);
             }
             return TUI_NIL;
@@ -287,14 +278,14 @@ void MJView::initInternals()
         return TUI_NIL;
     });
     
-    stateTable->setFunction("orderFront", [this](TuiTable* args, TuiRef* existingResult, TuiFunctionCallData* incomingCallData, TuiDebugInfo* callingDebugInfo) -> TuiRef* {
+    stateTable->setFunction("orderFront", [this](const tui::table& args, const tui::ref& existingResult, TuiFunctionCallData* incomingCallData, TuiDebugInfo* callingDebugInfo) -> tui::ref {
         if(args && args->arrayObjects.size() >= 1)
         {
-            TuiRef* viewTableRef = args->arrayObjects[0];
+            tui::ref viewTableRef = args->arrayObjects[0];
             
             if(viewTableRef->type() == Tui_ref_type_TABLE)
             {
-                MJView* subView = (MJView*)((TuiTable*)viewTableRef)->getUserData("_view");
+                MJView* subView = (MJView*)tui::toTable(viewTableRef)->getUserData("_view");
                 orderFront(subView);
             }
             return TUI_NIL;
@@ -341,29 +332,6 @@ MJView::~MJView()
     }
     
     cleanupRemovedSubviews();
-    
-    stateTable->release();
-    
-    if(updateFunction) {updateFunction->release();}
-    if(preRenderUpdateFunction) {preRenderUpdateFunction->release();}
-
-    if(parentSizeChangedFunction) {parentSizeChangedFunction->release();}
-
-    if(hoverStartFunction) {hoverStartFunction->release();}
-    if(hoverMovedFunction) {hoverMovedFunction->release();}
-    if(hoverEndFunction) {hoverEndFunction->release();}
-    if(hiddenStateChangedFunction) {hiddenStateChangedFunction->release();}
-
-    if(mouseDownFunction) {mouseDownFunction->release();}
-    if(mouseUpFunction) {mouseUpFunction->release();}
-    if(mouseDraggedFunction) {mouseDraggedFunction->release();}
-    if(mouseWheelFunction) {mouseWheelFunction->release();}
-
-
-    if(clickFunction) {clickFunction->release();}
-    if(rightClickFunction) {rightClickFunction->release();}
-    if(clickOutsideFunction) {clickOutsideFunction->release();}
-    if(clickDownOutsideFunction) {clickDownOutsideFunction->release();}
 }
 
 void MJView::cleanupRemovedSubviews()
@@ -447,20 +415,17 @@ void MJView::parentSizeChanged(dvec2 parentSize_)
 {
     if(parentSizeChangedFunction)
     {
-        TuiRef* inSizeRef = new TuiVec2(parentView->size);
-        TuiRef* sizeRef = parentSizeChangedFunction->call("parentSizeChangedFunction", inSizeRef, stateTable);
+        tui::ref sizeRef = parentSizeChangedFunction->call("parentSizeChangedFunction", tui::newVec2(parentView->size), stateTable);
         
         if(sizeRef)
         {
             if(sizeRef->type() == Tui_ref_type_VEC2)
             {
-                stateTable->setVec2("size", ((TuiVec2*)sizeRef)->value);
-                setSize(((TuiVec2*)sizeRef)->value);
+                stateTable->setVec2("size", tui::toVec2(sizeRef)->value);
+                setSize(tui::toVec2(sizeRef)->value);
             }
-            sizeRef->release();
         }
         
-        inSizeRef->release();
     }
     else if(scaleToParentSize)
     {
@@ -490,7 +455,7 @@ void MJView::setSize(dvec2 size_) //WARNING! MJTextView completely overrides thi
 	if(!approxEqualVec2(size, size_))
 	{
 		size = size_;
-        ((TuiVec2*)stateTable->objectsByStringKey["size"])->value = size;
+        tui::toVec2(stateTable->objectsByStringKey["size"])->value = size;
         
 		updateMatrix();
         
@@ -499,8 +464,8 @@ void MJView::setSize(dvec2 size_) //WARNING! MJTextView completely overrides thi
             subView->parentSizeChanged(size);
             /*if(subView->parentSizeChangedFunction)
             {
-                TuiRef* inRef = new TuiVec2(size);
-                TuiRef* sizeRef = subView->parentSizeChangedFunction->call("parentSizeChangedFunction", inRef, subView->stateTable);
+                tui::ref inRef = new TuiVec2(size);
+                tui::ref sizeRef = subView->parentSizeChangedFunction->call("parentSizeChangedFunction", inRef, subView->stateTable);
                 //subView->stateTable->setVec2("size", ((TuiVec2*)sizeRef)->value);
                 if(sizeRef)
                 {
@@ -524,8 +489,8 @@ void MJView::recalculateSizesRecursively()
 {
     /*if(parentSizeChangedFunction && parentView)
     {
-        TuiRef* inRef = new TuiVec2(parentView->size);
-        TuiRef* sizeRef = parentSizeChangedFunction->call("parentSizeChangedFunction", inRef);
+        tui::ref inRef = new TuiVec2(parentView->size);
+        tui::ref sizeRef = parentSizeChangedFunction->call("parentSizeChangedFunction", inRef);
         //stateTable->setVec2("size", ((TuiVec2*)sizeRef)->value);
         setSize(((TuiVec2*)sizeRef)->value);
         inRef->release();
@@ -807,8 +772,6 @@ void MJView::updateMatrix(int sanityCheck)
 	relativeMatrix = translate(relativeMatrix, windowPosition);
 
 	relativeMatrix = relativeMatrix * dmat4(windowRotation);
-    
-    dvec3 offsetToUse = baseOffset;
 
     dvec3 baseOffsetToUse = baseOffset * relativeViewRenderScale + dvec3(0.0,0.0,windowZRenderOffset);
 	dvec3 localOffsetToUse = dvec3(0.0);
@@ -957,13 +920,7 @@ void MJView::update(float dt)
 
     if(updateFunction)
     {
-        TuiNumber* dtRef = new TuiNumber(dt);
-        
-        updateFunction->call("MJView::update", dtRef, stateTable);
-        
-        dtRef->release();
-        
-        //updateFunction(dt);
+        updateFunction->call("MJView::update", tui::newNumber(dt), stateTable);
     }
 	
 	for(int i = 0; i < subviews.size(); i++)
@@ -1006,15 +963,7 @@ void MJView::preRender(GCommandBuffer* commandBuffer, MJRenderPass renderPass, i
     
     if(preRenderUpdateFunction)
     {
-        
-        TuiNumber* dtRef = new TuiNumber(dt);
-        TuiNumber* frameLerpRef = new TuiNumber(frameLerp);
-        
-        preRenderUpdateFunction->call("MJView::preRender->draw(dt, frameLerp)", dtRef, frameLerpRef, stateTable);
-        
-        dtRef->release();
-        frameLerpRef->release();
-        
+        preRenderUpdateFunction->call("MJView::preRender->draw(dt, frameLerp)", tui::newNumber(dt), tui::newNumber(frameLerp), stateTable);
     }
     
     if(needsAnimationTimerReset)
@@ -1334,9 +1283,8 @@ void MJView::mouseMoved3D(dvec3 windowRayStart, dvec3 windowRayDirection, bool t
                         
                         if(!foundEarlierHover)
                         {
-                            TuiRef* localPointRef = new TuiVec2(localPoint / renderScale);
+                            tui::vec2 localPointRef = tui::newVec2(localPoint / renderScale);
                             hoverStartFunction->call("hoverStartFunction", localPointRef, stateTable);
-                            localPointRef->release();
                             
                             for(int i = thisViewIndex - 1; i >= 0; i--)
                             {
@@ -1358,9 +1306,8 @@ void MJView::mouseMoved3D(dvec3 windowRayStart, dvec3 windowRayDirection, bool t
 			{
 				if(hoverMovedFunction)
 				{
-                    TuiRef* localPointRef = new TuiVec2(localPoint / renderScale);
+                    tui::vec2 localPointRef = tui::newVec2(localPoint / renderScale);
                     hoverMovedFunction->call("hoverMovedFunction", localPointRef, stateTable);
-                    localPointRef->release();
 				}
 			}
 		}
@@ -1397,11 +1344,7 @@ void MJView::mouseMoved3D(dvec3 windowRayStart, dvec3 windowRayDirection, bool t
 					hasLocalPoint = true;
 				}
                 
-                TuiRef* buttonIndexRef = new TuiNumber(i);
-                TuiRef* localPointRef = new TuiVec2(localPoint / renderScale);
-                mouseDraggedFunction->call("mouseDraggedFunction", buttonIndexRef, localPointRef, stateTable);
-                buttonIndexRef->release();
-                localPointRef->release();
+                mouseDraggedFunction->call("mouseDraggedFunction", tui::newNumber(i), tui::newVec2(localPoint / renderScale), stateTable);
 			}
 		}
 	}
@@ -1483,15 +1426,11 @@ bool MJView::mouseDown3D(dvec3 windowRayStart, dvec3 windowRayDirection, int but
 		sendClickEventOnMouseUpInside[buttonIndex] = true;
 		if(mouseDownFunction)
 		{
-            TuiRef* buttonIndexRef = new TuiNumber(buttonIndex);
-            TuiRef* localPointRef = new TuiVec2(localPoint / renderScale);
-            TuiRef* result = mouseDownFunction->call("mouseDownFunction", buttonIndexRef, localPointRef, stateTable);
+            tui::ref result = mouseDownFunction->call("mouseDownFunction", tui::newNumber(buttonIndex), tui::newVec2(localPoint / renderScale), stateTable);
             if(result && result->boolValue())
             {
                 captured = true;
             }
-            buttonIndexRef->release();
-            localPointRef->release();
 		}
 	}
 	else
@@ -1515,12 +1454,7 @@ bool MJView::mouseDown3D(dvec3 windowRayStart, dvec3 windowRayDirection, int but
 			if(!visibleUIContainsPointIncludingSubViews3D(windowRayStart, windowRayDirection))
 			{ 
 				dvec2 localPoint = windowPointToLocal(windowRayStart, windowRayDirection);
-                
-                TuiRef* buttonIndexRef = new TuiNumber(buttonIndex);
-                TuiRef* localPointRef = new TuiVec2(localPoint / renderScale);
-                clickDownOutsideFunction->call("clickDownOutsideFunction", buttonIndexRef, localPointRef, stateTable);
-                buttonIndexRef->release();
-                localPointRef->release();
+                clickDownOutsideFunction->call("clickDownOutsideFunction", tui::newNumber(buttonIndex), tui::newVec2(localPoint / renderScale), stateTable);
 			}
 		}
 	}
@@ -1544,12 +1478,7 @@ bool MJView::mouseWheel3D(dvec3 windowRayStart, dvec3 windowRayDirection, dvec2 
 	{
 		if(mouseWheelFunction)
 		{
-            TuiRef* localPointRef = new TuiVec2(localPoint / renderScale);
-            TuiRef* scrollChangeRef = new TuiVec2(scrollChange);
-            
-            mouseWheelFunction->call("mouseWheel3D", localPointRef, scrollChangeRef, stateTable);
-            scrollChangeRef->release();
-            localPointRef->release();
+            mouseWheelFunction->call("mouseWheel3D", tui::newVec2(localPoint / renderScale), tui::newVec2(scrollChange), stateTable);
 		}
 
 		if(masksEvents)
@@ -1658,17 +1587,13 @@ void MJView::mouseUp3D(dvec3 windowRayStart, dvec3 windowRayDirection, int butto
 				if(buttonIndex == 0 && clickFunction && !(*foundClickFunction))
 				{
 					dvec2 localPoint = windowPointToLocal(windowRayStart, windowRayDirection);
-                    TuiRef* localPointRef = new TuiVec2(localPoint / renderScale);
-                    clickFunction->call("clickFunction", localPointRef, stateTable);
-                    localPointRef->release();
+                    clickFunction->call("clickFunction", tui::newVec2(localPoint / renderScale), stateTable);
                     *foundClickFunction = true;
 				}
                 else if(buttonIndex == 1 && rightClickFunction && !(*foundClickFunction))
 				{
 					dvec2 localPoint = windowPointToLocal(windowRayStart, windowRayDirection);
-                    TuiRef* localPointRef = new TuiVec2(localPoint / renderScale);
-                    rightClickFunction->call("rightClickFunction", localPointRef, stateTable);
-                    localPointRef->release();
+                    rightClickFunction->call("rightClickFunction", tui::newVec2(localPoint / renderScale), stateTable);
                     *foundClickFunction = true;
 				}
 			}
@@ -1677,11 +1602,7 @@ void MJView::mouseUp3D(dvec3 windowRayStart, dvec3 windowRayDirection, int butto
 		if(mouseUpFunction)
 		{
 			dvec2 localPoint = windowPointToLocal(windowRayStart, windowRayDirection);
-            TuiNumber* buttonIndexRef = new TuiNumber(buttonIndex);
-            TuiVec2* localPointRef = new TuiVec2(localPoint / renderScale);
-            mouseUpFunction->call("mouseUpFunction", buttonIndexRef, localPointRef, stateTable);
-            buttonIndexRef->release();
-            localPointRef->release();
+            mouseUpFunction->call("mouseUpFunction", tui::newNumber(buttonIndex), tui::newVec2(localPoint / renderScale), stateTable);
 		}
 
 		/*if(!masksEvents) //dubious, commented out Jul 2026
@@ -1691,8 +1612,8 @@ void MJView::mouseUp3D(dvec3 windowRayStart, dvec3 windowRayDirection, int butto
 				if(!visibleUIContainsPointIncludingSubViews3D(windowRayStart, windowRayDirection))
 				{ 
 					dvec2 localPoint = windowPointToLocal(windowRayStart, windowRayDirection);
-                    TuiRef* buttonIndexRef = new TuiNumber(buttonIndex);
-                    TuiRef* localPointRef = new TuiVec2(localPoint / renderScale);
+                    tui::ref buttonIndexRef = new TuiNumber(buttonIndex);
+                    tui::ref localPointRef = new TuiVec2(localPoint / renderScale);
                     clickOutsideFunction->call("clickOutsideFunction", buttonIndexRef, localPointRef);
                     buttonIndexRef->release();
                     localPointRef->release();
@@ -1707,22 +1628,14 @@ void MJView::mouseUp3D(dvec3 windowRayStart, dvec3 windowRayDirection, int butto
 			if(!visibleUIContainsPointIncludingSubViews3D(windowRayStart, windowRayDirection))
 			{ 
 				dvec2 localPoint = windowPointToLocal(windowRayStart, windowRayDirection);
-                TuiRef* buttonIndexRef = new TuiNumber(buttonIndex);
-                TuiRef* localPointRef = new TuiVec2(localPoint / renderScale);
-                clickOutsideFunction->call("clickOutsideFunction", buttonIndexRef, localPointRef, stateTable);
-                buttonIndexRef->release();
-                localPointRef->release();
+                clickOutsideFunction->call("clickOutsideFunction", tui::newNumber(buttonIndex), tui::newVec2(localPoint / renderScale), stateTable);
 			}
 		}
 
 		if(mouseUpFunction && containsPoint(windowRayStart, windowRayDirection))
 		{
 			dvec2 localPoint = windowPointToLocal(windowRayStart, windowRayDirection);
-            TuiRef* buttonIndexRef = new TuiNumber(buttonIndex);
-            TuiRef* localPointRef = new TuiVec2(localPoint / renderScale);
-            mouseUpFunction->call("mouseUpFunction", buttonIndexRef, localPointRef, stateTable);
-            buttonIndexRef->release();
-            localPointRef->release();
+            mouseUpFunction->call("mouseUpFunction", tui::newNumber(buttonIndex), tui::newVec2(localPoint / renderScale), stateTable);
 		}
 	}
 
@@ -1815,7 +1728,7 @@ void MJView::removeAllSubviews()
 
 std::string MJView::getDescription()
 {
-    std::string result = Tui::string_format("MJView %p (%.2f,%.2f)\nsubviews:\n", (void*)this, size.x, size.y);
+    std::string result = tui::string_format("MJView %p (%.2f,%.2f)\nsubviews:\n", (void*)this, size.x, size.y);
     for(MJView* subView : subviews)
     {
         result = result + subView->getDescription();
@@ -1920,13 +1833,12 @@ void MJView::resetAnimationTimer()
 }
 
 
-void MJView::loadFromFile(std::string filePath, TuiTable* parentTable)
+void MJView::loadFromFile(std::string filePath, const tui::table& parentTable)
 {
-    TuiTable* table = (TuiTable*)TuiRef::runScriptFile(filePath, parentTable);
+    tui::table table = tui::toTable(TuiRef::runScriptFile(filePath, parentTable));
     if(table)
     {
         loadFromTable(table, true, parentTable);
-        table->release();
     }
 }
 
@@ -1977,7 +1889,7 @@ void MJView::setRelativePosition(std::string alignmentX, std::string alignmentY)
     }
 }
 
-void MJView::loadFromTable(TuiTable* table, bool needsToLayoutSubviews, TuiTable* rootTable_)
+void MJView::loadFromTable(const tui::table& table, bool needsToLayoutSubviews, const tui::table& rootTable_)
 {
     rootTable = rootTable_;
     
@@ -2008,11 +1920,10 @@ void MJView::loadFromTable(TuiTable* table, bool needsToLayoutSubviews, TuiTable
     }
     else if(table->hasKey("onParentSizeChanged"))
     {
-        TuiRef* ref = table->objectsByStringKey["onParentSizeChanged"];
+        tui::ref ref = table->objectsByStringKey["onParentSizeChanged"];
         if(ref->type() == Tui_ref_type_FUNCTION)
         {
-            parentSizeChangedFunction = (TuiFunction*)ref;
-            parentSizeChangedFunction->retain();
+            parentSizeChangedFunction = tui::toFunction(ref);
         }
         else
         {
@@ -2026,10 +1937,10 @@ void MJView::loadFromTable(TuiTable* table, bool needsToLayoutSubviews, TuiTable
         
         if(table->hasKey("parentWidthFraction"))
         {
-            TuiRef* ref = table->objectsByStringKey["parentWidthFraction"];
-            if(ref->type() == Tui_ref_type_NUMBER)
+            tui::ref ref = table->objectsByStringKey["parentWidthFraction"];
+            if(ref->isNumber())
             {
-                parentWidthFraction = ((TuiNumber*)ref)->value;
+                parentWidthFraction = ref->getNumberValue();
             }
             else
             {
@@ -2038,10 +1949,10 @@ void MJView::loadFromTable(TuiTable* table, bool needsToLayoutSubviews, TuiTable
         }
         else if(table->hasKey("parentHeightFraction"))
         {
-            TuiRef* ref = table->objectsByStringKey["parentHeightFraction"];
-            if(ref->type() == Tui_ref_type_NUMBER)
+            tui::ref ref = table->objectsByStringKey["parentHeightFraction"];
+            if(ref->isNumber())
             {
-                parentHeightFraction = ((TuiNumber*)ref)->value;
+                parentHeightFraction = ref->getNumberValue();
             }
             else
             {
@@ -2051,10 +1962,10 @@ void MJView::loadFromTable(TuiTable* table, bool needsToLayoutSubviews, TuiTable
         
         if(table->hasKey("parentSizeFraction"))
         {
-            TuiRef* ref = table->objectsByStringKey["parentSizeFraction"];
+            tui::ref ref = table->objectsByStringKey["parentSizeFraction"];
             if(ref->type() == Tui_ref_type_VEC2)
             {
-                parentResizeFraction = ((TuiVec2*)ref)->value;
+                parentResizeFraction = tui::toVec2(ref)->value;
             }
             else
             {
@@ -2065,14 +1976,14 @@ void MJView::loadFromTable(TuiTable* table, bool needsToLayoutSubviews, TuiTable
     
     if(table->hasKey("pos"))
     {
-        TuiRef* value = table->get("pos");
+        tui::ref value = table->get("pos");
         if(value->type() == Tui_ref_type_VEC3)
         {
-            stateTable->setVec3("pos", (((TuiVec3*)value)->value));
+            stateTable->setVec3("pos", tui::toVec3(value)->value);
         }
         else if(value->type() == Tui_ref_type_VEC2)
         {
-            dvec3 vec3Value = dvec3(((TuiVec2*)value)->value, 0);
+            dvec3 vec3Value = dvec3(tui::toVec2(value)->value, 0);
             stateTable->setVec3("pos", vec3Value);
         }
         else
@@ -2176,14 +2087,14 @@ void MJView::loadFromTable(TuiTable* table, bool needsToLayoutSubviews, TuiTable
     
     parentSizeChanged(parentView->size);
     
-    TuiTable* subviewTable = table->getTable("subviews");
+    tui::table subviewTable = table->getTable("subviews");
     if(subviewTable)
     {
-        for(TuiRef* subViewRef : subviewTable->arrayObjects)
+        for(tui::ref subViewRef : subviewTable->arrayObjects)
         {
             if(subViewRef->type() == Tui_ref_type_TABLE)
             {
-                MJView::loadUnknownViewFromTable((TuiTable*)subViewRef, this, false, rootTable);
+                MJView::loadUnknownViewFromTable(tui::toTable(subViewRef), this, false, rootTable);
             }
         }
     }
@@ -2210,16 +2121,16 @@ void MJView::doRelativeViewLayoutsForTablePostLoad()
     }
 }
 
-void MJView::tableKeyChanged(const std::string& key, TuiRef* value)
+void MJView::tableKeyChanged(const std::string& key, const tui::ref& value)
 {
     if(key == "pos")
     {
         switch (value->type()) {
             case Tui_ref_type_VEC2:
-                setBaseOffset(dvec3(((TuiVec2*)value)->value, 0.0));
+                setBaseOffset(dvec3(tui::toVec2(value)->value, 0.0));
                 break;
             case Tui_ref_type_VEC3:
-                setBaseOffset(((TuiVec3*)value)->value);
+                setBaseOffset(tui::toVec3(value)->value);
                 break;
             default:
                 MJError("pos expected vec2 or vec3");
@@ -2230,10 +2141,10 @@ void MJView::tableKeyChanged(const std::string& key, TuiRef* value)
     {
         switch (value->type()) {
             case Tui_ref_type_VEC2:
-                setAdditionalOffset(dvec3(((TuiVec2*)value)->value, 0.0));
+                setAdditionalOffset(dvec3(tui::toVec2(value)->value, 0.0));
                 break;
             case Tui_ref_type_VEC3:
-                setAdditionalOffset(((TuiVec3*)value)->value);
+                setAdditionalOffset(tui::toVec3(value)->value);
                 break;
             default:
                 MJError("additionalOffset expected vec2 or vec3");
@@ -2244,7 +2155,7 @@ void MJView::tableKeyChanged(const std::string& key, TuiRef* value)
     {
         switch (value->type()) {
             case Tui_ref_type_MAT3:
-                setRotation(((TuiMat3*)value)->value);
+                setRotation(tui::toMat3(value)->value);
                 break;
             default:
                 MJError("rotation expected mat3");
@@ -2257,7 +2168,7 @@ void MJView::tableKeyChanged(const std::string& key, TuiRef* value)
             case Tui_ref_type_VEC2:
             {
                 scaleToParentSize = false;
-                setSize(((TuiVec2*)value)->value);
+                setSize(tui::toVec2(value)->value);
             }
                 break;
             default:
@@ -2270,16 +2181,10 @@ void MJView::tableKeyChanged(const std::string& key, TuiRef* value)
         switch (value->type()) {
             case Tui_ref_type_FUNCTION:
             {
-                if(parentSizeChangedFunction)
-                {
-                    parentSizeChangedFunction->release();
-                    parentSizeChangedFunction = nullptr;
-                }
-                parentSizeChangedFunction = (TuiFunction*)value;
-                parentSizeChangedFunction->retain();
+                parentSizeChangedFunction = tui::toFunction(value);
                 
-                /*TuiRef* inSizeRef = new TuiVec2(parentView->size);
-                TuiRef* sizeRef = parentSizeChangedFunction->call("parentSizeChangedFunction", inSizeRef, stateTable);
+                /*tui::ref inSizeRef = new TuiVec2(parentView->size);
+                tui::ref sizeRef = parentSizeChangedFunction->call("parentSizeChangedFunction", inSizeRef, stateTable);
                 if(sizeRef)
                 {
                     if(sizeRef->type() == Tui_ref_type_VEC2)
@@ -2296,7 +2201,6 @@ void MJView::tableKeyChanged(const std::string& key, TuiRef* value)
             default:
                 if(parentSizeChangedFunction)
                 {
-                    parentSizeChangedFunction->release();
                     parentSizeChangedFunction = nullptr;
                 }
                 break;
@@ -2311,12 +2215,11 @@ void MJView::tableKeyChanged(const std::string& key, TuiRef* value)
             
             if(parentSizeChangedFunction)
             {
-                parentSizeChangedFunction->release();
                 parentSizeChangedFunction = nullptr;
             }
             
             scaleToParentSize = true;
-            parentResizeFraction = ((TuiVec2*)value)->value;
+            parentResizeFraction = tui::toVec2(value)->value;
             //todo setSize(parentView->size);
         }
         else
@@ -2331,11 +2234,10 @@ void MJView::tableKeyChanged(const std::string& key, TuiRef* value)
         parentWidthFraction = -1;
         parentHeightFraction = -1;
         
-        if(value->type() == Tui_ref_type_NUMBER)
+        if(value->isNumber())
         {
             if(parentSizeChangedFunction)
             {
-                parentSizeChangedFunction->release();
                 parentSizeChangedFunction = nullptr;
             }
             
@@ -2343,11 +2245,11 @@ void MJView::tableKeyChanged(const std::string& key, TuiRef* value)
             
             if(key == "parentWidthFraction")
             {
-                parentWidthFraction = ((TuiNumber*)value)->value;
+                parentWidthFraction = value->getNumberValue();
             }
             else
             {
-                parentHeightFraction = ((TuiNumber*)value)->value;
+                parentHeightFraction = value->getNumberValue();
             }
         }
         else
@@ -2368,7 +2270,7 @@ void MJView::tableKeyChanged(const std::string& key, TuiRef* value)
         if(value->type() == Tui_ref_type_VEC2)
         {
             parentOffsetFractionSet = true;
-            parentOffsetFraction = ((TuiVec2*)value)->value;
+            parentOffsetFraction = tui::toVec2(value)->value;
             updateMatrix();
         }
         else if(value->type() == Tui_ref_type_NIL)
@@ -2389,7 +2291,7 @@ void MJView::tableKeyChanged(const std::string& key, TuiRef* value)
         if(value->type() == Tui_ref_type_VEC2)
         {
             additionalOffsetFractionSet = true;
-            additionalOffsetFraction = ((TuiVec2*)value)->value;
+            additionalOffsetFraction = tui::toVec2(value)->value;
             updateMatrix();
         }
         else if(value->type() == Tui_ref_type_NIL)
@@ -2410,7 +2312,7 @@ void MJView::tableKeyChanged(const std::string& key, TuiRef* value)
         switch (value->type()) {
             case Tui_ref_type_TABLE:
             {
-                MJView* viewToAttachTo = (MJView*)((TuiTable*)value)->getUserData("_view");
+                MJView* viewToAttachTo = (MJView*)tui::toTable(value)->getUserData("_view");
                 if(viewToAttachTo)
                 {
                     setRelativeView(viewToAttachTo);
@@ -2452,12 +2354,7 @@ void MJView::tableKeyChanged(const std::string& key, TuiRef* value)
         switch (value->type()) {
             case Tui_ref_type_FUNCTION:
             {
-                if(updateFunction)
-                {
-                    updateFunction->release();
-                }
-                updateFunction = (TuiFunction*)value;
-                updateFunction->retain();
+                updateFunction = tui::toFunction(value);
                 childHasUpdateFunctionChanged(true);
             }
                 break;
@@ -2465,7 +2362,6 @@ void MJView::tableKeyChanged(const std::string& key, TuiRef* value)
             {
                 if(updateFunction)
                 {
-                    updateFunction->release();
                     updateFunction = nullptr;
                 }
                 childHasUpdateFunctionChanged(false);
@@ -2478,12 +2374,7 @@ void MJView::tableKeyChanged(const std::string& key, TuiRef* value)
         switch (value->type()) {
             case Tui_ref_type_FUNCTION:
             {
-                if(preRenderUpdateFunction)
-                {
-                    preRenderUpdateFunction->release();
-                }
-                preRenderUpdateFunction = (TuiFunction*)value;
-                preRenderUpdateFunction->retain();
+                preRenderUpdateFunction = tui::toFunction(value);
                 childHasUpdateFunctionChanged(true);
             }
                 break;
@@ -2491,7 +2382,6 @@ void MJView::tableKeyChanged(const std::string& key, TuiRef* value)
             {
                 if(preRenderUpdateFunction)
                 {
-                    preRenderUpdateFunction->release();
                     preRenderUpdateFunction = nullptr;
                 }
                 childHasUpdateFunctionChanged(false);
@@ -2504,12 +2394,7 @@ void MJView::tableKeyChanged(const std::string& key, TuiRef* value)
         switch (value->type()) {
             case Tui_ref_type_FUNCTION:
             {
-                if(mouseDownFunction)
-                {
-                    mouseDownFunction->release();
-                }
-                mouseDownFunction = (TuiFunction*)value;
-                mouseDownFunction->retain();
+                mouseDownFunction = tui::toFunction(value);
                 masksEvents = true;
             }
                 break;
@@ -2517,7 +2402,6 @@ void MJView::tableKeyChanged(const std::string& key, TuiRef* value)
             {
                 if(mouseDownFunction)
                 {
-                    mouseDownFunction->release();
                     mouseDownFunction = nullptr;
                 }
             }
@@ -2529,12 +2413,7 @@ void MJView::tableKeyChanged(const std::string& key, TuiRef* value)
         switch (value->type()) {
             case Tui_ref_type_FUNCTION:
             {
-                if(mouseUpFunction)
-                {
-                    mouseUpFunction->release();
-                }
-                mouseUpFunction = (TuiFunction*)value;
-                mouseUpFunction->retain();
+                mouseUpFunction = tui::toFunction(value);
                 masksEvents = true;
             }
                 break;
@@ -2542,7 +2421,6 @@ void MJView::tableKeyChanged(const std::string& key, TuiRef* value)
             {
                 if(mouseUpFunction)
                 {
-                    mouseUpFunction->release();
                     mouseUpFunction = nullptr;
                 }
             }
@@ -2554,12 +2432,7 @@ void MJView::tableKeyChanged(const std::string& key, TuiRef* value)
         switch (value->type()) {
             case Tui_ref_type_FUNCTION:
             {
-                if(mouseDraggedFunction)
-                {
-                    mouseDraggedFunction->release();
-                }
-                mouseDraggedFunction = (TuiFunction*)value;
-                mouseDraggedFunction->retain();
+                mouseDraggedFunction = tui::toFunction(value);
                 masksEvents = true;
             }
                 break;
@@ -2567,7 +2440,6 @@ void MJView::tableKeyChanged(const std::string& key, TuiRef* value)
             {
                 if(mouseDraggedFunction)
                 {
-                    mouseDraggedFunction->release();
                     mouseDraggedFunction = nullptr;
                 }
             }
@@ -2579,12 +2451,7 @@ void MJView::tableKeyChanged(const std::string& key, TuiRef* value)
         switch (value->type()) {
             case Tui_ref_type_FUNCTION:
             {
-                if(mouseWheelFunction)
-                {
-                    mouseWheelFunction->release();
-                }
-                mouseWheelFunction = (TuiFunction*)value;
-                mouseWheelFunction->retain();
+                mouseWheelFunction = tui::toFunction(value);
                 masksEvents = true;
             }
                 break;
@@ -2592,7 +2459,6 @@ void MJView::tableKeyChanged(const std::string& key, TuiRef* value)
             {
                 if(mouseWheelFunction)
                 {
-                    mouseWheelFunction->release();
                     mouseWheelFunction = nullptr;
                 }
             }
@@ -2604,12 +2470,7 @@ void MJView::tableKeyChanged(const std::string& key, TuiRef* value)
         switch (value->type()) {
             case Tui_ref_type_FUNCTION:
             {
-                if(hoverStartFunction)
-                {
-                    hoverStartFunction->release();
-                }
-                hoverStartFunction = (TuiFunction*)value;
-                hoverStartFunction->retain();
+                hoverStartFunction = tui::toFunction(value);
                 masksEvents = true;
             }
                 break;
@@ -2617,7 +2478,6 @@ void MJView::tableKeyChanged(const std::string& key, TuiRef* value)
             {
                 if(hoverStartFunction)
                 {
-                    hoverStartFunction->release();
                     hoverStartFunction = nullptr;
                 }
             }
@@ -2629,12 +2489,7 @@ void MJView::tableKeyChanged(const std::string& key, TuiRef* value)
         switch (value->type()) {
             case Tui_ref_type_FUNCTION:
             {
-                if(hoverEndFunction)
-                {
-                    hoverEndFunction->release();
-                }
-                hoverEndFunction = (TuiFunction*)value;
-                hoverEndFunction->retain();
+                hoverEndFunction = tui::toFunction(value);
                 masksEvents = true;
             }
                 break;
@@ -2642,7 +2497,6 @@ void MJView::tableKeyChanged(const std::string& key, TuiRef* value)
             {
                 if(hoverEndFunction)
                 {
-                    hoverEndFunction->release();
                     hoverEndFunction = nullptr;
                 }
             }
@@ -2654,12 +2508,7 @@ void MJView::tableKeyChanged(const std::string& key, TuiRef* value)
         switch (value->type()) {
             case Tui_ref_type_FUNCTION:
             {
-                if(clickFunction)
-                {
-                    clickFunction->release();
-                }
-                clickFunction = (TuiFunction*)value;
-                clickFunction->retain();
+                clickFunction = tui::toFunction(value);
                 masksEvents = true;
             }
                 break;
@@ -2667,7 +2516,6 @@ void MJView::tableKeyChanged(const std::string& key, TuiRef* value)
             {
                 if(clickFunction)
                 {
-                    clickFunction->release();
                     clickFunction = nullptr;
                 }
             }
@@ -2679,12 +2527,7 @@ void MJView::tableKeyChanged(const std::string& key, TuiRef* value)
         switch (value->type()) {
             case Tui_ref_type_FUNCTION:
             {
-                if(rightClickFunction)
-                {
-                    rightClickFunction->release();
-                }
-                rightClickFunction = (TuiFunction*)value;
-                rightClickFunction->retain();
+                rightClickFunction = tui::toFunction(value);
                 masksEvents = true;
             }
                 break;
@@ -2692,7 +2535,6 @@ void MJView::tableKeyChanged(const std::string& key, TuiRef* value)
             {
                 if(rightClickFunction)
                 {
-                    rightClickFunction->release();
                     rightClickFunction = nullptr;
                 }
             }
@@ -2704,12 +2546,7 @@ void MJView::tableKeyChanged(const std::string& key, TuiRef* value)
         switch (value->type()) {
             case Tui_ref_type_FUNCTION:
             {
-                if(clickOutsideFunction)
-                {
-                    clickOutsideFunction->release();
-                }
-                clickOutsideFunction = (TuiFunction*)value;
-                clickOutsideFunction->retain();
+                clickOutsideFunction = tui::toFunction(value);
                 masksEvents = true;
             }
                 break;
@@ -2717,7 +2554,6 @@ void MJView::tableKeyChanged(const std::string& key, TuiRef* value)
             {
                 if(clickOutsideFunction)
                 {
-                    clickOutsideFunction->release();
                     clickOutsideFunction = nullptr;
                 }
             }
@@ -2729,12 +2565,7 @@ void MJView::tableKeyChanged(const std::string& key, TuiRef* value)
         switch (value->type()) {
             case Tui_ref_type_FUNCTION:
             {
-                if(clickDownOutsideFunction)
-                {
-                    clickDownOutsideFunction->release();
-                }
-                clickDownOutsideFunction = (TuiFunction*)value;
-                clickDownOutsideFunction->retain();
+                clickDownOutsideFunction = tui::toFunction(value);
                 masksEvents = true;
             }
                 break;
@@ -2742,7 +2573,6 @@ void MJView::tableKeyChanged(const std::string& key, TuiRef* value)
             {
                 if(clickDownOutsideFunction)
                 {
-                    clickDownOutsideFunction->release();
                     clickDownOutsideFunction = nullptr;
                 }
             }

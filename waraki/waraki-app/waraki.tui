@@ -93,7 +93,7 @@ loadClientSite = function(siteData, hostID, url) #only called if we have a conne
     print("url:", url)
     print("bundledHostClientURL:", bundledHostClientURL)
 
-    if(url != bundledHostClientURL)
+    if(url != bundledHostClientURL or !database.get("bundledHostRunning"))
     {
         hostInfo = { #todo should save a title too from a siteInfo somehow for display
             hostID = hostID

@@ -17,44 +17,33 @@ MJAudio::MJAudio()
 
 MJAudio::~MJAudio()
 {
-    if(audioTable)
-    {
-        audioTable->release();
-    }
 }
 
-static inline std::string getKatipoResourcePath(const std::string& inPath, TuiTable* rootTable) //todo this is copied from MJCache
+static inline std::string getKatipoResourcePath(const std::string& inPath, const tui::table& rootTable) //todo this is copied from MJCache
 {
-    TuiRef* getResourcePathFunc = ((TuiTable*)rootTable->get("file"))->get("getResourcePath");
+    tui::ref getResourcePathFunc = tui::toTable(rootTable->get("file"))->get("getResourcePath");
     if(getResourcePathFunc)
     {
-        TuiString* inPathRef = new TuiString(inPath);
-        TuiRef* pathResult = ((TuiFunction*)getResourcePathFunc)->call("getResourcePathFunc", inPathRef);
-        inPathRef->release();
+        tui::ref pathResult = tui::toFunction(getResourcePathFunc)->call("getResourcePathFunc", tui::newString(inPath));
         if(pathResult)
         {
             std::string returnResult = pathResult->getStringValue();
-            pathResult->release();
             return returnResult;
         }
     }
     return Katipo::getResourcePath(inPath);
 }
 
-void MJAudio::bindTui(TuiTable* rootTable)
+void MJAudio::bindTui(const tui::table& rootTable)
 {
-    if(audioTable)
-    {
-        audioTable->release();
-    }
-    audioTable = new TuiTable(rootTable);
+    audioTable = tui::newTable(rootTable);
     rootTable->setTable("audio", audioTable);
     
-    audioTable->onSet = [this](TuiRef* table, const std::string& key, TuiRef* value) {
+    audioTable->onSet = [this](const tui::ref& table, const std::string& key, const tui::ref& value) {
         audioTableKeyChanged(key, value);
     };
     
-    audioTable->setFunction("stop", [this](TuiTable* args, TuiRef* existingResult, TuiFunctionCallData* incomingCallData, TuiDebugInfo* callingDebugInfo) -> TuiRef* {
+    audioTable->setFunction("stop", [this](const tui::table& args, const tui::ref& existingResult, TuiFunctionCallData* incomingCallData, TuiDebugInfo* callingDebugInfo) -> tui::ref {
 #ifdef __APPLE__
         MJAudioApple::getInstance()->stop();
 #else
@@ -64,7 +53,7 @@ void MJAudio::bindTui(TuiTable* rootTable)
     });
     
     
-    audioTable->setFunction("playSongs", [this](TuiTable* args, TuiRef* existingResult, TuiFunctionCallData* incomingCallData, TuiDebugInfo* callingDebugInfo) -> TuiRef* {
+    audioTable->setFunction("playSongs", [this](const tui::table& args, const tui::ref& existingResult, TuiFunctionCallData* incomingCallData, TuiDebugInfo* callingDebugInfo) -> tui::ref {
 #ifdef __APPLE__
         MJAudioApple::getInstance()->play(nullptr);
 #else
@@ -75,20 +64,20 @@ void MJAudio::bindTui(TuiTable* rootTable)
     
     
     
-    audioTable->setFunction("playSound", [this, rootTable](TuiTable* args, TuiRef* existingResult, TuiFunctionCallData* incomingCallData, TuiDebugInfo* callingDebugInfo) -> TuiRef* {
+    audioTable->setFunction("playSound", [this, rootTable](const tui::table& args, const tui::ref& existingResult, TuiFunctionCallData* incomingCallData, TuiDebugInfo* callingDebugInfo) -> tui::ref {
         if(args->arrayObjects.size() >= 1 && args->arrayObjects[0]->type() == Tui_ref_type_STRING)
         {
             double volume = 1.0;
             double pitch = 1.0;
-            if(args->arrayObjects.size() >= 2 && args->arrayObjects[1]->type() == Tui_ref_type_NUMBER)
+            if(args->arrayObjects.size() >= 2 && args->arrayObjects[1]->isNumber())
             {
-                volume = ((TuiNumber*)args->arrayObjects[1])->value;
-                if(args->arrayObjects.size() >= 3 && args->arrayObjects[2]->type() == Tui_ref_type_NUMBER)
+                volume = args->arrayObjects[1]->getNumberValue();
+                if(args->arrayObjects.size() >= 3 && args->arrayObjects[2]->isNumber())
                 {
-                    pitch = ((TuiNumber*)args->arrayObjects[2])->value;
+                    pitch = args->arrayObjects[2]->getNumberValue();
                 }
             }
-            std::string path = getKatipoResourcePath(((TuiString*)args->arrayObjects[0])->value, rootTable);
+            std::string path = getKatipoResourcePath(tui::toString(args->arrayObjects[0])->value, rootTable);
             MJAudioSDLMixer::getInstance()->playSound(path, volume, pitch);
         }
         else
@@ -98,38 +87,38 @@ void MJAudio::bindTui(TuiTable* rootTable)
         return TUI_NIL;
     });
     
-    audioTable->setFunction("currentTrackTime", [this](TuiTable* args, TuiRef* existingResult, TuiFunctionCallData* incomingCallData, TuiDebugInfo* callingDebugInfo) -> TuiRef* {
+    audioTable->setFunction("currentTrackTime", [this](const tui::table& args, const tui::ref& existingResult, TuiFunctionCallData* incomingCallData, TuiDebugInfo* callingDebugInfo) -> tui::ref {
 #ifdef __APPLE__
-        return new TuiNumber(MJAudioApple::getInstance()->currentTrackTime());
+        return tui::newNumber(MJAudioApple::getInstance()->currentTrackTime());
 #else
-        return new TuiNumber(MJAudioSDLMixer::getInstance()->currentTrackTime());
+        return tui::newNumber(MJAudioSDLMixer::getInstance()->currentTrackTime());
 #endif
         
         return TUI_NIL;
     });
     
-    audioTable->setFunction("currentTrackDuration", [this](TuiTable* args, TuiRef* existingResult, TuiFunctionCallData* incomingCallData, TuiDebugInfo* callingDebugInfo) -> TuiRef* {
+    audioTable->setFunction("currentTrackDuration", [this](const tui::table& args, const tui::ref& existingResult, TuiFunctionCallData* incomingCallData, TuiDebugInfo* callingDebugInfo) -> tui::ref {
 #ifdef __APPLE__
-        return new TuiNumber(MJAudioApple::getInstance()->currentTrackDuration());
+        return tui::newNumber(MJAudioApple::getInstance()->currentTrackDuration());
 #else
-        return new TuiNumber(MJAudioSDLMixer::getInstance()->currentTrackDuration());
+        return tui::newNumber(MJAudioSDLMixer::getInstance()->currentTrackDuration());
 #endif
         
         return TUI_NIL;
     });
     
     
-    audioTable->setFunction("currentTrackPath", [this](TuiTable* args, TuiRef* existingResult, TuiFunctionCallData* incomingCallData, TuiDebugInfo* callingDebugInfo) -> TuiRef* {
+    audioTable->setFunction("currentTrackPath", [this](const tui::table& args, const tui::ref& existingResult, TuiFunctionCallData* incomingCallData, TuiDebugInfo* callingDebugInfo) -> tui::ref {
 #ifdef __APPLE__
-        return new TuiString(MJAudioApple::getInstance()->currentTrackPath());
+        return tui::newString(MJAudioApple::getInstance()->currentTrackPath());
 #else
-        return new TuiString(MJAudioSDLMixer::getInstance()->currentTrackPath());
+        return tui::newString(MJAudioSDLMixer::getInstance()->currentTrackPath());
 #endif
         
         return TUI_NIL;
     });
     
-    audioTable->setFunction("next", [this](TuiTable* args, TuiRef* existingResult, TuiFunctionCallData* incomingCallData, TuiDebugInfo* callingDebugInfo) -> TuiRef* {
+    audioTable->setFunction("next", [this](const tui::table& args, const tui::ref& existingResult, TuiFunctionCallData* incomingCallData, TuiDebugInfo* callingDebugInfo) -> tui::ref {
 #ifdef __APPLE__
         MJAudioApple::getInstance()->skipToNextTrack();
 #else
@@ -139,14 +128,14 @@ void MJAudio::bindTui(TuiTable* rootTable)
         return TUI_NIL;
     });
     
-    audioTable->setFunction("seekToTime", [this](TuiTable* args, TuiRef* existingResult, TuiFunctionCallData* incomingCallData, TuiDebugInfo* callingDebugInfo) -> TuiRef* {
+    audioTable->setFunction("seekToTime", [this](const tui::table& args, const tui::ref& existingResult, TuiFunctionCallData* incomingCallData, TuiDebugInfo* callingDebugInfo) -> tui::ref {
         if(args->arrayObjects.size() >= 1)
         {
-            TuiRef* timeNumberRef = args->arrayObjects[0];
-            if(timeNumberRef->type() == Tui_ref_type_NUMBER)
+            tui::ref timeNumberRef = args->arrayObjects[0];
+            if(timeNumberRef->isNumber())
             {
 #ifdef __APPLE__
-                MJAudioApple::getInstance()->seekToTime(((TuiNumber*)timeNumberRef)->value);
+                MJAudioApple::getInstance()->seekToTime(timeNumberRef->getNumberValue());
 #else
                 MJAudioSDLMixer::getInstance()->seekToTime(((TuiNumber*)timeNumberRef)->value);
 #endif
@@ -163,14 +152,14 @@ void MJAudio::bindTui(TuiTable* rootTable)
         return TUI_NIL;
     });
     
-    audioTable->setFunction("setPlaybackRate", [this](TuiTable* args, TuiRef* existingResult, TuiFunctionCallData* incomingCallData, TuiDebugInfo* callingDebugInfo) -> TuiRef* {
+    audioTable->setFunction("setPlaybackRate", [this](const tui::table& args, const tui::ref& existingResult, TuiFunctionCallData* incomingCallData, TuiDebugInfo* callingDebugInfo) -> tui::ref {
         if(args->arrayObjects.size() >= 1)
         {
-            TuiRef* timeNumberRef = args->arrayObjects[0];
-            if(timeNumberRef->type() == Tui_ref_type_NUMBER)
+            tui::ref timeNumberRef = args->arrayObjects[0];
+            if(timeNumberRef->isNumber())
             {
 #ifdef __APPLE__
-                MJAudioApple::getInstance()->setPlaybackRate(((TuiNumber*)timeNumberRef)->value);
+                MJAudioApple::getInstance()->setPlaybackRate(timeNumberRef->getNumberValue());
 #else
                 MJAudioSDLMixer::getInstance()->setPlaybackRate(((TuiNumber*)timeNumberRef)->value);
 #endif
@@ -187,16 +176,16 @@ void MJAudio::bindTui(TuiTable* rootTable)
         return TUI_NIL;
     });
     
-    audioTable->setFunction("queueSongs", [this](TuiTable* args, TuiRef* existingResult, TuiFunctionCallData* incomingCallData, TuiDebugInfo* callingDebugInfo) -> TuiRef* {
+    audioTable->setFunction("queueSongs", [this](const tui::table& args, const tui::ref& existingResult, TuiFunctionCallData* incomingCallData, TuiDebugInfo* callingDebugInfo) -> tui::ref {
         if(args->arrayObjects.size() >= 1)
         {
-            TuiRef* arrayRef = args->arrayObjects[0];
+            tui::ref arrayRef = args->arrayObjects[0];
             if(arrayRef->type() == Tui_ref_type_TABLE)
             {
 #ifdef __APPLE__
-                MJAudioApple::getInstance()->play((TuiTable*)arrayRef);
+                MJAudioApple::getInstance()->play(tui::toTable(arrayRef));
 #else
-                MJAudioSDLMixer::getInstance()->playSongs((TuiTable*)arrayRef);
+                MJAudioSDLMixer::getInstance()->playSongs(tui::toTable(arrayRef));
 #endif
                 MJLog("playing song");
             }
@@ -213,26 +202,20 @@ void MJAudio::bindTui(TuiTable* rootTable)
     });
 }
 
-void MJAudio::audioTableKeyChanged(const std::string& key, TuiRef* value)
+void MJAudio::audioTableKeyChanged(const std::string& key, const tui::ref& value)
 {
     if(key == "playingSongChanged")
     {
         switch (value->type()) {
             case Tui_ref_type_FUNCTION:
             {
-                if(playingSongChangedFunction)
-                {
-                    playingSongChangedFunction->release();
-                }
-                playingSongChangedFunction = (TuiFunction*)value;
-                playingSongChangedFunction->retain();
+                playingSongChangedFunction = tui::toFunction(value);
             }
                 break;
             case Tui_ref_type_NIL:
             {
                 if(playingSongChangedFunction)
                 {
-                    playingSongChangedFunction->release();
                     playingSongChangedFunction = nullptr;
                 }
             }
@@ -247,19 +230,13 @@ void MJAudio::audioTableKeyChanged(const std::string& key, TuiRef* value)
         switch (value->type()) {
             case Tui_ref_type_FUNCTION:
             {
-                if(playingSongPausedChangedFunction)
-                {
-                    playingSongPausedChangedFunction->release();
-                }
-                playingSongPausedChangedFunction = (TuiFunction*)value;
-                playingSongPausedChangedFunction->retain();
+                playingSongPausedChangedFunction = tui::toFunction(value);
             }
                 break;
             case Tui_ref_type_NIL:
             {
                 if(playingSongPausedChangedFunction)
                 {
-                    playingSongPausedChangedFunction->release();
                     playingSongPausedChangedFunction = nullptr;
                 }
             }
@@ -275,15 +252,7 @@ void MJAudio::updateCurrentlyPlayingInfo(const std::string& titleString, const s
 {
     if(playingSongChangedFunction)
     {
-        TuiRef* titleRef = new TuiString(titleString);
-        TuiRef* artistRef = new TuiString(artistString);
-        TuiRef* durationRef = new TuiNumber(duration);
-        
-        playingSongChangedFunction->call("updateCurrentlyPlayingTrackInfo", titleRef, artistRef, durationRef);
-        
-        titleRef->release();
-        artistRef->release();
-        durationRef->release();
+        playingSongChangedFunction->call("updateCurrentlyPlayingTrackInfo", tui::newString(titleString), tui::newString(artistString), tui::newNumber(duration));
     }
 #ifdef __APPLE__
     MJAudioApple::getInstance()->updateCurrentlyPlayingOSInfo(titleString, artistString, duration, 0, imageBytes, imageLength);

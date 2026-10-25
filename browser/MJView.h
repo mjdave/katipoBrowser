@@ -51,8 +51,8 @@ public:
     MJCache* cache;
     WindowInfo* windowInfo;
     
-    TuiTable* stateTable = nullptr;
-    TuiTable* rootTable = nullptr;
+    tui::table stateTable = nullptr;
+    tui::table rootTable = nullptr;
     
     MJView* parentView;
     std::vector<MJView*> subviews;
@@ -108,7 +108,7 @@ public:
     
     std::string idString;
     
-    static MJView* loadUnknownViewFromTable(TuiTable* subViewTable, MJView* parentView, bool needsToLayoutSubviews, TuiTable* rootTableOrNil);
+    static MJView* loadUnknownViewFromTable(const tui::table& subViewTable, MJView* parentView, bool needsToLayoutSubviews, const tui::table& rootTableOrNil);
     /*
 
 	LuaRef getwasRemovedLuaFunction(lua_State* luaState) const GET_MJ_LUA_DEFINITION(wasRemovedLuaFunction)
@@ -124,8 +124,8 @@ public:
     
     //void setUpdateFunction(std::function<void(double)> updateFunction_);
     
-    TuiFunction* updateFunction = nullptr;
-    TuiFunction* preRenderUpdateFunction = nullptr;
+    tui::function updateFunction = nullptr;
+    tui::function preRenderUpdateFunction = nullptr;
     
     std::function<bool(bool, int, int, bool)> keyChangedFunction;
     
@@ -142,7 +142,7 @@ public:
     //else if parentHeightFraction > 0, we scale at parent.y * parentResizeFraction
     //else scale at parentSize * parentResizeFraction, defaults to parentSize * vec2(1,1)
     
-    TuiFunction* parentSizeChangedFunction = nullptr;
+    tui::function parentSizeChangedFunction = nullptr;
     double parentWidthFraction = -1;
     double parentHeightFraction = -1;
     dvec2 parentResizeFraction = vec2(1.0,1.0);
@@ -153,29 +153,29 @@ public:
     bool additionalOffsetFractionSet = false; //additionalOffsetFraction offsets AFTER ROTATION by a fraction of the width/height of the parent view
     dvec2 additionalOffsetFraction = dvec2(0.0,0.0);
     
-    TuiFunction* hoverStartFunction = nullptr;
-    TuiFunction* hoverMovedFunction = nullptr;
-    TuiFunction* hoverEndFunction = nullptr;
-    TuiFunction* hiddenStateChangedFunction = nullptr;
+    tui::function hoverStartFunction = nullptr;
+    tui::function hoverMovedFunction = nullptr;
+    tui::function hoverEndFunction = nullptr;
+    tui::function hiddenStateChangedFunction = nullptr;
     
     //std::function<void(int, dvec2)> mouseDownFunction;
     //std::function<void(int, dvec2)> mouseUpFunction;
     //std::function<void(dvec2)> mouseDraggedFunction;
     //std::function<void(dvec2, dvec2)> mouseWheelFunction;
-    TuiFunction* mouseDownFunction = nullptr;
-    TuiFunction* mouseUpFunction = nullptr;
-    TuiFunction* mouseDraggedFunction = nullptr;
-    TuiFunction* mouseWheelFunction = nullptr;
+    tui::function mouseDownFunction = nullptr;
+    tui::function mouseUpFunction = nullptr;
+    tui::function mouseDraggedFunction = nullptr;
+    tui::function mouseWheelFunction = nullptr;
     
     //std::function<void(dvec2)> clickFunction;
     //std::function<void(dvec2)> rightClickFunction;
     //std::function<void(int, dvec2)> clickOutsideFunction;
     //std::function<void(int, dvec2)> clickDownOutsideFunction;
     
-    TuiFunction* clickFunction = nullptr;
-    TuiFunction* rightClickFunction = nullptr;
-    TuiFunction* clickOutsideFunction = nullptr;
-    TuiFunction* clickDownOutsideFunction = nullptr;
+    tui::function clickFunction = nullptr;
+    tui::function rightClickFunction = nullptr;
+    tui::function clickOutsideFunction = nullptr;
+    tui::function clickDownOutsideFunction = nullptr;
     
     MJView* getViewWithID(const std::string& idString_) {
         if(!viewsByID || viewsByID->count(idString_) == 0)
@@ -322,10 +322,10 @@ public:
     
     void resetAnimationTimer();
     
-    void loadFromFile(std::string filePath, TuiTable* parentTable);
-    virtual void loadFromTable(TuiTable* table, bool needsToLayoutSubviews, TuiTable* rootTableOrNil = nullptr); //isRoot used to prevent doRelativeViewLayoutsForTablePostLoad from being called recursively
+    void loadFromFile(std::string filePath, const tui::table& parentTable);
+    virtual void loadFromTable(const tui::table& table, bool needsToLayoutSubviews, const tui::table& rootTableOrNil = nullptr); //isRoot used to prevent doRelativeViewLayoutsForTablePostLoad from being called recursively
     
-    virtual void tableKeyChanged(const std::string& key, TuiRef* value);
+    virtual void tableKeyChanged(const std::string& key, const tui::ref& value);
     
     
     void doRelativeViewLayoutsForTablePostLoad();

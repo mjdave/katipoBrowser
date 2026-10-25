@@ -8,6 +8,7 @@
 
 #include <vector>
 #include "SDL.h"
+#include "TuiScript.h"
 //#include "MJLua.h"
 
 class Shader;
@@ -27,7 +28,6 @@ class MJDrawQuad;
 class MJDrawable;
 class MJDataTexture;
 class Database;
-class TuiTable;
 
 
 #define MJ_WINDOW_MODE_WINDOWED 1
@@ -66,7 +66,7 @@ public:
     MainController();
     ~MainController();
     
-    void init(TuiTable* rootTable, Database* appDatabase_, std::string windowTitle = "Koru", std::string organizationName = "katipobrowser", std::string appTitle = "Koru");
+    void init(const tui::table& rootTable, Database* appDatabase_, std::string windowTitle = "Koru", std::string organizationName = "katipobrowser", std::string appTitle = "Koru");
     
     void applicationWillTerminate();
 

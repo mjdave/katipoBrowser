@@ -48,8 +48,8 @@ public:
     
     virtual void setSize(dvec2 size_);
     
-    virtual void loadFromTable(TuiTable* table, bool needsToLayoutSubviews, TuiTable* rootTableOrNil = nullptr);
-    virtual void tableKeyChanged(const std::string& key, TuiRef* value);
+    virtual void loadFromTable(const tui::table& table, bool needsToLayoutSubviews, const tui::table& rootTableOrNil = nullptr);
+    virtual void tableKeyChanged(const std::string& key, const tui::ref& value);
     
 protected:
 

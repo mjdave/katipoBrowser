@@ -166,7 +166,7 @@ void MJColorView::updateUBOs(float parentAlpha, dvec3 camPos, dvec3 viewPos)
 
 std::string MJColorView::getDescription()
 {
-    std::string result = Tui::string_format("MJColorView %p (%.2f,%.2f) - (%.2f,%.2f,%.2f,%.2f)\nsubviews:\n", (void*)this, size.x, size.y, color.x, color.y, color.z, color.w);
+    std::string result = tui::string_format("MJColorView %p (%.2f,%.2f) - (%.2f,%.2f,%.2f,%.2f)\nsubviews:\n", (void*)this, size.x, size.y, color.x, color.y, color.z, color.w);
     for(MJView* subView : subviews)
     {
         result = result + subView->getDescription();
@@ -175,7 +175,7 @@ std::string MJColorView::getDescription()
 }
 
 
-void MJColorView::loadFromTable(TuiTable* table, bool needsToLayoutSubviews, TuiTable* rootTableOrNil)
+void MJColorView::loadFromTable(const tui::table& table, bool needsToLayoutSubviews, const tui::table& rootTableOrNil)
 {
     MJView::loadFromTable(table, needsToLayoutSubviews, rootTableOrNil);
     
@@ -210,7 +210,7 @@ void MJColorView::loadFromTable(TuiTable* table, bool needsToLayoutSubviews, Tui
 }
 
 
-void MJColorView::tableKeyChanged(const std::string& key, TuiRef* value)
+void MJColorView::tableKeyChanged(const std::string& key, const tui::ref& value)
 {
     MJView::tableKeyChanged(key, value);
     

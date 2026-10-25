@@ -46,10 +46,6 @@ MJAudioSDLMixer::MJAudioSDLMixer()
 
 MJAudioSDLMixer::~MJAudioSDLMixer()
 {
-    if(playQueue)
-    {
-        playQueue->release();
-    }
 }
 
 void MJAudioSDLMixer::updateInfo()
@@ -127,7 +123,7 @@ void MJAudioSDLMixer::playSound(const std::string& soundURL, double volume, doub
     //cachedTracks[]
 }
 
-void MJAudioSDLMixer::playSongs(TuiTable* urls)
+void MJAudioSDLMixer::playSongs(const tui::table& urls)
 {
     if(!urls || urls->arrayObjects.empty())
     {
@@ -142,12 +138,6 @@ void MJAudioSDLMixer::playSongs(TuiTable* urls)
         return;
     }
 
-    if(playQueue)
-    {
-        playQueue->release();
-    }
-
-
     if(currentTrack)
     {
         MIX_StopTrack(currentTrack, 10);
@@ -156,7 +146,7 @@ void MJAudioSDLMixer::playSongs(TuiTable* urls)
         currentTrack = nullptr;
     }
 
-    playQueue = (TuiTable*)urls->retain();
+    playQueue = urls;
     songIndex = 0;
 
     std::string urlString = playQueue->arrayObjects[songIndex]->getStringValue();

@@ -38,25 +38,14 @@ mainView = {
                             id = "bookmarksScrollView"
                             type = "scrollView"
                             alignmentY = "above"
-                            layoutParentID = "urlTextEntry"
+                            layoutParentID = "urlTextEntryContainer"
                         }
                         {
                             id = "hostedSitesScrollView"
                             type = "scrollView"
                             alignmentY = "above"
-                            layoutParentID = "urlTextEntry"
+                            layoutParentID = "urlTextEntryContainer"
                             hidden = true
-                        }
-                        {
-                            id = "refreshButton"
-                            type = "button"
-                            buttonType = "image"
-                            color = vec4(1.0,1.0,1.0,1.0)
-                            path = "app/katipoBrowser/images/refresh.png"
-                            size = vec2(urlTextEntryHeight,urlTextEntryHeight)
-                            alignmentX = "outerRight"
-                            layoutParentID = "urlTextEntry"
-                            pos = vec3(10,0,0)
                         }
                         {
                             id = "browseButton"
@@ -102,16 +91,33 @@ mainView = {
                     }
                 }
                 {
-                    id = "urlTextEntry"
-                    type = "textEntry"
-                    fontSize = 16
+                    id = "urlTextEntryContainer"
+                    type = "button"
+                    buttonType = "color"
                     onParentSizeChanged = function(parentSize)
                     {
-                        return vec2(parentSize.x, urlTextEntryHeight)
+                        return vec2(math.min(bookmarksListWidth, parentSize.x), urlTextEntryHeight)
                     }
                     alignmentY = "bottom"
-                    pos = vec3(5,5,0)
-                    backgroundColor = vec4(0.0,0.0,0.05,1.0)
+                    color = vec4(0.1,0.1,0.1,0.5)
+                    subviews = {
+                        {
+                            id = "urlTextEntry"
+                            type = "textEntry"
+                            fontSize = 16
+                            #backgroundColor = vec4(0.1,0.1,0.1,1.0)
+                        }
+                        {
+                            id = "refreshButton"
+                            type = "button"
+                            buttonType = "image"
+                            color = vec4(1.0,1.0,1.0,0.8)
+                            additiveBlend = true
+                            path = "app/katipoBrowser/images/refresh.png"
+                            size = vec2(urlTextEntryHeight,urlTextEntryHeight)
+                            alignmentX = "innerRight"
+                        }
+                    }
                 }
             }
         }

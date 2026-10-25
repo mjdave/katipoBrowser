@@ -67,8 +67,8 @@ GPipeline::GPipeline(Vulkan* vulkan_,
 
     createDescriptorSetLayout();
 
-    std::string vertShaderCode = Tui::getFileContents(vertShaderPathname);
-    std::string fragShaderCode = Tui::getFileContents(fragShaderPathname);
+    std::string vertShaderCode = tui::getFileContents(vertShaderPathname);
+    std::string fragShaderCode = tui::getFileContents(fragShaderPathname);
 
     if(vertShaderCode.empty() || fragShaderCode.empty())
     {

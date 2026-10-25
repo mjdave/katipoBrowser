@@ -17,9 +17,9 @@ public:
    // DatabaseEnvironment* databaseEnvironment;
    // Database* database;
     
-    TuiTable* rootTable;
-    TuiTable* katipoTable;
-    TuiTable* scriptState;
+    tui::table rootTable;
+    tui::table katipoTable;
+    tui::table scriptState;
     
     BrowserTracker(std::string trackerScriptPath = Katipo::getResourcePath("tracker.tui"));
     ~BrowserTracker();

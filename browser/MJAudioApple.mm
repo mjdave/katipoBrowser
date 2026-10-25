@@ -61,7 +61,7 @@ MJAudioApple::~MJAudioApple()
     }
 }*/
 
-void MJAudioApple::play(TuiTable* urls)
+void MJAudioApple::play(const tui::table& urls)
 {
     [audioAppleDelegate play:urls];
     MPRemoteCommandCenter *commandCenter = [MPRemoteCommandCenter sharedCommandCenter];

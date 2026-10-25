@@ -90,37 +90,6 @@ EventManager::~EventManager()
    // SDL_RemoveTimer(sdlTimer);
 
     delete timer;
-    
-    if(textEntryListener)
-    {
-        textEntryListener->release();
-    }
-    if(listenerKeyChangedFunc)
-    {
-        listenerKeyChangedFunc->release();
-    }
-    for(auto& kv : anyKeyChangedListenerFunctions)
-    {
-        kv.second->release();
-    }
-    for(auto& kv : keyChangedByKeyListenerFunctions)
-    {
-        for(auto& kvb : kv.second)
-        {
-            for(auto& kvc : kvb.second)
-            {
-                kvc.second->release();
-            }
-        }
-    }
-    
-    for(auto& eventTypeAndStuff : onEventsByTypeByID)
-    {
-        for(auto& eventIDAndFunc : eventTypeAndStuff.second)
-        {
-            eventIDAndFunc.second->release();
-        }
-    }
 }
 
 
@@ -336,9 +305,7 @@ void EventManager::handleEvent(SDL_Event* event)
                     //luaModule->callFunction("textEntry",text);
                     if(hasTextEntryListener)
                     {
-                        TuiString* textRef = new TuiString(text);
-                        textEntryListener->call("textEntryListener", textRef);
-                        textRef->release();
+                        textEntryListener->call("textEntryListener", tui::newString(text));
                     }
                 }
             }
@@ -354,23 +321,14 @@ void EventManager::handleEvent(SDL_Event* event)
         
         for(auto& indexAndFunc : anyKeyChangedListenerFunctions)
         {
-            //indexAndFunc.second(keyDown, event->key.key, getModKey(), (event->key.repeat != 0));
-            TuiRef* keyRef = new TuiNumber(event->key.key);
-            TuiRef* modRef = new TuiNumber(getModKey());
-            indexAndFunc.second->call("keyChangedListenerFunction", TUI_BOOL(keyDown), keyRef, modRef, TUI_BOOL(event->key.repeat != 0));
-            keyRef->release();
-            modRef->release();
+            indexAndFunc.second->call("keyChangedListenerFunction", TUI_BOOL(keyDown), tui::newNumber(event->key.key), tui::newNumber(getModKey()), TUI_BOOL(event->key.repeat != 0));
         }
         
         if(keyChangedByKeyListenerFunctions.count("") != 0 && keyChangedByKeyListenerFunctions[""].count(event->key.key) != 0) //bit hacky, "" is what happens when we set from the browser before a site has been loaded, eg cmd-R for reload
         {
             for(auto& indexAndFunc : keyChangedByKeyListenerFunctions[""][event->key.key])
             {
-                TuiRef* keyRef = new TuiNumber(event->key.key);
-                TuiRef* modRef = new TuiNumber(getModKey());
-                indexAndFunc.second->call("keyChangedListenerFunction", TUI_BOOL(keyDown), keyRef, modRef, TUI_BOOL(event->key.repeat != 0));
-                keyRef->release();
-                modRef->release();
+                indexAndFunc.second->call("keyChangedListenerFunction", TUI_BOOL(keyDown), tui::newNumber(event->key.key), tui::newNumber(getModKey()), TUI_BOOL(event->key.repeat != 0));
             }
         }
         
@@ -380,22 +338,14 @@ void EventManager::handleEvent(SDL_Event* event)
             {
                 for(auto& indexAndFunc : keyChangedByKeyListenerFunctions[currentHostID][event->key.key])
                 {
-                    TuiRef* keyRef = new TuiNumber(event->key.key);
-                    TuiRef* modRef = new TuiNumber(getModKey());
-                    indexAndFunc.second->call("keyChangedListenerFunction", TUI_BOOL(keyDown), keyRef, modRef, TUI_BOOL(event->key.repeat != 0));
-                    keyRef->release();
-                    modRef->release();
+                    indexAndFunc.second->call("keyChangedListenerFunction", TUI_BOOL(keyDown), tui::newNumber(event->key.key), tui::newNumber(getModKey()), TUI_BOOL(event->key.repeat != 0));
                 }
             }
         }
         
         if(hasTextEntryListener)
         {
-            TuiRef* keyRef = new TuiNumber(event->key.key);
-            TuiRef* modRef = new TuiNumber(getModKey());
-            listenerKeyChangedFunc->call("listenerKeyChangedFunc", TUI_BOOL(keyDown), keyRef, modRef, TUI_BOOL(event->key.repeat != 0));
-            keyRef->release();
-            modRef->release();
+            listenerKeyChangedFunc->call("listenerKeyChangedFunc", TUI_BOOL(keyDown), tui::newNumber(event->key.key), tui::newNumber(getModKey()), TUI_BOOL(event->key.repeat != 0));
         }
 
         if(event->type == SDL_EVENT_KEY_DOWN && event->key.repeat == 0)
@@ -408,10 +358,7 @@ void EventManager::handleEvent(SDL_Event* event)
                     //luaModule->callFunction("textEntry",text);
                     if(hasTextEntryListener)
                     {
-                        //textEntryListener(text);
-                        TuiRef* textRef = new TuiString(text);
-                        textEntryListener->call("textEntryListener", textRef);
-                        textRef->release();
+                        textEntryListener->call("textEntryListener", tui::newString(text));
                     }
                 }
             }
@@ -476,9 +423,7 @@ void EventManager::handleEvent(SDL_Event* event)
                 {
                     for(auto& bar : foo.second)
                     {
-                        TuiVec2* value = new TuiVec2(wheelMotion);
-                        bar.second->call("mouseWheel", value);
-                        value->release();
+                        bar.second->call("mouseWheel", tui::newVec2(wheelMotion));
                     }
                 }
             }
@@ -494,9 +439,9 @@ void EventManager::handleEvent(SDL_Event* event)
                 {
                     for(auto& bar : foo.second)
                     {
-                        TuiNumber* value = new TuiNumber(((SDL_PinchFingerEvent*)event)->scale);
-                        TuiNumber* state = new TuiNumber(0);
-                        TuiVec2* mouseLoc = new TuiVec2(convertSDLToMouseLoc(dvec2(event->motion.x, event->motion.y), windowInfo));
+                        tui::number value = tui::newNumber(((SDL_PinchFingerEvent*)event)->scale);
+                        tui::number state = tui::newNumber(0);
+                        tui::vec2 mouseLoc = tui::newVec2(convertSDLToMouseLoc(dvec2(event->motion.x, event->motion.y), windowInfo));
                         if(event->type == SDL_EVENT_PINCH_UPDATE)
                         {
                             state->value = 1;
@@ -506,9 +451,6 @@ void EventManager::handleEvent(SDL_Event* event)
                             state->value = 2;
                         }
                         bar.second->call("pinch(begin_update_end_state_index, scale, centerLoc)", state, value, mouseLoc);
-                        value->release();
-                        state->release();
-                        mouseLoc->release();
                     }
                 }
             }
@@ -540,9 +482,17 @@ void EventManager::handleEvent(SDL_Event* event)
         {
             mainController->appLostFocus();
             appHasFocus = false;
-            if(currentKatipoTable)
+            if(mainKatipoTable)
             {
-                TuiFunction* onBackgroundChange = currentKatipoTable->getFunction("onBackgroundChange");
+                tui::function onBackgroundChange = mainKatipoTable->getFunction("onBackgroundChange");
+                if(onBackgroundChange)
+                {
+                    onBackgroundChange->call("onBackgroundChange", TUI_TRUE);
+                }
+            }
+            if(currentSiteKatipoTable)
+            {
+                tui::function onBackgroundChange = currentSiteKatipoTable->getFunction("onBackgroundChange");
                 if(onBackgroundChange)
                 {
                     onBackgroundChange->call("onBackgroundChange", TUI_TRUE);
@@ -554,9 +504,17 @@ void EventManager::handleEvent(SDL_Event* event)
         {
             mainController->appGainedFocus();
             appHasFocus = true;
-            if(currentKatipoTable)
+            if(mainKatipoTable)
             {
-                TuiFunction* onBackgroundChange = currentKatipoTable->getFunction("onBackgroundChange");
+                tui::function onBackgroundChange = mainKatipoTable->getFunction("onBackgroundChange");
+                if(onBackgroundChange)
+                {
+                    onBackgroundChange->call("onBackgroundChange", TUI_FALSE);
+                }
+            }
+            if(currentSiteKatipoTable)
+            {
+                tui::function onBackgroundChange = currentSiteKatipoTable->getFunction("onBackgroundChange");
                 if(onBackgroundChange)
                 {
                     onBackgroundChange->call("onBackgroundChange", TUI_FALSE);
@@ -664,22 +622,11 @@ void EventManager::setClipboardText(std::string text)
 }
 
 
-void EventManager::setTextEntryListener(TuiFunction* textEntryListener_, TuiFunction* listenerKeyChangedFunc_)
+void EventManager::setTextEntryListener(const tui::function& textEntryListener_, const tui::function& listenerKeyChangedFunc_)
 {
-    //finishActiveEvents()
-    if(textEntryListener)
-    {
-        textEntryListener->release();
-    }
     textEntryListener = textEntryListener_;
-    textEntryListener->retain();
-    
-    if(listenerKeyChangedFunc)
-    {
-        listenerKeyChangedFunc->release();
-    }
     listenerKeyChangedFunc = listenerKeyChangedFunc_;
-    listenerKeyChangedFunc->retain();
+    
     if(!hasTextEntryListener)
     {
         startTextEntry();
@@ -694,18 +641,16 @@ void EventManager::removeTextEntryListener()
 }
 
 
-int EventManager::addAnyKeyChangedListener(TuiFunction* listenerKeyChangedFunc_)
+int EventManager::addAnyKeyChangedListener(const tui::function& listenerKeyChangedFunc_)
 {
     int index = keyChangedListenerFunctionIndex++;
-    listenerKeyChangedFunc_->retain();
     anyKeyChangedListenerFunctions[index] = listenerKeyChangedFunc_;
     return index;
 }
 
-int EventManager::addSpecificKeyChangedListener(int keyCode, TuiFunction* listenerKeyChangedFunc_)
+int EventManager::addSpecificKeyChangedListener(int keyCode, const tui::function& listenerKeyChangedFunc_)
 {
     int index = keyChangedListenerFunctionIndex++;
-    listenerKeyChangedFunc_->retain();
     keyChangedByKeyListenerFunctions[currentHostID][keyCode][index] = listenerKeyChangedFunc_;
     return index;
 }
@@ -719,31 +664,21 @@ void EventManager::removeKeyChangedListener(int index)
         {
             if(keyCodeAndSet.second.count(index) != 0)
             {
-                keyCodeAndSet.second[index]->release();
                 keyCodeAndSet.second.erase(index);
             }
         }
     }
 }
 
-int EventManager::setOnEvent(const std::string& eventType, TuiFunction* callback)
+int EventManager::setOnEvent(const std::string& eventType, const tui::function& callback)
 {
     int eventID = onEventIndexCounter;
     onEventIndexCounter++;
     
-    std::map<int, TuiFunction*>& eventsByID = onEventsByTypeByID[eventType];
+    std::map<int, tui::function>& eventsByID = onEventsByTypeByID[eventType];
     
     eventsByID[eventID] = callback;
-    callback->retain();
     
-    return eventID;
-}
-
-int EventManager::setOnEvent(const std::string& key, std::function<TuiRef*(TuiTable* args, TuiRef* existingResult, TuiFunctionCallData* incomingCallData, TuiDebugInfo* callingDebugInfo)> value)
-{
-    TuiFunction* ref = new TuiFunction(value);
-    int eventID = setOnEvent(key, ref);
-    ref->release();
     return eventID;
 }
 
@@ -756,7 +691,6 @@ void EventManager::removeOnEvent(int eventID)
         {
             if(eventIDAndFunc.first == eventID)
             {
-                eventIDAndFunc.second->release();
                 eventTypeAndStuff.second.erase(eventID);
                 found = true;
                 break;
@@ -775,16 +709,16 @@ void EventManager::removeOnEvent(int eventID)
 }
 
 
-void EventManager::eventManagerTableKeyChanged(const std::string& key, TuiRef* value)
+void EventManager::eventManagerTableKeyChanged(const std::string& key, const tui::ref& value)
 {
     if(key == "uiScale")
     {
         switch (value->type()) {
             case Tui_ref_type_NUMBER:
             {
-                if(mainController->userUIScale != ((TuiNumber*)value)->value)
+                if(mainController->userUIScale != tui::toNumber(value)->value)
                 {
-                    mainController->userUIScale = ((TuiNumber*)value)->value;
+                    mainController->userUIScale = tui::toNumber(value)->value;
                     SDL_Rect rect;
                     SDL_GetWindowSafeArea(EventManager::getInstance()->window, &rect);
                     EventManager::getInstance()->windowSafeArea = dvec4(rect.x, rect.y, rect.w * mainController->userUIScale, rect.h * mainController->userUIScale);
@@ -801,30 +735,30 @@ void EventManager::eventManagerTableKeyChanged(const std::string& key, TuiRef* v
     }
 }
 
-void EventManager::bindTui(TuiTable* rootTable)
+void EventManager::bindTui(const tui::table& rootTable)
 {
-    TuiTable* eventManagerTable = new TuiTable(rootTable);
+    tui::table eventManagerTable = tui::newTable(rootTable);
     rootTable->setTable("eventManager", eventManagerTable);
-    eventManagerTable->release();
+    mainKatipoTable = rootTable->getTable("katipo");
     
     eventManagerTable->setDouble("uiScale", mainController->userUIScale);
     
-    eventManagerTable->onSet = [this](TuiRef* table, const std::string& key, TuiRef* value) {
+    eventManagerTable->onSet = [this](const tui::ref& table, const std::string& key, const tui::ref& value) {
         eventManagerTableKeyChanged(key, value);
     };
     
-    eventManagerTable->setFunction("addKeyEventListener", [this](TuiTable* args, TuiRef* existingResult, TuiFunctionCallData* incomingCallData, TuiDebugInfo* callingDebugInfo) -> TuiRef* {
+    eventManagerTable->setFunction("addKeyEventListener", [this](const tui::table& args, const tui::ref& existingResult, TuiFunctionCallData* incomingCallData, TuiDebugInfo* callingDebugInfo) -> tui::ref {
         if(args->arrayObjects.size() >= 1)
         {
             if(args->arrayObjects.size() >= 2 && args->arrayObjects[0]->type() == Tui_ref_type_NUMBER && args->arrayObjects[1]->type() == Tui_ref_type_FUNCTION)
             {
-                int result = addSpecificKeyChangedListener(((TuiNumber*)args->arrayObjects[0])->value, (TuiFunction*)args->arrayObjects[1]);
-                return new TuiNumber(result);
+                int result = addSpecificKeyChangedListener(tui::toNumber(args->arrayObjects[0])->value, tui::toFunction(args->arrayObjects[1]));
+                return tui::newNumber(result);
             }
             else if(args->arrayObjects.size() >= 1 && args->arrayObjects[0]->type() == Tui_ref_type_FUNCTION)
             {
-                int result = addAnyKeyChangedListener((TuiFunction*)args->arrayObjects[0]);
-                return new TuiNumber(result);
+                int result = addAnyKeyChangedListener(tui::toFunction(args->arrayObjects[0]));
+                return tui::newNumber(result);
             }
             else
             {
@@ -840,13 +774,13 @@ void EventManager::bindTui(TuiTable* rootTable)
    // void setTextEntryListener(TuiFunction* textEntryListener_, TuiFunction* listenerKeyChangedFunc_);
    // void removeTextEntryListener();
     
-    eventManagerTable->setFunction("removeKeyEventListener", [this](TuiTable* args, TuiRef* existingResult, TuiFunctionCallData* incomingCallData, TuiDebugInfo* callingDebugInfo) -> TuiRef* {
+    eventManagerTable->setFunction("removeKeyEventListener", [this](const tui::table& args, const tui::ref& existingResult, TuiFunctionCallData* incomingCallData, TuiDebugInfo* callingDebugInfo) -> tui::ref {
         if(args->arrayObjects.size() >= 1)
         {
-            TuiRef* idRef = args->arrayObjects[0];
-            if(idRef->type() == Tui_ref_type_NUMBER)
+            tui::ref idRef = args->arrayObjects[0];
+            if(idRef->isNumber())
             {
-                removeKeyChangedListener(((TuiNumber*)idRef)->value);
+                removeKeyChangedListener((idRef)->getNumberValue());
             }
             else
             {
@@ -857,28 +791,28 @@ void EventManager::bindTui(TuiTable* rootTable)
     });
     
     
-    eventManagerTable->setFunction("setTextEntryRectFromView", [this](TuiTable* args, TuiRef* existingResult, TuiFunctionCallData* incomingCallData, TuiDebugInfo* callingDebugInfo) -> TuiRef* {
+    eventManagerTable->setFunction("setTextEntryRectFromView", [this](const tui::table& args, const tui::ref& existingResult, TuiFunctionCallData* incomingCallData, TuiDebugInfo* callingDebugInfo) -> tui::ref {
         if(args->arrayObjects.size() >= 2)
         {
-            TuiRef* viewTableRef = args->arrayObjects[0];
-            TuiRef* cursorOffsetRef = args->arrayObjects[1];
+            tui::ref viewTableRef = args->arrayObjects[0];
+            tui::ref cursorOffsetRef = args->arrayObjects[1];
             
             if(viewTableRef->type() != Tui_ref_type_TABLE)
             {
                 TuiParseError(callingDebugInfo, "Incorrect type for first arg, view");
             }
-            if(cursorOffsetRef->type() != Tui_ref_type_NUMBER)
+            if(!cursorOffsetRef->isNumber())
             {
                 TuiParseError(callingDebugInfo, "Incorrect type for second arg, cursor offset (number)");
             }
             
-            MJView* textBoundsView = (MJView*)((TuiTable*)viewTableRef)->getUserData("_view");
+            MJView* textBoundsView = (MJView*)tui::toTable(viewTableRef)->getUserData("_view");
             
             dvec2 bottomLeft = dvec2(0,0); //todo handle other alignment?
             dvec2 topRight = textBoundsView->size; //todo handle other alignment?
             
             dvec2 windowPos = textBoundsView->locationRelativeToView(bottomLeft, mainController->mainMJView);
-            dvec2 cursorWindowPos = textBoundsView->locationRelativeToView(bottomLeft + dvec2(((TuiNumber*)viewTableRef)->value, 0), mainController->mainMJView);
+            dvec2 cursorWindowPos = textBoundsView->locationRelativeToView(bottomLeft + dvec2(cursorOffsetRef->getNumberValue(), 0), mainController->mainMJView);
             dvec2 extentPos = textBoundsView->locationRelativeToView(topRight, mainController->mainMJView);
             
             /*
@@ -900,14 +834,14 @@ void EventManager::bindTui(TuiTable* rootTable)
     });
     
     
-    eventManagerTable->setFunction("setTextEntryListener", [this](TuiTable* args, TuiRef* existingResult, TuiFunctionCallData* incomingCallData, TuiDebugInfo* callingDebugInfo) -> TuiRef* {
+    eventManagerTable->setFunction("setTextEntryListener", [this](const tui::table& args, const tui::ref& existingResult, TuiFunctionCallData* incomingCallData, TuiDebugInfo* callingDebugInfo) -> tui::ref {
         if(args->arrayObjects.size() >= 2)
         {
-            TuiRef* textEntryListenerFuncRef = args->arrayObjects[0];
-            TuiRef* listenerKeyChangedFuncRef = args->arrayObjects[1];
+            tui::ref textEntryListenerFuncRef = args->arrayObjects[0];
+            tui::ref listenerKeyChangedFuncRef = args->arrayObjects[1];
             if(textEntryListenerFuncRef->type() == Tui_ref_type_FUNCTION && listenerKeyChangedFuncRef->type() == Tui_ref_type_FUNCTION)
             {
-                setTextEntryListener((TuiFunction*)textEntryListenerFuncRef, (TuiFunction*)listenerKeyChangedFuncRef);
+                setTextEntryListener(tui::toFunction(textEntryListenerFuncRef), tui::toFunction(listenerKeyChangedFuncRef));
             }
             else
             {
@@ -917,14 +851,14 @@ void EventManager::bindTui(TuiTable* rootTable)
         return TUI_NIL;
     });
     
-    eventManagerTable->setFunction("removeTextEntryListener", [this](TuiTable* args, TuiRef* existingResult, TuiFunctionCallData* incomingCallData, TuiDebugInfo* callingDebugInfo) -> TuiRef* {
+    eventManagerTable->setFunction("removeTextEntryListener", [this](const tui::table& args, const tui::ref& existingResult, TuiFunctionCallData* incomingCallData, TuiDebugInfo* callingDebugInfo) -> tui::ref {
         removeTextEntryListener();
         return TUI_NIL;
     });
     
     
-    eventManagerTable->setFunction("getWindowSafeArea", [this](TuiTable* args, TuiRef* existingResult, TuiFunctionCallData* incomingCallData, TuiDebugInfo* callingDebugInfo) -> TuiRef* {
-        return new TuiVec4(windowSafeArea);
+    eventManagerTable->setFunction("getWindowSafeArea", [this](const tui::table& args, const tui::ref& existingResult, TuiFunctionCallData* incomingCallData, TuiDebugInfo* callingDebugInfo) -> tui::ref {
+        return tui::newVec4(windowSafeArea);
     });
     
     

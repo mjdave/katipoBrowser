@@ -46,7 +46,7 @@ MainController::MainController()
 
 
 //todo there is a bunch of unused stuff in here related to full screen switching etc and isn't supported. Fullscreen support will be needed, but not worth sorting out yet
-void MainController::init(TuiTable* rootTable, Database* appDatabase_, std::string windowTitle, std::string organizationName, std::string appTitle)
+void MainController::init(const tui::table& rootTable, Database* appDatabase_, std::string windowTitle, std::string organizationName, std::string appTitle)
 {
     appDatabase = appDatabase_;
 
@@ -85,7 +85,7 @@ void MainController::init(TuiTable* rootTable, Database* appDatabase_, std::stri
     
     if(appDatabase->hasKey("window"))
     {
-        TuiTable* windowInfo = (TuiTable*)TuiRef::loadBinaryString(appDatabase->dataForKey("window"));
+        tui::table windowInfo = tui::toTable(TuiRef::loadBinaryString(appDatabase->dataForKey("window")));
         if(windowInfo)
         {
             screenWidth = windowInfo->getDouble("w");
@@ -222,7 +222,7 @@ void MainController::saveWindowInfoToDatabase()
         SDL_GetWindowPosition(displayWindow, &finalWindowsPosX, &finalWindowsPosY);
         int w,h;
         SDL_GetWindowSize(displayWindow, &w, &h);
-        TuiTable* windowTable = new TuiTable();
+        tui::table windowTable = tui::newTable();
         windowTable->setDouble("x", finalWindowsPosX);
         windowTable->setDouble("y", finalWindowsPosY);
         windowTable->setDouble("w", w);

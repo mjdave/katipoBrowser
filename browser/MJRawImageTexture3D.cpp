@@ -11,7 +11,7 @@ MJRawImageTexture3D::MJRawImageTexture3D(Vulkan* vulkan_, std::string pathname_,
     size = size_;
     format = format_;
 
-    std::string fileString = Tui::getFileContents(pathname);
+    std::string fileString = tui::getFileContents(pathname);
 
     const char* pixels = fileString.data();
     VkDeviceSize imageSize = fileString.size();

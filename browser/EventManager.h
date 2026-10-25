@@ -3,15 +3,13 @@
 #define EventManager_hpp
 
 #include "WindowInfo.h"
+#include "TuiScript.h"
 #include "SDL.h"
 #include <functional>
 #include <map>
 
 class MainController;
 class Timer;
-class TuiFunction;
-class TuiTable;
-class TuiRef;
 
 #define MJ_KEY_MOD_SHIFT 1
 #define MJ_KEY_MOD_CTRL 2
@@ -60,18 +58,18 @@ public:
 	std::string getClipboardText();
 	void setClipboardText(std::string);
     
-    int addAnyKeyChangedListener(TuiFunction* listenerKeyChangedFunc_);
-    int addSpecificKeyChangedListener(int keyCode, TuiFunction* listenerKeyChangedFunc_);
+    int addAnyKeyChangedListener(const tui::function& listenerKeyChangedFunc_);
+    int addSpecificKeyChangedListener(int keyCode, const tui::function& listenerKeyChangedFunc_);
     void removeKeyChangedListener(int index);
     
-    void setTextEntryListener(TuiFunction* textEntryListener_, TuiFunction* listenerKeyChangedFunc_);
+    void setTextEntryListener(const tui::function& textEntryListener_, const tui::function& listenerKeyChangedFunc_);
     void removeTextEntryListener();
     
-    int setOnEvent(const std::string& key, TuiFunction* callback);
+    int setOnEvent(const std::string& key, const tui::function& callback);
     void removeOnEvent(int eventID);
-    int setOnEvent(const std::string& key, std::function<TuiRef*(TuiTable* args, TuiRef* existingResult, TuiFunctionCallData* incomingCallData, TuiDebugInfo* callingDebugInfo)> value);
+    int setOnEvent(const std::string& key, std::function<tui::ref(const tui::table& args, const tui::ref& existingResult, TuiFunctionCallData* incomingCallData, TuiDebugInfo* callingDebugInfo)> value);
     
-    void bindTui(TuiTable* rootTable);
+    void bindTui(const tui::table& rootTable);
 
 	int getModKey();
 	int getSecondModKey();
@@ -91,7 +89,8 @@ public:
     
     bool isResizingWindow = false;
     std::string currentHostID = "";
-    TuiTable* currentKatipoTable = nullptr;
+    tui::table mainKatipoTable = nullptr;
+    tui::table currentSiteKatipoTable = nullptr;
     bool hasSetTextRect = false;
 
 private:
@@ -122,17 +121,17 @@ private:
 	bool needsToResetMousePosition = false;
     
     bool hasTextEntryListener = false;
-    TuiFunction* textEntryListener = nullptr;
-    TuiFunction* listenerKeyChangedFunc = nullptr;
+    tui::function textEntryListener = nullptr;
+    tui::function listenerKeyChangedFunc = nullptr;
     
     int keyChangedListenerFunctionIndex = 0;
-    std::map<int,TuiFunction*> anyKeyChangedListenerFunctions;
-    std::map<std::string, std::map<int,std::map<int, TuiFunction*> > > keyChangedByKeyListenerFunctions;
+    std::map<int,tui::function> anyKeyChangedListenerFunctions;
+    std::map<std::string, std::map<int,std::map<int, tui::function> > > keyChangedByKeyListenerFunctions;
     
-    void eventManagerTableKeyChanged(const std::string& key, TuiRef* value);
+    void eventManagerTableKeyChanged(const std::string& key, const tui::ref& value);
     
     int onEventIndexCounter = 0;
-    std::map<std::string, std::map<int, TuiFunction*>> onEventsByTypeByID;
+    std::map<std::string, std::map<int, tui::function>> onEventsByTypeByID;
 
     
 private:

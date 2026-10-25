@@ -394,7 +394,7 @@ void Vulkan::createInstance()
     if (vkCreateInstance(&createInfo, nullptr, &instance) != VK_SUCCESS) {
 		//SHOW_ERROR_WINDOW(VULKAN_ERROR_TITLE, VULKAN_ERROR_MESSAGE);
         VULKAN_ERROR("failed to create instance!");
-        exit(0);
+        //exit(0);
     }
 
 }
@@ -436,7 +436,7 @@ std::string getDriverVerson(VkPhysicalDeviceProperties physicalDeviceProperties)
 		// NVIDIA
 	if (physicalDeviceProperties.vendorID == 4318)
 	{
-		return Tui::string_format("%d.%d.%d.%d",
+		return tui::string_format("%d.%d.%d.%d",
 			(physicalDeviceProperties.driverVersion >> 22) & 0x3ff,
 			(physicalDeviceProperties.driverVersion >> 14) & 0x0ff,
 			(physicalDeviceProperties.driverVersion >> 6) & 0x0ff,
@@ -445,13 +445,13 @@ std::string getDriverVerson(VkPhysicalDeviceProperties physicalDeviceProperties)
 	}
 	if (physicalDeviceProperties.vendorID == 0x8086) //intel
 	{
-		return Tui::string_format("%d.%d",
+		return tui::string_format("%d.%d",
 			(physicalDeviceProperties.driverVersion >> 14),
 			(physicalDeviceProperties.driverVersion) & 0x3fff
 		);
 	}
 	// Use Vulkan version conventions if vendor mapping is not available
-	return Tui::string_format("%d.%d.%d",
+	return tui::string_format("%d.%d.%d",
 		(physicalDeviceProperties.driverVersion >> 22),
 		(physicalDeviceProperties.driverVersion >> 12) & 0x3ff,
 		physicalDeviceProperties.driverVersion & 0xfff);
@@ -1478,7 +1478,7 @@ void Vulkan::submit()
 	} else if (result != VK_SUCCESS) {
 		MJError("vkQueuePresentKHR failed. swapChainExtent:(%d,%d)", swapChainExtent.width, swapChainExtent.height);
 		SHOW_ERROR_WINDOW(VULKAN_SWAPCHAIN_ERROR_TITLE, VULKAN_ERROR_MESSAGE);
-		std::string errorMessage = Tui::string_format("failed to present swap chain image:%d", result);
+		std::string errorMessage = tui::string_format("failed to present swap chain image:%d", result);
 		VULKAN_ERROR(errorMessage.c_str());
 	}
 

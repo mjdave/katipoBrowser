@@ -207,14 +207,17 @@ createAnimationUpdateFunc = function(view)
             if(view.clickFraction != nil)
             {
                 view.clickFraction -= dt * 4.0
-                if(view.clickFraction > 0.0)
+                if(view.currentDesiredColor)
                 {
-                    view.color = math.mix(view.currentDesiredColor, view.mouseDownColor, view.clickFraction)
-                }
-                else
-                {
-                    view.color = view.currentDesiredColor
-                    view.clickFraction = nil
+                    if(view.clickFraction > 0.0)
+                    {
+                        view.color = math.mix(view.currentDesiredColor, view.mouseDownColor, view.clickFraction)
+                    }
+                    else
+                    {
+                        view.color = view.currentDesiredColor
+                        view.clickFraction = nil
+                    }
                 }
             }
             
@@ -223,6 +226,8 @@ createAnimationUpdateFunc = function(view)
                 view.update = nil
             }
         }
+
+        #updateDerivedColors(view, newColor)
     }
 }
 

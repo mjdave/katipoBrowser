@@ -731,7 +731,7 @@ addItemView = function(markupView, style_, captureItemOrNil)
             backgroundLayout = {
                 type = "button"
                 buttonType = "color"
-                color = vec4(0.0,0.0,0.2,0.4)
+                color = vec4(0.0,0.0,0.0,0.0)
                 alignmentX = "left"
                 alignmentY = "bottom"
                 subviews = {
@@ -1705,6 +1705,7 @@ create = function(parentView, viewLayout)
     markupView.setText = function(newText)
     {
         markupView.currentMarkupText = newText
+        markupView.currentEditingFullCaptureText = newText
         reloadText(markupView)
     }
 
@@ -1715,6 +1716,7 @@ create = function(parentView, viewLayout)
             error("markupView.setTextWithStyleID expected styleID")
         }
         markupView.currentMarkupText = "[" + newText + "]('" + styleID + "')"
+        markupView.currentEditingFullCaptureText = newText
         reloadText(markupView)
     }
 
@@ -1753,6 +1755,11 @@ create = function(parentView, viewLayout)
     markupView.update = function(dt)
     {
         updateCursorFunction(markupView, dt)
+    }
+
+    markupView.finishEditing = function(confirmChanges)
+    {
+        finishEditing(markupView, confirmChanges)
     }
 
     return markupView

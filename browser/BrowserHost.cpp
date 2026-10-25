@@ -21,7 +21,7 @@
 #include "MJFileUtilsApple.h"
 #endif
 
-BrowserHost::BrowserHost(std::string hostDirName, std::string basePath_, std::string hostScriptPath, TuiTable* userConfiguration)
+BrowserHost::BrowserHost(std::string hostDirName, std::string basePath_, std::string hostScriptPath, const tui::table& userConfiguration)
 {
     basePath = basePath_;
     if(basePath.empty())
@@ -30,15 +30,13 @@ BrowserHost::BrowserHost(std::string hostDirName, std::string basePath_, std::st
     }
     std::string privateSavePath = Katipo::getSavePath("hostedSites/" + hostDirName + "/private/");
     
-    rootTable = Tui::initRootTable(); //todo this should optionally use a safe root table, probably by default
+    rootTable = tui::initRootTable(); //todo this should optionally use a safe root table, probably by default
     
-    katipoTable = new TuiTable(rootTable);
+    katipoTable = tui::newTable(rootTable);
     rootTable->set("katipo", katipoTable);
-    katipoTable->release();
     
-    TuiRef* hostScriptState = (TuiTable*)TuiRef::runScriptFile(hostScriptPath, rootTable);
+    tui::table hostScriptState = tui::toTable(TuiRef::runScriptFile(hostScriptPath, rootTable));
     katipoTable->set("host", hostScriptState);
-    hostScriptState->release();
     
     katipoTable->setString("version", KATIPO_VERSION);
     
@@ -62,11 +60,11 @@ BrowserHost::BrowserHost(std::string hostDirName, std::string basePath_, std::st
     katipoTable->setString("trackerPort", "3470"); //todo
     katipoTable->setBool("retry", true); //todo
 
-    katipoTable->setFunction("init", [this, privateSavePath](TuiTable* args, TuiRef* existingResult, TuiFunctionCallData* incomingCallData, TuiDebugInfo* callingDebugInfo) -> TuiRef* {
+    katipoTable->setFunction("init", [this, privateSavePath](const tui::table& args, const tui::ref& existingResult, TuiFunctionCallData* incomingCallData, TuiDebugInfo* callingDebugInfo) -> tui::ref {
         if(!trackerNetInterface)
         {
-            //TuiTable* clientInfo = katipoTable->getTable("clientInfo");
-            TuiTable* siteInfo = katipoTable->getTable("siteInfo");
+            //tui::table clientInfo = katipoTable->getTable("clientInfo");
+            tui::table siteInfo = katipoTable->getTable("siteInfo");
             if(!siteInfo)
             {
                 MJError("Invalid or missing siteInfo table");
@@ -85,9 +83,9 @@ BrowserHost::BrowserHost(std::string hostDirName, std::string basePath_, std::st
             
             std::string hostKeyPath = privateSavePath + "/" + siteInfo->getString("nameKey") + "_privateKey.tuib";
             
-            if(Tui::fileExistsAtPath(hostKeyPath)) //todo these should be saved in the database, not files
+            if(tui::fileExistsAtPath(hostKeyPath)) //todo these should be saved in the database, not files
             {
-                TuiTable* saveData = (TuiTable*)TuiRef::loadBinary(hostKeyPath);
+                tui::table saveData = tui::toTable(TuiRef::loadBinary(hostKeyPath));
                 if(saveData)
                 {
                     publicKey = saveData->getString("publicKey");
@@ -101,19 +99,18 @@ BrowserHost::BrowserHost(std::string hostDirName, std::string basePath_, std::st
                 secretKey.resize(crypto_box_SECRETKEYBYTES);
                 crypto_box_keypair((unsigned char*)&(publicKey[0]), (unsigned char*)&(secretKey[0]));
                 
-                TuiTable* saveData = new TuiTable(nullptr);
+                tui::table saveData = tui::newTable();
                 
                 saveData->setString("publicKey", publicKey);
                 saveData->setString("secretKey", secretKey);
                 
                 saveData->saveBinary(hostKeyPath);
-                saveData->release();
             
-                MJLog("Generated and saved new private key:\n%s.\nPlease backup this file and keep it safe and secure!", Tui::getAbsolutePath(hostKeyPath).c_str());
+                MJLog("Generated and saved new private key:\n%s.\nPlease backup this file and keep it safe and secure!", tui::getAbsolutePath(hostKeyPath).c_str());
             }
             else
             {
-                MJLog("Loaded private key:\n%s", Tui::getAbsolutePath(hostKeyPath).c_str());
+                MJLog("Loaded private key:\n%s", tui::getAbsolutePath(hostKeyPath).c_str());
             }
             
             siteInfo->setString("publicKey", publicKey);
@@ -135,32 +132,32 @@ BrowserHost::BrowserHost(std::string hostDirName, std::string basePath_, std::st
         return TUI_NIL;
     });
     
-    katipoTable->setFunction("createSecurityBookmarkForDirectory", [this, privateSavePath](TuiTable* args, TuiRef* existingResult, TuiFunctionCallData* incomingCallData, TuiDebugInfo* callingDebugInfo) -> TuiRef* {
+    katipoTable->setFunction("createSecurityBookmarkForDirectory", [this, privateSavePath](const tui::table& args, const tui::ref& existingResult, TuiFunctionCallData* incomingCallData, TuiDebugInfo* callingDebugInfo) -> tui::ref {
 #ifdef __APPLE__
         if(args && args->arrayObjects.size() >= 1 && args->arrayObjects[0]->type() == Tui_ref_type_STRING)
         {
-            TuiString* directoryPath = (TuiString*)args->arrayObjects[0];
+            tui::string directoryPath = tui::toString(args->arrayObjects[0]);
             std::string bookmark = createSecurityBookmarkForDirectory(directoryPath->value);
-            return new TuiString(bookmark);
+            return tui::newString(bookmark);
         }
 #endif
         return TUI_NIL;
     });
     
     
-    katipoTable->setFunction("resolveSecurityBookmark", [this, privateSavePath](TuiTable* args, TuiRef* existingResult, TuiFunctionCallData* incomingCallData, TuiDebugInfo* callingDebugInfo) -> TuiRef* {
+    katipoTable->setFunction("resolveSecurityBookmark", [this, privateSavePath](const tui::table& args, const tui::ref& existingResult, TuiFunctionCallData* incomingCallData, TuiDebugInfo* callingDebugInfo) -> tui::ref {
 #ifdef __APPLE__
         if(args && args->arrayObjects.size() >= 1 && args->arrayObjects[0]->type() == Tui_ref_type_STRING)
         {
-            TuiString* bookmarkData = (TuiString*)args->arrayObjects[0];
+            tui::string bookmarkData = tui::toString(args->arrayObjects[0]);
             std::string pathResult = resolveSecurityBookmark(bookmarkData->value);
-            return new TuiString(pathResult);
+            return tui::newString(pathResult);
         }
 #endif
         return TUI_NIL;
     });
     
-    scriptState = (TuiTable*)TuiRef::runScriptFile(Tui::pathByAppendingPathComponent(basePath,"code.tui"), rootTable);
+    scriptState = tui::toTable(TuiRef::runScriptFile(tui::pathByAppendingPathComponent(basePath,"code.tui"), rootTable));
     
     if(scriptState->getBool("loadSuccess"))
     {
@@ -185,8 +182,6 @@ BrowserHost::~BrowserHost()
         delete thread;
     }
     
-    rootTable->release();
-    scriptState->release();
     delete database;
     delete databaseEnvironment;
     delete trackerNetInterface;
@@ -197,14 +192,14 @@ BrowserHost::~BrowserHost()
 void BrowserHost::createThread()
 {
     
-    TuiFunction* startFunction = ((TuiTable*)katipoTable->get("host"))->getFunction("start");
-    TuiFunction* updateFunction = ((TuiTable*)katipoTable->get("host"))->getFunction("update");
+    tui::function startFunction = tui::toTable(katipoTable->get("host"))->getFunction("start");
+    tui::function updateFunction = tui::toTable(katipoTable->get("host"))->getFunction("update");
     startFunction->call("BrowserHost::BrowserHost()->start");
     
     Timer* timer = new Timer();
     Timer* deltaTimer = new Timer();
     
-    TuiNumber* dtNumRef = new TuiNumber(0.0);
+    tui::number dtNumRef = tui::newNumber(0.0);
     
     while(1)
     {
@@ -212,7 +207,6 @@ void BrowserHost::createThread()
         {
             delete timer;
             delete deltaTimer;
-            dtNumRef->release();
             return;
         }
         //checkInput();
@@ -232,7 +226,6 @@ void BrowserHost::createThread()
         {
             delete timer;
             delete deltaTimer;
-            dtNumRef->release();
             return;
         }
         

@@ -21,10 +21,10 @@ class BrowserTracker;
 
 struct SiteConnectionInfo {
     MJView* mainView = nullptr;
-    TuiTable* rootTable = nullptr;
-    TuiTable* katipoTable = nullptr;
-    TuiTable* scriptState = nullptr;
-    TuiRef* publicData = nullptr;
+    tui::table rootTable = nullptr;
+    tui::table katipoTable = nullptr;
+    tui::table scriptState = nullptr;
+    tui::ref publicData = nullptr;
     std::string trackerKey;
     std::string hostName;
     std::map<std::string, bool> checkedResourceFiles;
@@ -32,13 +32,13 @@ struct SiteConnectionInfo {
 
 class KatipoBrowser {
 public:
-    MJView* mainView;
-    TuiTable* rootTable;
-    TuiTable* scriptState;
-    TuiTable* katipoTable;
+    MJView* mainView = nullptr;
+    tui::table rootTable = nullptr;
+    tui::table scriptState = nullptr;
+    tui::table katipoTable = nullptr;
     
-    DatabaseEnvironment* appDatabaseEnvironment;
-    Database* appDatabase;
+    DatabaseEnvironment* appDatabaseEnvironment = nullptr;
+    Database* appDatabase = nullptr;
     
     Scanner* scanner = nullptr;
     
@@ -51,7 +51,7 @@ public:
     
     MJView* currentSiteView = nullptr;
     
-    uint32_t updateTimerID;
+    uint32_t updateTimerID = 0;
 
 public:
     
@@ -70,7 +70,7 @@ private:
                const std::string& hostID,
                const std::string& remoteURL,
                const std::string& hostName,
-               TuiTable* args);
+               const tui::table& args);
 
 private:
 

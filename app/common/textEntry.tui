@@ -27,6 +27,12 @@ create = function(parentView, viewLayout)
         #fontSize = viewLayout.fontSize
         alignmentX = viewLayout.alignmentX
         verticalAlignment = viewLayout.verticalAlignment
+        markupPadding = {
+            top = 0
+            left = 0
+            right = 0
+            bottom = 0
+        }
         #pos = vec3(xOffset,yOffset,0)
     }
 
@@ -37,6 +43,7 @@ create = function(parentView, viewLayout)
     }
 
     entryMarkupView = textEntryView.addView(markupViewLayout)
+
     textEntryView.textEntryMarkupView = entryMarkupView
     textEntryView.setText = function(text)
     {
@@ -69,6 +76,16 @@ create = function(parentView, viewLayout)
     textEntryView.textEntryClickFunction = function()
     {
         textEntryView.textEntryMarkupView.callBackgroundClickFunction("textEntryStyle")
+    }
+
+    textEntryView.getIsEditing = function()
+    {
+        return (textEntryView.textEntryMarkupView.currentEditingTextView != nil)
+    }
+
+    textEntryView.finishEditing = function(confirmChanges)
+    {
+        textEntryView.textEntryMarkupView.finishEditing(confirmChanges)
     }
 
     entryMarkupView.styles = {

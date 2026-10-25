@@ -492,7 +492,6 @@
 				ENABLE_USER_SCRIPT_SANDBOXING = NO;
 				ENABLE_USER_SELECTED_FILES = readwrite;
 				FRAMEWORK_SEARCH_PATHS = (
-					"\"$(SRCROOT)/../ThirdParty\"",
 					"\"$(SRCROOT)/../../mac/thirdPartyMac\"",
 					"$(PROJECT_DIR)/../../mac/thirdPartyMac",
 					"$(PROJECT_DIR)/../../mac/thirdPartyMac/MoltenVK/dynamic/MoltenVK.xcframework/macos-arm64_x86_64",
@@ -575,7 +574,6 @@
 				ENABLE_USER_SCRIPT_SANDBOXING = NO;
 				ENABLE_USER_SELECTED_FILES = readwrite;
 				FRAMEWORK_SEARCH_PATHS = (
-					"\"$(SRCROOT)/../ThirdParty\"",
 					"\"$(SRCROOT)/../../mac/thirdPartyMac\"",
 					"$(PROJECT_DIR)/../../mac/thirdPartyMac",
 					"$(PROJECT_DIR)/../../mac/thirdPartyMac/MoltenVK/dynamic/MoltenVK.xcframework/macos-arm64_x86_64",

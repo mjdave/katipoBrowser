@@ -72,7 +72,7 @@ MJImageTexture* MJCache::getTextureAbsolutePathWithOptions(std::string path, MJI
         return texture;
     }
     
-	std::string key = Tui::string_format("%s_%d_%d_%d_%d_%d_%d_%s", path.c_str(), options.repeat, options.loadFlipped, options.mipmap, options.minFilter, options.magFilter, options.mipmapMode, alphaChannel_.c_str());
+	std::string key = tui::string_format("%s_%d_%d_%d_%d_%d_%d_%s", path.c_str(), options.repeat, options.loadFlipped, options.mipmap, options.minFilter, options.magFilter, options.mipmapMode, alphaChannel_.c_str());
 	if(textures.count(key) > 0)
 	{
 		return textures[key];
@@ -95,30 +95,27 @@ MJImageTexture* MJCache::getTextureAbsolutePath(std::string path, bool repeat, b
 	return getTextureAbsolutePathWithOptions(path, options, "", disableCache);
 }
 
-static inline std::string getKatipoResourcePath(const std::string& inPath, TuiTable* rootTable)
+static inline std::string getKatipoResourcePath(const std::string& inPath, const tui::table& rootTable)
 {
-    TuiRef* getResourcePathFunc = ((TuiTable*)rootTable->get("file"))->get("getResourcePath");
+    tui::ref getResourcePathFunc = tui::toTable(rootTable->get("file"))->get("getResourcePath");
     if(getResourcePathFunc)
     {
-        TuiString* inPathRef = new TuiString(inPath);
-        TuiRef* pathResult = ((TuiFunction*)getResourcePathFunc)->call("getResourcePathFunc", inPathRef);
-        inPathRef->release();
+        tui::string inPathRef = tui::newString(inPath);
+        tui::ref pathResult = tui::toFunction(getResourcePathFunc)->call("getResourcePathFunc", inPathRef);
         if(pathResult)
         {
-            std::string returnResult = pathResult->getStringValue();
-            pathResult->release();
-            return returnResult;
+            return pathResult->getStringValue();
         }
     }
     return Katipo::getResourcePath(inPath);
 }
 
-MJImageTexture* MJCache::getTexture(std::string name, TuiTable* rootTable, bool repeat, bool loadFlipped, bool mipmap, bool disableCache)
+MJImageTexture* MJCache::getTexture(std::string name, const tui::table& rootTable, bool repeat, bool loadFlipped, bool mipmap, bool disableCache)
 {
     return getTextureAbsolutePath(getKatipoResourcePath(name, rootTable), repeat, loadFlipped, mipmap, disableCache);
 }
 
-MJImageTexture* MJCache::getTextureWithOptions(std::string name, TuiTable* rootTable, MJImageTextureOptions options, std::string alphaChannel_, bool disableCache)
+MJImageTexture* MJCache::getTextureWithOptions(std::string name, const tui::table& rootTable, MJImageTextureOptions options, std::string alphaChannel_, bool disableCache)
 {
 	std::string absoluteAlphaPath = "";
 	if(!alphaChannel_.empty())
@@ -128,10 +125,10 @@ MJImageTexture* MJCache::getTextureWithOptions(std::string name, TuiTable* rootT
 	return getTextureAbsolutePathWithOptions(getKatipoResourcePath(name, rootTable), options, absoluteAlphaPath, disableCache);
 }
 
-MJFont* MJCache::getOrLoadFontIfAvailableInternal(std::string name, int pointSize, TuiTable* rootTable)
+MJFont* MJCache::getOrLoadFontIfAvailableInternal(std::string name, int pointSize, const tui::table& rootTable)
 {
-    std::string combinedFontName = Tui::string_format("%s%d", name.c_str(), pointSize);
-    std::string cacheKey = combinedFontName + Tui::string_format("%p", rootTable);
+    std::string combinedFontName = tui::string_format("%s%d", name.c_str(), pointSize);
+    std::string cacheKey = combinedFontName + tui::string_format("%p", rootTable.get());
     
     
     if(fonts.count(cacheKey) > 0)
@@ -144,7 +141,7 @@ MJFont* MJCache::getOrLoadFontIfAvailableInternal(std::string name, int pointSiz
         std::string fontFilepath = searchPath + combinedFontName + ".fnt";
         if(missingFiles.count(fontFilepath) == 0)
         {
-            if(Tui::fileExistsAtPath(fontFilepath))
+            if(tui::fileExistsAtPath(fontFilepath))
             {
                 std::string imageFilepath = searchPath + combinedFontName + ".png";
                 MJFont* font = new MJFont(vulkan, this, fontFilepath, imageFilepath, fontOffsets[name]);
@@ -160,7 +157,7 @@ MJFont* MJCache::getOrLoadFontIfAvailableInternal(std::string name, int pointSiz
     std::string fontFilepath = getKatipoResourcePath("fonts/" + combinedFontName + ".fnt", rootTable);
     if(missingFiles.count(fontFilepath) == 0)
     {
-        if(Tui::fileExistsAtPath(fontFilepath))
+        if(tui::fileExistsAtPath(fontFilepath))
         {
             std::string imageFilepath = getKatipoResourcePath("fonts/" + combinedFontName + ".png", rootTable);
             MJFont* font = new MJFont(vulkan, this, fontFilepath, imageFilepath, fontOffsets[name]);
@@ -184,7 +181,7 @@ MJFont* MJCache::getOrLoadFontIfAvailableInternal(std::string name, int pointSiz
         return nullptr;
     }
     
-    if(Tui::fileExistsAtPath(fontFilepath))
+    if(tui::fileExistsAtPath(fontFilepath))
     {
         std::string imageFilepath = getKatipoResourcePath("app/common/fonts/" + combinedFontName + ".png", rootTable);
         MJFont* font = new MJFont(vulkan, this, fontFilepath, imageFilepath, fontOffsets[name]);
@@ -198,7 +195,7 @@ MJFont* MJCache::getOrLoadFontIfAvailableInternal(std::string name, int pointSiz
     return nullptr;
 }
 
-MJFont* MJCache::getFont(std::string name, int pointSize, TuiTable* rootTable, double* resultScale)
+MJFont* MJCache::getFont(std::string name, int pointSize, const tui::table& rootTable, double* resultScale)
 {
     
     pointSize *= pixelDensity;
@@ -269,10 +266,10 @@ GPipeline* MJCache::getPipeline(std::string name,
     
     for(auto& searchPath : shaderSearchPaths)
     {
-        std::string shaderTestFilePath = Tui::pathByAppendingPathComponent(searchPath, "shaders/" + name + ".tui");
+        std::string shaderTestFilePath = tui::pathByAppendingPathComponent(searchPath, "shaders/" + name + ".tui");
         if(missingFiles.count(shaderTestFilePath) == 0)
         {
-            if(Tui::fileExistsAtPath(shaderTestFilePath))
+            if(tui::fileExistsAtPath(shaderTestFilePath))
             {
                 shaderPath = shaderTestFilePath;
                 baseDirectoryToUse = searchPath;
@@ -285,7 +282,7 @@ GPipeline* MJCache::getPipeline(std::string name,
     
     if(shaderPath.empty())
     {
-        shaderPath = Katipo::getResourcePath(Tui::pathByAppendingPathComponent(fileDirPath, "shaders/" + name + ".tui"));
+        shaderPath = Katipo::getResourcePath(tui::pathByAppendingPathComponent(fileDirPath, "shaders/" + name + ".tui"));
         baseDirectoryToUse = Katipo::getResourcePath(fileDirPath);
     }
     
@@ -300,7 +297,7 @@ GPipeline* MJCache::getPipeline(std::string name,
         }
     }
     
-    TuiTable* shaderTable = (TuiTable*)TuiRef::runScriptFile(shaderPath, nullptr);
+    tui::table shaderTable = tui::toTable(TuiRef::runScriptFile(shaderPath, nullptr));
 
     PipelineStateOptions options = PipelineStateOptions();
     
@@ -397,8 +394,8 @@ GPipeline* MJCache::getPipeline(std::string name,
     }
     
     
-    std::string vertPath = Tui::pathByAppendingPathComponent(Tui::pathByAppendingPathComponent(baseDirectoryToUse, "spv"), shaderTable->getString("vertPath"));
-    std::string fragPath = Tui::pathByAppendingPathComponent(Tui::pathByAppendingPathComponent(baseDirectoryToUse, "spv"), shaderTable->getString("fragPath"));
+    std::string vertPath = tui::pathByAppendingPathComponent(tui::pathByAppendingPathComponent(baseDirectoryToUse, "spv"), shaderTable->getString("vertPath"));
+    std::string fragPath = tui::pathByAppendingPathComponent(tui::pathByAppendingPathComponent(baseDirectoryToUse, "spv"), shaderTable->getString("fragPath"));
 
     GPipeline* pipeline = new GPipeline(vulkan,
         name,
@@ -414,8 +411,6 @@ GPipeline* MJCache::getPipeline(std::string name,
 	//MJLog("total pipiline creation time:%dms", (int)(totalLoadTime * 1000.0));
 	pipelines[key][renderPassVarient] = pipeline;
     
-    
-    delete shaderTable;
     shaderTable = nullptr;
     
     return pipeline;

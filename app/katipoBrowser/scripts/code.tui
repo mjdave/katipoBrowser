@@ -2,6 +2,7 @@
 #global scene
 #global eventManager
 #global katipo
+#global time
 
 keys = require("app/common/keys.tui")
 
@@ -12,6 +13,8 @@ currentSiteHostID = false
 currentURLFullLink = ""
 getInProgress = false
 hostTabSelected = false # very simple tab setup for now, we either have 'browse' or 'host' selected, this is that state
+
+lastReloadTime = 0
 
 bookmarks = database.get("bookmarks")
 if(!bookmarks)
@@ -410,6 +413,8 @@ getCallback = function(result, hostID, url)
 
 doGet = function(url, siteNameOrNil, checksumsOrNil)
 {
+    print("doGet:", url)
+    .lastReloadTime = time.now()
     checksums = checksumsOrNil
     if(!checksums)
     {
@@ -421,14 +426,9 @@ doGet = function(url, siteNameOrNil, checksumsOrNil)
     }
 
     .currentURLFullLink = stripDefaultPortFromUrl(url)
-    currentURLSiteName = siteNameOrNil
-    if(!siteNameOrNil)
-    {
-        currentURLSiteName = currentURLFullLink
-    }
     .getInProgress = true
     fadeSiteContent(false)
-    urlTextEntry.setText(currentURLSiteName)
+    urlTextEntry.setText(currentURLFullLink)
     katipo.get(currentURLFullLink, checksums, getCallback)
     
     browserManagementView.fadeOut()
@@ -551,6 +551,7 @@ urlTextEntry.setOnStartedEditing(onStartedEditing)
 
 urlTextFinishedEditing = function(textValue, changesMade)
 {
+    print("urlTextFinishedEditing textValue:", textValue, " changesMade:", changesMade)
     if(!changesMade and hostTabSelected)
     {
         return
@@ -576,11 +577,17 @@ katipo.onLinkClick = function(linkString)
     urlTextEntry.setText(currentURLFullLink)
 }
 
+urlTextEntryContainer = scene.getView("urlTextEntryContainer")
 
-refreshButton.click = function()
+urlTextEntryContainerFunction = function()
 {
-    doGet(currentURLFullLink, nil, nil)
+    if(browserManagementView.hidden and !urlTextEntry.getIsEditing())
+    {
+        urlTextEntry.textEntryClickFunction()
+    }
 }
+urlTextEntryContainer.setClickFunction(urlTextEntryContainerFunction)
+
 
 loadInitialLink = function()
 {
@@ -599,12 +606,25 @@ loadInitialLink = function()
 loadInitialLink()
 
 
+reload = function()
+{
+    if(currentURLFullLink)
+    {
+        doGet(currentURLFullLink, nil, nil)
+    }
+}
+
+refreshButton.click = function()
+{
+    urlTextEntry.finishEditing(false)
+    reload()
+}
 
 reloadKey = function(isDown, code, mod, isRepeat)
 {
-    if(isDown and !isRepeat and currentURLFullLink and (mod == keys.modifiers.ctrl or mod == keys.modifiers.cmd))
+    if(isDown and !isRepeat and (mod == keys.modifiers.ctrl or mod == keys.modifiers.cmd))
     {
-        doGet(currentURLFullLink, nil, nil)
+        reload()
     }
 }
 #a full list of keycodes can be found in the katipo browser resources, within the file app/common/keys.tui
@@ -651,3 +671,17 @@ minusKey = function(isDown, code, mod, isRepeat)
     }
 }
 eventManager.addKeyEventListener(keys.keyCodes.minus, minusKey)
+
+katipo.onBackgroundChange = function(hidden)
+{
+    if(!hidden)
+    {
+        print("onBackgroundChange")
+        currentTime = time.now()
+        if(currentTime - lastReloadTime > 60 * 10) #reload if it has been longer than 10 minutes
+        {
+            print("reload")
+            reload()
+        }
+    }
+}

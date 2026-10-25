@@ -23,14 +23,14 @@ public:
     
     ClientNetInterface* trackerNetInterface;
     
-    TuiTable* rootTable;
-    TuiTable* katipoTable;
-    TuiTable* scriptState;
+    tui::table rootTable;
+    tui::table katipoTable;
+    tui::table scriptState;
     
     BrowserHost(std::string hostDirName,
                 std::string basePath_ = "",
                 std::string hostScriptPath = Katipo::getResourcePath("host.tui"),
-                TuiTable* userConfiguration = nullptr);
+                const tui::table& userConfiguration = nullptr);
     ~BrowserHost();
     
 private:

@@ -3,8 +3,7 @@
 #define MJAudioApple_h
 
 #include "MathUtils.h"
-class TuiFunction;
-class TuiTable;
+#include "TuiScript.h"
 
 class MJAudioApple {
 public: // members
@@ -20,7 +19,7 @@ public: // members
     
     void updatePausedState();
     
-    void play(TuiTable* urls);
+    void play(const tui::table& urls);
     void skipToNextTrack();
     void stop();
     
@@ -34,7 +33,7 @@ public: // members
     void updateCurrentlyPlayingOSInfo(const std::string& titleString, const std::string& artistString, double trackDuration, double elapsedPlaybackTime, void* imageBytes, int imageLength);
     
 public:
-    //TuiFunction* finishedCallbackFunction = nullptr;
+    //tui::function finishedCallbackFunction = nullptr;
     
 public:
    // void audioPlayerDidFinishPlaying(bool success);

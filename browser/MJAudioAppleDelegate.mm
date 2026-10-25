@@ -84,7 +84,7 @@
     
     if(titleString.empty())
     {
-        titleString = Tui::fileNameFromPath(filePathsByPlayerItems[playerItem]);
+        titleString = tui::fileNameFromPath(filePathsByPlayerItems[playerItem]);
     }
     
     
@@ -143,7 +143,7 @@
     if(urlsByQueueIndex.count(queueIndex + 1) != 0)
     {
         const std::string& nextUrlString = urlsByQueueIndex[queueIndex + 1];
-        MJAudio::getInstance()->updateCurrentlyPlayingTrackInfo(Tui::fileNameFromPath(nextUrlString));
+        MJAudio::getInstance()->updateCurrentlyPlayingTrackInfo(tui::fileNameFromPath(nextUrlString));
     }*/
     
     AVPlayerItem* nextItem = nullptr;
@@ -184,9 +184,9 @@
     
     int index = 0;
     AVPlayerItem* prevPlayerItem = nullptr;
-    for(TuiRef* urlString : currentURLs->arrayObjects)
+    for(auto& urlString : currentURLs->arrayObjects)
     {
-        std::string path = ((TuiString*)urlString)->value;
+        std::string path = urlString->getStringValue();
         AVPlayerItem* playerItem = [[AVPlayerItem alloc] initWithURL:[NSURL fileURLWithPath:[NSString stringWithUTF8String:path.c_str()]]];//((TuiString*)urlString)->value.c_str()]]];
         filePathsByPlayerItems[playerItem] = path;
         
@@ -217,20 +217,18 @@
     [self sendUpdatedPausedState];
 }
 
-- (void)play:(TuiTable*)urls
+- (void)play:(const tui::table&)urls
 {
     if(urls)
     {
         if(currentURLs)
         {
-            currentURLs->release();
             currentURLs = nullptr;
         }
         
         if(!urls->arrayObjects.empty())
         {
             currentURLs = urls;
-            currentURLs->retain();
             
             [self restartQueuePlayback];
         }

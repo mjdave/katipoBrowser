@@ -236,7 +236,6 @@ setDirectoryTree = function(fileBrowserView, directoryTree, selectedIndex, isFro
             {
                 backgroundViewClick = function() #left panel click
                 {
-
                     if(thisFile.files)
                     {
                         tuiBug = { #definite tui bug here, couldn't pass this directly as function arg
@@ -262,10 +261,10 @@ setDirectoryTree = function(fileBrowserView, directoryTree, selectedIndex, isFro
                         fileBrowserView.leftSelectedIndex = i
                     }
 
-                    #if(onBrowserContentChange)
-                    #{
-                    #    onBrowserContentChange(fileBrowserView)
-                    #}
+                    if(fileBrowserView.onBrowserContentChange)
+                    {
+                        fileBrowserView.onBrowserContentChange(fileBrowserView)
+                    }
                 }
 
                 backgroundView.setClickFunction(backgroundViewClick)
@@ -279,10 +278,10 @@ setDirectoryTree = function(fileBrowserView, directoryTree, selectedIndex, isFro
             #leftPaneScrollView.insertRow(itemView)
             table.insert(fileBrowserView.leftItemViews, itemView)
 
-            #if(onBrowserItemCreate)
-            #{
-            #    onBrowserItemCreate(itemView, i)
-            #}
+            if(fileBrowserView.onBrowserItemCreate)
+            {
+                fileBrowserView.onBrowserItemCreate(itemView, i)
+            }
         }
 
         #if(fileBrowserView.leftSelectedIndex != nil)
@@ -296,10 +295,10 @@ setDirectoryTree = function(fileBrowserView, directoryTree, selectedIndex, isFro
     }
 
 
-    #if(onBrowserContentChange)
-    #{
-    #    onBrowserContentChange(fileBrowserView)
-    #}
+    if(fileBrowserView.onBrowserContentChange)
+    {
+        fileBrowserView.onBrowserContentChange(fileBrowserView)
+    }
 
 }
 
