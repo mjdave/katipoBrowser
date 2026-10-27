@@ -104,7 +104,7 @@ static inline std::string getKatipoResourcePath(const std::string& inPath, const
         tui::ref pathResult = tui::toFunction(getResourcePathFunc)->call("getResourcePathFunc", inPathRef);
         if(pathResult)
         {
-            return pathResult->getStringValue();
+            return pathResult->stringValue();
         }
     }
     return Katipo::getResourcePath(inPath);

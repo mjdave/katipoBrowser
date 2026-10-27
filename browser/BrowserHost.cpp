@@ -115,8 +115,8 @@ BrowserHost::BrowserHost(std::string hostDirName, std::string basePath_, std::st
             
             siteInfo->setString("publicKey", publicKey);
             
-            trackerNetInterface = new ClientNetInterface(katipoTable->get("trackerIP")->getStringValue(),
-                                                    katipoTable->get("trackerPort")->getStringValue(),
+            trackerNetInterface = new ClientNetInterface(katipoTable->get("trackerIP")->stringValue(),
+                                                    katipoTable->get("trackerPort")->stringValue(),
                                                          publicKey, secretKey, siteInfo);
             trackerNetInterface->bindTui(katipoTable);
 

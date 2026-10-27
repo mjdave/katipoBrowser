@@ -186,7 +186,7 @@
     AVPlayerItem* prevPlayerItem = nullptr;
     for(auto& urlString : currentURLs->arrayObjects)
     {
-        std::string path = urlString->getStringValue();
+        std::string path = urlString->stringValue();
         AVPlayerItem* playerItem = [[AVPlayerItem alloc] initWithURL:[NSURL fileURLWithPath:[NSString stringWithUTF8String:path.c_str()]]];//((TuiString*)urlString)->value.c_str()]]];
         filePathsByPlayerItems[playerItem] = path;
         

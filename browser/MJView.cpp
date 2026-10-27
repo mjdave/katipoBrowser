@@ -143,7 +143,7 @@ void MJView::initInternals()
             tui::ref viewNameRef = args->arrayObjects[0];
             if(viewNameRef->type() == Tui_ref_type_STRING)
             {
-                MJView* subView = getSubViewWithID(viewNameRef->getStringValue());
+                MJView* subView = getSubViewWithID(viewNameRef->stringValue());
                 if(!subView)
                 {
                     //MJWarn("no subView named:%s", ((TuiString*)viewNameRef)->value.c_str());
@@ -231,7 +231,7 @@ void MJView::initInternals()
             
             if(numberRef->isNumber())
             {
-                duration = numberRef->getNumberValue();
+                duration = numberRef->numberValue();
             }
             else
             {
@@ -250,7 +250,7 @@ void MJView::initInternals()
             
             if(numberRef->isNumber())
             {
-                duration = numberRef->getNumberValue();
+                duration = numberRef->numberValue();
             }
             else
             {
@@ -1940,7 +1940,7 @@ void MJView::loadFromTable(const tui::table& table, bool needsToLayoutSubviews, 
             tui::ref ref = table->objectsByStringKey["parentWidthFraction"];
             if(ref->isNumber())
             {
-                parentWidthFraction = ref->getNumberValue();
+                parentWidthFraction = ref->numberValue();
             }
             else
             {
@@ -1952,7 +1952,7 @@ void MJView::loadFromTable(const tui::table& table, bool needsToLayoutSubviews, 
             tui::ref ref = table->objectsByStringKey["parentHeightFraction"];
             if(ref->isNumber())
             {
-                parentHeightFraction = ref->getNumberValue();
+                parentHeightFraction = ref->numberValue();
             }
             else
             {
@@ -2245,11 +2245,11 @@ void MJView::tableKeyChanged(const std::string& key, const tui::ref& value)
             
             if(key == "parentWidthFraction")
             {
-                parentWidthFraction = value->getNumberValue();
+                parentWidthFraction = value->numberValue();
             }
             else
             {
-                parentHeightFraction = value->getNumberValue();
+                parentHeightFraction = value->numberValue();
             }
         }
         else

@@ -238,7 +238,7 @@ void KatipoBrowser::init()
     rootTable->getTable("file")->setFunction("getSavePath", [rootTable](const tui::table& args, const tui::ref& existingResult, TuiFunctionCallData* incomingCallData, TuiDebugInfo* callingDebugInfo) -> tui::ref {
         if(args->arrayObjects.size() > 0 && args->arrayObjects[0]->type() == Tui_ref_type_STRING)
         {
-            return tui::newString(Katipo::getSavePath(args->arrayObjects[0]->getStringValue()));
+            return tui::newString(Katipo::getSavePath(args->arrayObjects[0]->stringValue()));
         }
         return tui::newString(Katipo::getSavePath());
     });
@@ -246,7 +246,7 @@ void KatipoBrowser::init()
     rootTable->getTable("file")->setFunction("getResourcePath", [](const tui::table& args, const tui::ref& existingResult, TuiFunctionCallData* incomingCallData, TuiDebugInfo* callingDebugInfo) -> tui::ref {
         if(args->arrayObjects.size() > 0 && args->arrayObjects[0]->type() == Tui_ref_type_STRING)
         {
-            const std::string& appendPath = args->arrayObjects[0]->getStringValue();
+            const std::string& appendPath = args->arrayObjects[0]->stringValue();
             return tui::newString(Katipo::getResourcePath(appendPath));
         }
         return tui::newString(Katipo::getResourcePath());
@@ -267,7 +267,7 @@ void KatipoBrowser::init()
                                                 TuiDebugInfo* callingDebugInfo) -> tui::ref {
         if(args->arrayObjects.size() >= 1)
         {
-            std::string url = args->arrayObjects[0]->getStringValue();
+            std::string url = args->arrayObjects[0]->stringValue();
             SDL_OpenURL(url.c_str());
         }
         return TUI_NIL;
@@ -279,7 +279,7 @@ void KatipoBrowser::init()
                                                 TuiDebugInfo* callingDebugInfo) -> tui::ref {
         if(args->arrayObjects.size() >= 2)
         {
-            std::string hostDirName = args->arrayObjects[0]->getStringValue();
+            std::string hostDirName = args->arrayObjects[0]->stringValue();
             bool shouldRun = args->arrayObjects[1]->boolValue();
             
             if(!hostDirName.empty())
@@ -333,8 +333,8 @@ void KatipoBrowser::init()
                                                 TuiDebugInfo* callingDebugInfo) -> tui::ref { //note added outside function above so for now sites can't load other sites
         if(args->arrayObjects.size() >= 3)
         {
-            std::string hostID = args->arrayObjects[0]->getStringValue();
-            std::string siteSavePath = args->arrayObjects[1]->getStringValue();
+            std::string hostID = args->arrayObjects[0]->stringValue();
+            std::string siteSavePath = args->arrayObjects[1]->stringValue();
             tui::ref publicData = args->arrayObjects[2];
             
             if(currentSiteView)
@@ -394,7 +394,7 @@ void KatipoBrowser::init()
                             {
                                 SiteConnectionInfo& siteConnectionInfo = siteConnectionInfosByHostID[hostID];
                                 //todo use stuff in siteConnectionInfosByHostID
-                                std::string remoteURL = urlRef->getStringValue();
+                                std::string remoteURL = urlRef->stringValue();
                                 doGet(siteConnectionInfo.trackerKey, hostID, remoteURL, siteConnectionInfo.hostName, args);
                             }
                             
@@ -426,7 +426,7 @@ void KatipoBrowser::init()
                 siteConnectionInfo.rootTable->getTable("file")->setFunction("getSavePath", [siteSavePath](const tui::table& args, const tui::ref& existingResult, TuiFunctionCallData* incomingCallData, TuiDebugInfo* callingDebugInfo) -> tui::ref {
                     if(args->arrayObjects.size() > 0 && args->arrayObjects[0]->type() == Tui_ref_type_STRING)
                     {
-                        const std::string& appendPath = args->arrayObjects[0]->getStringValue();
+                        const std::string& appendPath = args->arrayObjects[0]->stringValue();
                         return tui::newString(siteSavePath + "/" + appendPath);
                     }
                     return tui::newString(siteSavePath + "/");
@@ -435,7 +435,7 @@ void KatipoBrowser::init()
                 siteConnectionInfo.rootTable->getTable("file")->setFunction("getResourcePath", [this, siteSavePath, hostID](const tui::table& args, const tui::ref& existingResult, TuiFunctionCallData* incomingCallData, TuiDebugInfo* callingDebugInfo) -> tui::ref {
                     if(args->arrayObjects.size() > 0 && args->arrayObjects[0]->type() == Tui_ref_type_STRING)
                     {
-                        const std::string& appendPath = args->arrayObjects[0]->getStringValue();
+                        const std::string& appendPath = args->arrayObjects[0]->stringValue();
                         std::string siteResourcePath = siteSavePath + "/" + appendPath;
                         
                         SiteConnectionInfo& siteConnectionInfoReloaded = siteConnectionInfosByHostID[hostID];
@@ -572,7 +572,7 @@ void KatipoBrowser::init()
             tui::ref urlRef = args->arrayObjects[0];
             if(urlRef->type() == Tui_ref_type_STRING)
             {
-                std::string remoteURL = urlRef->getStringValue();
+                std::string remoteURL = urlRef->stringValue();
                 std::vector<std::string> split = tui::splitString(remoteURL, '/');
                 
                 std::string trackerURL = "127.0.0.1";

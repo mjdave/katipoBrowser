@@ -780,7 +780,7 @@ void EventManager::bindTui(const tui::table& rootTable)
             tui::ref idRef = args->arrayObjects[0];
             if(idRef->isNumber())
             {
-                removeKeyChangedListener((idRef)->getNumberValue());
+                removeKeyChangedListener((idRef)->numberValue());
             }
             else
             {
@@ -812,7 +812,7 @@ void EventManager::bindTui(const tui::table& rootTable)
             dvec2 topRight = textBoundsView->size; //todo handle other alignment?
             
             dvec2 windowPos = textBoundsView->locationRelativeToView(bottomLeft, mainController->mainMJView);
-            dvec2 cursorWindowPos = textBoundsView->locationRelativeToView(bottomLeft + dvec2(cursorOffsetRef->getNumberValue(), 0), mainController->mainMJView);
+            dvec2 cursorWindowPos = textBoundsView->locationRelativeToView(bottomLeft + dvec2(cursorOffsetRef->numberValue(), 0), mainController->mainMJView);
             dvec2 extentPos = textBoundsView->locationRelativeToView(topRight, mainController->mainMJView);
             
             /*

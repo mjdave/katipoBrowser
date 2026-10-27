@@ -37,7 +37,7 @@ MJTextView::MJTextView(MJView* parentView_)
             tui::ref indexRef = args->arrayObjects[0];
             if(indexRef->isNumber())
             {
-                dvec4 rect = getRectForCharAtIndex(indexRef->getNumberValue());
+                dvec4 rect = getRectForCharAtIndex(indexRef->numberValue());
                 return tui::newVec4(rect);
             }
         }
@@ -56,7 +56,7 @@ MJTextView::MJTextView(MJView* parentView_)
             tui::ref verticalOffsetRef = args->arrayObjects[1];
             if(currentCursorOffsetRef->isNumber() && verticalOffsetRef->isNumber())
             {
-                int result = getCursorOffsetForVerticalCursorMovement(currentCursorOffsetRef->getNumberValue(), verticalOffsetRef->getNumberValue());
+                int result = getCursorOffsetForVerticalCursorMovement(currentCursorOffsetRef->numberValue(), verticalOffsetRef->numberValue());
                 return tui::newNumber(result);
             }
             else
@@ -445,7 +445,7 @@ void MJTextView::preRender(GCommandBuffer* commandBuffer, MJRenderPass renderPas
     {
         if(stateTable->hasKey("text"))
         {
-            setText(stateTable->objectsByStringKey["text"]->getStringValue());
+            setText(stateTable->objectsByStringKey["text"]->stringValue());
         }
         
         if(stateTable->hasKey("size"))

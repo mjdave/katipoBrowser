@@ -149,7 +149,7 @@ void MJAudioSDLMixer::playSongs(const tui::table& urls)
     playQueue = urls;
     songIndex = 0;
 
-    std::string urlString = playQueue->arrayObjects[songIndex]->getStringValue();
+    std::string urlString = playQueue->arrayObjects[songIndex]->stringValue();
     SDL_IOStream* stream = SDL_IOFromFile(urlString.c_str(), "r");
     if(!stream) {
         MJError("Could not load stream %s. error: %s", urlString.c_str(), SDL_GetError());
@@ -201,7 +201,7 @@ void MJAudioSDLMixer::skipToNextTrack()
     {
         songIndex = (songIndex + 1) % playQueue->arrayObjects.size();
 
-        std::string urlString = playQueue->arrayObjects[songIndex]->getStringValue();
+        std::string urlString = playQueue->arrayObjects[songIndex]->stringValue();
         SDL_IOStream* stream = SDL_IOFromFile(urlString.c_str(), "r");
         if(!stream) {
             MJError("Could not load stream %s. error: %s", urlString.c_str(), SDL_GetError());
@@ -268,7 +268,7 @@ std::string MJAudioSDLMixer::currentTrackPath()
 {
     if(playQueue && playQueue->arrayObjects.size() > songIndex)
     {
-        return playQueue->arrayObjects[songIndex]->getStringValue();
+        return playQueue->arrayObjects[songIndex]->stringValue();
     }
     return "";
 }

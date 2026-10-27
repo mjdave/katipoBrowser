@@ -27,7 +27,7 @@ static inline std::string getKatipoResourcePath(const std::string& inPath, const
         tui::ref pathResult = tui::toFunction(getResourcePathFunc)->call("getResourcePathFunc", tui::newString(inPath));
         if(pathResult)
         {
-            std::string returnResult = pathResult->getStringValue();
+            std::string returnResult = pathResult->stringValue();
             return returnResult;
         }
     }
@@ -71,10 +71,10 @@ void MJAudio::bindTui(const tui::table& rootTable)
             double pitch = 1.0;
             if(args->arrayObjects.size() >= 2 && args->arrayObjects[1]->isNumber())
             {
-                volume = args->arrayObjects[1]->getNumberValue();
+                volume = args->arrayObjects[1]->numberValue();
                 if(args->arrayObjects.size() >= 3 && args->arrayObjects[2]->isNumber())
                 {
-                    pitch = args->arrayObjects[2]->getNumberValue();
+                    pitch = args->arrayObjects[2]->numberValue();
                 }
             }
             std::string path = getKatipoResourcePath(tui::toString(args->arrayObjects[0])->value, rootTable);
@@ -135,7 +135,7 @@ void MJAudio::bindTui(const tui::table& rootTable)
             if(timeNumberRef->isNumber())
             {
 #ifdef __APPLE__
-                MJAudioApple::getInstance()->seekToTime(timeNumberRef->getNumberValue());
+                MJAudioApple::getInstance()->seekToTime(timeNumberRef->numberValue());
 #else
                 MJAudioSDLMixer::getInstance()->seekToTime(((TuiNumber*)timeNumberRef)->value);
 #endif
@@ -159,7 +159,7 @@ void MJAudio::bindTui(const tui::table& rootTable)
             if(timeNumberRef->isNumber())
             {
 #ifdef __APPLE__
-                MJAudioApple::getInstance()->setPlaybackRate(timeNumberRef->getNumberValue());
+                MJAudioApple::getInstance()->setPlaybackRate(timeNumberRef->numberValue());
 #else
                 MJAudioSDLMixer::getInstance()->setPlaybackRate(((TuiNumber*)timeNumberRef)->value);
 #endif
