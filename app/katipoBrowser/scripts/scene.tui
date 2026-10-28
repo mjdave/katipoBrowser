@@ -115,7 +115,7 @@ mainView = {
                             additiveBlend = true
                             path = "app/katipoBrowser/images/refresh.png"
                             size = vec2(urlTextEntryHeight,urlTextEntryHeight)
-                            alignmentX = "innerRight"
+                            alignmentX = "innerLeft"
                         }
                     }
                 }
