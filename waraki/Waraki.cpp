@@ -237,7 +237,7 @@ void Waraki::init()
     rootTable->getTable("file")->setFunction("getSavePath", [rootTable](const tui::table& args, const tui::ref& existingResult, TuiFunctionCallData* incomingCallData, TuiDebugInfo* callingDebugInfo) -> tui::ref {
         if(args->arrayObjects.size() > 0 && args->arrayObjects[0]->type() == Tui_ref_type_STRING)
         {
-            return tui::newString(Katipo::getSavePath(args->arrayObjects[0]->getStringValue()));
+            return tui::newString(Katipo::getSavePath(args->arrayObjects[0]->stringValue()));
         }
         return tui::newString(Katipo::getSavePath());
     });
@@ -245,7 +245,7 @@ void Waraki::init()
     rootTable->getTable("file")->setFunction("getResourcePath", [](const tui::table& args, const tui::ref& existingResult, TuiFunctionCallData* incomingCallData, TuiDebugInfo* callingDebugInfo) -> tui::ref {
         if(args->arrayObjects.size() > 0 && args->arrayObjects[0]->type() == Tui_ref_type_STRING)
         {
-            const std::string& appendPath = args->arrayObjects[0]->getStringValue();
+            const std::string& appendPath = args->arrayObjects[0]->stringValue();
             return tui::newString(Katipo::getResourcePath(appendPath));
         }
         return tui::newString(Katipo::getResourcePath());
@@ -268,7 +268,7 @@ void Waraki::init()
                                                 TuiDebugInfo* callingDebugInfo) -> tui::ref {
         if(args->arrayObjects.size() >= 1)
         {
-            std::string url = args->arrayObjects[0]->getStringValue();
+            std::string url = args->arrayObjects[0]->stringValue();
             SDL_OpenURL(url.c_str());
         }
         return TUI_NIL;
@@ -280,7 +280,7 @@ void Waraki::init()
                                                 TuiDebugInfo* callingDebugInfo) -> tui::ref {
         if(args->arrayObjects.size() >= 2)
         {
-            std::string hostDirName = args->arrayObjects[0]->getStringValue();
+            std::string hostDirName = args->arrayObjects[0]->stringValue();
             bool shouldRun = args->arrayObjects[1]->boolValue();
             
             if(!hostDirName.empty())
@@ -354,7 +354,7 @@ void Waraki::init()
                                                 TuiDebugInfo* callingDebugInfo) -> tui::ref {
         if(args->arrayObjects.size() >= 2)
         {
-            std::string initialPath = args->arrayObjects[0]->getStringValue();
+            std::string initialPath = args->arrayObjects[0]->stringValue();
             
             SDL_ShowOpenFileDialog(sdlFileOpenCallback,
                                    args->arrayObjects[1].get(),
@@ -372,7 +372,7 @@ void Waraki::init()
                                                 TuiDebugInfo* callingDebugInfo) -> tui::ref {
         if(args->arrayObjects.size() >= 2)
         {
-            std::string initialPath = args->arrayObjects[0]->getStringValue();
+            std::string initialPath = args->arrayObjects[0]->stringValue();
             
             SDL_ShowOpenFolderDialog(sdlFileOpenCallback,
                                      args->arrayObjects[1].get(),
@@ -398,7 +398,7 @@ void Waraki::init()
                 scanner = new Scanner(publicKey, secretKey, katipoTable);
             }
             
-            scanner->startScan(args->arrayObjects[0]->getStringValue(), tui::toFunction(args->arrayObjects[1]));
+            scanner->startScan(args->arrayObjects[0]->stringValue(), tui::toFunction(args->arrayObjects[1]));
             
         }
         return TUI_NIL;
@@ -413,7 +413,7 @@ void Waraki::init()
         {
             //scanner
             
-            std::string trackerKey = args->arrayObjects[0]->getStringValue();
+            std::string trackerKey = args->arrayObjects[0]->stringValue();
             
             ScannerConnection connection = scanner->getConnection(trackerKey); //we are now responsible for closing the connection
             if(!connection.netInterface)
@@ -445,7 +445,7 @@ void Waraki::init()
                 registeredAppFunctionsTable = tui::newTable();
                 katipoTable->setTable("registeredAppFunctions", registeredAppFunctionsTable);
             }
-            registeredAppFunctionsTable->set(args->arrayObjects[0]->getStringValue(), args->arrayObjects[1]);
+            registeredAppFunctionsTable->set(args->arrayObjects[0]->stringValue(), args->arrayObjects[1]);
         }
         
         return TUI_NIL;
@@ -460,8 +460,8 @@ void Waraki::init()
                                                 TuiDebugInfo* callingDebugInfo) -> tui::ref { //note added outside function above so for now sites can't load other sites
         if(args->arrayObjects.size() >= 3)
         {
-            std::string hostID = args->arrayObjects[0]->getStringValue();
-            std::string siteSavePath = args->arrayObjects[1]->getStringValue();
+            std::string hostID = args->arrayObjects[0]->stringValue();
+            std::string siteSavePath = args->arrayObjects[1]->stringValue();
             tui::ref publicData = args->arrayObjects[2];
             
             
@@ -539,7 +539,7 @@ void Waraki::init()
                             {
                                 SiteConnectionInfo& siteConnectionInfo = siteConnectionInfosByHostID[hostID];
                                 //todo use stuff in siteConnectionInfosByHostID
-                                std::string remoteURL = urlRef->getStringValue();
+                                std::string remoteURL = urlRef->stringValue();
                                 doGet(siteConnectionInfo.trackerKey, hostID, remoteURL, siteConnectionInfo.hostName, args);
                             }
                             
@@ -579,7 +579,7 @@ void Waraki::init()
                         tui::table registeredAppFunctionsTable = katipoTable->getTable("registeredAppFunctions");
                         if(registeredAppFunctionsTable)
                         {
-                            tui::function func = registeredAppFunctionsTable->getFunction(args->arrayObjects[0]->getStringValue());
+                            tui::function func = registeredAppFunctionsTable->getFunction(args->arrayObjects[0]->stringValue());
                             if(func)
                             {
                                 tui::table functionArgs = tui::newTable();
@@ -592,7 +592,7 @@ void Waraki::init()
                             }
                             else
                             {
-                                MJWarn("attempt to call unregistered app function:%s", args->arrayObjects[0]->getStringValue().c_str());
+                                MJWarn("attempt to call unregistered app function:%s", args->arrayObjects[0]->stringValue().c_str());
                             }
                         }
                     }
@@ -603,7 +603,7 @@ void Waraki::init()
                 siteConnectionInfo.rootTable->getTable("file")->setFunction("getSavePath", [siteSavePath](const tui::table& args, const tui::ref& existingResult, TuiFunctionCallData* incomingCallData, TuiDebugInfo* callingDebugInfo) -> tui::ref {
                     if(args->arrayObjects.size() > 0 && args->arrayObjects[0]->type() == Tui_ref_type_STRING)
                     {
-                        const std::string& appendPath = args->arrayObjects[0]->getStringValue();
+                        const std::string& appendPath = args->arrayObjects[0]->stringValue();
                         return tui::newString(siteSavePath + "/" + appendPath);
                     }
                     return tui::newString(siteSavePath + "/");
@@ -612,7 +612,7 @@ void Waraki::init()
                 siteConnectionInfo.rootTable->getTable("file")->setFunction("getResourcePath", [this, siteSavePath, hostID](const tui::table& args, const tui::ref& existingResult, TuiFunctionCallData* incomingCallData, TuiDebugInfo* callingDebugInfo) -> tui::ref {
                     if(args->arrayObjects.size() > 0 && args->arrayObjects[0]->type() == Tui_ref_type_STRING)
                     {
-                        const std::string& appendPath = args->arrayObjects[0]->getStringValue();
+                        const std::string& appendPath = args->arrayObjects[0]->stringValue();
                         std::string siteResourcePath = siteSavePath + "/" + appendPath;
                         
                         SiteConnectionInfo& siteConnectionInfoReloaded = siteConnectionInfosByHostID[hostID];
@@ -670,11 +670,11 @@ void Waraki::init()
                     if(viewNameRef->type() == Tui_ref_type_STRING && siteConnectionInfosByHostID.count(hostID) != 0)
                     {
                         SiteConnectionInfo& siteConnectionInfo = siteConnectionInfosByHostID[hostID];
-                        if(viewNameRef->getStringValue() == siteConnectionInfo.mainView->idString)
+                        if(viewNameRef->stringValue() == siteConnectionInfo.mainView->idString)
                         {
                             return siteConnectionInfo.mainView->stateTable;
                         }
-                        MJView* subView = siteConnectionInfo.mainView->getSubViewWithID(viewNameRef->getStringValue());
+                        MJView* subView = siteConnectionInfo.mainView->getSubViewWithID(viewNameRef->stringValue());
                         if(subView)
                         {
                             return subView->stateTable;
@@ -760,7 +760,7 @@ void Waraki::init()
             tui::ref urlRef = args->arrayObjects[0];
             if(urlRef->type() == Tui_ref_type_STRING)
             {
-                std::string remoteURL = urlRef->getStringValue();
+                std::string remoteURL = urlRef->stringValue();
                 std::vector<std::string> split = tui::splitString(remoteURL, '/');
                 
                 std::string trackerURL = "127.0.0.1";
@@ -891,11 +891,11 @@ void Waraki::init()
             tui::ref viewNameRef = args->arrayObjects[0];
             if(viewNameRef->type() == Tui_ref_type_STRING)
             {
-                if(viewNameRef->getStringValue() == mainView->idString)
+                if(viewNameRef->stringValue() == mainView->idString)
                 {
                     return mainView->stateTable;
                 }
-                MJView* subView = mainView->getSubViewWithID(viewNameRef->getStringValue());
+                MJView* subView = mainView->getSubViewWithID(viewNameRef->stringValue());
                 if(subView)
                 {
                     return subView->stateTable;

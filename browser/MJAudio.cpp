@@ -137,7 +137,7 @@ void MJAudio::bindTui(const tui::table& rootTable)
 #ifdef __APPLE__
                 MJAudioApple::getInstance()->seekToTime(timeNumberRef->numberValue());
 #else
-                MJAudioSDLMixer::getInstance()->seekToTime(((TuiNumber*)timeNumberRef)->value);
+                MJAudioSDLMixer::getInstance()->seekToTime(timeNumberRef->numberValue());
 #endif
             }
             else
@@ -161,7 +161,7 @@ void MJAudio::bindTui(const tui::table& rootTable)
 #ifdef __APPLE__
                 MJAudioApple::getInstance()->setPlaybackRate(timeNumberRef->numberValue());
 #else
-                MJAudioSDLMixer::getInstance()->setPlaybackRate(((TuiNumber*)timeNumberRef)->value);
+                MJAudioSDLMixer::getInstance()->setPlaybackRate(timeNumberRef->numberValue());
 #endif
             }
             else
