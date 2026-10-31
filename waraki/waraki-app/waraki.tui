@@ -1,6 +1,6 @@
 keys = require("app/common/keys.tui")
-urlTextEntry = scene.getView("urlTextEntry")
-urlTextEntry.hidden = true
+urlTextEntryContainer = scene.getView("urlTextEntryContainer")
+urlTextEntryContainer.hidden = true
 
 welcomePage = false
 createLibraryPage = false
