@@ -32,6 +32,8 @@ class MJTextView : public MJView {
     double textRenderScale;
 	double fontGeometryScale = 1.0;
 
+    bool hasWaitedExtraFrameForNextVertices = false;
+
     
 public:
     MJTextView(MJView* parentView_);

@@ -430,21 +430,29 @@ void MJTextView::preRender(GCommandBuffer* commandBuffer, MJRenderPass renderPas
     
     if(!nextVertices.empty())
     {
-        Vulkan* vulkan = cache->vulkan;
-        
-        if(hasRenderData)
+        if(!hasWaitedExtraFrameForNextVertices)
         {
-            if(prevVertexBuffer.buffer)
-            {
-                vulkan->destroySingleBuffer(prevVertexBuffer);
-                prevVertexBuffer.buffer = nullptr;
-            }
-            prevVertexBuffer = vertexBuffer;
+            hasWaitedExtraFrameForNextVertices = true;
         }
-        vertexBuffer = nextVertexBuffer;
-        vertices = nextVertices;
-        nextVertices.clear();
-        hasRenderData = true;
+        else
+        {
+            Vulkan* vulkan = cache->vulkan;
+            
+            if(hasRenderData)
+            {
+                if(prevVertexBuffer.buffer)
+                {
+                    vulkan->destroySingleBuffer(prevVertexBuffer);
+                    prevVertexBuffer.buffer = nullptr;
+                }
+                prevVertexBuffer = vertexBuffer;
+            }
+            vertexBuffer = nextVertexBuffer;
+            vertices = nextVertices;
+            nextVertices.clear();
+            hasRenderData = true;
+            hasWaitedExtraFrameForNextVertices = false;
+        }
     }
     
     MJView::preRender(commandBuffer, renderPass, renderTargetCompatibilityIndex, dt, frameLerp, animationTimer_);
