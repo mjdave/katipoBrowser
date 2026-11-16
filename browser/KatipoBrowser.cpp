@@ -215,7 +215,7 @@ tui::table setupScene(SiteConnectionInfo& siteConnectionInfo, std::string siteSa
     return sceneTable;
 }
 
-void KatipoBrowser::init()
+void KatipoBrowser::init(int argc, char *argv[])
 {
     if(sodium_init() < 0) //this is safe to call multiple times
     {
@@ -227,12 +227,22 @@ void KatipoBrowser::init()
     Katipo::baseSavePath = basePath;
     
     tui::table rootTable = tui::getRootTable();
+
+    tui::table launchArgsTable = tui::newTable();
+    rootTable->set("launchArgs", launchArgsTable);
+    for(int i = 1; i < argc; i++)
+    {
+        launchArgsTable->arrayObjects.push_back(tui::newString(argv[i]));
+    }
+
     katipoTable = addKatipoTable(rootTable);
     appDatabaseEnvironment = new DatabaseEnvironment(Katipo::getSavePath("database"),
                                                      1,
                                                      2);
     appDatabase = new Database(appDatabaseEnvironment, "app");
     appDatabase->bindTui("", rootTable);
+
+    
     
     
     rootTable->getTable("file")->setFunction("getSavePath", [rootTable](const tui::table& args, const tui::ref& existingResult, TuiFunctionCallData* incomingCallData, TuiDebugInfo* callingDebugInfo) -> tui::ref {

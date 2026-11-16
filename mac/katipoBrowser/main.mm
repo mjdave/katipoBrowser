@@ -10,7 +10,7 @@ SDL_AppResult SDL_AppInit(void **appstate, int argc, char *argv[])
 {
     SDL_SetAppMetadata("Koru", KATIPO_VERSION, "com.katipobrowser");
     
-    KatipoBrowser::getInstance()->init();
+    KatipoBrowser::getInstance()->init(argc, argv);
 
     return SDL_APP_CONTINUE;
 }

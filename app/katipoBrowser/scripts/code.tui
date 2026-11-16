@@ -3,6 +3,7 @@
 #global eventManager
 #global katipo
 #global time
+#global launchArgs
 
 keys = require("app/common/keys.tui")
 
@@ -589,21 +590,6 @@ urlTextEntryContainerFunction = function()
 urlTextEntryContainer.setClickFunction(urlTextEntryContainerFunction)
 
 
-loadInitialLink = function()
-{
-    siteContentBackground.goalColor = vec4(0.0, 0.015, 0.01, 0.6)
-    if(table.count(bookmarks) == 0)
-    {
-        doGet("katipobrowser.com/katipo")
-    }
-    else
-    {
-        bookmarkInfo = bookmarks[0]
-        doGet(bookmarkInfo.url, bookmarkInfo.siteInfo.title, bookmarkInfo.checksums)
-    }
-}
-
-loadInitialLink()
 
 
 reload = function()
@@ -681,6 +667,66 @@ katipo.onBackgroundChange = function(hidden)
         if(currentTime - lastReloadTime > 60 * 10) #reload if it has been longer than 10 minutes
         {
             print("reload")
+            reload()
+        }
+    }
+}
+
+
+launchArgLink = false
+reloadSeconds = false
+
+if(launchArgs)
+{
+    for(i = 0, i < table.count(launchArgs), i++)
+    {
+        arg = launchArgs[i]
+
+        if(arg == "--get")
+        {
+            .launchArgLink = launchArgs[i + 1]
+            i++
+        }
+        else if(arg == "--reload")
+        {
+            .reloadSeconds = load(launchArgs[i + 1])
+            i++
+        }
+    }
+}
+
+loadInitialLink = function()
+{
+    siteContentBackground.goalColor = vec4(0.0, 0.015, 0.01, 0.6)
+
+    if(launchArgLink)
+    {
+        doGet(launchArgLink)
+    }
+    else if(table.count(bookmarks) == 0)
+    {
+        doGet("katipobrowser.com/katipo")
+    }
+    else
+    {
+        bookmarkInfo = bookmarks[0]
+        doGet(bookmarkInfo.url, bookmarkInfo.siteInfo.title, bookmarkInfo.checksums)
+    }
+}
+
+loadInitialLink()
+
+reloadTimer = 0
+
+katipo.update = function(dt)
+{
+    if(reloadSeconds)
+    {
+        reloadTimer += dt
+        if(reloadTimer >= reloadSeconds)
+        {
+            .reloadTimer = 0
+            print("reloading")
             reload()
         }
     }

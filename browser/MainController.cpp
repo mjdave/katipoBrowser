@@ -103,6 +103,27 @@ void MainController::init(const tui::table& rootTable, Database* appDatabase_, s
             setInitialScreenPos = true;
         }
     }
+
+    bool foundStartFullScreenLaunchArg = false;
+    tui::table launchArgs = rootTable->getTable("launchArgs");
+    if(launchArgs)
+    {
+        for(tui::ref& arg : launchArgs->arrayObjects)
+        {
+            if(arg->stringValue() == "--fullscreen")
+            {
+                foundStartFullScreenLaunchArg = true;
+            }
+        }
+    }
+
+    if(foundStartFullScreenLaunchArg)
+    {
+        screenWidth = mode->w;
+        screenHeight = mode->h;
+        setInitialScreenPos = false;
+        flags |= SDL_WINDOW_FULLSCREEN;
+    }
     
 #if TARGET_OS_IPHONE
     //SDL_DisplayID displayID = SDL_GetPrimaryDisplay();
