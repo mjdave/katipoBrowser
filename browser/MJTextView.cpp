@@ -79,6 +79,11 @@ MJTextView::~MJTextView()
 	{
 		Vulkan* vulkan = cache->vulkan;
 		vulkan->destroySingleBuffer(vertexBuffer);
+        if(prevVertexBuffer.buffer)
+        {
+            vulkan->destroySingleBuffer(prevVertexBuffer);
+            prevVertexBuffer.buffer = nullptr;
+        }
 	}
 }
 
@@ -429,7 +434,12 @@ void MJTextView::preRender(GCommandBuffer* commandBuffer, MJRenderPass renderPas
         
         if(hasRenderData)
         {
-            vulkan->destroySingleBuffer(vertexBuffer);
+            if(prevVertexBuffer.buffer)
+            {
+                vulkan->destroySingleBuffer(prevVertexBuffer);
+                prevVertexBuffer.buffer = nullptr;
+            }
+            prevVertexBuffer = vertexBuffer;
         }
         vertexBuffer = nextVertexBuffer;
         vertices = nextVertices;

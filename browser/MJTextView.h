@@ -83,6 +83,8 @@ private:
     std::vector<FontVert> vertices;
     MJVMABuffer vertexBuffer;
     
+    MJVMABuffer prevVertexBuffer;
+    
     std::vector<FontVert> nextVertices;
     MJVMABuffer nextVertexBuffer;
 

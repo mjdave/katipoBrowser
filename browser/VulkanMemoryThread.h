@@ -48,7 +48,7 @@ MJError("FAILED TO ALLOCATE VIDEO MEMORY: " #__funcCall__);\
 class MJRenderTarget;
 
 struct MJVMABuffer {
-	VkBuffer buffer;
+	VkBuffer buffer = nullptr;
 	VmaAllocation allocation;
 	VmaAllocationInfo allocInfo;
 };
