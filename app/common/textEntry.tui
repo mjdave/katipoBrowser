@@ -27,6 +27,7 @@ create = function(parentView, viewLayout)
         #fontSize = viewLayout.fontSize
         alignmentX = viewLayout.alignmentX
         verticalAlignment = viewLayout.verticalAlignment
+        ignoreClickOutside = viewLayout.ignoreClickOutside
         markupPadding = {
             top = 0
             left = 0

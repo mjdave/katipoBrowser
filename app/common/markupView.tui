@@ -1037,7 +1037,7 @@ addItemView = function(markupView, style_, captureItemOrNil)
 
     backgroundView.clickOutside = function()
     {
-        if(markupView.currentEditingTextView == textView)
+        if(markupView.currentEditingTextView == textView and (!markupView.ignoreClickOutside))
         {
             finishEditing(markupView, false)
         }
@@ -1654,6 +1654,7 @@ create = function(parentView, viewLayout)
     markupView.cachedRows = {}
 
     markupView.variableWidth = viewLayout.variableWidth
+    markupView.ignoreClickOutside = viewLayout.ignoreClickOutside
 
     scrollViewLayout = {
         size = viewLayout.size
