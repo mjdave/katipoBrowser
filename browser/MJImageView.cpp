@@ -225,6 +225,10 @@ void MJImageView::loadFromTable(const tui::table& table, bool needsToLayoutSubvi
     {
         stateTable->setBool("crop", table->getBool("crop"));
     }
+    if(table->hasKey("disableCache"))
+    {
+        stateTable->setBool("disableCache", table->getBool("disableCache"));
+    }
     if(table->hasKey("path"))
     {
         stateTable->setString("path", table->getString("path"));
@@ -267,6 +271,10 @@ void MJImageView::tableKeyChanged(const std::string& key, const tui::ref& value)
     {
         setShaderName(stateTable->getString("shader"));
     }
+    else if(key == "disableCache")
+    {
+        disableCache = stateTable->getBool("disableCache");
+    }
     else if(key == "additiveBlend")
     {
         if(stateTable->getBool("additiveBlend"))
@@ -284,11 +292,11 @@ void MJImageView::tableKeyChanged(const std::string& key, const tui::ref& value)
     }
     else if(key == "path")
     {
-        setImageTexture(cache->getTexture(stateTable->getString("path"), rootTable, false, false, true));
+        setImageTexture(cache->getTexture(stateTable->getString("path"), rootTable, false, false, true, disableCache));
     }
     else if(key == "absolutePath") //todo possible sandboxing issue
     {
-        setImageTexture(cache->getTextureAbsolutePath(stateTable->getString("absolutePath"), false, false, true));
+        setImageTexture(cache->getTextureAbsolutePath(stateTable->getString("absolutePath"), false, false, true, disableCache));
     }
     else if(key == "crop")
     {

@@ -692,6 +692,11 @@ if(launchArgs)
             .reloadSeconds = load(launchArgs[i + 1])
             i++
         }
+        else if(arg == "--hideURLEntry")
+        {
+            urlTextEntryContainer = scene.getView("urlTextEntryContainer")
+            urlTextEntryContainer.hidden = true
+        }
     }
 }
 
