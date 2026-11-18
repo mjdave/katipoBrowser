@@ -179,7 +179,7 @@ void MJImageView::updateTexCoords()
             
             dvec2 croppedOffset = (dvec2(1.0) - newImageSizeFraction) * 0.5;
             
-            drawQuad->setTexCoords(imageOffset + croppedOffset, newImageSizeFraction + imageOffset + croppedOffset);
+            drawQuad->setTexCoords(imageOffset + croppedOffset, (newImageSizeFraction + imageOffset + croppedOffset) * imageSize);
         }
         else
         {
