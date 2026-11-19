@@ -22,6 +22,10 @@ MJImageView::MJImageView(MJView* parentView_)
 
 MJImageView::~MJImageView()
 {
+    if(imageTexture && imageTextureNeedsReleased)
+    {
+        delete imageTexture;
+    }
 }
 
 void MJImageView::destroyDrawables()
@@ -86,7 +90,13 @@ void MJImageView::setImageTexture(MJImageTexture* imageTexture_)
 {
     if(imageTexture_ != imageTexture)
     {
+        if(imageTexture && imageTextureNeedsReleased)
+        {
+            delete imageTexture;
+        }
         imageTexture = imageTexture_;
+        imageTextureNeedsReleased = disableCache;
+        
         if(drawQuad)
         {
             drawQuad->setImageTeture(imageTexture);

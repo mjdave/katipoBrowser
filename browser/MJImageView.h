@@ -14,6 +14,7 @@ public:
     std::string shaderName;
     
     MJImageTexture* imageTexture;
+    bool imageTextureNeedsReleased = false;
     dvec4 color;
     
     dvec2 imageSize;
